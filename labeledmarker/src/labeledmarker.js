@@ -147,7 +147,7 @@ LabeledMarker.prototype.redraw = function(force) {
  * main view into the mini-map.
  */
 LabeledMarker.prototype.copy = function() {
-  return new LabeledMarker(this.latlng_, this.opt_opts_);
+  return new LabeledMarker(this.latlng_, this.opts_);
 }
 
 
