@@ -352,7 +352,7 @@ DragZoomControl.prototype.drag_ = function(e){
   var G = this.globals;
   if(G.draggingOn) {
     var pos = this.getRelPos_(e);
-    rect = this.getRectangle_(G.startX, G.startY, pos, G.mapRatio);
+    var rect = this.getRectangle_(G.startX, G.startY, pos, G.mapRatio);
 
     if (rect.left) {
       addX = -rect.width;			
@@ -422,13 +422,13 @@ DragZoomControl.prototype.mouseup_ = function(e){
       setTimeout (function() {G.map.removeOverlay(zoomAreaPoly)}, G.options.overlayRemoveTime);  
     }catch(e) {}
 
-    polyBounds = zoomAreaPoly.getBounds();
+    var polyBounds = zoomAreaPoly.getBounds();
     var ne = polyBounds.getNorthEast();
     var sw = polyBounds.getSouthWest();
     var se = new GLatLng(sw.lat(), ne.lng());
     var nw = new GLatLng(ne.lat(), sw.lng());
-    zoomLevel = G.map.getBoundsZoomLevel(polyBounds);
-    center = polyBounds.getCenter();
+    var zoomLevel = G.map.getBoundsZoomLevel(polyBounds);
+    var center = polyBounds.getCenter();
     G.map.setCenter(center, zoomLevel);
 
     // invoke callback if provided
