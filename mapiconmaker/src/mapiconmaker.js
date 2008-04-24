@@ -29,10 +29,13 @@ MapIconMaker.createMarkerIcon = function(opts) {
   var primaryColor = opts.primaryColor || "#ff0000";
   var strokeColor = opts.strokeColor || "#000000";
   var cornerColor = opts.cornerColor || "#ffffff";
+  var transparency = opts.transparency;
    
   var baseUrl = "http://chart.apis.google.com/chart?cht=mm";
   var iconUrl = baseUrl + "&chs=" + width + "x" + height + 
       "&chco=" + cornerColor.replace("#", "") + "," + primaryColor.replace("#", "") + "," + strokeColor.replace("#", "") + "&ext=.png";
+  if (transparency)
+    iconUrl = iconUrl + "&chf=a,s,ffffff" + transparency;
   var icon = new GIcon(G_DEFAULT_ICON);
   icon.image = iconUrl;
   icon.iconSize = new GSize(width, height);
