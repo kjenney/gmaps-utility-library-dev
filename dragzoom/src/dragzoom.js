@@ -457,7 +457,7 @@ DragZoomControl.prototype.setDimensions_ = function() {
   G.mapRatio  = G.mapHeight / G.mapWidth;
   // set left:0px in next <div>s in case we inherit text-align:center from map <div> in IE.
   DragZoomUtil.style([G.mapCover, G.cornerTopDiv, G.cornerRightDiv, G.cornerBottomDiv, G.cornerLeftDiv], 
-    {left: '0px',width: G.mapWidth + 'px', height: G.mapHeight +'px'});
+      {top: '0px', left: '0px', width: G.mapWidth + 'px', height: G.mapHeight +'px'});
 };
 
 /**
