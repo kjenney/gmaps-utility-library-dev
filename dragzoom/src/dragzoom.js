@@ -656,7 +656,6 @@ DragZoomUtil.getMousePosition = function(e) {
     posY = e.clientY + 
       (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
   }
-  GLog.write('left: '+posX+', top: '+posY);
   return {left: posX, top: posY};  
 };
 
