@@ -53,6 +53,33 @@ Creates a DragZoomControl with the specified options (hashes). All parameters ar
 </tbody>
 </table>
 
+<h3>
+<a name="DragZoomEvents"></a>Events</h3>
+<table style="width:90%;" summary="class DragZoomControl - Events">
+<tbody><tr>
+<th>Events</th>
+<th>Arguments</th>
+<th>Description</th>
+</tr>
+<tr class="odd">
+<td class="code">addoverlay</td>
+<td class="code">overlay</td>
+<td>This event is fired when the mouse button is
+released after a zoom rectangle has been specified. The <a href="http://code.google.com/apis/maps/documentation/reference.html#GPolyline">GPolyline</a>
+representing the frame around the selected area is passed as the overlay
+argument.</td>
+</tr>
+<tr class="even">
+<td class="code">removeoverlay</td>
+<td class="code">overlay</td>
+<td>This event is fired when the <a href="http://code.google.com/apis/maps/documentation/reference.html#GPolyline">GPolyline</a>
+representing the frame around the selected area (passed as the overlay
+argument) is removed. This occurs <a href="#DragZoomOtherOptions">overlayRemoveTime</a> milliseconds after the
+area was specified.</td>
+</tr>
+</tbody>
+</table>
+
 <h2>
 <a name="DragZoomBoxStyleOptions"></a>class DragZoomBoxStyleOptions</h2>
 <p>Instances of this class are used in the <code><span class="nomatch">opts_boxStyle</span></code> argument to the constructor of the
