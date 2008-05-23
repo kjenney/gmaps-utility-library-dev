@@ -38,6 +38,8 @@
  *     zoom button which are common to both un-activated and activated state
  *   opts_other.buttonStyle {Object} A hash of css styles for the zoom button 
  *     which will be applied when the button is in un-activated state.
+ *   opts_other.rightMouseZoomOutEnabled {Boolean} Whether to zoom out when a drag
+ *     with the right mouse button occurs.
  *   opts_other.buttonZoomingHTML {String} HTML which is placed in the 
  *     zoom button when the button is activated. 
  *   opts_other.buttonZoomingStyle {Object} A hash of css styles for the 
@@ -134,7 +136,8 @@ function DragZoomControl(opts_boxStyle, opts_other, opts_callbacks) {
     buttonZoomingStyle: {background: '#FF0'},
     overlayRemoveTime: 6000,
     backButtonEnabled: false,
-    stickyZoomEnabled: false
+    stickyZoomEnabled: false,
+    rightMouseZoomOutEnabled: false
   };
 	
   for (var s in opts_other) {
@@ -316,6 +319,13 @@ DragZoomControl.prototype.coverMousedown_ = function(e){
   var pos = this.getRelPos_(e);
   G.startX = pos.left;
   G.startY = pos.top;
+
+  if (e.which) {
+    var rightMouse = (e.which != 1);
+  } else if (e.button) {
+    var rightMouse = (e.button != 1);
+  }
+  G.draggingRightMouse = rightMouse;
   
   DragZoomUtil.style([G.mapCover], {background: 'transparent', opacity: 1, filter: 'alpha(opacity=100)'});
   DragZoomUtil.style([G.outlineDiv], {left: G.startX + 'px', top: G.startY + 'px', display: 'block', width: '1px', height: '1px'});
@@ -426,7 +436,14 @@ DragZoomControl.prototype.mouseup_ = function(e){
     var sw = polyBounds.getSouthWest();
     var se = new GLatLng(sw.lat(), ne.lng());
     var nw = new GLatLng(ne.lat(), sw.lng());
-    var zoomLevel = G.map.getBoundsZoomLevel(polyBounds);
+    if (G.options.rightMouseZoomOutEnabled && G.draggingRightMouse) {
+      var mapSpan = G.map.getBounds().toSpan();
+      var polySpan = polyBounds.toSpan();
+      var dSize = Math.max(mapSpan.lat()/polySpan.lat(), mapSpan.lng()/polySpan.lng());
+      var zoomLevel = G.map.getZoom() - Math.ceil(Math.log(dSize, 2));
+    } else {
+      var zoomLevel = G.map.getBoundsZoomLevel(polyBounds);
+    }
     var center = polyBounds.getCenter();
     G.map.setCenter(center, zoomLevel);
 
@@ -638,7 +655,8 @@ DragZoomUtil.getMousePosition = function(e) {
       (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
     posY = e.clientY + 
       (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
-  }	
+  }
+  GLog.write('left: '+posX+', top: '+posY);
   return {left: posX, top: posY};  
 };
 

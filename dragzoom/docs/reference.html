@@ -5,13 +5,13 @@
 </head>
 <body>
 <h2>
-<a name="DragZoom"></a>class DragZoomControl</h2>
+<a name="DragZoomControl"></a>class DragZoomControl</h2>
 <p>
 This class lets you add a control to the map which, when clicked, will let the map user zoom by dragging a rectangle on the map.
-It extends <a href="http://www.google.com/apis/maps/documentation/reference.html#GControl" target="_blank">GControl</a>.
+It extends <code><span class="xref"><a href="http://www.google.com/apis/maps/documentation/reference.html#GControlImpl">GControl</a></span></code>.
 </p>
 <h3>Constructor</h3>
-<table summary="class DragZoomControl - Constructor">
+<table style="width: 90%" summary="class DragZoomControl - Constructor">
 <tbody><tr>
 <th>Constructor</th>
 <th>Description</th>
@@ -65,16 +65,16 @@ Creates a DragZoomControl with the specified options (hashes). All parameters ar
 <td class="code">addoverlay</td>
 <td class="code">overlay</td>
 <td>This event is fired when the mouse button is
-released after a zoom rectangle has been specified. The <a href="http://code.google.com/apis/maps/documentation/reference.html#GPolyline">GPolyline</a>
+released after a zoom rectangle has been specified. The <code><span class="xref"><a href="http://code.google.com/apis/maps/documentation/reference.html#GPolyline">GPolyline</a></span></code>
 representing the frame around the selected area is passed as the overlay
 argument.</td>
 </tr>
 <tr class="even">
 <td class="code">removeoverlay</td>
 <td class="code">overlay</td>
-<td>This event is fired when the <a href="http://code.google.com/apis/maps/documentation/reference.html#GPolyline">GPolyline</a>
+<td>This event is fired when the <code><span class="xref"><a href="http://code.google.com/apis/maps/documentation/reference.html#GPolyline">GPolyline</a></span></code>
 representing the frame around the selected area (passed as the overlay
-argument) is removed. This occurs <a href="#DragZoomOtherOptions">overlayRemoveTime</a> milliseconds after the
+argument) is removed. This occurs <span class="xref"><a href="#DragZoomOtherOptions">overlayRemoveTime</a></span> milliseconds after the
 area was specified.</td>
 </tr>
 </tbody>
@@ -82,7 +82,7 @@ area was specified.</td>
 
 <h2>
 <a name="DragZoomBoxStyleOptions"></a>class DragZoomBoxStyleOptions</h2>
-<p>Instances of this class are used in the <code><span class="nomatch">opts_boxStyle</span></code> argument to the constructor of the
+<p>Instances of this class are used in the <code><span class="xref"><a href="#DragZoomBoxStyleOptions">opts_boxStyle</a></span></code> argument to the constructor of the
 <code><span class="xref"><a href="#DragZoomControl">DragZoomControl</a></span></code> class. There is no constructor for this class. 
 Instead, this class is instantiated as a javascript object literal. 
 <h3>Properties</h3>
@@ -199,7 +199,14 @@ Instead, this class is instantiated as a javascript object literal.
 <td> Whether or not the control stays in "zoom mode" until turned off. When true, the user can zoom repeatedly, until clicking on the zoom button again to turn zoom mode off. Defaults to false.
 </td>
 </tr>
+<tr class="odd">
 
+<td class="code">rightMouseZoomOutEnabled</td>
+<td class="code"> Boolean</td>
+<td> Whether to zoom out when a drag with the right mouse button occurs.  If enabled, dragging with the right button tries to find a zoom level to
+fit the current visible extent of the map into the size of the dragged box. Defaults to false.
+</td>
+</tr>
 </tbody>
 </table>
 
