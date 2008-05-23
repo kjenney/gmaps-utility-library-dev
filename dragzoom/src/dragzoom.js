@@ -185,7 +185,6 @@ DragZoomControl.prototype.initButton_ = function(buttonContainerDiv) {
   var G = this.globals;
   var buttonDiv = document.createElement('div');
   buttonDiv.innerHTML = G.options.buttonHTML;
-  buttonDiv.id = 'gzoom-control';
   DragZoomUtil.style([buttonDiv], {cursor: 'pointer', zIndex:200});
   DragZoomUtil.style([buttonDiv], G.options.buttonStartingStyle);
   DragZoomUtil.style([buttonDiv], G.options.buttonStyle);
@@ -201,7 +200,6 @@ DragZoomControl.prototype.initBackButton_ = function(buttonContainerDiv) {
   var G = this.globals;
   var backButtonDiv = document.createElement('div');
   backButtonDiv.innerHTML = G.options.backButtonHTML;
-  backButtonDiv.id = 'gzoom-back';
   DragZoomUtil.style([backButtonDiv], {cursor: 'pointer', zIndex:200});
   DragZoomUtil.style([backButtonDiv], G.options.buttonStartingStyle);
   DragZoomUtil.style([backButtonDiv], G.options.backButtonStyle);
@@ -254,8 +252,14 @@ DragZoomControl.prototype.initialize = function(map) {
  
   //DOM:map covers
     var zoomDiv = document.createElement("div");
-    zoomDiv.id ='gzoom-map-cover';
-    zoomDiv.innerHTML ='<div id="gzoom-outline" style="position:absolute;display:none;"></div><div id="gzoom-cornerTopDiv" style="position:absolute;display:none;"></div><div id="gzoom-cornerLeftDiv" style="position:absolute;display:none;"></div><div id="gzoom-cornerRightDiv" style="position:absolute;display:none;"></div><div id="gzoom-cornerBottomDiv" style="position:absolute;display:none;"></div>';
+    var DIVS_TO_CREATE = ['outlineDiv', 'cornerTopDiv', 'cornerLeftDiv', 'cornerRightDiv', 'cornerBottomDiv'];
+    for (var i=0; i<DIVS_TO_CREATE.length; i++) {
+        var id = DIVS_TO_CREATE[i];
+        var div = document.createElement("div");
+        DragZoomUtil.style([div], {position: 'absolute', display: 'none'});
+        zoomDiv.appendChild(div);
+        G[id] = div;
+    }
     DragZoomUtil.style([zoomDiv], {position: 'absolute', display: 'none', overflow: 'hidden', cursor: 'crosshair', zIndex: 101});
     mapDiv.appendChild(zoomDiv);
   
@@ -278,14 +282,9 @@ DragZoomControl.prototype.initialize = function(map) {
   
   // get globals
     G.mapPosition = DragZoomUtil.getElementPosition(mapDiv);
-    G.outlineDiv = DragZoomUtil.gE("gzoom-outline");	
-    G.buttonDiv = DragZoomUtil.gE("gzoom-control");
-    G.backButtonDiv = DragZoomUtil.gE("gzoom-back");
-    G.mapCover = DragZoomUtil.gE("gzoom-map-cover");
-    G.cornerTopDiv = DragZoomUtil.gE("gzoom-cornerTopDiv");
-    G.cornerRightDiv = DragZoomUtil.gE("gzoom-cornerRightDiv");
-    G.cornerBottomDiv = DragZoomUtil.gE("gzoom-cornerBottomDiv");
-    G.cornerLeftDiv = DragZoomUtil.gE("gzoom-cornerLeftDiv");
+    G.buttonDiv = buttonDiv;
+    G.backButtonDiv = backButtonDiv;
+    G.mapCover = zoomDiv;
     G.map = map;
   
     G.borderCorrection = G.style.outlineWidth * 2;	
