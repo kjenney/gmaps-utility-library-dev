@@ -501,16 +501,18 @@ ExtInfoWindow.prototype.ajaxRequest_ = function(url){
   var thisMap = this.map_;
   var thisCallback = this.callback_;
   GDownloadUrl(url, function(response, status){
-    var infoWindow = document.getElementById(thisMap.getExtInfoWindow().infoWindowId_ + '_contents');
-    if (response == null || status == -1 ) {
-      infoWindow.innerHTML = '<span class="error">ERROR: The Ajax request failed to get HTML content from "' + url + '"</span>';
-    } else {
-      infoWindow.innerHTML = response;
+    if (thisMap.getExtInfoWindow() !== null) {
+      var infoWindow = document.getElementById(thisMap.getExtInfoWindow().infoWindowId_ + '_contents');
+      if (response == null || status == -1 ) {
+        infoWindow.innerHTML = '<span class="error">ERROR: The Ajax request failed to get HTML content from "' + url + '"</span>';
+      } else {
+        infoWindow.innerHTML = response;
+      }
+      if (thisCallback != null ) {
+        thisCallback();
+      }
+      thisMap.getExtInfoWindow().resize();
     }
-    if (thisCallback != null ) {
-      thisCallback();
-    }
-    thisMap.getExtInfoWindow().resize();
     GEvent.trigger(thisMap, 'extinfowindowupdate');
   });
 };
