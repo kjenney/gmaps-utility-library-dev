@@ -106,14 +106,19 @@ LabeledMarker.prototype.initialize = function(map) {
 }
 
 /**
- * Move the text div based on current projection and zoom level, call the redraw()
- * handler in GMarker.
+ * Call the redraw() handler in GMarker and our our redrawLabel() function.
  *
  * @param {Boolean} force will be true when pixel coordinates need to be recomputed.
  */
 LabeledMarker.prototype.redraw = function(force) {
   GMarker.prototype.redraw.apply(this, arguments);
-  
+  this.redrawLabel_();  
+}
+
+/**
+ * Moves the text div based on current projection and zoom level.
+ */
+LabeledMarker.prototype.redrawLabel_ = function() {
   // Calculate the DIV coordinates of two opposite corners of our bounds to
   // get the size and position of our rectangle
   var p = this.map_.fromLatLngToDivPixel(this.latlng_);
@@ -122,7 +127,6 @@ LabeledMarker.prototype.redraw = function(force) {
   // Now position our div based on the div coordinates of our bounds
   this.div_.style.left = (p.x + this.labelOffset_.width) + "px";
   this.div_.style.top = (p.y + this.labelOffset_.height) + "px";
-  this.div_.style.zIndex = z; // in front of the marker
 }
 
 /**
@@ -174,6 +178,15 @@ LabeledMarker.prototype.hide = function() {
   this.hideLabel();
 }
 
+
+/**
+ * Repositions label and marker when setLatLng is called.
+ */
+LabeledMarker.prototype.setLatLng = function(latlng) {
+  this.latlng_ = latlng;
+  GMarker.prototype.setLatLng.apply(this, arguments);
+  this.redrawLabel_();
+}
 
 /**
  * Sets the visibility of the label, which will be respected during show/hides.
