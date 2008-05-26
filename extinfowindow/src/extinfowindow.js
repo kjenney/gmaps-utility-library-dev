@@ -84,8 +84,8 @@ ExtInfoWindow.prototype.initialize = function(map) {
   this.map_ = map;
 
   if( this.maximizeEnabled_ ){
-    this.maxWidth_ = this.map_.getSize().width * .9;
-    this.maxHeight_ = this.map_.getSize().height * .9;
+    this.maxWidth_ = this.map_.getSize().width * 0.9;
+    this.maxHeight_ = this.map_.getSize().height * 0.9;
   }
 
   this.defaultStyles = {
@@ -116,9 +116,9 @@ ExtInfoWindow.prototype.initialize = function(map) {
     tempElement.style.visibility = 'hidden';
     document.body.appendChild(tempElement);
     tempElement = document.getElementById(this.infoWindowId_ + '_' + i);
-    var tempWrapperPart = eval('this.wrapperParts.' + i);    
-    tempWrapperPart.w = parseInt(this.getStyle_(tempElement, 'width'));
-    tempWrapperPart.h = parseInt(this.getStyle_(tempElement, 'height'));
+    var tempWrapperPart = this.wrapperParts[i];    
+    tempWrapperPart.w = parseInt(this.getStyle_(tempElement, 'width'), 10);
+    tempWrapperPart.h = parseInt(this.getStyle_(tempElement, 'height'), 10);
     document.body.removeChild(tempElement);
   }
   for (var i in this.wrapperParts) {
@@ -420,7 +420,7 @@ ExtInfoWindow.prototype.resize = function(){
   this.wrapperParts.l.domElement.style.top = newPosTop + 'px';
   this.wrapperParts.r.domElement.style.top = newPosTop + 'px';
   this.contentDiv_.style.top = newPosTop + 'px';
-  windowTHeight = parseInt(this.wrapperParts.t.domElement.style.height);
+  windowTHeight = parseInt(this.wrapperParts.t.domElement.style.height, 10);
   newPosTop -= windowTHeight;
   this.wrapperParts.close.domElement.style.top = newPosTop + this.borderSize_ + 'px';
   this.wrapperParts.tl.domElement.style.top = newPosTop + 'px';
@@ -559,6 +559,10 @@ ExtInfoWindow.prototype.getDimensions_ = function(element) {
 ExtInfoWindow.prototype.getStyle_ = function(element, style) {
   var found = false;
   style = this.camelize_(style);
+  if (element.id == this.infoWindowId_ && style == 'width' && element.style.display == 'none') {
+  	element.style.visibility = 'hidden';
+	  element.style.display = '';
+  }
   var value = element.style[style];
   if (!value) {
     if (document.defaultView && document.defaultView.getComputedStyle) {
@@ -574,6 +578,10 @@ ExtInfoWindow.prototype.getStyle_ = function(element, style) {
     }else {
       value = element.offsetHeight;
     }
+  }
+  if (element.id == this.infoWindowId_ && style == 'width' && element.style.display != 'none') {
+  	element.style.display = 'none';
+  	element.style.visibility = 'visible';	
   }
   return (value == 'auto') ? null : value;
 };
