@@ -706,10 +706,6 @@ GMap2.prototype.closeExtInfoWindow = function(){
   }
 };
 
-if (gmapsUtilityLibrary.loader) {
-  gmapsUtilityLibrary.loader.loaded(
-    'extinfowindow', {
-      'gmapsUtilityLibrary.ExtInfoWindow' : ExtInfoWindow
-    }
-  );
+if (!google.loader.loadFailure) {
+  google_exportSymbol('gmapsUtilityLibrary.ExtInfoWindow', ExtInfoWindow);
 }

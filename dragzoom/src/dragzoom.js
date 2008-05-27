@@ -707,11 +707,7 @@ DragZoomUtil.getManyElements = function(idsString){
   return elements;
 };
 
-if (gmapsUtilityLibrary.loader) {
-  gmapsUtilityLibrary.loader.loaded(
-    'dragzoom', {
-      'gmapsUtilityLibrary.DragZoom.Control' : DragZoomControl,
-      'gmapsUtilityLibrary.DragZoom.Util': DragZoomUtil
-    }
-  );
+if (!google.loader.loadFailure) {
+  google_exportSymbol('gmapsUtilityLibrary.DragZoom.Control', DragZoomControl);
+  google_exportSymbol('gmapsUtilityLibrary.DragZoom.Util', DragZoomUtil);
 }

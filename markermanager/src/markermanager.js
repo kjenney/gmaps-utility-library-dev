@@ -708,10 +708,6 @@ MarkerManager.prototype.removeFromArray = function(array, value, opt_notype) {
   return shift;
 };
 
-if (gmapsUtilityLibrary.loader) {
-  gmapsUtilityLibrary.loader.loaded(
-    'markermanager', {
-      'gmapsUtilityLibrary.MarkerManager' : MarkerManager
-    }
-  );
+if (!google.loader.loadFailure) {
+  google_exportSymbol('gmapsUtilityLibrary.MarkerManager', MarkerManager);
 }

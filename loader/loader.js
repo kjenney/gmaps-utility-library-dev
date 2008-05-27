@@ -6,72 +6,110 @@ if (!window.gmapsUtilityLibrary) {
 if (!window.gmapsUtilityLibrary.loader) {
   window.gmapsUtilityLibrary.loader = {};
   (function() { // New scope
-    var baseUrl = 'http://localhost/~rbecker1/lemnar-loader-branch/';
-
-    // Insert a new script into DOM with a src of url
-    function loadJavascript(url) {
-      var scriptElement = document.createElement('script');
-      scriptElement.setAttribute('type', 'text/javascript');
-      scriptElement.setAttribute('src', url);
-      document.getElementsByTagName('head')[0].appendChild(scriptElement);
-    }
-
-    // Build a list of libraries to load
-    var librariesToLoad = [];
-    var callbacks = {};
-    function loadLibrary(libName, callback) {
-      var library = {};
-      library.name = libName;
-      library.url = baseUrl + libName + '/src/' + libName + '.js';
-      librariesToLoad.push(library);
-      callbacks[libName] = callback;
-    }
-
-    // Actually start loading libraries
-    var finalCallback = null;
-    function setOnLoadCallback(onLoadFunction) {
-      finalCallback = onLoadFunction;
-      for (var library in librariesToLoad) if (librariesToLoad.hasOwnProperty(library)) {
-        loadJavascript(librariesToLoad[library].url);
+    if (google.loader.loadFailure) {
+      alert('Loader requires Google AJAX Libraries API to be loaded.');
+    } else {
+        google.loader.GoogleApisBase = 'http://gmaps-utility-library.googlecode.com/svn/trunk';
+        google.loader.rpl({
+      		":dragzoom" : {
+      			"versions" : {
+      				":1.0" : {
+      					"uncompressed" : "../../../dragzoom/1.0/src/dragzoom.js",
+      					"compressed" : "../../../dragzoom/1.0/src/dragzoom_packed.js"
+      				},
+      				":1.1" : {
+      					"uncompressed" : "../../../dragzoom/1.2/src/dragzoom.js",
+      					"compressed" : "../../../dragzoom/1.2/src/dragzoom_packed.js"
+      				},
+      				":1.2" : {
+      					"uncompressed" : "../../../dragzoom/1.2/src/dragzoom.js",
+      					"compressed" : "../../../dragzoom/1.2/src/dragzoom_packed.js"
+      				}
+      			},
+      			"aliases" : {
+      				":1" : "1.2"
+      			}
+      		},
+      		":extinfowindow" : {
+      			"versions" : {
+      				":1.0" : {
+      					"uncompressed" : "../../../extinfowindow/1.0/src/extinfowindow.js",
+      					"compressed" : "../../../extinfowindow/1.0/src/extinfowindow_packed.js"
+      				}
+      			},
+      			"aliases" : {
+      				":1" : "1.0"
+      			}
+      		},
+      		":extmaptypecontrol" : {
+      			"versions" : {
+      				":1.0" : {
+      					"uncompressed" : "../../../extmaptypecontrol/1.0/src/extmaptypecontrol.js",
+                "compressed" : "../../../extmaptypecontrol/1.0/src/extmaptypecontrol.js" // No compressed version
+      				},
+      				":1.1" : {
+      					"uncompressed" : "../../../extmaptypecontrol/1.1/src/extmaptypecontrol.js",
+      					"compressed" : "../../../extmaptypecontrol/1.1/src/extmaptypecontrol_packed.js"
+      				},
+      				":1.2" : {
+      					"uncompressed" : "../../../extmaptypecontrol/1.2/src/extmaptypecontrol.js",
+      					"compressed" : "../../../extmaptypecontrol/1.2/src/extmaptypecontrol_packed.js"
+      				}
+      			},
+      			"aliases" : {
+      				":1" : "1.2"
+      			}
+      		},
+      		":labeledmarker" : {
+      			"versions" : {
+      				":1.0" : {
+      					"uncompressed" : "../../../labeledmarker/1.0/src/labeledmarker.js",
+      					"compressed" : "../../../labeledmarker/1.0/src/labeledmarker_packed.js"
+      				},
+      				":1.1" : {
+      					"uncompressed" : "../../../labeledmarker/1.1/src/labeledmarker.js",
+      					"compressed" : "../../../labeledmarker/1.1/src/labeledmarker_packed.js"
+      				}
+      			},
+      			"aliases" : {
+      				":1" : "1.1"
+      			}
+      		}, 
+      		":mapiconmaker" : {
+      			"versions" : {
+      				":1.0" : {
+      					"uncompressed" : "../../../mapiconmaker/1.0/src/mapiconmaker.js",
+      					"compressed" : "../../../mapiconmaker/1.0/src/mapiconmaker_packed.js"
+      				}
+      			},
+      			"aliases" : {
+      				":1" : "1.0"
+      			}
+      		},
+      		":markermanager" : {
+      			"versions" : {
+      				":1.0" : {
+      					"uncompressed" : "../../../markermanager/1.0/src/markermanager.js",
+      					"compressed" : "../../../markermanager/1.0/src/markermanager.js" // No compressed version
+      				}
+      			},
+      			"aliases" : {
+      				":1" : "1.0"
+      			}
+      		},
+      		":markertracker" : {
+      			"versions" : {
+      				":1.0" : {
+      					"uncompressed" : "../../../markertracker/1.0/src/markertracker.js",
+      					"compressed" : "../../../markertracker/1.0/src/markertracker.js" // No compressed version
+      				}
+      			},
+      			"aliases" : {
+      				":1" : "1.0"
+      			}
+      		}
+      	});
       }
     }
-
-    // Execute a callback for the newly loaded library
-    var loadedLibraryCount = 0;
-    function executeAppropriateCallbacks(libName) {
-      if (callbacks[libName]) {
-        callbacks[libName]();
-      }
-      loadedLibraryCount++;
-      if (loadedLibraryCount === librariesToLoad.length) {
-        finalCallback();
-      }
-    }
-
-    // Place a given function into the given namespace
-    function exportFunctionToNamespace(functionToExport, functionNamespace) {
-      var namespaceComponents = functionNamespace.split(/\./);
-      var currentNamespace = window;
-      for (var i = 0; i < namespaceComponents.length - 1; i++) {
-        if (!currentNamespace[namespaceComponents[i]]) {
-          currentNamespace[namespaceComponents[i]] = {};
-        }
-        currentNamespace = currentNamespace[namespaceComponents[i]];
-      }
-      currentNamespace[namespaceComponents[namespaceComponents.length - 1]] = functionToExport;
-    }
-
-    // Called when library has loaded
-    function libraryLoaded(libName, exportedFunctions) {
-      for (var namespace in exportedFunctions) if (exportedFunctions.hasOwnProperty(namespace)) {
-        exportFunctionToNamespace(exportedFunctions[namespace], namespace);
-      }
-      executeAppropriateCallbacks(libName);
-    }
-
-    exportFunctionToNamespace(loadLibrary, 'gmapsUtilityLibrary.load');
-    exportFunctionToNamespace(setOnLoadCallback, 'gmapsUtilityLibrary.setOnLoadCallback');
-    exportFunctionToNamespace(libraryLoaded, 'gmapsUtilityLibrary.loader.loaded');
-
   })();
 }

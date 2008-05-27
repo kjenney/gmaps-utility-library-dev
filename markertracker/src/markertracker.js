@@ -285,10 +285,6 @@ MarkerTracker.prototype.getRotatedPoint_ = function(x, y, ang, xoffset, yoffset)
   return(rotatedPoint);
 };
 
-if (gmapsUtilityLibrary.loader) {
-  gmapsUtilityLibrary.loader.loaded(
-    'markertracker', {
-      'gmapsUtilityLibrary.MarkerTracker' : MarkerTracker
-    }
-  );
+if (!google.loader.loadFailure) {
+  google_exportSymbol('gmapsUtilityLibrary.MarkerTracker', MarkerTracker);
 }

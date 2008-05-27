@@ -275,10 +275,6 @@ ExtMapTypeControl.prototype.setButtonStyle_ = function(button) {
   button.style.cursor = "pointer";
 }
 
-if (gmapsUtilityLibrary.loader) {
-  gmapsUtilityLibrary.loader.loaded(
-    'extmaptypecontrol', {
-      'gmapsUtilityLibrary.ExtMapTypeControl' : ExtMapTypeControl
-    }
-  );
+if (!google.loader.loadFailure) {
+  google_exportSymbol('gmapsUtilityLibrary.ExtMapTypeControl', ExtMapTypeControl);
 }
