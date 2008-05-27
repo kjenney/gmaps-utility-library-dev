@@ -95,3 +95,10 @@ MapIconMaker.createFlatIcon = function(opts) {
   return icon;
 }
 
+if (gmapsUtilityLibrary.loader) {
+  gmapsUtilityLibrary.loader.loaded(
+    'mapiconmaker', {
+      'gmapsUtilityLibrary.MapIconMaker' : MapIconMaker
+    }
+  );
+}

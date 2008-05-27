@@ -705,3 +705,11 @@ GMap2.prototype.closeExtInfoWindow = function(){
     this.ExtInfoWindowInstance_.remove();
   }
 };
+
+if (gmapsUtilityLibrary.loader) {
+  gmapsUtilityLibrary.loader.loaded(
+    'extinfowindow', {
+      'gmapsUtilityLibrary.ExtInfoWindow' : ExtInfoWindow
+    }
+  );
+}

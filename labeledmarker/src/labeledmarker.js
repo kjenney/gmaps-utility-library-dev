@@ -227,3 +227,11 @@ LabeledMarker.prototype.hideLabel = function() {
 LabeledMarker.prototype.showLabel = function() {
   this.div_.style.visibility = 'visible';
 }
+
+if (gmapsUtilityLibrary.loader) {
+  gmapsUtilityLibrary.loader.loaded(
+    'labeledmarker', {
+      'gmapsUtilityLibrary.LabeledMarker' : LabeledMarker
+    }
+  );
+}

@@ -274,3 +274,11 @@ ExtMapTypeControl.prototype.setButtonStyle_ = function(button) {
   button.style.fontSize = "12px"; 
   button.style.cursor = "pointer";
 }
+
+if (gmapsUtilityLibrary.loader) {
+  gmapsUtilityLibrary.loader.loaded(
+    'extmaptypecontrol', {
+      'gmapsUtilityLibrary.ExtMapTypeControl' : ExtMapTypeControl
+    }
+  );
+}
