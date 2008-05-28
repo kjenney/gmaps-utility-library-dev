@@ -60,8 +60,15 @@ function MarkerManager(map, opt_opts) {
 
   opt_opts = opt_opts || {};
   me.tileSize_ = MarkerManager.DEFAULT_TILE_SIZE_;
-  
-  var maxZoom = MarkerManager.DEFAULT_MAX_ZOOM_;
+
+  var mapTypes = map.getMapTypes();
+  var maxZoom = mapTypes[0].getMaximumResolution();
+  for (var i=0; i < mapTypes.length; i++) {
+    var mapTypeMaxZoom = mapTypes[i].getMaximumResolution();
+    if (mapTypeMaxZoom > maxZoom) {
+      maxZoom = mapTypeMaxZoom;
+    }
+  };
   if(opt_opts.maxZoom != undefined) {
     maxZoom = opt_opts.maxZoom;
   }
@@ -108,7 +115,6 @@ function MarkerManager(map, opt_opts) {
 
 // Static constants:
 MarkerManager.DEFAULT_TILE_SIZE_ = 1024;
-MarkerManager.DEFAULT_MAX_ZOOM_ = 17;
 MarkerManager.DEFAULT_BORDER_PADDING_ = 100;
 MarkerManager.MERCATOR_ZOOM_LEVEL_ZERO_RANGE = 256;
 
