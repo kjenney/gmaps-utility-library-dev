@@ -52,7 +52,9 @@
  *   opts_other.backButtonEnabled {Boolean} enables Back Button functionality
  *   opts_other.backButtonHTML {String} The back button HTML
  *   opts_other.backButtonStyle {Object} A hash of css styles for the back button
- *     which will be applied when the button is created.	
+ *     which will be applied when the button is created.
+ *   opts_other.minDragSize {Number} The minimum size of the rectangle when it is
+ *     released for a zoom to happen.
  * @param {opts_callbacks} Named optional arguments:
  *   opts_callbacks.buttonclick {Function} Called when the DragZoom is activated 
  *     by clicking on the "zoom" button. 
@@ -137,7 +139,8 @@ function DragZoomControl(opts_boxStyle, opts_other, opts_callbacks) {
     overlayRemoveTime: 6000,
     backButtonEnabled: false,
     stickyZoomEnabled: false,
-    rightMouseZoomOutEnabled: false
+    rightMouseZoomOutEnabled: false,
+    minDragSize: 0
   };
 	
   for (var s in opts_other) {
@@ -415,41 +418,43 @@ DragZoomControl.prototype.mouseup_ = function(e){
 	
     this.resetDragZoom_();
 
-    var nwpx = new GPoint(rect.startX, rect.startY);
-    var nepx = new GPoint(rect.endX, rect.startY);
-    var sepx = new GPoint(rect.endX, rect.endY);
-    var swpx = new GPoint(rect.startX, rect.endY);
-    var nw = G.map.fromContainerPixelToLatLng(nwpx); 
-    var ne = G.map.fromContainerPixelToLatLng(nepx); 
-    var se = G.map.fromContainerPixelToLatLng(sepx); 
-    var sw = G.map.fromContainerPixelToLatLng(swpx); 
+    if (rect.width >= G.options.minDragSize && rect.height >= G.options.minDragSize) {
+      var nwpx = new GPoint(rect.startX, rect.startY);
+      var nepx = new GPoint(rect.endX, rect.startY);
+      var sepx = new GPoint(rect.endX, rect.endY);
+      var swpx = new GPoint(rect.startX, rect.endY);
+      var nw = G.map.fromContainerPixelToLatLng(nwpx); 
+      var ne = G.map.fromContainerPixelToLatLng(nepx); 
+      var se = G.map.fromContainerPixelToLatLng(sepx); 
+      var sw = G.map.fromContainerPixelToLatLng(swpx); 
 
-    var zoomAreaPoly = new GPolyline([nw, ne, se, sw, nw], G.style.outlineColor, G.style.outlineWidth + 1,.4);
+      var zoomAreaPoly = new GPolyline([nw, ne, se, sw, nw], G.style.outlineColor, G.style.outlineWidth + 1,.4);
 
-    try{
-      G.map.addOverlay(zoomAreaPoly);
-      setTimeout (function() {G.map.removeOverlay(zoomAreaPoly)}, G.options.overlayRemoveTime);  
-    }catch(e) {}
+      try{
+        G.map.addOverlay(zoomAreaPoly);
+        setTimeout (function() {G.map.removeOverlay(zoomAreaPoly)}, G.options.overlayRemoveTime);  
+      }catch(e) {}
 
-    var polyBounds = zoomAreaPoly.getBounds();
-    var ne = polyBounds.getNorthEast();
-    var sw = polyBounds.getSouthWest();
-    var se = new GLatLng(sw.lat(), ne.lng());
-    var nw = new GLatLng(ne.lat(), sw.lng());
-    if (G.options.rightMouseZoomOutEnabled && G.draggingRightMouse) {
-      var mapSpan = G.map.getBounds().toSpan();
-      var polySpan = polyBounds.toSpan();
-      var dSize = Math.max(mapSpan.lat()/polySpan.lat(), mapSpan.lng()/polySpan.lng());
-      var zoomLevel = G.map.getZoom() - Math.ceil(Math.log(dSize, 2));
-    } else {
-      var zoomLevel = G.map.getBoundsZoomLevel(polyBounds);
-    }
-    var center = polyBounds.getCenter();
-    G.map.setCenter(center, zoomLevel);
+      var polyBounds = zoomAreaPoly.getBounds();
+      var ne = polyBounds.getNorthEast();
+      var sw = polyBounds.getSouthWest();
+      var se = new GLatLng(sw.lat(), ne.lng());
+      var nw = new GLatLng(ne.lat(), sw.lng());
+      if (G.options.rightMouseZoomOutEnabled && G.draggingRightMouse) {
+        var mapSpan = G.map.getBounds().toSpan();
+        var polySpan = polyBounds.toSpan();
+        var dSize = Math.max(mapSpan.lat()/polySpan.lat(), mapSpan.lng()/polySpan.lng());
+        var zoomLevel = G.map.getZoom() - Math.ceil(Math.log(dSize, 2));
+      } else {
+        var zoomLevel = G.map.getBoundsZoomLevel(polyBounds);
+      }
+      var center = polyBounds.getCenter();
+      G.map.setCenter(center, zoomLevel);
 
-    // invoke callback if provided
-    if (G.callbacks.dragend != null) {
-      G.callbacks.dragend(nw, ne, se, sw, nwpx, nepx, sepx, swpx);
+      // invoke callback if provided
+      if (G.callbacks.dragend != null) {
+        G.callbacks.dragend(nw, ne, se, sw, nwpx, nepx, sepx, swpx);
+      }
     }
 
     //re-init if sticky

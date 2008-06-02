@@ -207,6 +207,13 @@ Instead, this class is instantiated as a javascript object literal.
 fit the current visible extent of the map into the size of the dragged box. Defaults to false.
 </td>
 </tr>
+<tr class="even">
+
+<td class="code">minDragSize</td>
+<td class="code"> Number</td>
+<td> Often, users will try to &quot;cancel&quot; a dragzoom operation by resizing their selected rectangle to a point.  <code>minDragSize</code> specifies a minimum size in pixels for the dragged rectangle to trigger a zoom. The default is 0, but something like 3-5 is sensible for most cases.
+</td>
+</tr>
 </tbody>
 </table>
 
