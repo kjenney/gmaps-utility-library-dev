@@ -71,7 +71,7 @@ MapIconMaker.createFlatIcon = function(opts) {
   var width = opts.width || 32;
   var height = opts.height || 32;
   var primaryColor = opts.primaryColor || "#ff0000";
-  var shadowColor = opts.shadowColor || "#bbbbbb";
+  var shadowColor = opts.shadowColor || "#000000";
   var text = opts.text || "";
   var textColor = opts.textColor || "#000000";
   var textSize = opts.textSize || 0;
@@ -80,10 +80,10 @@ MapIconMaker.createFlatIcon = function(opts) {
 
   var baseUrl = "http://chart.apis.google.com/chart?cht=" + typeCode;
   var iconUrl = baseUrl + "&chs=" + width + "x" + height + 
-      "&chco=" + primaryColor.replace("#", "") + "," + shadowColor.replace("#", "") + 
+      "&chco=" + primaryColor.replace("#", "") + "," + shadowColor.replace("#", "") + "ff,ffffff01" +
       "&chl=" + text + "&chx=" + textColor.replace("#", "") + "," + textSize;
   var icon = new GIcon(G_DEFAULT_ICON);
-  icon.image = iconUrl + "&ext=.png";
+  icon.image = iconUrl + "&chf=bg,s,00000000" + "&ext=.png";
   icon.iconSize = new GSize(width, height);
   icon.shadowSize = new GSize(0, 0);
   icon.iconAnchor = new GPoint(width/2, height/2);
