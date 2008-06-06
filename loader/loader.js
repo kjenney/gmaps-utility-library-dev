@@ -1,115 +1,54 @@
-/*jslint white: true, browser: true, undef: true, nomen: true, eqeqeq: true, glovar: true */
+/*global google*/
 /*global gmapsUtilityLibrary*/
 if (!window.gmapsUtilityLibrary) {
   window.gmapsUtilityLibrary = {};
 }
 if (!window.gmapsUtilityLibrary.loader) {
   window.gmapsUtilityLibrary.loader = {};
-  (function() { // New scope
+  (function () { // New scope
     if (google.loader.loadFailure) {
       alert('Loader requires Google AJAX Libraries API to be loaded.');
     } else {
-        google.loader.GoogleApisBase = 'http://gmaps-utility-library.googlecode.com/svn/trunk';
-        google.loader.rpl({
-      		":dragzoom" : {
-      			"versions" : {
-      				":1.0" : {
-      					"uncompressed" : "../../../dragzoom/1.0/src/dragzoom.js",
-      					"compressed" : "../../../dragzoom/1.0/src/dragzoom_packed.js"
-      				},
-      				":1.1" : {
-      					"uncompressed" : "../../../dragzoom/1.2/src/dragzoom.js",
-      					"compressed" : "../../../dragzoom/1.2/src/dragzoom_packed.js"
-      				},
-      				":1.2" : {
-      					"uncompressed" : "../../../dragzoom/1.2/src/dragzoom.js",
-      					"compressed" : "../../../dragzoom/1.2/src/dragzoom_packed.js"
-      				}
-      			},
-      			"aliases" : {
-      				":1" : "1.2"
-      			}
-      		},
-      		":extinfowindow" : {
-      			"versions" : {
-      				":1.0" : {
-      					"uncompressed" : "../../../extinfowindow/1.0/src/extinfowindow.js",
-      					"compressed" : "../../../extinfowindow/1.0/src/extinfowindow_packed.js"
-      				}
-      			},
-      			"aliases" : {
-      				":1" : "1.0"
-      			}
-      		},
-      		":extmaptypecontrol" : {
-      			"versions" : {
-      				":1.0" : {
-      					"uncompressed" : "../../../extmaptypecontrol/1.0/src/extmaptypecontrol.js",
-                "compressed" : "../../../extmaptypecontrol/1.0/src/extmaptypecontrol.js" // No compressed version
-      				},
-      				":1.1" : {
-      					"uncompressed" : "../../../extmaptypecontrol/1.1/src/extmaptypecontrol.js",
-      					"compressed" : "../../../extmaptypecontrol/1.1/src/extmaptypecontrol_packed.js"
-      				},
-      				":1.2" : {
-      					"uncompressed" : "../../../extmaptypecontrol/1.2/src/extmaptypecontrol.js",
-      					"compressed" : "../../../extmaptypecontrol/1.2/src/extmaptypecontrol_packed.js"
-      				}
-      			},
-      			"aliases" : {
-      				":1" : "1.2"
-      			}
-      		},
-      		":labeledmarker" : {
-      			"versions" : {
-      				":1.0" : {
-      					"uncompressed" : "../../../labeledmarker/1.0/src/labeledmarker.js",
-      					"compressed" : "../../../labeledmarker/1.0/src/labeledmarker_packed.js"
-      				},
-      				":1.1" : {
-      					"uncompressed" : "../../../labeledmarker/1.1/src/labeledmarker.js",
-      					"compressed" : "../../../labeledmarker/1.1/src/labeledmarker_packed.js"
-      				}
-      			},
-      			"aliases" : {
-      				":1" : "1.1"
-      			}
-      		}, 
-      		":mapiconmaker" : {
-      			"versions" : {
-      				":1.0" : {
-      					"uncompressed" : "../../../mapiconmaker/1.0/src/mapiconmaker.js",
-      					"compressed" : "../../../mapiconmaker/1.0/src/mapiconmaker_packed.js"
-      				}
-      			},
-      			"aliases" : {
-      				":1" : "1.0"
-      			}
-      		},
-      		":markermanager" : {
-      			"versions" : {
-      				":1.0" : {
-      					"uncompressed" : "../../../markermanager/1.0/src/markermanager.js",
-      					"compressed" : "../../../markermanager/1.0/src/markermanager.js" // No compressed version
-      				}
-      			},
-      			"aliases" : {
-      				":1" : "1.0"
-      			}
-      		},
-      		":markertracker" : {
-      			"versions" : {
-      				":1.0" : {
-      					"uncompressed" : "../../../markertracker/1.0/src/markertracker.js",
-      					"compressed" : "../../../markertracker/1.0/src/markertracker.js" // No compressed version
-      				}
-      			},
-      			"aliases" : {
-      				":1" : "1.0"
-      			}
-      		}
-      	});
-      }
+      google.loader.GoogleApisBase = 'http://gmaps-utility-library.googlecode.com/svn/trunk';
+      google.loader.rpl(function () {
+        // A shorthand version of the object required by rpl
+        var libraries = {
+          "compressed" : {
+            "dragzoom" : 2,
+            "extinfowindow" : 0,
+            "extmaptypecontrol" : 2,
+            "labeledmarker" : 1,
+            "mapiconmaker" : 1
+          },
+          "uncompressed" : {
+            "markermanager" : 0,
+            "markertracker" : 0
+          }
+        };
+        var rplObject = {};
+        // Convert shorthand into the real thing.  Assumptions:
+        // we always compress some libraries, and never others
+        // we increment versions by 0.1, from 1.0
+        // we neither change major versions nor skip minor versions
+        for (var librarySetName in libraries) {
+          var librarySet = libraries[librarySetName];
+          for (var libraryName in librarySet) {
+            var highestLibraryVersion = librarySet[libraryName];
+            var rplLibrary = rplObject[":" + libraryName] = {};
+            rplLibrary.versions = {};
+            for (var versionName = 0; versionName <= highestLibraryVersion; versionName++) {
+              var rplUrl = rplLibrary.versions[":1." + versionName] = {};
+              // Traversing up three directories is necessary as the real ajax
+              // libraries use a different directory structure than we do.
+              var url = "../../../" + libraryName + "/1." + versionName + "/src/" + libraryName;
+              rplUrl.uncompressed = url + ".js";
+              rplUrl.compressed = url + ((librarySetName === "compressed") ? "_packed" : "") + ".js";
+            }
+            rplObject[":" + libraryName].aliases = {":1" : "1." + highestLibraryVersion};
+          }
+        }
+        return rplObject;
+      }());
     }
   })();
 }
