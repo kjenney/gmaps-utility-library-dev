@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <title>Google Maps API Example - Simple Labeled Marker and setLatLng</title>
+    <title>Google Maps API Example - Simple Labeled Marker and copy</title>
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAA-O3c-Om9OcvXMOJXreXHAxTPZYElJSBeBUeMSX5xXgq6lLjHthQK56gfyM5NBqKVAIOX7Pg8-ceW5A"
       type="text/javascript"></script>
     <script src="../src/labeledmarker.js"></script>
@@ -37,8 +37,8 @@
         var marker = new LabeledMarker(latlng, opts);
 
         GEvent.addListener(marker, "click", function() {
-          marker.setLatLng(new GLatLng(48.25, 21));
-          GLog.write("Called setLatLng to put marker in new location");
+          map.showMapBlowup(marker.getLatLng());
+          GLog.write("Showing a mini map with the labeledmarker in it.");
         });
         map.addOverlay(marker);
       }
