@@ -52,7 +52,7 @@ function LabeledMarker(latlng, opt_opts){
   }
   
   GMarker.apply(this, arguments);
-}
+};
 
 
 // It's a limitation of JavaScript inheritance that we can't conveniently
@@ -103,7 +103,7 @@ LabeledMarker.prototype.initialize = function(map) {
       GEvent.addDomListener(this.div_, name, newEventPassthru(this, name));
     }
   }
-}
+};
 
 /**
  * Call the redraw() handler in GMarker and our our redrawLabel() function.
@@ -113,7 +113,7 @@ LabeledMarker.prototype.initialize = function(map) {
 LabeledMarker.prototype.redraw = function(force) {
   GMarker.prototype.redraw.apply(this, arguments);
   this.redrawLabel_();  
-}
+};
 
 /**
  * Moves the text div based on current projection and zoom level.
@@ -127,7 +127,8 @@ LabeledMarker.prototype.redrawLabel_ = function() {
   // Now position our div based on the div coordinates of our bounds
   this.div_.style.left = (p.x + this.labelOffset_.width) + "px";
   this.div_.style.top = (p.y + this.labelOffset_.height) + "px";
-}
+  this.div_.style.zIndex = z; // in front of the marker
+};
 
 /**
  * Remove the text div from the map pane, destroy event passthrus, and calls the
@@ -143,7 +144,7 @@ LabeledMarker.prototype.redrawLabel_ = function() {
   }
   this.div_ = null;
   GMarker.prototype.remove.apply(this, arguments);
-}
+};
 
 /**
  * Return a copy of this overlay, for the parent Map to duplicate itself in full. This
@@ -152,7 +153,7 @@ LabeledMarker.prototype.redrawLabel_ = function() {
  */
 LabeledMarker.prototype.copy = function() {
   return new LabeledMarker(this.latlng_, this.opts_);
-}
+};
 
 
 /**
@@ -166,7 +167,7 @@ LabeledMarker.prototype.show = function() {
   } else {
     this.hideLabel();
   }
-}
+};
 
 
 /**
@@ -176,7 +177,7 @@ LabeledMarker.prototype.show = function() {
 LabeledMarker.prototype.hide = function() {
   GMarker.prototype.hide.apply(this, arguments);
   this.hideLabel();
-}
+};
 
 
 /**
@@ -186,7 +187,7 @@ LabeledMarker.prototype.setLatLng = function(latlng) {
   this.latlng_ = latlng;
   GMarker.prototype.setLatLng.apply(this, arguments);
   this.redrawLabel_();
-}
+};
 
 /**
  * Sets the visibility of the label, which will be respected during show/hides.
@@ -201,7 +202,7 @@ LabeledMarker.prototype.setLabelVisibility = function(visibility) {
       this.hideLabel();
     }
   }
-}
+};
 
 
 /**
@@ -210,7 +211,7 @@ LabeledMarker.prototype.setLabelVisibility = function(visibility) {
  */
 LabeledMarker.prototype.getLabelVisibility = function() {
   return this.labelVisibility_;
-}
+};
 
 
 /**
@@ -218,7 +219,7 @@ LabeledMarker.prototype.getLabelVisibility = function() {
  */
 LabeledMarker.prototype.hideLabel = function() {
   this.div_.style.visibility = 'hidden';
-}
+};
 
 
 /**
@@ -226,4 +227,4 @@ LabeledMarker.prototype.hideLabel = function() {
  */
 LabeledMarker.prototype.showLabel = function() {
   this.div_.style.visibility = 'visible';
-}
+};
