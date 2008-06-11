@@ -215,7 +215,7 @@ MarkerManager.prototype.isGridPointVisible_ = function(point) {
     horizontal = minX + width <= point.x && point.x <= width - 1;
   }
   return vertical && horizontal;
-}
+};
 
 
 /**
@@ -336,7 +336,7 @@ MarkerManager.prototype.addMarkers = function(markers, minZoom, opt_maxZoom) {
  */
 MarkerManager.prototype.getOptMaxZoom_ = function(opt_maxZoom) {
   return opt_maxZoom != undefined ? opt_maxZoom : this.maxZoom_;
-}
+};
 
 
 /**
@@ -386,7 +386,7 @@ GBounds.prototype.containsPoint = function(point) {
           outer.maxX >= point.x &&
           outer.minY <= point.y &&
           outer.maxY >= point.y);
-}
+};
 
 /**
  * Get a cell in the grid, creating it first if necessary.
