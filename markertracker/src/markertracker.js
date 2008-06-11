@@ -284,8 +284,3 @@ MarkerTracker.prototype.getRotatedPoint_ = function(x, y, ang, xoffset, yoffset)
   var rotatedPoint = new GPoint(newx, newy);
   return(rotatedPoint);
 };
-
-
-
-
-
