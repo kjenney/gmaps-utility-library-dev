@@ -28,7 +28,7 @@
  */
 function ExtMapTypeControl(opt_opts) {
   this.options = opt_opts || {};
-}
+};
 
 
 ExtMapTypeControl.prototype = new GControl();
@@ -150,7 +150,7 @@ ExtMapTypeControl.prototype.initialize = function(map) {
   map.getContainer().appendChild(container);
 
   return container;
-}
+};
 
 /*
  * Creates buttons for map types.
@@ -167,7 +167,7 @@ ExtMapTypeControl.prototype.addMapTypeButtons_ = function(map) {
   }
   me.resetButtonEvents_(map, mapTypeDivs);
   return mapTypeDivs;
-}
+};
 
 /*
  * Ensures that map type button events are assigned correctly.
@@ -196,7 +196,7 @@ ExtMapTypeControl.prototype.resetButtonEvents_ = function(map, mapTypeDivs) {
     }
     GEvent.trigger(mapTypeDivs[divIndex], "click");
   });
-}
+};
 
 /*
  * Creates simple buttons with text nodes. 
@@ -213,7 +213,7 @@ ExtMapTypeControl.prototype.createButton_ = function(text) {
   textDiv.style.width = "6em";
   buttonDiv.appendChild(textDiv);
   return buttonDiv;
-}
+};
 
 /*
  * Assigns events to MapType buttons to change maptype
@@ -234,7 +234,7 @@ ExtMapTypeControl.prototype.assignButtonEvent_ = function(div, map, mapType, oth
     me.toggleButton_(div.firstChild, true);
     map.setMapType(mapType);
   });
-}
+};
 
 /*
  * Changes style of button to appear on/off depending on boolean passed in.
@@ -248,7 +248,7 @@ ExtMapTypeControl.prototype.toggleButton_ = function(div, boolCheck) {
    for (var j = 0; j < shadows.length; j++) {
      div.style["border" + shadows[j]] = "1px solid #b0b0b0";
   } 
-   }
+};
 
 /*
  * Required by GMaps API for controls. 
@@ -256,7 +256,7 @@ ExtMapTypeControl.prototype.toggleButton_ = function(div, boolCheck) {
  */
 ExtMapTypeControl.prototype.getDefaultPosition = function() {
   return new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(7, 7));
-}
+};
 
 /*
  * Sets the proper CSS for the given button element.
@@ -272,4 +272,4 @@ ExtMapTypeControl.prototype.setButtonStyle_ = function(button) {
   button.style.textAlign = "center";
   button.style.fontSize = "12px"; 
   button.style.cursor = "pointer";
-}
+};
