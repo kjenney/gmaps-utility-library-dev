@@ -152,7 +152,7 @@ function DragZoomControl(opts_boxStyle, opts_other, opts_callbacks) {
     opts_callbacks = {}
   }
   this.globals.callbacks = opts_callbacks;
-}
+};
 
 DragZoomControl.prototype = new GControl();
 
@@ -242,65 +242,65 @@ DragZoomControl.prototype.initialize = function(map) {
   var mapDiv = map.getContainer();
  
   // Create div for both buttons	
-    var buttonContainerDiv = document.createElement("div");	
-    DragZoomUtil.style([buttonContainerDiv], {cursor: 'pointer', zIndex: 150});
+  var buttonContainerDiv = document.createElement("div");	
+  DragZoomUtil.style([buttonContainerDiv], {cursor: 'pointer', zIndex: 150});
 
   // create and init the zoom button
-    //DOM:button
-    var buttonDiv = this.initButton_(buttonContainerDiv);
+  //DOM:button
+  var buttonDiv = this.initButton_(buttonContainerDiv);
 
   // create and init the back button				
-    //DOM:button
-    var backButtonDiv = this.initBackButton_(buttonContainerDiv);
+  //DOM:button
+  var backButtonDiv = this.initBackButton_(buttonContainerDiv);
   
   // Add the two buttons to the map 					
-    mapDiv.appendChild(buttonContainerDiv);
+  mapDiv.appendChild(buttonContainerDiv);
  
   //DOM:map covers
-    var zoomDiv = document.createElement("div");
-    var DIVS_TO_CREATE = ['outlineDiv', 'cornerTopDiv', 'cornerLeftDiv', 'cornerRightDiv', 'cornerBottomDiv'];
-    for (var i=0; i<DIVS_TO_CREATE.length; i++) {
-        var id = DIVS_TO_CREATE[i];
-        var div = document.createElement("div");
-        DragZoomUtil.style([div], {position: 'absolute', display: 'none'});
-        zoomDiv.appendChild(div);
-        G[id] = div;
-    }
-    DragZoomUtil.style([zoomDiv], {position: 'absolute', display: 'none', overflow: 'hidden', cursor: 'crosshair', zIndex: 101});
-    mapDiv.appendChild(zoomDiv);
+  var zoomDiv = document.createElement("div");
+  var DIVS_TO_CREATE = ['outlineDiv', 'cornerTopDiv', 'cornerLeftDiv', 'cornerRightDiv', 'cornerBottomDiv'];
+  for (var i=0; i<DIVS_TO_CREATE.length; i++) {
+    var id = DIVS_TO_CREATE[i];
+    var div = document.createElement("div");
+    DragZoomUtil.style([div], {position: 'absolute', display: 'none'});
+    zoomDiv.appendChild(div);
+    G[id] = div;
+  }
+  DragZoomUtil.style([zoomDiv], {position: 'absolute', display: 'none', overflow: 'hidden', cursor: 'crosshair', zIndex: 101});
+  mapDiv.appendChild(zoomDiv);
   
   // add event listeners
-    GEvent.addDomListener(buttonDiv, 'click', function(e) {
-      me.buttonclick_(e);
-    });
-    GEvent.addDomListener(backButtonDiv, 'click', function(e) {
-      me.backbuttonclick_(e);
-    });
-    GEvent.addDomListener(zoomDiv, 'mousedown', function(e) {
-      me.coverMousedown_(e);
-    });
-    GEvent.addDomListener(document, 'mousemove', function(e) {
-      me.drag_(e);
-    });
-    GEvent.addDomListener(document, 'mouseup', function(e) {
-      me.mouseup_(e);
-    });
+  GEvent.addDomListener(buttonDiv, 'click', function(e) {
+    me.buttonclick_(e);
+  });
+  GEvent.addDomListener(backButtonDiv, 'click', function(e) {
+    me.backbuttonclick_(e);
+  });
+  GEvent.addDomListener(zoomDiv, 'mousedown', function(e) {
+    me.coverMousedown_(e);
+  });
+  GEvent.addDomListener(document, 'mousemove', function(e) {
+    me.drag_(e);
+  });
+  GEvent.addDomListener(document, 'mouseup', function(e) {
+    me.mouseup_(e);
+  });
   
   // get globals
-    G.mapPosition = DragZoomUtil.getElementPosition(mapDiv);
-    G.buttonDiv = buttonDiv;
-    G.backButtonDiv = backButtonDiv;
-    G.mapCover = zoomDiv;
-    G.map = map;
-  
-    G.borderCorrection = G.style.outlineWidth * 2;	
-    this.setDimensions_();
+  G.mapPosition = DragZoomUtil.getElementPosition(mapDiv);
+  G.buttonDiv = buttonDiv;
+  G.backButtonDiv = backButtonDiv;
+  G.mapCover = zoomDiv;
+  G.map = map;
+
+  G.borderCorrection = G.style.outlineWidth * 2;	
+  this.setDimensions_();
   
   //styles
-    this.initStyles_();
+  this.initStyles_();
 
   // disable text selection on map cover
-    G.mapCover.onselectstart = function() {return false}; 
+  G.mapCover.onselectstart = function() {return false}; 
     
   return buttonContainerDiv;
 };
@@ -640,7 +640,7 @@ var DragZoomUtil={};
  */
 DragZoomUtil.gE = function(sId) {
   return document.getElementById(sId);
-}
+};
 
 /**
  * A general-purpose function to get the absolute position

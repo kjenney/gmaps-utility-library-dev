@@ -14,11 +14,15 @@
 
     function load() {
       if (GBrowserIsCompatible()) {
-        var map = new GMap2(document.getElementById("map"));
-        map.setCenter(new GLatLng(37.4419, -122.1419), 13);
-        map.enableScrollWheelZoom();
-        map.addControl(new GSmallMapControl());
-        map.addControl(new DragZoomControl());
+        var map1 = new GMap2(document.getElementById("map1"));
+        map1.setCenter(new GLatLng(37.4419, -122.1419), 13);
+        map1.addControl(new GSmallMapControl());
+        map1.addControl(new DragZoomControl());
+
+        var map2 = new GMap2(document.getElementById("map2"));
+        map2.setCenter(new GLatLng(37.4419, -122.1419), 13);
+        map2.addControl(new GSmallMapControl());
+        map2.addControl(new DragZoomControl());
       }
     }
 
@@ -26,6 +30,8 @@
     </script>
   </head>
   <body onload="load()" onunload="GUnload()">
-    <div id="map" style="width: 500px; height: 400px"></div>
+    <div id="map1" style="width: 400px; height: 300px"></div>
+    <br/><br/>
+    <div id="map2" style="width: 400px; height: 300px"></div>
   </body>
 </html>
