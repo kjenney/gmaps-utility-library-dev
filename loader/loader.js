@@ -1,54 +1,97 @@
-/*global google*/
-/*global gmapsUtilityLibrary*/
-if (!window.gmapsUtilityLibrary) {
-  window.gmapsUtilityLibrary = {};
-}
-if (!window.gmapsUtilityLibrary.loader) {
-  window.gmapsUtilityLibrary.loader = {};
-  (function () { // New scope
-    if (google.loader.loadFailure) {
-      alert('Loader requires Google AJAX Libraries API to be loaded.');
+(function () {// New scope
+  var releaseProjectBase = "http://gmaps-utility-library.googlecode.com/svn/trunk";
+  var devProjectBase = "http://gmaps-utility-library-dev.googlecode.com/svn/trunk";
+  var libraries = {
+    "dragzoom" : ["1.0", "1.1", "1.2", "1.3"],
+    "extinfowindow" : ["1.0"],
+    "extmaptypecontrol" : ["1.0", "1.1", "1.2", "1.3"],
+    "labeledmarker" : ["1.0", "1.1", "1.2"],
+    "mapiconmaker" : ["1.0"],
+    "markermanager" : ["1.0"],
+    "markertracker" : ["1.0"]
+  };
+  var librariesToLoad = 0;
+  var callbacks = {};
+  function load (libName, libVersionRequested, libOptions) {
+    // Determine which version to load
+    if (!libraries[libName]) {
+      alert("No library named " + libName + " exists.");
     } else {
-      google.loader.GoogleApisBase = 'http://gmaps-utility-library.googlecode.com/svn/trunk';
-      google.loader.rpl(function () {
-        // A shorthand version of the object required by rpl
-        var libraries = {
-          "compressed" : {
-            "dragzoom" : 2,
-            "extinfowindow" : 0,
-            "extmaptypecontrol" : 2,
-            "labeledmarker" : 1,
-            "mapiconmaker" : 1
-          },
-          "uncompressed" : {
-            "markermanager" : 0,
-            "markertracker" : 0
-          }
-        };
-        var rplObject = {};
-        // Convert shorthand into the real thing.  Assumptions:
-        // we always compress some libraries, and never others
-        // we increment versions by 0.1, from 1.0
-        // we neither change major versions nor skip minor versions
-        for (var librarySetName in libraries) {
-          var librarySet = libraries[librarySetName];
-          for (var libraryName in librarySet) {
-            var highestLibraryVersion = librarySet[libraryName];
-            var rplLibrary = rplObject[":" + libraryName] = {};
-            rplLibrary.versions = {};
-            for (var versionName = 0; versionName <= highestLibraryVersion; versionName++) {
-              var rplUrl = rplLibrary.versions[":1." + versionName] = {};
-              // Traversing up three directories is necessary as the real ajax
-              // libraries use a different directory structure than we do.
-              var url = "../../../" + libraryName + "/1." + versionName + "/src/" + libraryName;
-              rplUrl.uncompressed = url + ".js";
-              rplUrl.compressed = url + ((librarySetName === "compressed") ? "_packed" : "") + ".js";
-            }
-            rplObject[":" + libraryName].aliases = {":1" : "1." + highestLibraryVersion};
-          }
+      var libVersion;
+      if (libVersionRequested === "x") {
+        libVersion = "";
+      } else {
+        // Turn the request into a partial regex string
+        libVersionRequested = "^" + libVersionRequested.replace(/\./, "\\.");
+      }
+      for (var i = 0; i < libraries[libName].length; i++) {
+        if (libraries[libName][i].match(libVersionRequested)) {
+          // Because versions are listed in ascending order in libraries[i],
+          // the highest version matching the request will be selected.
+          libVersion = "/" + libraries[libName][i];
         }
-        return rplObject;
-      }());
+      }
+      if (libVersion === undefined) {
+        alert("Invalid version requested.");
+      } else {
+        // Pick between the release and development projects
+        var urlBase = libVersion === "" ? devProjectBase : releaseProjectBase;
+        // Default to using the compressed versions of the libraries
+        var packingOption = "_packed";
+        // Parse optional parameters
+        if (libOptions) {
+          // Setup the callback
+          callbacks[libName] = libOptions.callback;
+
+          // Choose uncompressed option
+          packingOption = libOptions.uncompressed ? "" : "_packed";
+        }
+        // Keep track of how many libraries we need to load
+        librariesToLoad++;
+
+        // Load the library
+        var firstHead = document.getElementsByTagName("head")[0];
+        var scriptTag = document.createElement("script");
+        var libUrl = urlBase + "/" + libName + libVersion + "/src/" + libName + packingOption + ".js";
+        scriptTag.setAttribute("src", libUrl);
+        if (!window.google.maps) {
+          alert("The Google Maps API must be loaded before loading any utility libraries.");
+        } else {
+          firstHead.appendChild(scriptTag);
+        }
+      }
     }
-  })();
-}
+  }
+  function loaded (libName) {
+    console.log(libName + " loaded.");
+    // Execute any lib-specific callback immediately upon being loaded.
+    if (typeof callbacks[libName] === "function") {
+      callbacks[libName]();
+    }
+    // Execute the final call back after all libraries have been loaded.
+    librariesToLoad--;
+    if ((librariesToLoad === 0) && (typeof callbacks.loader === "function")) {
+      callbacks.loader();
+    }
+  }
+  function setOnLoadCallback (callback) {
+    callbacks.loader = callback;
+  }
+  var namespace = "google.extentions.maps";
+	function exportSymbol(symbolName, symbol) {
+	  symbolName = namespace + "." + symbolName;
+		var symbolNameParts = symbolName.split(/\./);
+		var currentNamespace = window;
+		for (var i = 0; i < symbolNameParts.length-1; i++) {
+			if (!currentNamespace[symbolNameParts[i]]) {
+				currentNamespace[symbolNameParts[i]] = {}
+			}
+			currentNamespace = currentNamespace[symbolNameParts[i]];
+		}
+		currentNamespace[symbolNameParts[symbolNameParts.length-1]] = symbol;
+	}
+  exportSymbol("load", load);
+  exportSymbol("setOnLoadCallback", setOnLoadCallback);
+  exportSymbol("loader.loaded", loaded);
+  exportSymbol("loader.exportSymbol", exportSymbol);
+})();

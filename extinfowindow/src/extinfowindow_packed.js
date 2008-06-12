@@ -1,1 +1,712 @@
-eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('C H(a,b,c,d){3.1n=c;3.R=a;3.K=b;3.L=d==6?{}:d;3.1g=3.L.22==6?6:3.L.22;3.23=3.L.24==6?6:3.L.24;3.1F=3.L.25==6?6:3.L.25;3.19=3.1F==6?15:1a;3.1o=15;3.N=3.L.26==6?0:3.L.26;3.1p=3.L.27==6?0+3.N:3.L.27+3.N;3.1q=3.L.28==6?0+3.N:3.L.28+3.N;3.A=6;3.v=G.1b(\'1c\');3.v.7.Y=\'2G\';3.v.7.I=\'Z\';3.E=G.1b(\'1c\');3.E.11=3.K+\'29\';3.E.1r=3.1n;3.E.7.I=\'1h\';3.E.7.W=\'1i\';3.1d=G.1b(\'1c\')};H.D=1s 2H();H.D.2I=C(b){3.A=b;u(3.19){3.2a=3.A.1G().z*0.9;3.2b=3.A.1G().F*0.9}3.2c={2d:3.A.1G().z/2,2J:1};3.4={M:{t:0,l:0,w:0,h:0,s:6},t:{t:0,l:0,w:0,h:0,s:6},12:{t:0,l:0,w:0,h:0,s:6},l:{t:0,l:0,w:0,h:0,s:6},r:{t:0,l:0,w:0,h:0,s:6},X:{t:0,l:0,w:0,h:0,s:6},b:{t:0,l:0,w:0,h:0,s:6},1t:{t:0,l:0,w:0,h:0,s:6},1e:{t:0,l:0,w:0,h:0,s:6},S:{t:0,l:0,w:0,h:0,s:6}};u(3.19){3.4.T={t:0,l:0,w:0,h:0,s:6}3.4.16={t:0,l:0,w:0,h:0,s:6}}1j(8 i 1k 3.4){8 c=G.1b(\'1c\');c.11=3.K+\'1u\'+i;c.7.W=\'1i\';G.1v.13(c);c=G.1w(3.K+\'1u\'+i);8 d=3.4[i];d.w=1H(3.1f(c,\'z\'),10);d.h=1H(3.1f(c,\'F\'),10);G.1v.1I(c)}1j(8 i 1k 3.4){u(i==\'S\'){3.1d.13(3.E)}8 e=6;u(3.4[i].s==6){e=G.1b(\'1c\');3.1d.13(e)}U{e=3.4[i].s}e.11=3.K+\'1u\'+i;e.7.Y=\'1l\';e.7.z=3.4[i].w+\'B\';e.7.F=3.4[i].h+\'B\';e.7.P=3.4[i].t+\'B\';e.7.1x=3.4[i].l+\'B\';3.4[i].s=e}3.A.2K(2L).13(3.v);3.v.11=3.K;8 f=3.1f(G.1w(3.K),\'z\');3.v.7.z=(f==6?3.2c.2d:f);3.A.2M().13(3.E);3.14=3.O(3.v).z;3.E.7.z=3.14+\'B\';3.E.7.Y=\'1l\';3.v.13(3.1d);u(3.19){3.2e=3.O(3.v).z;2N.2O(3.2e)}u(3.19){1J=3.A;2f=3.2a;2P=3.2b;2Q=3.v;2g=3.1F;2h=3.v.7.z;2i=3.v.7.F;Q.1K(3.4.T.s,\'1y\',C(){8 a=1J.J();a.v.7.z=2f+\'B\';a.1z(2g);a.1o=1a;a.1L(1a);a.1A()});Q.1K(3.4.16.s,\'1y\',C(){8 a=1J.J();a.v.7.z=2h;a.v.7.F=2i;u(a.1g!=6){a.1z(3.1g)}U{a.E.1r=a.1n}a.1o=15;a.1L(1a);a.1M();a.1A()});3.1A()}8 g=[\'2R\',\'2S\',\'2T\'];1j(i=0;i<g.2j;i++){Q.2U(3.v,g[i],3,3.2k)}Q.1B(3.A,\'2V\');u(3.1g!=6){3.1z(3.1g)}};H.D.2k=C(e){u(2W.2X.2Y().2Z(\'30\')!=-1&&G.31){2l.2m.32=1a;2l.2m.33=15}U{e.34()}};H.D.2n=C(){u(3.A.J()!=6){Q.1B(3.A,\'35\');Q.36(3.v);u(3.v.2o){3.v.2o=\'\'}u(3.v.2p){3.v.2p.1I(3.v)}3.v=6;Q.1B(3.A,\'37\');3.A.1N(6)}};H.D.38=C(){V 1s H(3.R,3.K,3.1n,3.L)};H.D.1L=C(a){u(!a||3.v==6)V;8 b=3.E.17;3.E.7.F=b+\'B\';3.14=3.O(3.v).z;3.E.7.z=3.v.7.z;3.E.7.1x=3.4.l.w+\'B\';3.E.7.P=3.4.M.h+\'B\';3.E.7.W=\'2q\';3.4.M.t=0;3.4.M.l=0;3.4.t.l=3.4.M.w;3.4.t.w=(3.4.l.w+3.14+3.4.r.w)-3.4.M.w-3.4.12.w;3.4.t.h=3.4.M.h;3.4.12.l=3.4.t.w+3.4.M.w;3.4.l.t=3.4.M.h;3.4.l.h=b;3.4.r.l=3.14+3.4.l.w;3.4.r.t=3.4.12.h;3.4.r.h=b;3.4.X.t=b+3.4.M.h;3.4.b.l=3.4.X.w;3.4.b.t=b+3.4.M.h;3.4.b.w=(3.4.l.w+3.14+3.4.r.w)-3.4.X.w-3.4.1t.w;3.4.b.h=3.4.X.h;3.4.1t.l=3.4.b.w+3.4.X.w;3.4.1t.t=b+3.4.12.h;3.4.1e.l=3.N+(3.14/2)-(3.4.1e.w/2);3.4.1e.t=3.4.X.t+3.4.X.h-3.N;3.4.S.l=3.4.12.l+3.4.12.w-3.4.S.w-3.N;3.4.S.t=3.N;u(3.19){3.4.T.l=3.4.S.l-3.4.T.w-5;3.4.T.t=3.4.S.t;3.4.16.l=3.4.T.l;3.4.16.t=3.4.T.t}1j(8 i 1k 3.4){u(i==\'S\'){3.1d.39(3.E,3.4[i].s)}8 c=6;u(3.4[i].s==6){c=G.1b(\'1c\');3.1d.13(c)}U{c=3.4[i].s}c.11=3.K+\'1u\'+i;c.7.Y=\'1l\';c.7.z=3.4[i].w+\'B\';c.7.F=3.4[i].h+\'B\';c.7.P=3.4[i].t+\'B\';c.7.1x=3.4[i].l+\'B\';3.4[i].s=c}8 d=3.R;8 e=3.A;Q.1K(3.4.S.s,\'1y\',C(){e.18()});8 f=3.A.1m(3.R.1O());3.v.7.Y=\'1l\';8 g=3.R.1C();3.v.7.1x=(f.x-(3.14/2)-g.1P.x+g.1Q.x)+\'B\';3.v.7.P=(f.y-3.4.X.h-b-3.4.M.h-3.4.1e.h-g.1P.y+g.1Q.y+3.N)+\'B\';3.v.7.I=\'1h\';u(3.A.J()!=6){3.1R()}};H.D.1A=C(){u(3.4.T.s!=6&&3.4.16.s!=6){u(3.1o){3.4.T.s.7.I=\'Z\';3.4.16.s.7.I=\'1h\'}U{3.4.T.s.7.I=\'1h\';3.4.16.s.7.I=\'Z\'}}}H.D.1M=C(){8 a=3.E.3a(1a);a.11=3.K+\'2r\';a.7.W=\'1i\';a.7.F=\'1S\';G.1v.13(a);a=G.1w(3.K+\'2r\');8 b=a.17;G.1v.1I(a);3.E.7.F=b+\'B\';8 c=3.v.1T;8 d=3.A.1m(3.R.1O());8 e=3.4.t.s.17+3.4.l.s.17+3.4.b.s.17;8 f=3.4.t.s.2s;3.4.l.s.7.F=b+\'B\';3.4.r.s.7.F=b+\'B\';8 g=3.4.b.s.2s-b;3.4.l.s.7.P=g+\'B\';3.4.r.s.7.P=g+\'B\';3.E.7.P=g+\'B\';2t=1H(3.4.t.s.7.F,10);g-=2t;3.4.S.s.7.P=g+3.N+\'B\';3.4.M.s.7.P=g+\'B\';3.4.t.s.7.P=g+\'B\';3.4.12.s.7.P=g+\'B\';3.1R()};H.D.1R=C(){8 a=3.A.1m(3.A.2u().3b());8 b=3.A.1m(3.A.2u().3c());8 c=3.A.1m(3.R.1O());8 d=0;8 e=0;8 f=3.1p;8 g=3.1q;8 h=3.R.1C().1Q;8 i=3.R.1C().1P;8 j=3.4.t.s;8 k=3.4.l.s;8 l=3.4.b.s;8 m=3.4.r.s;8 n=3.4.1e.s;8 o=c.y-(-h.y+i.y+3.O(n).F+3.O(l).F+3.O(k).F+3.O(j).F+3.1q);u(o<a.y){e=a.y-o}U{8 p=c.y+3.1q;u(p>=b.y){e=-(p-b.y)}}8 q=2v.2w(c.x+3.O(3.v).z/2+3.O(m).z+3.1p+h.x-i.x);u(q>a.x){d=-(q-a.x)}U{8 r=-(2v.2w((3.O(3.v).z/2-3.R.1C().3d.z/2)+3.O(k).z+3.N+3.1p)-c.x-h.x+i.x);u(r<b.x){d=b.x-r}}u(d!=0||e!=0&&3.A.J()!=6){3.A.3e(1s 3f(d,e))}};H.D.1z=C(d){8 e=3.A;8 f=3.23;3g(d,C(a,b){u(e.J()!==6){8 c=G.1w(e.J().K+\'29\');u(a==6||b==-1){c.1r=\'<2x 3h="3i">3j: 3k 3l 3m 3n 3o 3p 3q 3r 3s "\'+d+\'"</2x>\'}U{c.1r=a}u(f!=6){f()}e.J().1M()}Q.1B(e,\'3t\')})};H.D.O=C(a){8 b=3.1f(a,\'I\');u(b!=\'Z\'&&b!=6){V{z:a.1T,F:a.17}}8 c=a.7;8 d=c.W;8 e=c.Y;8 f=c.I;c.W=\'1i\';c.Y=\'1l\';c.I=\'1h\';8 g=a.3u;8 h=a.3v;c.I=f;c.Y=e;c.W=d;V{z:g,F:h}};H.D.1f=C(a,b){8 c=15;b=3.2y(b);u(a.11==3.K&&b==\'z\'&&a.7.I==\'Z\'){a.7.W=\'1i\';a.7.I=\'\'}8 d=a.7[b];u(!d){u(G.1U&&G.1U.2z){8 e=G.1U.2z(a,6);d=e?e[b]:6}U u(a.2A){d=a.2A[b]}}u((d==\'1S\')&&(b==\'z\'||b==\'F\')&&(3.1f(a,\'I\')!=\'Z\')){u(b==\'z\'){d=a.1T}U{d=a.17}}u(a.11==3.K&&b==\'z\'&&a.7.I!=\'Z\'){a.7.I=\'Z\';a.7.W=\'2q\'}V(d==\'1S\')?6:d};H.D.2y=C(a){8 b=a.3w(\'-\'),1V=b.2j;u(1V==1)V b[0];8 c=a.1W(0)==\'-\'?b[0].1W(0).2B()+b[0].2C(1):b[0];1j(8 i=1;i<1V;i++){c+=b[i].1W(0).2B()+b[i].2C(1)}V c};1X.D.1D=6;1X.D.1Y=6;1X.D.1Z=6;1E.D.20=C(b,c,d,e){u(b==6){2D\'2E 1k 1E.20: 3x 3y 3z 6\';V 15}u(c==6||c==\'\'){2D\'2E 1k 1E.20: 3A 3B a 3C\';V 15}b.3D();u(b.J()!=6){b.18()}u(b.J()==6){b.1N(1s H(3,c,d,e));u(b.1Y==6){b.1Y=Q.2F(b,\'1y\',C(a){u(!a&&b.J()!=6){b.18()}})}u(b.1Z==6){b.1Z=Q.2F(b,\'3E\',C(a){u(b.J()!=6){b.18()}})}b.3F(b.J())}};1E.D.18=C(a){u(a.3G()!=6){a.18()}};21.D.J=C(){V 3.1D};21.D.1N=C(a){3.1D=a}21.D.18=C(){u(3.J()!=6){3.1D.2n()}};',62,229,'|||this|wrapperParts||null|style|var||||||||||||||||||||domElement||if|container_||||width|map_|px|function|prototype|contentDiv_|height|document|ExtInfoWindow|display|getExtInfoWindow|infoWindowId_|options_|tl|borderSize_|getDimensions_|top|GEvent|marker_|close|max|else|return|visibility|bl|position|none||id|tr|appendChild|contentWidth|false|min|offsetHeight|closeExtInfoWindow|maximizeEnabled_|true|createElement|div|wrapperDiv_|beak|getStyle_|ajaxUrl_|block|hidden|for|in|absolute|fromLatLngToDivPixel|html_|isMaximized_|paddingX_|paddingY_|innerHTML|new|br|_|body|getElementById|left|click|ajaxRequest_|toggleMaxMin_|trigger|getIcon|ExtInfoWindowInstance_|GMarker|maxContent_|getSize|parseInt|removeChild|thisMap|addDomListener|redraw|resize|setExtInfoWindow_|getPoint|iconAnchor|infoWindowAnchor|repositionMap_|auto|offsetWidth|defaultView|len|charAt|GMap|ClickListener_|InfoWindowListener_|openExtInfoWindow|GMap2|ajaxUrl|callback_|ajaxCallback|maxContent|beakOffset|paddingX|paddingY|_contents|maxWidth_|maxHeight_|defaultStyles|containerWidth|minWidth_|thisMaxWidth|thisMaxContent|thisMinWidth|thisMinHeight|length|onClick_|window|event|remove|outerHTML|parentNode|visible|_tempContents|offsetTop|windowTHeight|getBounds|Math|round|span|camelize_|getComputedStyle|currentStyle|toUpperCase|substring|throw|Error|addListener|relative|GOverlay|initialize|borderSize|getPane|G_MAP_FLOAT_PANE|getContainer|console|log|thisMaxHeight|thisContainer|mousedown|dblclick|DOMMouseScroll|bindDom|extinfowindowopen|navigator|userAgent|toLowerCase|indexOf|msie|all|cancelBubble|returnValue|stopPropagation|extinfowindowbeforeclose|clearInstanceListeners|extinfowindowclose|copy|insertBefore|cloneNode|getNorthEast|getSouthWest|iconSize|panBy|GSize|GDownloadUrl|class|error|ERROR|The|Ajax|request|failed|to|get|HTML|content|from|extinfowindowupdate|clientWidth|clientHeight|split|map|cannot|be|must|specify|cssId|closeInfoWindow|infowindowopen|addOverlay|getExtInfWindow'.split('|'),0,{}))
+/*
+* ExtInfoWindow Class, v1.0 
+*  Copyright (c) 2007, Joe Monahan (http://www.seejoecode.com)
+* 
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+* 
+*       http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+* This class lets you add an info window to the map which mimics GInfoWindow
+* and allows for users to skin it via CSS.  Additionally it has options to
+* pull in HTML content from an ajax request, triggered when a user clicks on
+* the associated marker.
+*/
+
+
+/**
+ * Creates a new ExtInfoWindow that will initialize by reading styles from css
+ *
+ * @constructor
+ * @param {GMarker} marker The marker associated with the info window
+ * @param {String} windowId The DOM Id we will use to reference the info window
+ * @param {String} html The HTML contents
+ * @param {Object} opt_opts A contianer for optional arguments:
+ *    {String} ajaxUrl The Url to hit on the server to request some contents 
+ *    {Number} paddingX The padding size in pixels that the info window will leave on 
+ *                    the left and right sides of the map when panning is involved.
+ *    {Number} paddingY The padding size in pixels that the info window will leave on 
+ *                    the top and bottom sides of the map when panning is involved.
+ *    {Number} beakOffset The repositioning offset for when aligning the beak element. 
+ *                    This is used to make sure the beak lines up correcting if the 
+ *                    info window styling containers a border.
+ */
+function ExtInfoWindow(marker, windowId, html, opt_opts) {
+  this.html_ = html;
+  this.marker_ = marker;
+  this.infoWindowId_ = windowId;
+
+  this.options_ = opt_opts == null ? {} : opt_opts;
+  this.ajaxUrl_ = this.options_.ajaxUrl == null ? null : this.options_.ajaxUrl;
+  this.callback_ = this.options_.ajaxCallback == null ? null : this.options_.ajaxCallback;
+  
+  this.maxContent_ = this.options_.maxContent == null ? null : this.options_.maxContent;
+  this.maximizeEnabled_ = this.maxContent_ == null ? false : true;
+  this.isMaximized_ = false;
+
+  this.borderSize_ = this.options_.beakOffset == null ? 0 : this.options_.beakOffset;
+  this.paddingX_ = this.options_.paddingX == null ? 0 + this.borderSize_ : this.options_.paddingX + this.borderSize_;
+  this.paddingY_ = this.options_.paddingY == null ? 0 + this.borderSize_ : this.options_.paddingY + this.borderSize_;
+
+  this.map_ = null;
+
+  this.container_ = document.createElement('div');
+  this.container_.style.position = 'relative';
+  this.container_.style.display = 'none';
+
+  this.contentDiv_ = document.createElement('div');
+  this.contentDiv_.id = this.infoWindowId_ + '_contents';
+  this.contentDiv_.innerHTML = this.html_;
+  this.contentDiv_.style.display = 'block';
+  this.contentDiv_.style.visibility = 'hidden';
+
+  this.wrapperDiv_ = document.createElement('div');
+};
+
+//use the GOverlay class
+ExtInfoWindow.prototype = new GOverlay();
+
+/**
+ * Called by GMap2's addOverlay method.  Creates the wrapping div for our info window and adds
+ * it to the relevant map pane.  Also binds mousedown event to a private function so that they
+ * are not passed to the underlying map.  Finally, performs ajax request if set up to use ajax
+ * in the constructor.
+ * @param {GMap2} map The map that has had this extInfoWindow is added to it.
+ */
+ExtInfoWindow.prototype.initialize = function(map) {
+  this.map_ = map;
+
+  if( this.maximizeEnabled_ ){
+    this.maxWidth_ = this.map_.getSize().width * 0.9;
+    this.maxHeight_ = this.map_.getSize().height * 0.9;
+  }
+
+  this.defaultStyles = {
+    containerWidth: this.map_.getSize().width / 2,
+    borderSize: 1
+  };
+
+  this.wrapperParts = {
+    tl:{t:0, l:0, w:0, h:0, domElement: null},
+    t:{t:0, l:0, w:0, h:0, domElement: null},
+    tr:{t:0, l:0, w:0, h:0, domElement: null},
+    l:{t:0, l:0, w:0, h:0, domElement: null},
+    r:{t:0, l:0, w:0, h:0, domElement: null},
+    bl:{t:0, l:0, w:0, h:0, domElement: null},
+    b:{t:0, l:0, w:0, h:0, domElement: null},
+    br:{t:0, l:0, w:0, h:0, domElement: null},
+    beak:{t:0, l:0, w:0, h:0, domElement: null},
+    close:{t:0, l:0, w:0, h:0, domElement: null}
+  };
+  if( this.maximizeEnabled_ ){
+    this.wrapperParts.max = {t:0, l:0, w:0, h:0, domElement: null}
+    this.wrapperParts.min = {t:0, l:0, w:0, h:0, domElement: null}
+  }
+
+  for (var i in this.wrapperParts ) {
+    var tempElement = document.createElement('div');
+    tempElement.id = this.infoWindowId_ + '_' + i;
+    tempElement.style.visibility = 'hidden';
+    document.body.appendChild(tempElement);
+    tempElement = document.getElementById(this.infoWindowId_ + '_' + i);
+    var tempWrapperPart = this.wrapperParts[i];    
+    tempWrapperPart.w = parseInt(this.getStyle_(tempElement, 'width'), 10);
+    tempWrapperPart.h = parseInt(this.getStyle_(tempElement, 'height'), 10);
+    document.body.removeChild(tempElement);
+  }
+  for (var i in this.wrapperParts) {
+    if (i == 'close' ) {
+      //first append the content so the close button is layered above it
+      this.wrapperDiv_.appendChild(this.contentDiv_);
+    }
+    var wrapperPartsDiv = null;
+    if (this.wrapperParts[i].domElement == null) {
+      wrapperPartsDiv = document.createElement('div');
+      this.wrapperDiv_.appendChild(wrapperPartsDiv);
+    } else {
+      wrapperPartsDiv = this.wrapperParts[i].domElement;
+    }
+    wrapperPartsDiv.id = this.infoWindowId_ + '_' + i;
+    wrapperPartsDiv.style.position = 'absolute';
+    wrapperPartsDiv.style.width = this.wrapperParts[i].w + 'px';
+    wrapperPartsDiv.style.height = this.wrapperParts[i].h + 'px';
+    wrapperPartsDiv.style.top = this.wrapperParts[i].t + 'px';
+    wrapperPartsDiv.style.left = this.wrapperParts[i].l + 'px';
+    this.wrapperParts[i].domElement = wrapperPartsDiv;
+  }
+  
+  this.map_.getPane(G_MAP_FLOAT_PANE).appendChild(this.container_);
+  this.container_.id = this.infoWindowId_;
+  var containerWidth  = this.getStyle_(document.getElementById(this.infoWindowId_), 'width');
+  this.container_.style.width = (containerWidth == null ? this.defaultStyles.containerWidth : containerWidth);
+
+  this.map_.getContainer().appendChild(this.contentDiv_);
+  this.contentWidth = this.getDimensions_(this.container_).width;
+  this.contentDiv_.style.width = this.contentWidth + 'px';
+  this.contentDiv_.style.position = 'absolute';
+
+  this.container_.appendChild(this.wrapperDiv_);
+  
+  if( this.maximizeEnabled_ ){
+    this.minWidth_ = this.getDimensions_(this.container_).width;
+    console.log(this.minWidth_);
+  }
+  
+  if (this.maximizeEnabled_) {
+    thisMap = this.map_;
+    thisMaxWidth = this.maxWidth_;
+    thisMaxHeight = this.maxHeight_;
+    thisContainer = this.container_;
+    thisMaxContent = this.maxContent_;
+    
+    thisMinWidth = this.container_.style.width;
+    thisMinHeight = this.container_.style.height;
+    //add event handler for maximize and minimize icons
+    GEvent.addDomListener(this.wrapperParts.max.domElement, 'click', 
+      function() {
+        var infoWindow = thisMap.getExtInfoWindow();
+        infoWindow.container_.style.width = thisMaxWidth + 'px';
+        infoWindow.ajaxRequest_(thisMaxContent);
+        infoWindow.isMaximized_ = true;
+        infoWindow.redraw(true);
+      
+        //swap min/max icons
+        infoWindow.toggleMaxMin_();
+      }
+    );
+    GEvent.addDomListener(this.wrapperParts.min.domElement, 'click', 
+      function() {
+        var infoWindow = thisMap.getExtInfoWindow();
+        infoWindow.container_.style.width = thisMinWidth;
+        infoWindow.container_.style.height = thisMinHeight;
+        if (infoWindow.ajaxUrl_ != null ) {
+           infoWindow.ajaxRequest_(this.ajaxUrl_);
+        }else{
+          infoWindow.contentDiv_.innerHTML = infoWindow.html_;
+        }
+        
+        infoWindow.isMaximized_ = false;
+        infoWindow.redraw(true);
+        infoWindow.resize();
+
+        //swap min/max icons
+        infoWindow.toggleMaxMin_();
+      }
+    );
+    
+    this.toggleMaxMin_();
+    
+  }
+
+  var stealEvents = ['mousedown', 'dblclick', 'DOMMouseScroll'];
+  for( i=0; i < stealEvents.length; i++ ){
+    GEvent.bindDom(this.container_, stealEvents[i], this, this.onClick_);
+  }
+
+  GEvent.trigger(this.map_, 'extinfowindowopen');
+  if (this.ajaxUrl_ != null ) {
+    this.ajaxRequest_(this.ajaxUrl_);
+  }
+};
+
+/**
+ * Private function to steal mouse click events to prevent it from returning to the map.
+ * Without this links in the ExtInfoWindow would not work, and you could click to zoom or drag 
+ * the map behind it.
+ * @private
+ * @param {MouseEvent} e The mouse event caught by this function
+ */
+ExtInfoWindow.prototype.onClick_ = function(e) {
+  if(navigator.userAgent.toLowerCase().indexOf('msie') != -1 && document.all) {
+    window.event.cancelBubble = true;
+    window.event.returnValue = false;
+  } else {
+    //e.preventDefault();
+    e.stopPropagation();
+  }
+};
+
+/**
+ * Remove the extInfoWindow container from the map pane. 
+ */
+ExtInfoWindow.prototype.remove = function() {
+  if (this.map_.getExtInfoWindow() != null) {
+    GEvent.trigger(this.map_, 'extinfowindowbeforeclose');
+    
+    GEvent.clearInstanceListeners(this.container_);
+    if (this.container_.outerHTML) {
+      this.container_.outerHTML = ''; //prevent pseudo-leak in IE
+    }
+    if (this.container_.parentNode) {
+      this.container_.parentNode.removeChild(this.container_);
+    }
+    this.container_ = null;
+    GEvent.trigger(this.map_, 'extinfowindowclose');
+    this.map_.setExtInfoWindow_(null);
+  }
+};
+
+/**
+ * Return a copy of this overlay, for the parent Map to duplicate itself in full. This
+ * is part of the Overlay interface and is used, for example, to copy everything in the 
+ * main view into the mini-map.
+ * @return {GOverlay}
+ */
+ExtInfoWindow.prototype.copy = function() {
+  return new ExtInfoWindow(this.marker_, this.infoWindowId_, this.html_, this.options_);
+};
+
+/**
+ * Draw extInfoWindow and wrapping decorators onto the map.  Resize and reposition
+ * the map as necessary. 
+ * @param {Boolean} force Will be true when pixel coordinates need to be recomputed.
+ */
+ExtInfoWindow.prototype.redraw = function(force) {
+  if (!force || this.container_ == null) return;
+  
+  //set the content section's height, needed so  browser font resizing does not affect the window's dimensions
+  var contentHeight = this.contentDiv_.offsetHeight;
+  this.contentDiv_.style.height = contentHeight + 'px';
+  
+  this.contentWidth = this.getDimensions_(this.container_).width;
+  this.contentDiv_.style.width = this.container_.style.width;
+
+  //reposition contents depending on wrapper parts.
+  //this is necessary for content that is pulled in via ajax
+  this.contentDiv_.style.left = this.wrapperParts.l.w + 'px';
+  this.contentDiv_.style.top = this.wrapperParts.tl.h + 'px';
+  this.contentDiv_.style.visibility = 'visible';
+
+  //Finish configuring wrapper parts that were not set in initialization
+  this.wrapperParts.tl.t = 0;
+  this.wrapperParts.tl.l = 0;
+  this.wrapperParts.t.l = this.wrapperParts.tl.w;
+  this.wrapperParts.t.w = (this.wrapperParts.l.w + this.contentWidth + this.wrapperParts.r.w) - this.wrapperParts.tl.w - this.wrapperParts.tr.w;
+  this.wrapperParts.t.h = this.wrapperParts.tl.h;
+  this.wrapperParts.tr.l = this.wrapperParts.t.w + this.wrapperParts.tl.w;
+  this.wrapperParts.l.t = this.wrapperParts.tl.h;
+  this.wrapperParts.l.h = contentHeight;
+  this.wrapperParts.r.l = this.contentWidth + this.wrapperParts.l.w;
+  this.wrapperParts.r.t = this.wrapperParts.tr.h;
+  this.wrapperParts.r.h = contentHeight;
+  this.wrapperParts.bl.t = contentHeight + this.wrapperParts.tl.h;
+  this.wrapperParts.b.l = this.wrapperParts.bl.w;
+  this.wrapperParts.b.t = contentHeight + this.wrapperParts.tl.h;
+  this.wrapperParts.b.w = (this.wrapperParts.l.w + this.contentWidth + this.wrapperParts.r.w) - this.wrapperParts.bl.w - this.wrapperParts.br.w;
+  this.wrapperParts.b.h = this.wrapperParts.bl.h;
+  this.wrapperParts.br.l = this.wrapperParts.b.w + this.wrapperParts.bl.w;
+  this.wrapperParts.br.t = contentHeight + this.wrapperParts.tr.h;
+  this.wrapperParts.beak.l = this.borderSize_ + (this.contentWidth / 2) - (this.wrapperParts.beak.w / 2);
+  this.wrapperParts.beak.t = this.wrapperParts.bl.t + this.wrapperParts.bl.h - this.borderSize_;
+  this.wrapperParts.close.l = this.wrapperParts.tr.l +this.wrapperParts.tr.w - this.wrapperParts.close.w - this.borderSize_;
+  this.wrapperParts.close.t = this.borderSize_;
+  if( this.maximizeEnabled_ ){
+    this.wrapperParts.max.l = this.wrapperParts.close.l - this.wrapperParts.max.w - 5;
+    this.wrapperParts.max.t = this.wrapperParts.close.t;
+    this.wrapperParts.min.l = this.wrapperParts.max.l;
+    this.wrapperParts.min.t = this.wrapperParts.max.t;
+  }
+
+  //create the decoration wrapper DOM objects
+  //append the styled info window to the container
+  for (var i in this.wrapperParts) {
+    if (i == 'close' ) {
+      //first append the content so the close button is layered above it
+      this.wrapperDiv_.insertBefore(this.contentDiv_, this.wrapperParts[i].domElement);
+    }
+    var wrapperPartsDiv = null;
+    if (this.wrapperParts[i].domElement == null) {
+      wrapperPartsDiv = document.createElement('div');
+      this.wrapperDiv_.appendChild(wrapperPartsDiv);
+    } else {
+      wrapperPartsDiv = this.wrapperParts[i].domElement;
+    }
+    wrapperPartsDiv.id = this.infoWindowId_ + '_' + i;
+    wrapperPartsDiv.style.position='absolute';
+    wrapperPartsDiv.style.width = this.wrapperParts[i].w + 'px';
+    wrapperPartsDiv.style.height = this.wrapperParts[i].h + 'px';
+    wrapperPartsDiv.style.top = this.wrapperParts[i].t + 'px';
+    wrapperPartsDiv.style.left = this.wrapperParts[i].l + 'px';
+    this.wrapperParts[i].domElement = wrapperPartsDiv;
+  }
+
+  //add event handler for the close icon
+  var currentMarker = this.marker_;
+  var thisMap = this.map_;
+  GEvent.addDomListener(this.wrapperParts.close.domElement, 'click', 
+    function() {
+      thisMap.closeExtInfoWindow();
+    }
+  );
+  
+  
+  
+  //position the container on the map, over the marker
+  var pixelLocation = this.map_.fromLatLngToDivPixel(this.marker_.getPoint());
+  this.container_.style.position = 'absolute';
+  var markerIcon = this.marker_.getIcon();
+  this.container_.style.left = (pixelLocation.x 
+    - (this.contentWidth / 2) 
+    - markerIcon.iconAnchor.x 
+    + markerIcon.infoWindowAnchor.x
+  ) + 'px';
+
+  this.container_.style.top = (pixelLocation.y
+    - this.wrapperParts.bl.h
+    - contentHeight
+    - this.wrapperParts.tl.h
+    - this.wrapperParts.beak.h
+    - markerIcon.iconAnchor.y
+    + markerIcon.infoWindowAnchor.y
+    + this.borderSize_
+  ) + 'px';
+
+  this.container_.style.display = 'block';
+
+  if(this.map_.getExtInfoWindow() != null) {
+    this.repositionMap_();
+  }
+};
+
+ExtInfoWindow.prototype.toggleMaxMin_ = function(){
+  if( this.wrapperParts.max.domElement != null && this.wrapperParts.min.domElement != null ){
+    if (this.isMaximized_) {
+      this.wrapperParts.max.domElement.style.display = 'none';
+      this.wrapperParts.min.domElement.style.display = 'block';
+    }else{
+      this.wrapperParts.max.domElement.style.display = 'block';
+      this.wrapperParts.min.domElement.style.display = 'none';
+    }
+  }
+}
+
+/**
+ * Determine the dimensions of the contents to recalculate and reposition the 
+ * wrapping decorator elements accordingly.
+ */
+ExtInfoWindow.prototype.resize = function(){
+  
+  //Create temporary DOM node for new contents to get new height
+  //This is done because if you manipulate this.contentDiv_ directly it causes visual errors in IE6
+  var tempElement = this.contentDiv_.cloneNode(true);
+  tempElement.id = this.infoWindowId_ + '_tempContents';
+  tempElement.style.visibility = 'hidden';	
+  tempElement.style.height = 'auto';
+  document.body.appendChild(tempElement);
+  tempElement = document.getElementById(this.infoWindowId_ + '_tempContents');
+  var contentHeight = tempElement.offsetHeight;
+  document.body.removeChild(tempElement);
+
+  //Set the new height to eliminate visual defects that can be caused by font resizing in browser
+  this.contentDiv_.style.height = contentHeight + 'px';
+
+  var contentWidth = this.container_.offsetWidth;
+  var pixelLocation = this.map_.fromLatLngToDivPixel(this.marker_.getPoint());
+
+  var oldWindowHeight = this.wrapperParts.t.domElement.offsetHeight + this.wrapperParts.l.domElement.offsetHeight + this.wrapperParts.b.domElement.offsetHeight;	
+  var oldWindowPosTop = this.wrapperParts.t.domElement.offsetTop;
+
+  //resize info window to look correct for new height
+  this.wrapperParts.l.domElement.style.height = contentHeight + 'px';
+  this.wrapperParts.r.domElement.style.height = contentHeight + 'px';
+  var newPosTop = this.wrapperParts.b.domElement.offsetTop - contentHeight;
+  this.wrapperParts.l.domElement.style.top = newPosTop + 'px';
+  this.wrapperParts.r.domElement.style.top = newPosTop + 'px';
+  this.contentDiv_.style.top = newPosTop + 'px';
+  windowTHeight = parseInt(this.wrapperParts.t.domElement.style.height, 10);
+  newPosTop -= windowTHeight;
+  this.wrapperParts.close.domElement.style.top = newPosTop + this.borderSize_ + 'px';
+  this.wrapperParts.tl.domElement.style.top = newPosTop + 'px';
+  this.wrapperParts.t.domElement.style.top = newPosTop + 'px';
+  this.wrapperParts.tr.domElement.style.top = newPosTop + 'px';
+
+  this.repositionMap_();
+};
+
+/**
+ * Check to see if the displayed extInfoWindow is positioned off the viewable 
+ * map region and by how much.  Use that information to pan the map so that 
+ * the extInfoWindow is completely displayed.
+ * @private
+ */
+ExtInfoWindow.prototype.repositionMap_ = function(){
+  //pan if necessary so it shows on the screen
+  var mapNE = this.map_.fromLatLngToDivPixel(
+    this.map_.getBounds().getNorthEast()
+  );
+  var mapSW = this.map_.fromLatLngToDivPixel(
+    this.map_.getBounds().getSouthWest()
+  );
+  var markerPosition = this.map_.fromLatLngToDivPixel(
+    this.marker_.getPoint()
+  );
+
+  var panX = 0;
+  var panY = 0;
+  var paddingX = this.paddingX_;
+  var paddingY = this.paddingY_;
+  var infoWindowAnchor = this.marker_.getIcon().infoWindowAnchor;
+  var iconAnchor = this.marker_.getIcon().iconAnchor;
+
+  //test top of screen	
+  var windowT = this.wrapperParts.t.domElement;
+  var windowL = this.wrapperParts.l.domElement;
+  var windowB = this.wrapperParts.b.domElement;
+  var windowR = this.wrapperParts.r.domElement;
+  var windowBeak = this.wrapperParts.beak.domElement;
+
+  var offsetTop = markerPosition.y - ( -infoWindowAnchor.y + iconAnchor.y +  this.getDimensions_(windowBeak).height + this.getDimensions_(windowB).height + this.getDimensions_(windowL).height + this.getDimensions_(windowT).height + this.paddingY_);
+  if (offsetTop < mapNE.y) {
+    panY = mapNE.y - offsetTop;
+  } else {
+    //test bottom of screen
+    var offsetBottom = markerPosition.y + this.paddingY_;
+    if (offsetBottom >= mapSW.y) {
+      panY = -(offsetBottom - mapSW.y);
+    }
+  }
+
+  //test right of screen
+  var offsetRight = Math.round(markerPosition.x + this.getDimensions_(this.container_).width/2 + this.getDimensions_(windowR).width + this.paddingX_ + infoWindowAnchor.x - iconAnchor.x);
+  if (offsetRight > mapNE.x) {
+    panX = -( offsetRight - mapNE.x);
+  } else {
+    //test left of screen
+    var offsetLeft = - (Math.round( (this.getDimensions_(this.container_).width/2 - this.marker_.getIcon().iconSize.width/2) + this.getDimensions_(windowL).width + this.borderSize_ + this.paddingX_) - markerPosition.x - infoWindowAnchor.x + iconAnchor.x);
+    if( offsetLeft < mapSW.x) {
+      panX = mapSW.x - offsetLeft;
+    }
+  }
+
+  if (panX != 0 || panY != 0 && this.map_.getExtInfoWindow() != null ) {
+    this.map_.panBy(new GSize(panX,panY));
+  }
+};
+
+/**
+ * Private function that handles performing an ajax request to the server.  The response
+ * information is assumed to be HTML and is placed inside this extInfoWindow's contents region.
+ * Last, check to see if the height has changed, and resize the extInfoWindow accordingly.
+ * @private
+ * @param {String} url The Url of where to make the ajax request on the server
+ */
+ExtInfoWindow.prototype.ajaxRequest_ = function(url){
+  var thisMap = this.map_;
+  var thisCallback = this.callback_;
+  GDownloadUrl(url, function(response, status){
+    if (thisMap.getExtInfoWindow() !== null) {
+      var infoWindow = document.getElementById(thisMap.getExtInfoWindow().infoWindowId_ + '_contents');
+      if (response == null || status == -1 ) {
+        infoWindow.innerHTML = '<span class="error">ERROR: The Ajax request failed to get HTML content from "' + url + '"</span>';
+      } else {
+        infoWindow.innerHTML = response;
+      }
+      if (thisCallback != null ) {
+        thisCallback();
+      }
+      thisMap.getExtInfoWindow().resize();
+    }
+    GEvent.trigger(thisMap, 'extinfowindowupdate');
+  });
+};
+
+/**
+ * Private function derived from Prototype.js to get a given element's
+ * height and width
+ * @private
+ * @param {Object} element The DOM element that will have height and 
+ *                    width will be calculated for it.
+ * @return {Object} Object with keys: width, height
+ */
+ExtInfoWindow.prototype.getDimensions_ = function(element) {
+  var display = this.getStyle_(element, 'display');
+  if (display != 'none' && display != null) { // Safari bug
+    return {width: element.offsetWidth, height: element.offsetHeight};
+  }
+
+  // All *Width and *Height properties give 0 on elements with display none,
+  // so enable the element temporarily
+  var els = element.style;
+  var originalVisibility = els.visibility;
+  var originalPosition = els.position;
+  var originalDisplay = els.display;
+  els.visibility = 'hidden';
+  els.position = 'absolute';
+  els.display = 'block';
+  var originalWidth = element.clientWidth;
+  var originalHeight = element.clientHeight;
+  els.display = originalDisplay;
+  els.position = originalPosition;
+  els.visibility = originalVisibility;
+  return {width: originalWidth, height: originalHeight};
+};
+
+/**
+ * Private function derived from Prototype.js to get a given element's
+ * value that is associated with the passed style
+ * @private
+ * @param {Object} element The DOM element that will be checked.
+ * @param {String} style The style name that will be have it's value returned.
+ * @return {Object}
+ */
+ExtInfoWindow.prototype.getStyle_ = function(element, style) {
+  var found = false;
+  style = this.camelize_(style);
+  if (element.id == this.infoWindowId_ && style == 'width' && element.style.display == 'none') {
+  	element.style.visibility = 'hidden';
+	  element.style.display = '';
+  }
+  var value = element.style[style];
+  if (!value) {
+    if (document.defaultView && document.defaultView.getComputedStyle) {
+      var css = document.defaultView.getComputedStyle(element, null);
+      value = css ? css[style] : null;
+    } else if (element.currentStyle) {
+      value = element.currentStyle[style];
+    }
+  }
+  if((value == 'auto') && (style == 'width' || style == 'height') && (this.getStyle_(element, 'display') != 'none')) {
+    if( style == 'width' ) {
+      value = element.offsetWidth;
+    }else {
+      value = element.offsetHeight;
+    }
+  }
+  if (element.id == this.infoWindowId_ && style == 'width' && element.style.display != 'none') {
+  	element.style.display = 'none';
+  	element.style.visibility = 'visible';	
+  }
+  return (value == 'auto') ? null : value;
+};
+
+/**
+ * Private function pulled from Prototype.js that will change a hyphened
+ * style name into camel case.
+ * @private
+ * @param {String} element The string that will be parsed and made into camel case
+ * @return {String}
+ */
+ExtInfoWindow.prototype.camelize_ = function(element) {
+  var parts = element.split('-'), len = parts.length;
+  if (len == 1) return parts[0];
+  var camelized = element.charAt(0) == '-'
+    ? parts[0].charAt(0).toUpperCase() + parts[0].substring(1)
+    : parts[0];
+
+  for (var i = 1; i < len; i++) {
+    camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
+  }
+  return camelized;
+};
+
+GMap.prototype.ExtInfoWindowInstance_ = null;
+GMap.prototype.ClickListener_ = null;
+GMap.prototype.InfoWindowListener_ = null;
+
+/**
+ * Creates a new instance of ExtInfoWindow for the GMarker.  Register the newly created 
+ * instance with the map, ensuring only one window is open at a time. If this is the first
+ * ExtInfoWindow ever opened, add event listeners to the map to close the ExtInfoWindow on 
+ * zoom and click, to mimic the default GInfoWindow behavior.
+ *
+ * @param {GMap} map The GMap2 object where the ExtInfoWindow will open
+ * @param {String} cssId The id we will use to reference the info window
+ * @param {String} html The HTML contents
+ * @param {Object} opt_opts A contianer for optional arguments:
+ *    {String} ajaxUrl The Url to hit on the server to request some contents 
+ *    {Number} paddingX The padding size in pixels that the info window will leave on 
+ *                    the left and right sides of the map when panning is involved.
+ *    {Number} paddingX The padding size in pixels that the info window will leave on 
+ *                    the top and bottom sides of the map when panning is involved.
+ *    {Number} beakOffset The repositioning offset for when aligning the beak element. 
+ *                    This is used to make sure the beak lines up correcting if the 
+ *                    info window styling containers a border.
+ */
+GMarker.prototype.openExtInfoWindow = function(map, cssId, html, opt_opts) {
+  if (map == null) {
+    throw 'Error in GMarker.openExtInfoWindow: map cannot be null';
+    return false;
+  }
+  if (cssId == null || cssId == '') {
+    throw 'Error in GMarker.openExtInfoWindow: must specify a cssId';
+    return false;
+  }
+  
+  map.closeInfoWindow();
+  if (map.getExtInfoWindow() != null) {
+    map.closeExtInfoWindow();
+  }
+  if (map.getExtInfoWindow() == null) {
+    map.setExtInfoWindow_( new ExtInfoWindow(
+      this,
+      cssId,
+      html,
+      opt_opts
+    ) );
+    if (map.ClickListener_ == null) {
+      //listen for map click, close ExtInfoWindow if open
+      map.ClickListener_ = GEvent.addListener(map, 'click',
+      function(event) {
+          if( !event && map.getExtInfoWindow() != null ){
+            map.closeExtInfoWindow();
+          }
+        }
+      );
+    }
+    if (map.InfoWindowListener_ == null) {
+      //listen for default info window open, close ExtInfoWindow if open
+      map.InfoWindowListener_ = GEvent.addListener(map, 'infowindowopen', 
+      function(event) {
+          if (map.getExtInfoWindow() != null) {
+            map.closeExtInfoWindow();
+          }
+        }
+      );
+    }
+    map.addOverlay(map.getExtInfoWindow());
+  }
+};
+
+/**
+ * Remove the ExtInfoWindow instance
+ * @param {GMap2} map The map where the GMarker and ExtInfoWindow exist
+ */
+GMarker.prototype.closeExtInfoWindow = function(map) {
+  if( map.getExtInfWindow() != null ){
+    map.closeExtInfoWindow();
+  }
+};
+
+/**
+ * Get the ExtInfoWindow instance from the map
+ */
+GMap2.prototype.getExtInfoWindow = function(){
+  return this.ExtInfoWindowInstance_;
+};
+/**
+ * Set the ExtInfoWindow instance for the map
+ * @private
+ */
+GMap2.prototype.setExtInfoWindow_ = function( extInfoWindow ){
+  this.ExtInfoWindowInstance_ = extInfoWindow;
+}
+/**
+ * Remove the ExtInfoWindow from the map
+ */
+GMap2.prototype.closeExtInfoWindow = function(){
+  if( this.getExtInfoWindow() != null ){
+    this.ExtInfoWindowInstance_.remove();
+  }
+};
+
+if (google.extentions.maps.loader) {
+  google.extentions.maps.loader.exportSymbol('ExtInfoWindow', ExtInfoWindow);
+  google.extentions.maps.loader.loaded("extinfowindow");
+}

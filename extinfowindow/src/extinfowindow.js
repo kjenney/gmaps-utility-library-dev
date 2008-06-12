@@ -706,6 +706,7 @@ GMap2.prototype.closeExtInfoWindow = function(){
   }
 };
 
-if (!google.loader.loadFailure) {
-  google_exportSymbol('gmapsUtilityLibrary.ExtInfoWindow', ExtInfoWindow);
+if (google.extentions.maps.loader) {
+  google.extentions.maps.loader.exportSymbol('ExtInfoWindow', ExtInfoWindow);
+  google.extentions.maps.loader.loaded("extinfowindow");
 }

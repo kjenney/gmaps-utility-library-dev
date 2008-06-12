@@ -1,2 +1,101 @@
-var MapIconMaker={};
-MapIconMaker.createMarkerIcon=function(a){var b=a.width||32;var c=a.height||32;var d=a.primaryColor||"#ff0000";var e=a.strokeColor||"#000000";var f=a.cornerColor||"#ffffff";var g="http://chart.apis.google.com/chart?cht=mm";var h=g+"&chs="+b+"x"+c+"&chco="+f.replace("#","")+","+d.replace("#","")+","+e.replace("#","")+"&ext=.png";var j=new GIcon(G_DEFAULT_ICON);j.image=h;j.iconSize=new GSize(b,c);j.shadowSize=new GSize(Math.floor(b*1.6),c);j.iconAnchor=new GPoint(b/2,c);j.infoWindowAnchor=new GPoint(b/2,Math.floor(c/12));j.printImage=h+"&chof=gif";j.mozPrintImage=h+"&chf=bg,s,ECECD8"+"&chof=gif";var h=g+"&chs="+b+"x"+c+"&chco="+f.replace("#","")+","+d.replace("#","")+","+e.replace("#","");j.transparent=h+"&chf=a,s,ffffff11&ext=.png";j.imageMap=[b/2,c,(7/16)*b,(5/8)*c,(5/16)*b,(7/16)*c,(7/32)*b,(5/16)*c,(5/16)*b,(1/8)*c,(1/2)*b,0,(11/16)*b,(1/8)*c,(25/32)*b,(5/16)*c,(11/16)*b,(7/16)*c,(9/16)*b,(5/8)*c];for(var i=0;i<j.imageMap.length;i++){j.imageMap[i]=parseInt(j.imageMap[i])}return j}
+/**
+ * MapIconMaker v1.0
+ * Copyright (c) 2008 Pamela Fox
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ *
+ *
+ *  Author: Pamela Fox
+ *
+ *  This gives you static function(s) for creating dynamically sized and
+ *  colored marker icons using the Charts API marker output.
+ */
+
+var MapIconMaker = {};
+
+MapIconMaker.createMarkerIcon = function(opts) {
+  var width = opts.width || 32;
+  var height = opts.height || 32;
+  var primaryColor = opts.primaryColor || "#ff0000";
+  var strokeColor = opts.strokeColor || "#000000";
+  var cornerColor = opts.cornerColor || "#ffffff";
+  var transparency = opts.transparency;
+   
+  var baseUrl = "http://chart.apis.google.com/chart?cht=mm";
+  var iconUrl = baseUrl + "&chs=" + width + "x" + height + 
+      "&chco=" + cornerColor.replace("#", "") + "," + primaryColor.replace("#", "") + "," + strokeColor.replace("#", "") + "&ext=.png";
+  if (transparency)
+    iconUrl = iconUrl + "&chf=a,s,ffffff" + transparency;
+  var icon = new GIcon(G_DEFAULT_ICON);
+  icon.image = iconUrl;
+  icon.iconSize = new GSize(width, height);
+  icon.shadowSize = new GSize(Math.floor(width*1.6), height);
+  icon.iconAnchor = new GPoint(width/2, height);
+  icon.infoWindowAnchor = new GPoint(width/2, Math.floor(height/12));
+  icon.printImage = iconUrl + "&chof=gif";
+  icon.mozPrintImage = iconUrl + "&chf=bg,s,ECECD8" + "&chof=gif";
+  var iconUrl = baseUrl + "&chs=" + width + "x" + height + 
+      "&chco=" + cornerColor.replace("#", "") + "," + primaryColor.replace("#", "") + "," + strokeColor.replace("#", "");
+  icon.transparent = iconUrl + "&chf=a,s,ffffff11&ext=.png";
+
+  icon.imageMap = [
+      width/2, height,
+      (7/16)*width, (5/8)*height,
+      (5/16)*width, (7/16)*height,
+      (7/32)*width, (5/16)*height,
+      (5/16)*width, (1/8)*height,
+      (1/2)*width, 0,
+      (11/16)*width, (1/8)*height,
+      (25/32)*width, (5/16)*height,
+      (11/16)*width, (7/16)*height,
+      (9/16)*width, (5/8)*height
+  ];
+  for (var i = 0; i < icon.imageMap.length; i++) {
+    icon.imageMap[i] = parseInt(icon.imageMap[i]);
+  }
+
+  return icon;
+}
+
+MapIconMaker.createFlatIcon = function(opts) {
+  var width = opts.width || 32;
+  var height = opts.height || 32;
+  var primaryColor = opts.primaryColor || "#ff0000";
+  var shadowColor = opts.shadowColor || "#bbbbbb";
+  var text = opts.text || "";
+  var textColor = opts.textColor || "#000000";
+  var textSize = opts.textSize || 0;
+  var type = opts.type ||  "circle";
+  var typeCode = (type == "circle") ? "it" : "itr";
+
+  var baseUrl = "http://chart.apis.google.com/chart?cht=" + typeCode;
+  var iconUrl = baseUrl + "&chs=" + width + "x" + height + 
+      "&chco=" + primaryColor.replace("#", "") + "," + shadowColor.replace("#", "") + 
+      "&chl=" + text + "&chx=" + textColor.replace("#", "") + "," + textSize;
+  var icon = new GIcon(G_DEFAULT_ICON);
+  icon.image = iconUrl + "&ext=.png";
+  icon.iconSize = new GSize(width, height);
+  icon.shadowSize = new GSize(0, 0);
+  icon.iconAnchor = new GPoint(width/2, height/2);
+  icon.infoWindowAnchor = new GPoint(width/2, height/2);
+  icon.printImage = iconUrl + "&chof=gif";
+  icon.mozPrintImage = iconUrl + "&chf=bg,s,ECECD8" + "&chof=gif";
+  icon.transparent = iconUrl + "&chf=a,s,ffffff11&ext=.png";
+  // icon.imageMap, im lazy
+  return icon;
+}
+
+if (google.extentions.maps.loader) {
+  google.extentions.maps.loader.exportSymbol("MapIconMaker", MapIconMaker);
+  google.extentions.maps.loader.loaded("mapiconmaker");
+}

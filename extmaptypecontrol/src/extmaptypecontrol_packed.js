@@ -1,1 +1,281 @@
-eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('3 4(a){B.C=a||{}}4.o=A 1U();4.o.1S=3(d){1 e=v.z("s");1 f=B;1 g=d.K();1 h=f.V(d);n.J(d,"1E",3(){1 a=d.K();1 b=a.1x();1 c=f.G(b.14());c.W(\'Y\',b.1g());g.11(b);h.11(c);f.M(d,h);e.9(c)});n.J(d,"1T",3(){5(1 i=0;i<h.6;i++){n.1Q(h[i],"E");e.1N(h[i])}h=f.V(d);f.M(d,h);5(1 i=0;i<h.6;i++){e.9(h[i])}});q(f.C.1L){1 j=f.G("18");j.W(\'Y\',\'1D 18\');j.2.1B="1z";j.2.Q=\'t\';j.u.2.S="x";j.u.2.T="x";f.8=A 1n(F);f.8.t=F;n.J(f.8,"1l",3(a){1j.1h(a);q(a){j.2.Q=\'2h\'}12{j.2.Q=\'t\'}});d.2a(f.8);n.10(j.u,"E",3(){q(f.8.t){f.8.t=N;f.8.23()}12{f.8.t=F;f.8.21()}f.w(j.u,!f.8.t)});q(f.C.Z){r=v.z("s");r.2.S="x";r.2.T="x";r.1e="&L;?&L;";1 k=v.z("s");k.2.1d="1c";k.2.1b="1R";1 l=[{"p":"#1P","y":"&1O; 1a P"},{"p":"#1M","y":"25-1a P"},{"p":"#1K","y":"&1J; 25 P"},{"p":"#1I","y":"1H 1G"}];5(1 i=0;i<l.6;i++){k.1e+="<s 2=\'y-1F: x\'><I 2=\'1C-p: "+l[i].p+"\'>&L;&L</I>"+"<I 2=\'p: "+l[i].p+"\'> "+l[i].y+" </I>"+"</s>"}k.2.R="17";n.10(r,"E",3(){q(f.D){f.D=N;k.2.R="17"}12{f.D=F;k.2.R="1A"}f.w(r,f.D)});f.w(r,f.D)}1 m=v.z("s");m.2.1d="1c";q(f.C.Z)j.9(r);j.9(m);q(f.C.Z)j.9(k);f.w(j.u,N);e.9(j)}5(1 i=0;i<h.6;i++){e.9(h[i])}d.1y().9(e);H e}4.o.V=3(a){1 b=B;1 c=a.K();1 d=A 16();5(1 i=0;i<c.6;i++){d[i]=b.G(c[i].14());d[i].W(\'Y\',c[i].1g())}b.M(a,d);H d}4.o.M=3(c,d){1 e=B;1 f=c.K();5(1 i=0;i<d.6;i++){1 g=A 16;5(1 j=0;j<f.6;j++){q(j!=i){g.11(d[j])}}e.15(d[i],c,f[i],g)}n.J(c,"1w",3(){1 a=0;1 b=c.1v();5(1 i=0;i<f.6;i++){q(f[i]==b){a=i}}n.1u(d[a],"E")})}4.o.G=3(a){1 b=v.z("s");B.19(b);b.2.S="x";b.2.T="x";1 c=v.z("s");c.9(v.1t(a));c.2.1s="1r";b.9(c);H b}4.o.15=3(a,b,c,d){1 e=B;n.10(a,"E",3(){5(1 i=0;i<d.6;i++){e.w(d[i].u,N)}e.w(a.u,F);b.1q(c)})}4.o.w=3(a,b){a.2.1p=b?"1o":"";a.2.U="O X 13";1 c=b?["1m","1k"]:["1V","1i"];5(1 j=0;j<c.6;j++){a.2["U"+c[j]]="O X #1X"}}4.o.1Y=3(){H A 1Z(2f,A 2d(7,7))}4.o.19=3(a){a.2.p="#2b";a.2.29="13";a.2.28="27 26";a.2.U="O X 24";a.2.1b="1f";a.2.22="1f";a.2.2c="20";a.2.2e="1W";a.2.2g="2i"}',62,143,'|var|style|function|ExtMapTypeControl|for|length||trafficInfo|appendChild||||||||||||||GEvent|prototype|color|if|keyDiv|div|hidden|firstChild|document|toggleButton_|left|text|createElement|new|this|options|keyExpanded|click|true|createButton_|return|span|addListener|getMapTypes|nbsp|resetButtonEvents_|false|1px|MPH|visibility|display|cssFloat|styleFloat|border|addMapTypeButtons_|setAttribute|solid|title|showTrafficKey|addDomListener|push|else|white|getName|assignButtonEvent_|Array|none|Traffic|setButtonStyle_|50|padding|both|clear|innerHTML|0px|getAlt|write|Right|GLog|Left|changed|Top|GTrafficOverlay|bold|fontWeight|setMapType|6em|width|createTextNode|trigger|getCurrentMapType|maptypechanged|pop|getContainer|8px|block|marginRight|background|Show|addmaptype|align|data|No|c0c0c0|lt|ff0000|showTraffic|ffcf00|removeChild|gt|30ac3e|clearListeners|2px|initialize|removemaptype|GControl|Bottom|12px|b0b0b0|getDefaultPosition|GControlPosition|center|hide|margin|show|black||Arial|small|font|backgroundColor|addOverlay|000000|textAlign|GSize|fontSize|G_ANCHOR_TOP_RIGHT|cursor|visible|pointer'.split('|'),0,{}))
+/*
+* ExtMapTypeControl Class 
+*  Copyright (c) 2007, Google 
+*  Author: Pamela Fox, others
+* 
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+* 
+*       http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+* This class lets you add a control to the map which mimics GMapTypeControl
+*  and allows for the addition of a traffic button/traffic key.
+*/
+
+/*
+ * Constructor for ExtMapTypeControl, which uses an option hash
+ * to decide what elements to put in the control.
+ * @param {opt_opts} Named optional arguments:
+ *   opt_opts.showTraffic {Boolean} Controls whether traffic button is shown
+ *   opt_opts.showTrafficKey {Boolean} Controls whether traffic key is shown
+ */
+function ExtMapTypeControl(opt_opts) {
+  this.options = opt_opts || {};
+}
+
+
+ExtMapTypeControl.prototype = new GControl();
+
+/**
+ * Is called by GMap2's addOverlay method. Creates the button 
+ *  and appends to the map div.
+ * @param {GMap2} map The map that has had this ExtMapTypeControl added to it.
+ * @return {DOM Object} Div that holds the control
+ */ 
+ExtMapTypeControl.prototype.initialize = function(map) {
+  var container = document.createElement("div");
+  var me = this;
+
+  var mapTypes = map.getMapTypes();
+  var mapTypeDivs = me.addMapTypeButtons_(map);
+
+  GEvent.addListener(map, "addmaptype", function() {
+    var newMapTypes = map.getMapTypes();
+    var newMapType = newMapTypes.pop();
+    var newMapTypeDiv = me.createButton_(newMapType.getName());
+    newMapTypeDiv.setAttribute('title', newMapType.getAlt());
+    mapTypes.push(newMapType);
+    mapTypeDivs.push(newMapTypeDiv);
+    me.resetButtonEvents_(map, mapTypeDivs);
+    container.appendChild(newMapTypeDiv);
+  });
+  GEvent.addListener(map, "removemaptype", function() {
+    for (var i = 0; i < mapTypeDivs.length; i++) {
+      GEvent.clearListeners(mapTypeDivs[i], "click");
+      container.removeChild(mapTypeDivs[i]);
+    }
+    mapTypeDivs = me.addMapTypeButtons_(map);
+    me.resetButtonEvents_(map, mapTypeDivs);
+    for (var i = 0; i < mapTypeDivs.length; i++ ) {
+      container.appendChild(mapTypeDivs[i]);
+    }
+  });
+
+  if (me.options.showTraffic) {
+    var trafficDiv = me.createButton_("Traffic");
+    trafficDiv.setAttribute('title', 'Show Traffic');
+    trafficDiv.style.marginRight = "8px";
+    trafficDiv.style.visibility = 'hidden';
+    trafficDiv.firstChild.style.cssFloat = "left";
+    trafficDiv.firstChild.style.styleFloat = "left";
+    // Sending true makes overlay hidden by default
+    me.trafficInfo = new GTrafficOverlay(true);
+    me.trafficInfo.hidden = true;
+    // We have to do this so that we can sense if traffic is in view
+    GEvent.addListener(me.trafficInfo, "changed", function(hasTrafficInView) {
+      GLog.write(hasTrafficInView);
+      if (hasTrafficInView) {
+        trafficDiv.style.visibility = 'visible';
+      } else {
+        trafficDiv.style.visibility = 'hidden';
+      }
+    });
+    map.addOverlay(me.trafficInfo);
+
+    GEvent.addDomListener(trafficDiv.firstChild, "click", function() {
+      if (me.trafficInfo.hidden) {
+        me.trafficInfo.hidden = false;
+        me.trafficInfo.show();
+      } else {
+        me.trafficInfo.hidden = true;
+        me.trafficInfo.hide();
+      }
+      me.toggleButton_(trafficDiv.firstChild, !me.trafficInfo.hidden);
+    });
+
+    if (me.options.showTrafficKey) {
+      keyDiv = document.createElement("div");
+      keyDiv.style.cssFloat = "left";
+      keyDiv.style.styleFloat = "left";
+      keyDiv.innerHTML = "&nbsp;?&nbsp;";
+  
+      var keyExpandedDiv = document.createElement("div");
+      keyExpandedDiv.style.clear = "both";
+      keyExpandedDiv.style.padding = "2px";
+      var keyInfo = [{"color": "#30ac3e", "text": "&gt; 50 MPH"},
+                     {"color": "#ffcf00", "text": "25-50 MPH"},
+                     {"color": "#ff0000", "text": "&lt; 25 MPH"},
+                     {"color": "#c0c0c0", "text": "No data"}];
+      for (var i = 0; i < keyInfo.length; i++) {
+        keyExpandedDiv.innerHTML += "<div style='text-align: left'><span style='background-color: " + keyInfo[i].color + "'>&nbsp;&nbsp</span>"
+            +  "<span style='color: " + keyInfo[i].color + "'> " + keyInfo[i].text + " </span>" + "</div>"; 
+      }
+      keyExpandedDiv.style.display = "none";
+
+      GEvent.addDomListener(keyDiv, "click", function() {
+        if (me.keyExpanded) {
+          me.keyExpanded = false;
+          keyExpandedDiv.style.display = "none";
+        } else {
+          me.keyExpanded = true;
+          keyExpandedDiv.style.display = "block";
+        }
+        me.toggleButton_(keyDiv, me.keyExpanded);
+      });
+
+      me.toggleButton_(keyDiv, me.keyExpanded);
+    }
+
+    var separatorDiv = document.createElement("div");
+    separatorDiv.style.clear = "both";
+
+    if (me.options.showTrafficKey) trafficDiv.appendChild(keyDiv);
+    trafficDiv.appendChild(separatorDiv);
+    if (me.options.showTrafficKey) trafficDiv.appendChild(keyExpandedDiv);
+    me.toggleButton_(trafficDiv.firstChild, false);
+
+    container.appendChild(trafficDiv);
+  }
+
+  for (var i = 0; i < mapTypeDivs.length; i++ ) {
+    container.appendChild(mapTypeDivs[i]);
+  }
+
+  map.getContainer().appendChild(container);
+
+  return container;
+}
+
+/*
+ * Creates buttons for map types.
+ * @param {GMap2} Map object for which to create buttons.
+ * @return {Array} Divs containing the buttons.
+ */
+ExtMapTypeControl.prototype.addMapTypeButtons_ = function(map) {
+  var me = this;
+  var mapTypes = map.getMapTypes();
+  var mapTypeDivs = new Array();
+  for (var i = 0; i < mapTypes.length; i++) {
+    mapTypeDivs[i] = me.createButton_(mapTypes[i].getName());
+    mapTypeDivs[i].setAttribute('title', mapTypes[i].getAlt());
+  }
+  me.resetButtonEvents_(map, mapTypeDivs);
+  return mapTypeDivs;
+}
+
+/*
+ * Ensures that map type button events are assigned correctly.
+ * @param {GMap2} Map object for which to reset events.
+ * @param {Array} mapTypeDivs Divs containing map type buttons.
+ */
+ExtMapTypeControl.prototype.resetButtonEvents_ = function(map, mapTypeDivs) {
+  var me = this;
+  var mapTypes = map.getMapTypes();
+  for (var i = 0; i < mapTypeDivs.length; i++) {
+    var otherDivs = new Array;
+    for (var j = 0; j < mapTypes.length; j++ ) {
+      if (j != i) {
+        otherDivs.push(mapTypeDivs[j]);
+      }
+    }
+    me.assignButtonEvent_(mapTypeDivs[i], map, mapTypes[i], otherDivs);
+  }
+  GEvent.addListener(map, "maptypechanged", function() {
+    var divIndex = 0;
+    var mapType = map.getCurrentMapType();
+    for (var i = 0; i < mapTypes.length; i++) {
+      if (mapTypes[i] == mapType) {
+        divIndex = i;
+      }
+    }
+    GEvent.trigger(mapTypeDivs[divIndex], "click");
+  });
+}
+
+/*
+ * Creates simple buttons with text nodes. 
+ * @param {String} text Text to display in button
+ * @return {DOM Object} The div for the button.
+ */
+ExtMapTypeControl.prototype.createButton_ = function(text) {
+  var buttonDiv = document.createElement("div");
+  this.setButtonStyle_(buttonDiv);
+  buttonDiv.style.cssFloat = "left";
+  buttonDiv.style.styleFloat = "left";
+  var textDiv = document.createElement("div");
+  textDiv.appendChild(document.createTextNode(text));
+  textDiv.style.width = "6em";
+  buttonDiv.appendChild(textDiv);
+  return buttonDiv;
+}
+
+/*
+ * Assigns events to MapType buttons to change maptype
+ *  and toggle button styles correctly for all buttons
+ *  when button is clicked.
+ *  @param {DOM Object} div Button's div to assign click to
+ *  @param {GMap2} Map object to change maptype of.
+ *  @param {Object} mapType GMapType to change map to when clicked
+ *  @param {Array} otherDivs Array of other button divs to toggle off
+ */  
+ExtMapTypeControl.prototype.assignButtonEvent_ = function(div, map, mapType, otherDivs) {
+  var me = this;
+
+  GEvent.addDomListener(div, "click", function() {
+    for (var i = 0; i < otherDivs.length; i++) {
+      me.toggleButton_(otherDivs[i].firstChild, false);
+    }
+    me.toggleButton_(div.firstChild, true);
+    map.setMapType(mapType);
+  });
+}
+
+/*
+ * Changes style of button to appear on/off depending on boolean passed in.
+ * @param {DOM Object} div  Button div to change style of
+ * @param {Boolean} boolCheck Used to decide to use on style or off style
+ */
+ExtMapTypeControl.prototype.toggleButton_ = function(div, boolCheck) {
+   div.style.fontWeight = boolCheck ? "bold" : "";
+   div.style.border = "1px solid white";
+   var shadows = boolCheck ? ["Top", "Left"] : ["Bottom", "Right"];
+   for (var j = 0; j < shadows.length; j++) {
+     div.style["border" + shadows[j]] = "1px solid #b0b0b0";
+  } 
+   }
+
+/*
+ * Required by GMaps API for controls. 
+ * @return {GControlPosition} Default location for control
+ */
+ExtMapTypeControl.prototype.getDefaultPosition = function() {
+  return new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(7, 7));
+}
+
+/*
+ * Sets the proper CSS for the given button element.
+ * @param {DOM Object} button Button div to set style for
+ */
+ExtMapTypeControl.prototype.setButtonStyle_ = function(button) {
+  button.style.color = "#000000";
+  button.style.backgroundColor = "white";
+  button.style.font = "small Arial";
+  button.style.border = "1px solid black";
+  button.style.padding = "0px";
+  button.style.margin= "0px";
+  button.style.textAlign = "center";
+  button.style.fontSize = "12px"; 
+  button.style.cursor = "pointer";
+}
+
+if (google.extentions.maps.loader) {
+  google.extentions.maps.loader.exportSymbol('ExtMapTypeControl', ExtMapTypeControl);
+  google.extentions.maps.loader.loaded("extmaptypecontrol");
+}

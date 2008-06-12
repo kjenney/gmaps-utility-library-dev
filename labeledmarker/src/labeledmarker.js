@@ -228,6 +228,7 @@ LabeledMarker.prototype.showLabel = function() {
   this.div_.style.visibility = 'visible';
 }
 
-if (!google.loader.loadFailure) {
-  google_exportSymbol('gmapsUtilityLibrary.LabeledMarker', LabeledMarker);
+if (google.extentions.maps.loader) {
+  google.extentions.maps.loader.exportSymbol("LabeledMarker", LabeledMarker);
+  google.extentions.maps.loader.loaded("labeledmarker");
 }

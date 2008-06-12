@@ -707,7 +707,8 @@ DragZoomUtil.getManyElements = function(idsString){
   return elements;
 };
 
-if (!google.loader.loadFailure) {
-  google_exportSymbol('gmapsUtilityLibrary.DragZoom.Control', DragZoomControl);
-  google_exportSymbol('gmapsUtilityLibrary.DragZoom.Util', DragZoomUtil);
+if (google.extentions.maps.loader) {
+  google.extentions.maps.loader.exportSymbol('DragZoom.Control', DragZoomControl);
+  google.extentions.maps.loader.exportSymbol('DragZoom.Util', DragZoomUtil);
+  google.extentions.maps.loader.loaded("dragzoom");
 }
