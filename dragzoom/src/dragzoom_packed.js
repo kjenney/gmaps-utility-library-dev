@@ -707,8 +707,8 @@ DragZoomUtil.getManyElements = function(idsString){
   return elements;
 };
 
-if (google.extentions.maps.loader) {
-  google.extentions.maps.loader.exportSymbol('DragZoom.Control', DragZoomControl);
-  google.extentions.maps.loader.exportSymbol('DragZoom.Util', DragZoomUtil);
-  google.extentions.maps.loader.loaded("dragzoom");
+if (google.extensions.maps.loader) {
+  google.extensions.maps.loader.exportSymbol('DragZoom.Control', DragZoomControl);
+  google.extensions.maps.loader.exportSymbol('DragZoom.Util', DragZoomUtil);
+  google.extensions.maps.loader.loaded("dragzoom");
 }

@@ -285,7 +285,7 @@ MarkerTracker.prototype.getRotatedPoint_ = function(x, y, ang, xoffset, yoffset)
   return(rotatedPoint);
 };
 
-if (google.extentions.maps.loader) {
-  google.extentions.maps.loader.exportSymbol("MarkerTracker", MarkerTracker);
-  google.extentions.maps.loader.loaded("markertracker");
+if (google.extensions.maps.loader) {
+  google.extensions.maps.loader.exportSymbol("MarkerTracker", MarkerTracker);
+  google.extensions.maps.loader.loaded("markertracker");
 }

@@ -275,7 +275,7 @@ ExtMapTypeControl.prototype.setButtonStyle_ = function(button) {
   button.style.cursor = "pointer";
 }
 
-if (google.extentions.maps.loader) {
-  google.extentions.maps.loader.exportSymbol('ExtMapTypeControl', ExtMapTypeControl);
-  google.extentions.maps.loader.loaded("extmaptypecontrol");
+if (google.extensions.maps.loader) {
+  google.extensions.maps.loader.exportSymbol('ExtMapTypeControl', ExtMapTypeControl);
+  google.extensions.maps.loader.loaded("extmaptypecontrol");
 }

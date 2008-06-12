@@ -708,7 +708,7 @@ MarkerManager.prototype.removeFromArray = function(array, value, opt_notype) {
   return shift;
 };
 
-if (google.extentions.maps.loader) {
-  google.extentions.maps.loader.exportSymbol("MarkerManager", MarkerManager);
-  google.extentions.maps.loader.loaded("markermanager");
+if (google.extensions.maps.loader) {
+  google.extensions.maps.loader.exportSymbol("MarkerManager", MarkerManager);
+  google.extensions.maps.loader.loaded("markermanager");
 }

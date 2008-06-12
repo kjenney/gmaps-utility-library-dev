@@ -228,7 +228,7 @@ LabeledMarker.prototype.showLabel = function() {
   this.div_.style.visibility = 'visible';
 }
 
-if (google.extentions.maps.loader) {
-  google.extentions.maps.loader.exportSymbol("LabeledMarker", LabeledMarker);
-  google.extentions.maps.loader.loaded("labeledmarker");
+if (google.extensions.maps.loader) {
+  google.extensions.maps.loader.exportSymbol("LabeledMarker", LabeledMarker);
+  google.extensions.maps.loader.loaded("labeledmarker");
 }

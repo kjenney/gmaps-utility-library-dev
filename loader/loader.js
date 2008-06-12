@@ -77,7 +77,7 @@
   function setOnLoadCallback (callback) {
     callbacks.loader = callback;
   }
-  var namespace = "google.extentions.maps";
+  var namespace = "google.extensions.maps";
 	function exportSymbol(symbolName, symbol) {
 	  symbolName = namespace + "." + symbolName;
 		var symbolNameParts = symbolName.split(/\./);

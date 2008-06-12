@@ -16,14 +16,14 @@
           map.addControl(new google.maps.SmallMapControl());
           map.setCenter(new google.maps.LatLng(48.25, 11.00), 4);
           map.enableDoubleClickZoom();
-          google.extentions.maps.load("markermanager", "x", {uncompressed: true, callback: doWeatherDemo});
-          google.extentions.maps.load("dragzoom", "x", {callback: addZoomer});
-          google.extentions.maps.setOnloadCallback(function () {alert("All Libraries Loaded.");});
+          google.extensions.maps.load("markermanager", "x", {uncompressed: true, callback: doWeatherDemo});
+          google.extensions.maps.load("dragzoom", "x", {callback: addZoomer});
+          google.extensions.maps.setOnloadCallback(function () {alert("All Libraries Loaded.");});
         }
       }
 
       function addZoomer () {
-        map.addControl(new google.extentions.maps.DragZoom.Control());
+        map.addControl(new google.extensions.maps.DragZoom.Control());
       }
 
       function doWeatherDemo () {
@@ -55,7 +55,7 @@
           }
           return batch;
         }
-        var mgr = new google.extentions.maps.MarkerManager(map);
+        var mgr = new google.extensions.maps.MarkerManager(map);
         mgr.addMarkers(getWeatherMarkers(20), 3);
         mgr.addMarkers(getWeatherMarkers(200), 6);
         mgr.addMarkers(getWeatherMarkers(1000), 8);
