@@ -130,7 +130,7 @@ MarkerTracker.DEFAULT_QUICK_PAN_ENABLED_ = true;
 /**
  *  Disables the marker tracker.
  */
-MarkerTracker.prototype.disable = function() {
+MarkerTracker.prototype.disable = function () {
   this.enabled_ = false;
   this.updateArrow_();
 };
@@ -138,7 +138,7 @@ MarkerTracker.prototype.disable = function() {
 /**
  *  Enables the marker tracker.
  */
-MarkerTracker.prototype.enable = function() {
+MarkerTracker.prototype.enable = function () {
   this.enabled_ = true;
   this.updateArrow_();
 };
@@ -148,7 +148,7 @@ MarkerTracker.prototype.enable = function() {
  *  check if the parent marker is in view, if not draw the tracking arrow.
  */
 
-MarkerTracker.prototype.updateArrow_ = function() {
+MarkerTracker.prototype.updateArrow_ = function () {
   if(!this.map_.getBounds().containsLatLng(this.marker_.getLatLng()) && this.enabled_) {
     this.drawArrow_();
   } else if(this.arrowDisplayed_) {
@@ -163,7 +163,7 @@ MarkerTracker.prototype.updateArrow_ = function() {
  *  not with in the map view.
  */
 
-MarkerTracker.prototype.drawArrow_ = function() {
+MarkerTracker.prototype.drawArrow_ = function () {
 
   //convert to pixels
   var bounds = this.map_.getBounds();
@@ -247,7 +247,7 @@ MarkerTracker.prototype.drawArrow_ = function() {
  *  Hides the arrows.
  */
 
-MarkerTracker.prototype.hideArrow_ = function() {
+MarkerTracker.prototype.hideArrow_ = function () {
   this.map_.removeOverlay(this.babyMarker_);
   if(this.arrow_) {
     this.map_.removeOverlay(this.arrow_);
@@ -263,7 +263,7 @@ MarkerTracker.prototype.hideArrow_ = function() {
  *  Pans the map to the parent marker.
  */
 
-MarkerTracker.prototype.panToMarker_ = function() {
+MarkerTracker.prototype.panToMarker_ = function () {
   this.map_.panTo(this.marker_.getLatLng());
 };
 
@@ -278,7 +278,7 @@ MarkerTracker.prototype.panToMarker_ = function() {
  * @return {GPoint} A rotated GPoint.
  */
 
-MarkerTracker.prototype.getRotatedPoint_ = function(x, y, ang, xoffset, yoffset) {
+MarkerTracker.prototype.getRotatedPoint_ = function (x, y, ang, xoffset, yoffset) {
   var newx = y * Math.sin(ang) - x * Math.cos(ang) + xoffset;
   var newy = x * Math.sin(ang) + y * Math.cos(ang) + yoffset;
   var rotatedPoint = new GPoint(newx, newy);

@@ -23,7 +23,7 @@
 
 var MapIconMaker = {};
 
-MapIconMaker.createMarkerIcon = function(opts) {
+MapIconMaker.createMarkerIcon = function (opts) {
   var width = opts.width || 32;
   var height = opts.height || 32;
   var primaryColor = opts.primaryColor || "#ff0000";
@@ -67,7 +67,7 @@ MapIconMaker.createMarkerIcon = function(opts) {
   return icon;
 }
 
-MapIconMaker.createFlatIcon = function(opts) {
+MapIconMaker.createFlatIcon = function (opts) {
   var width = opts.width || 32;
   var height = opts.height || 32;
   var primaryColor = opts.primaryColor || "#ff0000";

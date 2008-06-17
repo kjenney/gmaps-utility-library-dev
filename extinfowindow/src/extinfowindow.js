@@ -80,7 +80,7 @@ ExtInfoWindow.prototype = new GOverlay();
  * in the constructor.
  * @param {GMap2} map The map that has had this extInfoWindow is added to it.
  */
-ExtInfoWindow.prototype.initialize = function(map) {
+ExtInfoWindow.prototype.initialize = function (map) {
   this.map_ = map;
 
   if( this.maximizeEnabled_ ){
@@ -170,7 +170,7 @@ ExtInfoWindow.prototype.initialize = function(map) {
     thisMinHeight = this.container_.style.height;
     //add event handler for maximize and minimize icons
     GEvent.addDomListener(this.wrapperParts.max.domElement, 'click',
-      function() {
+      function () {
         var infoWindow = thisMap.getExtInfoWindow();
         infoWindow.container_.style.width = thisMaxWidth + 'px';
         infoWindow.ajaxRequest_(thisMaxContent);
@@ -182,7 +182,7 @@ ExtInfoWindow.prototype.initialize = function(map) {
       }
     );
     GEvent.addDomListener(this.wrapperParts.min.domElement, 'click',
-      function() {
+      function () {
         var infoWindow = thisMap.getExtInfoWindow();
         infoWindow.container_.style.width = thisMinWidth;
         infoWindow.container_.style.height = thisMinHeight;
@@ -223,7 +223,7 @@ ExtInfoWindow.prototype.initialize = function(map) {
  * @private
  * @param {MouseEvent} e The mouse event caught by this function
  */
-ExtInfoWindow.prototype.onClick_ = function(e) {
+ExtInfoWindow.prototype.onClick_ = function (e) {
   if(navigator.userAgent.toLowerCase().indexOf('msie') != -1 && document.all) {
     window.event.cancelBubble = true;
     window.event.returnValue = false;
@@ -236,7 +236,7 @@ ExtInfoWindow.prototype.onClick_ = function(e) {
 /**
  * Remove the extInfoWindow container from the map pane.
  */
-ExtInfoWindow.prototype.remove = function() {
+ExtInfoWindow.prototype.remove = function () {
   if (this.map_.getExtInfoWindow() != null) {
     GEvent.trigger(this.map_, 'extinfowindowbeforeclose');
 
@@ -259,7 +259,7 @@ ExtInfoWindow.prototype.remove = function() {
  * main view into the mini-map.
  * @return {GOverlay}
  */
-ExtInfoWindow.prototype.copy = function() {
+ExtInfoWindow.prototype.copy = function () {
   return new ExtInfoWindow(this.marker_, this.infoWindowId_, this.html_, this.options_);
 };
 
@@ -268,7 +268,7 @@ ExtInfoWindow.prototype.copy = function() {
  * the map as necessary.
  * @param {Boolean} force Will be true when pixel coordinates need to be recomputed.
  */
-ExtInfoWindow.prototype.redraw = function(force) {
+ExtInfoWindow.prototype.redraw = function (force) {
   if (!force || this.container_ == null) return;
 
   //set the content section's height, needed so  browser font resizing does not affect the window's dimensions
@@ -341,7 +341,7 @@ ExtInfoWindow.prototype.redraw = function(force) {
   var currentMarker = this.marker_;
   var thisMap = this.map_;
   GEvent.addDomListener(this.wrapperParts.close.domElement, 'click',
-    function() {
+    function () {
       thisMap.closeExtInfoWindow();
     }
   );
@@ -525,7 +525,7 @@ ExtInfoWindow.prototype.ajaxRequest_ = function(url){
  *                    width will be calculated for it.
  * @return {Object} Object with keys: width, height
  */
-ExtInfoWindow.prototype.getDimensions_ = function(element) {
+ExtInfoWindow.prototype.getDimensions_ = function (element) {
   var display = this.getStyle_(element, 'display');
   if (display != 'none' && display != null) { // Safari bug
     return {width: element.offsetWidth, height: element.offsetHeight};
@@ -556,7 +556,7 @@ ExtInfoWindow.prototype.getDimensions_ = function(element) {
  * @param {String} style The style name that will be have it's value returned.
  * @return {Object}
  */
-ExtInfoWindow.prototype.getStyle_ = function(element, style) {
+ExtInfoWindow.prototype.getStyle_ = function (element, style) {
   var found = false;
   style = this.camelize_(style);
   if (element.id == this.infoWindowId_ && style == 'width' && element.style.display == 'none') {
@@ -593,7 +593,7 @@ ExtInfoWindow.prototype.getStyle_ = function(element, style) {
  * @param {String} element The string that will be parsed and made into camel case
  * @return {String}
  */
-ExtInfoWindow.prototype.camelize_ = function(element) {
+ExtInfoWindow.prototype.camelize_ = function (element) {
   var parts = element.split('-'), len = parts.length;
   if (len == 1) return parts[0];
   var camelized = element.charAt(0) == '-'
@@ -629,7 +629,7 @@ GMap.prototype.InfoWindowListener_ = null;
  *                    This is used to make sure the beak lines up correcting if the
  *                    info window styling containers a border.
  */
-GMarker.prototype.openExtInfoWindow = function(map, cssId, html, opt_opts) {
+GMarker.prototype.openExtInfoWindow = function (map, cssId, html, opt_opts) {
   if (map == null) {
     throw 'Error in GMarker.openExtInfoWindow: map cannot be null';
     return false;
@@ -653,7 +653,7 @@ GMarker.prototype.openExtInfoWindow = function(map, cssId, html, opt_opts) {
     if (map.ClickListener_ == null) {
       //listen for map click, close ExtInfoWindow if open
       map.ClickListener_ = GEvent.addListener(map, 'click',
-      function(event) {
+      function (event) {
           if( !event && map.getExtInfoWindow() != null ){
             map.closeExtInfoWindow();
           }
@@ -663,7 +663,7 @@ GMarker.prototype.openExtInfoWindow = function(map, cssId, html, opt_opts) {
     if (map.InfoWindowListener_ == null) {
       //listen for default info window open, close ExtInfoWindow if open
       map.InfoWindowListener_ = GEvent.addListener(map, 'infowindowopen',
-      function(event) {
+      function (event) {
           if (map.getExtInfoWindow() != null) {
             map.closeExtInfoWindow();
           }
@@ -678,7 +678,7 @@ GMarker.prototype.openExtInfoWindow = function(map, cssId, html, opt_opts) {
  * Remove the ExtInfoWindow instance
  * @param {GMap2} map The map where the GMarker and ExtInfoWindow exist
  */
-GMarker.prototype.closeExtInfoWindow = function(map) {
+GMarker.prototype.closeExtInfoWindow = function (map) {
   if( map.getExtInfWindow() != null ){
     map.closeExtInfoWindow();
   }

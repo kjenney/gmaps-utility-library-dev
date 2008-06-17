@@ -39,14 +39,14 @@ ExtMapTypeControl.prototype = new GControl();
  * @param {GMap2} map The map that has had this ExtMapTypeControl added to it.
  * @return {DOM Object} Div that holds the control
  */
-ExtMapTypeControl.prototype.initialize = function(map) {
+ExtMapTypeControl.prototype.initialize = function (map) {
   var container = document.createElement("div");
   var me = this;
 
   var mapTypes = map.getMapTypes();
   var mapTypeDivs = me.addMapTypeButtons_(map);
 
-  GEvent.addListener(map, "addmaptype", function() {
+  GEvent.addListener(map, "addmaptype", function () {
     var newMapTypes = map.getMapTypes();
     var newMapType = newMapTypes.pop();
     var newMapTypeDiv = me.createButton_(newMapType.getName());
@@ -56,7 +56,7 @@ ExtMapTypeControl.prototype.initialize = function(map) {
     me.resetButtonEvents_(map, mapTypeDivs);
     container.appendChild(newMapTypeDiv);
   });
-  GEvent.addListener(map, "removemaptype", function() {
+  GEvent.addListener(map, "removemaptype", function () {
     for (var i = 0; i < mapTypeDivs.length; i++) {
       GEvent.clearListeners(mapTypeDivs[i], "click");
       container.removeChild(mapTypeDivs[i]);
@@ -79,7 +79,7 @@ ExtMapTypeControl.prototype.initialize = function(map) {
     me.trafficInfo = new GTrafficOverlay(true);
     me.trafficInfo.hidden = true;
     // We have to do this so that we can sense if traffic is in view
-    GEvent.addListener(me.trafficInfo, "changed", function(hasTrafficInView) {
+    GEvent.addListener(me.trafficInfo, "changed", function (hasTrafficInView) {
       if (hasTrafficInView) {
         trafficDiv.style.visibility = 'visible';
       } else {
@@ -88,7 +88,7 @@ ExtMapTypeControl.prototype.initialize = function(map) {
     });
     map.addOverlay(me.trafficInfo);
 
-    GEvent.addDomListener(trafficDiv.firstChild, "click", function() {
+    GEvent.addDomListener(trafficDiv.firstChild, "click", function () {
       if (me.trafficInfo.hidden) {
         me.trafficInfo.hidden = false;
         me.trafficInfo.show();
@@ -118,7 +118,7 @@ ExtMapTypeControl.prototype.initialize = function(map) {
       }
       keyExpandedDiv.style.display = "none";
 
-      GEvent.addDomListener(keyDiv, "click", function() {
+      GEvent.addDomListener(keyDiv, "click", function () {
         if (me.keyExpanded) {
           me.keyExpanded = false;
           keyExpandedDiv.style.display = "none";
@@ -157,7 +157,7 @@ ExtMapTypeControl.prototype.initialize = function(map) {
  * @param {GMap2} Map object for which to create buttons.
  * @return {Array} Divs containing the buttons.
  */
-ExtMapTypeControl.prototype.addMapTypeButtons_ = function(map) {
+ExtMapTypeControl.prototype.addMapTypeButtons_ = function (map) {
   var me = this;
   var mapTypes = map.getMapTypes();
   var mapTypeDivs = new Array();
@@ -174,7 +174,7 @@ ExtMapTypeControl.prototype.addMapTypeButtons_ = function(map) {
  * @param {GMap2} Map object for which to reset events.
  * @param {Array} mapTypeDivs Divs containing map type buttons.
  */
-ExtMapTypeControl.prototype.resetButtonEvents_ = function(map, mapTypeDivs) {
+ExtMapTypeControl.prototype.resetButtonEvents_ = function (map, mapTypeDivs) {
   var me = this;
   var mapTypes = map.getMapTypes();
   for (var i = 0; i < mapTypeDivs.length; i++) {
@@ -186,7 +186,7 @@ ExtMapTypeControl.prototype.resetButtonEvents_ = function(map, mapTypeDivs) {
     }
     me.assignButtonEvent_(mapTypeDivs[i], map, mapTypes[i], otherDivs);
   }
-  GEvent.addListener(map, "maptypechanged", function() {
+  GEvent.addListener(map, "maptypechanged", function () {
     var divIndex = 0;
     var mapType = map.getCurrentMapType();
     for (var i = 0; i < mapTypes.length; i++) {
@@ -203,7 +203,7 @@ ExtMapTypeControl.prototype.resetButtonEvents_ = function(map, mapTypeDivs) {
  * @param {String} text Text to display in button
  * @return {DOM Object} The div for the button.
  */
-ExtMapTypeControl.prototype.createButton_ = function(text) {
+ExtMapTypeControl.prototype.createButton_ = function (text) {
   var buttonDiv = document.createElement("div");
   this.setButtonStyle_(buttonDiv);
   buttonDiv.style.cssFloat = "left";
@@ -224,10 +224,10 @@ ExtMapTypeControl.prototype.createButton_ = function(text) {
  *  @param {Object} mapType GMapType to change map to when clicked
  *  @param {Array} otherDivs Array of other button divs to toggle off
  */
-ExtMapTypeControl.prototype.assignButtonEvent_ = function(div, map, mapType, otherDivs) {
+ExtMapTypeControl.prototype.assignButtonEvent_ = function (div, map, mapType, otherDivs) {
   var me = this;
 
-  GEvent.addDomListener(div, "click", function() {
+  GEvent.addDomListener(div, "click", function () {
     for (var i = 0; i < otherDivs.length; i++) {
       me.toggleButton_(otherDivs[i].firstChild, false);
     }
@@ -241,7 +241,7 @@ ExtMapTypeControl.prototype.assignButtonEvent_ = function(div, map, mapType, oth
  * @param {DOM Object} div  Button div to change style of
  * @param {Boolean} boolCheck Used to decide to use on style or off style
  */
-ExtMapTypeControl.prototype.toggleButton_ = function(div, boolCheck) {
+ExtMapTypeControl.prototype.toggleButton_ = function (div, boolCheck) {
    div.style.fontWeight = boolCheck ? "bold" : "";
    div.style.border = "1px solid white";
    var shadows = boolCheck ? ["Top", "Left"] : ["Bottom", "Right"];
@@ -254,7 +254,7 @@ ExtMapTypeControl.prototype.toggleButton_ = function(div, boolCheck) {
  * Required by GMaps API for controls.
  * @return {GControlPosition} Default location for control
  */
-ExtMapTypeControl.prototype.getDefaultPosition = function() {
+ExtMapTypeControl.prototype.getDefaultPosition = function () {
   return new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(7, 7));
 };
 
@@ -262,7 +262,7 @@ ExtMapTypeControl.prototype.getDefaultPosition = function() {
  * Sets the proper CSS for the given button element.
  * @param {DOM Object} button Button div to set style for
  */
-ExtMapTypeControl.prototype.setButtonStyle_ = function(button) {
+ExtMapTypeControl.prototype.setButtonStyle_ = function (button) {
   button.style.color = "#000000";
   button.style.backgroundColor = "white";
   button.style.font = "small Arial";

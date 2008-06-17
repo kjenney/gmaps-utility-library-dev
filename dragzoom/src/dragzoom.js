@@ -165,7 +165,7 @@ DragZoomControl.prototype = new GControl();
  * Back Button functionality:
  * @param {text} text string for the back button
  */
-DragZoomControl.prototype.saveMapContext = function(text) {
+DragZoomControl.prototype.saveMapContext = function (text) {
   if (this.globals.options.backButtonEnabled) {
     this.saveBackContext_(text,true);
     this.globals.backButtonDiv.style.display = 'block';
@@ -175,19 +175,19 @@ DragZoomControl.prototype.saveMapContext = function(text) {
 /**
  * Method called to initiate a dragZoom as if the user had clicked the dragZoom button.
  */
-DragZoomControl.prototype.initiateZoom = function() {this.buttonclick_()};
+DragZoomControl.prototype.initiateZoom = function () {this.buttonclick_()};
 
 /**
  * Method called to initiate a dragZoom back operation as if the user had clicked the dragZoom back button.
  * Back Button functionality:
  */
-DragZoomControl.prototype.initiateZoomBack = function() {if (this.globals.options.backButtonEnabled) this.backbuttonclick_()};
+DragZoomControl.prototype.initiateZoomBack = function () {if (this.globals.options.backButtonEnabled) this.backbuttonclick_()};
 
 /**
  * Creates a new button to control gzoom and appends to the button container div.
  * @param {DOM Node} buttonContainerDiv created in main .initialize code
  */
-DragZoomControl.prototype.initButton_ = function(buttonContainerDiv) {
+DragZoomControl.prototype.initButton_ = function (buttonContainerDiv) {
   var G = this.globals;
   var buttonDiv = document.createElement('div');
   buttonDiv.innerHTML = G.options.buttonHTML;
@@ -202,7 +202,7 @@ DragZoomControl.prototype.initButton_ = function(buttonContainerDiv) {
  * Creates a second new button to control backup zoom and appends to the button container div.
  * @param {DOM Node} buttonContainerDiv created in main .initialize code
  */
-DragZoomControl.prototype.initBackButton_ = function(buttonContainerDiv) {
+DragZoomControl.prototype.initBackButton_ = function (buttonContainerDiv) {
   var G = this.globals;
   var backButtonDiv = document.createElement('div');
   backButtonDiv.innerHTML = G.options.backButtonHTML;
@@ -236,7 +236,7 @@ DragZoomControl.prototype.setButtonMode_ = function(mode){
  * @param {GMap2} map The map that has had this DragZoomControl added to it.
  * @return {DOM Object} Div that holds the gzoomcontrol button
  */
-DragZoomControl.prototype.initialize = function(map) {
+DragZoomControl.prototype.initialize = function (map) {
   var G = this.globals;
   var me = this;
   var mapDiv = map.getContainer();
@@ -270,19 +270,19 @@ DragZoomControl.prototype.initialize = function(map) {
   mapDiv.appendChild(zoomDiv);
 
   // add event listeners
-  GEvent.addDomListener(buttonDiv, 'click', function(e) {
+  GEvent.addDomListener(buttonDiv, 'click', function (e) {
     me.buttonclick_(e);
   });
-  GEvent.addDomListener(backButtonDiv, 'click', function(e) {
+  GEvent.addDomListener(backButtonDiv, 'click', function (e) {
     me.backbuttonclick_(e);
   });
-  GEvent.addDomListener(zoomDiv, 'mousedown', function(e) {
+  GEvent.addDomListener(zoomDiv, 'mousedown', function (e) {
     me.coverMousedown_(e);
   });
-  GEvent.addDomListener(document, 'mousemove', function(e) {
+  GEvent.addDomListener(document, 'mousemove', function (e) {
     me.drag_(e);
   });
-  GEvent.addDomListener(document, 'mouseup', function(e) {
+  GEvent.addDomListener(document, 'mouseup', function (e) {
     me.mouseup_(e);
   });
 
@@ -300,7 +300,7 @@ DragZoomControl.prototype.initialize = function(map) {
   this.initStyles_();
 
   // disable text selection on map cover
-  G.mapCover.onselectstart = function() {return false};
+  G.mapCover.onselectstart = function () {return false};
 
   return buttonContainerDiv;
 };
@@ -309,7 +309,7 @@ DragZoomControl.prototype.initialize = function(map) {
  * Required by GMaps API for controls.
  * @return {GControlPosition} Default location for control
  */
-DragZoomControl.prototype.getDefaultPosition = function() {
+DragZoomControl.prototype.getDefaultPosition = function () {
   return new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(3, 120));
 };
 
@@ -432,7 +432,7 @@ DragZoomControl.prototype.mouseup_ = function(e){
 
       try{
         G.map.addOverlay(zoomAreaPoly);
-        setTimeout (function() {G.map.removeOverlay(zoomAreaPoly)}, G.options.overlayRemoveTime);
+        setTimeout (function () {G.map.removeOverlay(zoomAreaPoly)}, G.options.overlayRemoveTime);
       }catch(e) {}
 
       var polyBounds = zoomAreaPoly.getBounds();
@@ -470,7 +470,7 @@ DragZoomControl.prototype.mouseup_ = function(e){
 /**
  * Set the cover sizes according to the size of the map
  */
-DragZoomControl.prototype.setDimensions_ = function() {
+DragZoomControl.prototype.setDimensions_ = function () {
   var G = this.globals;
   var mapSize = G.map.getSize();
   G.mapWidth  = mapSize.width;
@@ -529,7 +529,7 @@ DragZoomControl.prototype.backbuttonclick_ = function(){
  * Back Button functionality:
  * Saves the map context and pushes it on the backStack for later use by the back button
  */
-DragZoomControl.prototype.saveBackContext_ = function(text,methodCall) {
+DragZoomControl.prototype.saveBackContext_ = function (text,methodCall) {
   var G = this.globals;
   var backFrame = {};
   backFrame["center"] = G.map.getCenter();
@@ -546,7 +546,7 @@ DragZoomControl.prototype.saveBackContext_ = function(text,methodCall) {
  * Back Button functionality:
  * Pops the previous map context off of the backStack and restores the map to that context
  */
-DragZoomControl.prototype.restoreBackContext_ = function() {
+DragZoomControl.prototype.restoreBackContext_ = function () {
   var G = this.globals;
   var backFrame = G.backStack.pop();
   G.map.setCenter(backFrame["center"],backFrame["zoom"],backFrame["maptype"]);
@@ -576,7 +576,7 @@ DragZoomControl.prototype.initCover_ = function(){
  * Gets position of the mouse relative to the map
  * @param {Object} e
  */
-DragZoomControl.prototype.getRelPos_ = function(e) {
+DragZoomControl.prototype.getRelPos_ = function (e) {
   var pos = DragZoomUtil.getMousePosition(e);
   var G = this.globals;
   return {top: (pos.top - G.mapPosition.top),
@@ -621,7 +621,7 @@ DragZoomControl.prototype.getRectangle_ = function(startX, startY, pos, ratio){
 /**
  * Resets CSS and button display when drag zoom done
  */
-DragZoomControl.prototype.resetDragZoom_ = function() {
+DragZoomControl.prototype.resetDragZoom_ = function () {
   var G = this.globals;
   DragZoomUtil.style([G.mapCover, G.cornerTopDiv, G.cornerRightDiv, G.cornerBottomDiv, G.cornerLeftDiv],
     {display: 'none', opacity: G.style.opacity, filter: G.style.alphaIE});
@@ -638,7 +638,7 @@ var DragZoomUtil={};
  * @param {String} sId
  * @return {Object} DOM object with sId id
  */
-DragZoomUtil.gE = function(sId) {
+DragZoomUtil.gE = function (sId) {
   return document.getElementById(sId);
 };
 
@@ -648,7 +648,7 @@ DragZoomUtil.gE = function(sId) {
  * @param {Object} e  Mouse event
  * @return {Object} Describes position
  */
-DragZoomUtil.getMousePosition = function(e) {
+DragZoomUtil.getMousePosition = function (e) {
   var posX = 0;
   var posY = 0;
   if (!e) var e = window.event;
@@ -669,7 +669,7 @@ DragZoomUtil.getMousePosition = function(e) {
  * @param {Object} element
  * @return {Object} Describes position
  */
-DragZoomUtil.getElementPosition = function(element) {
+DragZoomUtil.getElementPosition = function (element) {
   var leftPos = element.offsetLeft;          // initialize var to store calculations
   var topPos = element.offsetTop;            // initialize var to store calculations
   var parElement = element.offsetParent;     // identify first offset parent element

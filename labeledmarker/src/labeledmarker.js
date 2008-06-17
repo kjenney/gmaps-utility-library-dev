@@ -66,7 +66,7 @@ LabeledMarker.prototype = new GMarker(new GLatLng(0, 0));
  *
  * @param {GMap2} map the map that has had this labeledmarker added to it.
  */
-LabeledMarker.prototype.initialize = function(map) {
+LabeledMarker.prototype.initialize = function (map) {
   // Do the GMarker constructor first.
   GMarker.prototype.initialize.apply(this, arguments);
 
@@ -91,7 +91,7 @@ LabeledMarker.prototype.initialize = function(map) {
      * @param {GEventListener} event to be triggered.
      */
     function newEventPassthru(obj, event) {
-      return function() {
+      return function () {
         GEvent.trigger(obj, event);
       };
     }
@@ -110,7 +110,7 @@ LabeledMarker.prototype.initialize = function(map) {
  *
  * @param {Boolean} force will be true when pixel coordinates need to be recomputed.
  */
-LabeledMarker.prototype.redraw = function(force) {
+LabeledMarker.prototype.redraw = function (force) {
   GMarker.prototype.redraw.apply(this, arguments);
   this.redrawLabel_();
 };
@@ -118,7 +118,7 @@ LabeledMarker.prototype.redraw = function(force) {
 /**
  * Moves the text div based on current projection and zoom level.
  */
-LabeledMarker.prototype.redrawLabel_ = function() {
+LabeledMarker.prototype.redrawLabel_ = function () {
   // Calculate the DIV coordinates of two opposite corners of our bounds to
   // get the size and position of our rectangle
   var p = this.map_.fromLatLngToDivPixel(this.latlng_);
@@ -134,7 +134,7 @@ LabeledMarker.prototype.redrawLabel_ = function() {
  * Remove the text div from the map pane, destroy event passthrus, and calls the
  * default remove() handler in GMarker.
  */
- LabeledMarker.prototype.remove = function() {
+ LabeledMarker.prototype.remove = function () {
   GEvent.clearInstanceListeners(this.div_);
   if (this.div_.outerHTML) {
     this.div_.outerHTML = ""; //prevent pseudo-leak in IE
@@ -151,7 +151,7 @@ LabeledMarker.prototype.redrawLabel_ = function() {
  * is part of the Overlay interface and is used, for example, to copy everything in the
  * main view into the mini-map.
  */
-LabeledMarker.prototype.copy = function() {
+LabeledMarker.prototype.copy = function () {
   return new LabeledMarker(this.latlng_, this.opts_);
 };
 
@@ -160,7 +160,7 @@ LabeledMarker.prototype.copy = function() {
  * Shows the marker, and shows label if it wasn't hidden. Note that this function
  * triggers the event GMarker.visibilitychanged in case the marker is currently hidden.
  */
-LabeledMarker.prototype.show = function() {
+LabeledMarker.prototype.show = function () {
   GMarker.prototype.show.apply(this, arguments);
   if (this.labelVisibility_) {
     this.showLabel();
@@ -174,7 +174,7 @@ LabeledMarker.prototype.show = function() {
  * Hides the marker and label if it is currently visible. Note that this function
  * triggers the event GMarker.visibilitychanged in case the marker is currently visible.
  */
-LabeledMarker.prototype.hide = function() {
+LabeledMarker.prototype.hide = function () {
   GMarker.prototype.hide.apply(this, arguments);
   this.hideLabel();
 };
@@ -183,7 +183,7 @@ LabeledMarker.prototype.hide = function() {
 /**
  * Repositions label and marker when setLatLng is called.
  */
-LabeledMarker.prototype.setLatLng = function(latlng) {
+LabeledMarker.prototype.setLatLng = function (latlng) {
   this.latlng_ = latlng;
   GMarker.prototype.setLatLng.apply(this, arguments);
   this.redrawLabel_();
@@ -193,7 +193,7 @@ LabeledMarker.prototype.setLatLng = function(latlng) {
  * Sets the visibility of the label, which will be respected during show/hides.
  * If marker is visible when set, it will show or hide label appropriately.
  */
-LabeledMarker.prototype.setLabelVisibility = function(visibility) {
+LabeledMarker.prototype.setLabelVisibility = function (visibility) {
   this.labelVisibility_ = visibility;
   if (!this.isHidden()) { // Marker showing, make visible change
     if (this.labelVisibility_) {
@@ -209,7 +209,7 @@ LabeledMarker.prototype.setLabelVisibility = function(visibility) {
  * Returns whether label visibility is set on.
  * @return {Boolean}
  */
-LabeledMarker.prototype.getLabelVisibility = function() {
+LabeledMarker.prototype.getLabelVisibility = function () {
   return this.labelVisibility_;
 };
 
@@ -217,7 +217,7 @@ LabeledMarker.prototype.getLabelVisibility = function() {
 /**
  * Hides the label of the marker.
  */
-LabeledMarker.prototype.hideLabel = function() {
+LabeledMarker.prototype.hideLabel = function () {
   this.div_.style.visibility = 'hidden';
 };
 
@@ -225,6 +225,6 @@ LabeledMarker.prototype.hideLabel = function() {
 /**
  * Shows the label of the marker.
  */
-LabeledMarker.prototype.showLabel = function() {
+LabeledMarker.prototype.showLabel = function () {
   this.div_.style.visibility = 'visible';
 };
