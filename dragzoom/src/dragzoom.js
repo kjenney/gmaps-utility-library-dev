@@ -25,6 +25,90 @@
 *  to its state prior to the DragZoom.  Sequential DragZooms are backed out in reverse order.
 */
 
+
+/* utility functions in DragZoomUtil.namespace */
+var DragZoomUtil = {};
+
+/**
+ * Alias function for getting element by id
+ * @param {String} sId
+ * @return {Object} DOM object with sId id
+ */
+DragZoomUtil.gE = function (sId) {
+  return document.getElementById(sId);
+};
+
+/**
+ * A general-purpose function to get the absolute position
+ * of the mouse.
+ * @param {Object} e  Mouse event
+ * @return {Object} Describes position
+ */
+DragZoomUtil.getMousePosition = function (e) {
+  var posX = 0;
+  var posY = 0;
+  if (!e) {
+    var e = window.event;
+  }
+  if (e.pageX || e.pageY) {
+    posX = e.pageX;
+    posY = e.pageY;
+  } else if (e.clientX || e.clientY) {
+    posX = e.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+    posY = e.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+  }
+  return {left: posX, top: posY};
+};
+
+/**
+ * Gets position of element
+ * @param {Object} element
+ * @return {Object} Describes position
+ */
+DragZoomUtil.getElementPosition = function (element) {
+  var leftPos = element.offsetLeft;          // initialize var to store calculations
+  var topPos = element.offsetTop;            // initialize var to store calculations
+  var parElement = element.offsetParent;     // identify first offset parent element
+  while (parElement != null) {                // move up through element hierarchy
+    leftPos += parElement.offsetLeft;      // appending left offset of each parent
+    topPos += parElement.offsetTop;
+    parElement = parElement.offsetParent;  // until no more offset parents exist
+  }
+  return {left: leftPos, top: topPos};
+};
+
+/**
+ * Applies styles to DOM objects
+ * @param {String/Object} elements Either comma-delimited list of ids
+ *   or an array of DOM objects
+ * @param {Object} styles Hash of styles to be applied
+ */
+DragZoomUtil.style = function (elements, styles) {
+  if (typeof(elements) == 'string') {
+    elements = DragZoomUtil.getManyElements(elements);
+  }
+  for (var i = 0; i < elements.length; i++) {
+    for (var s in styles) {
+      elements[i].style[s] = styles[s];
+    }
+  }
+};
+
+/**
+ * Gets DOM elements array according to list of IDs
+ * @param {String} elementsString Comma-delimited list of IDs
+ * @return {Array} Array of DOM elements corresponding to s
+ */
+DragZoomUtil.getManyElements = function (idsString) {
+  var idsArray = idsString.split(',');
+  var elements = [];
+  for (var i = 0; i < idsArray.length; i++) {
+    elements[elements.length] = DragZoomUtil.gE(idsArray[i]);
+  }
+  return elements;
+};
+
+
 /**
  * Constructor for DragZoomControl, which takes 3 option hashes and
  *  uses them to customize the control.
@@ -653,86 +737,4 @@ DragZoomControl.prototype.resetDragZoom_ = function () {
   if (G.options.backButtonEnabled  && (G.backStack.length > 0)) {
     G.backButtonDiv.style.display = 'block'; // show the back button
   }
-};
-
-/* utility functions in DragZoomUtil.namespace */
-var DragZoomUtil = {};
-
-/**
- * Alias function for getting element by id
- * @param {String} sId
- * @return {Object} DOM object with sId id
- */
-DragZoomUtil.gE = function (sId) {
-  return document.getElementById(sId);
-};
-
-/**
- * A general-purpose function to get the absolute position
- * of the mouse.
- * @param {Object} e  Mouse event
- * @return {Object} Describes position
- */
-DragZoomUtil.getMousePosition = function (e) {
-  var posX = 0;
-  var posY = 0;
-  if (!e) {
-    var e = window.event;
-  }
-  if (e.pageX || e.pageY) {
-    posX = e.pageX;
-    posY = e.pageY;
-  } else if (e.clientX || e.clientY) {
-    posX = e.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
-    posY = e.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
-  }
-  return {left: posX, top: posY};
-};
-
-/**
- * Gets position of element
- * @param {Object} element
- * @return {Object} Describes position
- */
-DragZoomUtil.getElementPosition = function (element) {
-  var leftPos = element.offsetLeft;          // initialize var to store calculations
-  var topPos = element.offsetTop;            // initialize var to store calculations
-  var parElement = element.offsetParent;     // identify first offset parent element
-  while (parElement != null) {                // move up through element hierarchy
-    leftPos += parElement.offsetLeft;      // appending left offset of each parent
-    topPos += parElement.offsetTop;
-    parElement = parElement.offsetParent;  // until no more offset parents exist
-  }
-  return {left: leftPos, top: topPos};
-};
-
-/**
- * Applies styles to DOM objects
- * @param {String/Object} elements Either comma-delimited list of ids
- *   or an array of DOM objects
- * @param {Object} styles Hash of styles to be applied
- */
-DragZoomUtil.style = function (elements, styles) {
-  if (typeof(elements) == 'string') {
-    elements = DragZoomUtil.getManyElements(elements);
-  }
-  for (var i = 0; i < elements.length; i++) {
-    for (var s in styles) {
-      elements[i].style[s] = styles[s];
-    }
-  }
-};
-
-/**
- * Gets DOM elements array according to list of IDs
- * @param {String} elementsString Comma-delimited list of IDs
- * @return {Array} Array of DOM elements corresponding to s
- */
-DragZoomUtil.getManyElements = function (idsString) {
-  var idsArray = idsString.split(',');
-  var elements = [];
-  for (var i = 0; i < idsArray.length; i++) {
-    elements[elements.length] = DragZoomUtil.gE(idsArray[i]);
-  }
-  return elements;
 };
