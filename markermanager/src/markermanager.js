@@ -665,27 +665,28 @@ MarkerManager.prototype.rectangleDiffCoords = function (bounds1, bounds2, callba
   var maxX2 = bounds2.maxX;
   var maxY2 = bounds2.maxY;
 
-  for (var x = minX1; x <= maxX1; x++) {  // All x in R1
+  var x, y;
+  for (x = minX1; x <= maxX1; x++) {  // All x in R1
     // All above:
-    for (var y = minY1; y <= maxY1 && y < minY2; y++) {  // y in R1 above R2
+    for (y = minY1; y <= maxY1 && y < minY2; y++) {  // y in R1 above R2
       callback(x, y);
     }
     // All below:
-    for (var y = Math.max(maxY2 + 1, minY1);  // y in R1 below R2
+    for (y = Math.max(maxY2 + 1, minY1);  // y in R1 below R2
          y <= maxY1; y++) {
       callback(x, y);
     }
   }
 
-  for (var y = Math.max(minY1, minY2);
+  for (y = Math.max(minY1, minY2);
        y <= Math.min(maxY1, maxY2); y++) {  // All y in R2 and in R1
     // Strictly left:
-    for (var x = Math.min(maxX1 + 1, minX2) - 1;
+    for (x = Math.min(maxX1 + 1, minX2) - 1;
          x >= minX1; x--) {  // x in R1 left of R2
       callback(x, y);
     }
     // Strictly right:
-    for (var x = Math.max(minX1, maxX2 + 1);  // x in R1 right of R2
+    for (x = Math.max(minX1, maxX2 + 1);  // x in R1 right of R2
          x <= maxX1; x++) {
       callback(x, y);
     }

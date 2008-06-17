@@ -110,7 +110,8 @@ ExtInfoWindow.prototype.initialize = function (map) {
     this.wrapperParts.min = {t: 0, l: 0, w: 0, h: 0, domElement: null};
   }
 
-  for (var i in this.wrapperParts) {
+  var i;
+  for (i in this.wrapperParts) {
     var tempElement = document.createElement('div');
     tempElement.id = this.infoWindowId_ + '_' + i;
     tempElement.style.visibility = 'hidden';
@@ -121,7 +122,7 @@ ExtInfoWindow.prototype.initialize = function (map) {
     tempWrapperPart.h = parseInt(this.getStyle_(tempElement, 'height'), 10);
     document.body.removeChild(tempElement);
   }
-  for (var i in this.wrapperParts) {
+  for (i in this.wrapperParts) {
     if (i == 'close') {
       //first append the content so the close button is layered above it
       this.wrapperDiv_.appendChild(this.contentDiv_);
@@ -160,20 +161,14 @@ ExtInfoWindow.prototype.initialize = function (map) {
   }
 
   if (this.maximizeEnabled_) {
-    thisMap = this.map_;
-    thisMaxWidth = this.maxWidth_;
-    thisMaxHeight = this.maxHeight_;
-    thisContainer = this.container_;
-    thisMaxContent = this.maxContent_;
+    var that = this;
 
-    thisMinWidth = this.container_.style.width;
-    thisMinHeight = this.container_.style.height;
     //add event handler for maximize and minimize icons
     GEvent.addDomListener(this.wrapperParts.max.domElement, 'click',
       function () {
-        var infoWindow = thisMap.getExtInfoWindow();
-        infoWindow.container_.style.width = thisMaxWidth + 'px';
-        infoWindow.ajaxRequest_(thisMaxContent);
+        var infoWindow = that.map_.getExtInfoWindow();
+        infoWindow.container_.style.width = that.maxWidth_ + 'px';
+        infoWindow.ajaxRequest_(that.maxContent_);
         infoWindow.isMaximized_ = true;
         infoWindow.redraw(true);
 
@@ -183,9 +178,9 @@ ExtInfoWindow.prototype.initialize = function (map) {
     );
     GEvent.addDomListener(this.wrapperParts.min.domElement, 'click',
       function () {
-        var infoWindow = thisMap.getExtInfoWindow();
-        infoWindow.container_.style.width = thisMinWidth;
-        infoWindow.container_.style.height = thisMinHeight;
+        var infoWindow = that.map_.getExtInfoWindow();
+        infoWindow.container_.style.width = that.container_.style.width;
+        infoWindow.container_.style.height = that.container_.style.height;
         if (infoWindow.ajaxUrl_ != null) {
           infoWindow.ajaxRequest_(this.ajaxUrl_);
         } else {
@@ -341,10 +336,10 @@ ExtInfoWindow.prototype.redraw = function (force) {
 
   //add event handler for the close icon
   var currentMarker = this.marker_;
-  var thisMap = this.map_;
+  var that = this;
   GEvent.addDomListener(this.wrapperParts.close.domElement, 'click',
     function () {
-      thisMap.closeExtInfoWindow();
+      that.map_.closeExtInfoWindow();
     }
   );
 
@@ -486,11 +481,11 @@ ExtInfoWindow.prototype.repositionMap_ = function () {
  * @param {String} url The Url of where to make the ajax request on the server
  */
 ExtInfoWindow.prototype.ajaxRequest_ = function (url) {
-  var thisMap = this.map_;
+  var that = this;
   var thisCallback = this.callback_;
   GDownloadUrl(url, function (response, status) {
-    if (thisMap.getExtInfoWindow() !== null) {
-      var infoWindow = document.getElementById(thisMap.getExtInfoWindow().infoWindowId_ + '_contents');
+    if (that.map_.getExtInfoWindow() !== null) {
+      var infoWindow = document.getElementById(that.map_.getExtInfoWindow().infoWindowId_ + '_contents');
       if (response == null || status == -1) {
         infoWindow.innerHTML = '<span class="error">ERROR: The Ajax request failed to get HTML content from "' + url + '"</span>';
       } else {
@@ -499,9 +494,9 @@ ExtInfoWindow.prototype.ajaxRequest_ = function (url) {
       if (thisCallback != null) {
         thisCallback();
       }
-      thisMap.getExtInfoWindow().resize();
+      that.map_.getExtInfoWindow().resize();
     }
-    GEvent.trigger(thisMap, 'extinfowindowupdate');
+    GEvent.trigger(that.map_, 'extinfowindowupdate');
   });
 };
 

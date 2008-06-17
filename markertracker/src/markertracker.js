@@ -176,20 +176,22 @@ MarkerTracker.prototype.drawArrow_ = function () {
   var maxY =  SE.y - this.padding_;
 
   // find the geometric info for the marker realative to the center of the map
-  var center = this.map_.fromLatLngToDivPixel(this.map_.getCenter());
-  var loc = this.map_.fromLatLngToDivPixel(this.marker_.getLatLng());
+  var center, loc;
+  center = this.map_.fromLatLngToDivPixel(this.map_.getCenter());
+  loc = this.map_.fromLatLngToDivPixel(this.marker_.getLatLng());
 
   //get the slope of the line
   var m = (center.y - loc.y) / (center.x - loc.x);
   var b = (center.y - m * center.x);
 
   // end the line within the bounds
+  var x;
   if (loc.x < maxX && loc.x > minX) {
-    var x = loc.x;
+    x = loc.x;
   } else if (center.x > loc.x) {
-    var x = minX;
+    x = minX;
   } else {
-    var x = maxX;
+    x = maxX;
   }
 
   //calculate y and check boundaries again
@@ -217,9 +219,8 @@ MarkerTracker.prototype.drawArrow_ = function () {
   // right side of marker is at -1,-1
   var arrowRight = this.map_.fromDivPixelToLatLng(this.getRotatedPoint_(((-1) * this.length_), ((-1) * this.length_), ang, x, y));
 
-
-  var center = this.map_.getCenter();
-  var loc = this.marker_.getLatLng();
+  center = this.map_.getCenter();
+  loc = this.marker_.getLatLng();
 
   this.oldArrow_ = this.arrow_;
   this.arrow_ = new GPolyline([arrowLeft, arrowLoc, arrowRight], this.color_, this.weight_, this.opacity_);

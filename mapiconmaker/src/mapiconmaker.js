@@ -44,8 +44,7 @@ MapIconMaker.createMarkerIcon = function (opts) {
   icon.infoWindowAnchor = new GPoint(width / 2, Math.floor(height / 12));
   icon.printImage = iconUrl + "&chof=gif";
   icon.mozPrintImage = iconUrl + "&chf=bg,s,ECECD8" + "&chof=gif";
-  var iconUrl = baseUrl + "&chs=" + width + "x" + height + "&chco=" + cornerColor.replace("#", "") + "," + primaryColor.replace("#", "") + "," + strokeColor.replace("#", "");
-  icon.transparent = iconUrl + "&chf=a,s,ffffff11&ext=.png";
+  icon.transparent = baseUrl + "&chs=" + width + "x" + height + "&chco=" + cornerColor.replace("#", "") + "," + primaryColor.replace("#", "") + "," + strokeColor.replace("#", "") + "&chf=a,s,ffffff11&ext=.png";
 
   icon.imageMap = [
     width / 2, height,

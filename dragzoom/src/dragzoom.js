@@ -44,12 +44,10 @@ DragZoomUtil.gE = function (sId) {
  * @param {Object} e  Mouse event
  * @return {Object} Describes position
  */
-DragZoomUtil.getMousePosition = function (e) {
+DragZoomUtil.getMousePosition = function (ev) {
   var posX = 0;
   var posY = 0;
-  if (!e) {
-    var e = window.event;
-  }
+  var e = ev || window.event;
   if (e.pageX || e.pageY) {
     posX = e.pageX;
     posY = e.pageY;
@@ -198,7 +196,8 @@ function DragZoomControl(opts_boxStyle, opts_other, opts_callbacks) {
   };
 
   var style = this.globals.style;
-  for (var s in opts_boxStyle) {
+  var s;
+  for (s in opts_boxStyle) {
     style[s] = opts_boxStyle[s];
   }
 
@@ -227,7 +226,7 @@ function DragZoomControl(opts_boxStyle, opts_other, opts_callbacks) {
     minDragSize: 0
   };
 
-  for (var s in opts_other) {
+  for (s in opts_other) {
     this.globals.options[s] = opts_other[s];
   }
 
@@ -415,10 +414,11 @@ DragZoomControl.prototype.coverMousedown_ = function (e) {
   G.startX = pos.left;
   G.startY = pos.top;
 
+  var rightMouse;
   if (e.which) {
-    var rightMouse = (e.which != 1);
+    rightMouse = (e.which != 1);
   } else if (e.button) {
-    var rightMouse = (e.button != 1);
+    rightMouse = (e.button != 1);
   }
   G.draggingRightMouse = rightMouse;
 
@@ -458,12 +458,14 @@ DragZoomControl.prototype.drag_ = function (e) {
     var pos = this.getRelPos_(e);
     var rect = this.getRectangle_(G.startX, G.startY, pos, G.mapRatio);
 
+    var addX;
     if (rect.left) {
       addX = -rect.width;
     } else {
       addX = 0;
     }
 
+    var addY;
     if (rect.top) {
       addY = -rect.height;
     } else {
@@ -519,10 +521,11 @@ DragZoomControl.prototype.mouseup_ = function (e) {
       var nepx = new GPoint(rect.endX, rect.startY);
       var sepx = new GPoint(rect.endX, rect.endY);
       var swpx = new GPoint(rect.startX, rect.endY);
-      var nw = G.map.fromContainerPixelToLatLng(nwpx);
-      var ne = G.map.fromContainerPixelToLatLng(nepx);
-      var se = G.map.fromContainerPixelToLatLng(sepx);
-      var sw = G.map.fromContainerPixelToLatLng(swpx);
+      var nw, ne, se, sw;
+      nw = G.map.fromContainerPixelToLatLng(nwpx);
+      ne = G.map.fromContainerPixelToLatLng(nepx);
+      se = G.map.fromContainerPixelToLatLng(sepx);
+      sw = G.map.fromContainerPixelToLatLng(swpx);
 
       var zoomAreaPoly = new GPolyline([nw, ne, se, sw, nw], G.style.outlineColor, G.style.outlineWidth + 1, 0.4);
 
@@ -531,20 +534,21 @@ DragZoomControl.prototype.mouseup_ = function (e) {
         setTimeout(function () {
           G.map.removeOverlay(zoomAreaPoly);
         }, G.options.overlayRemoveTime);
-      } catch (e) {}
+      } catch (error) {}
 
       var polyBounds = zoomAreaPoly.getBounds();
-      var ne = polyBounds.getNorthEast();
-      var sw = polyBounds.getSouthWest();
-      var se = new GLatLng(sw.lat(), ne.lng());
-      var nw = new GLatLng(ne.lat(), sw.lng());
+      ne = polyBounds.getNorthEast();
+      sw = polyBounds.getSouthWest();
+      se = new GLatLng(sw.lat(), ne.lng());
+      nw = new GLatLng(ne.lat(), sw.lng());
+      var zoomLevel;
       if (G.options.rightMouseZoomOutEnabled && G.draggingRightMouse) {
         var mapSpan = G.map.getBounds().toSpan();
         var polySpan = polyBounds.toSpan();
         var dSize = Math.max(mapSpan.lat() / polySpan.lat(), mapSpan.lng() / polySpan.lng());
-        var zoomLevel = G.map.getZoom() - Math.ceil(Math.log(dSize, 2));
+        zoomLevel = G.map.getZoom() - Math.ceil(Math.log(dSize, 2));
       } else {
-        var zoomLevel = G.map.getBoundsZoomLevel(polyBounds);
+        zoomLevel = G.map.getBoundsZoomLevel(polyBounds);
       }
       var center = polyBounds.getCenter();
       G.map.setCenter(center, zoomLevel);
@@ -712,7 +716,7 @@ DragZoomControl.prototype.getRectangle_ = function (startX, startY, pos, ratio) 
     dY = dY * -1;
     top = true;
   }
-  delta = dX > dY ? dX : dY;
+  var delta = dX > dY ? dX : dY;
 
   return {
     startX: startX,

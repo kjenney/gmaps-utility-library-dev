@@ -57,17 +57,19 @@ ExtMapTypeControl.prototype.initialize = function (map) {
     container.appendChild(newMapTypeDiv);
   });
   GEvent.addListener(map, "removemaptype", function () {
-    for (var i = 0; i < mapTypeDivs.length; i++) {
+    var i;
+    for (i = 0; i < mapTypeDivs.length; i++) {
       GEvent.clearListeners(mapTypeDivs[i], "click");
       container.removeChild(mapTypeDivs[i]);
     }
     mapTypeDivs = me.addMapTypeButtons_(map);
     me.resetButtonEvents_(map, mapTypeDivs);
-    for (var i = 0; i < mapTypeDivs.length; i++) {
+    for (i = 0; i < mapTypeDivs.length; i++) {
       container.appendChild(mapTypeDivs[i]);
     }
   });
 
+  var i;
   if (me.options.showTraffic) {
     var trafficDiv = me.createButton_("Traffic");
     trafficDiv.setAttribute('title', 'Show Traffic');
@@ -100,7 +102,7 @@ ExtMapTypeControl.prototype.initialize = function (map) {
     });
 
     if (me.options.showTrafficKey) {
-      keyDiv = document.createElement("div");
+      var keyDiv = document.createElement("div");
       keyDiv.style.cssFloat = "left";
       keyDiv.style.styleFloat = "left";
       keyDiv.innerHTML = "&nbsp;?&nbsp;";
@@ -112,7 +114,7 @@ ExtMapTypeControl.prototype.initialize = function (map) {
                      {"color": "#ffcf00", "text": "25-50 MPH"},
                      {"color": "#ff0000", "text": "&lt; 25 MPH"},
                      {"color": "#c0c0c0", "text": "No data"}];
-      for (var i = 0; i < keyInfo.length; i++) {
+      for (i = 0; i < keyInfo.length; i++) {
         keyExpandedDiv.innerHTML += "<div style='text-align: left'><span style='background-color: " + keyInfo[i].color + "'>&nbsp;&nbsp</span>" + "<span style='color: " + keyInfo[i].color + "'> " + keyInfo[i].text + " </span>" + "</div>";
       }
       keyExpandedDiv.style.display = "none";
@@ -146,7 +148,7 @@ ExtMapTypeControl.prototype.initialize = function (map) {
     container.appendChild(trafficDiv);
   }
 
-  for (var i = 0; i < mapTypeDivs.length; i++) {
+  for (i = 0; i < mapTypeDivs.length; i++) {
     container.appendChild(mapTypeDivs[i]);
   }
 
