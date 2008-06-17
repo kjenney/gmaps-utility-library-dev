@@ -34,7 +34,7 @@
  *   opt_opts.labelOffset {GSize} label offset, the x- and y-distance between
  *     the marker's latlng and the upper-left corner of the text div.
  */
-function LabeledMarker(latlng, opt_opts){
+function LabeledMarker(latlng, opt_opts) {
   this.latlng_ = latlng;
   this.opts_ = opt_opts;
 
@@ -52,7 +52,7 @@ function LabeledMarker(latlng, opt_opts){
   }
 
   GMarker.apply(this, arguments);
-};
+}
 
 
 // It's a limitation of JavaScript inheritance that we can't conveniently
@@ -98,7 +98,7 @@ LabeledMarker.prototype.initialize = function (map) {
 
     // Pass through events fired on the text div to the marker.
     var eventPassthrus = ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseover', 'mouseout'];
-    for(var i = 0; i < eventPassthrus.length; i++) {
+    for (var i = 0; i < eventPassthrus.length; i++) {
       var name = eventPassthrus[i];
       GEvent.addDomListener(this.div_, name, newEventPassthru(this, name));
     }
@@ -134,7 +134,7 @@ LabeledMarker.prototype.redrawLabel_ = function () {
  * Remove the text div from the map pane, destroy event passthrus, and calls the
  * default remove() handler in GMarker.
  */
- LabeledMarker.prototype.remove = function () {
+LabeledMarker.prototype.remove = function () {
   GEvent.clearInstanceListeners(this.div_);
   if (this.div_.outerHTML) {
     this.div_.outerHTML = ""; //prevent pseudo-leak in IE

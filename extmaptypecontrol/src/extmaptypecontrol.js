@@ -28,7 +28,7 @@
  */
 function ExtMapTypeControl(opt_opts) {
   this.options = opt_opts || {};
-};
+}
 
 
 ExtMapTypeControl.prototype = new GControl();
@@ -63,7 +63,7 @@ ExtMapTypeControl.prototype.initialize = function (map) {
     }
     mapTypeDivs = me.addMapTypeButtons_(map);
     me.resetButtonEvents_(map, mapTypeDivs);
-    for (var i = 0; i < mapTypeDivs.length; i++ ) {
+    for (var i = 0; i < mapTypeDivs.length; i++) {
       container.appendChild(mapTypeDivs[i]);
     }
   });
@@ -113,8 +113,7 @@ ExtMapTypeControl.prototype.initialize = function (map) {
                      {"color": "#ff0000", "text": "&lt; 25 MPH"},
                      {"color": "#c0c0c0", "text": "No data"}];
       for (var i = 0; i < keyInfo.length; i++) {
-        keyExpandedDiv.innerHTML += "<div style='text-align: left'><span style='background-color: " + keyInfo[i].color + "'>&nbsp;&nbsp</span>"
-            +  "<span style='color: " + keyInfo[i].color + "'> " + keyInfo[i].text + " </span>" + "</div>";
+        keyExpandedDiv.innerHTML += "<div style='text-align: left'><span style='background-color: " + keyInfo[i].color + "'>&nbsp;&nbsp</span>" + "<span style='color: " + keyInfo[i].color + "'> " + keyInfo[i].text + " </span>" + "</div>";
       }
       keyExpandedDiv.style.display = "none";
 
@@ -135,15 +134,19 @@ ExtMapTypeControl.prototype.initialize = function (map) {
     var separatorDiv = document.createElement("div");
     separatorDiv.style.clear = "both";
 
-    if (me.options.showTrafficKey) trafficDiv.appendChild(keyDiv);
+    if (me.options.showTrafficKey) {
+      trafficDiv.appendChild(keyDiv);
+    }
     trafficDiv.appendChild(separatorDiv);
-    if (me.options.showTrafficKey) trafficDiv.appendChild(keyExpandedDiv);
+    if (me.options.showTrafficKey) {
+      trafficDiv.appendChild(keyExpandedDiv);
+    }
     me.toggleButton_(trafficDiv.firstChild, false);
 
     container.appendChild(trafficDiv);
   }
 
-  for (var i = 0; i < mapTypeDivs.length; i++ ) {
+  for (var i = 0; i < mapTypeDivs.length; i++) {
     container.appendChild(mapTypeDivs[i]);
   }
 
@@ -179,7 +182,7 @@ ExtMapTypeControl.prototype.resetButtonEvents_ = function (map, mapTypeDivs) {
   var mapTypes = map.getMapTypes();
   for (var i = 0; i < mapTypeDivs.length; i++) {
     var otherDivs = new Array;
-    for (var j = 0; j < mapTypes.length; j++ ) {
+    for (var j = 0; j < mapTypes.length; j++) {
       if (j != i) {
         otherDivs.push(mapTypeDivs[j]);
       }
@@ -242,11 +245,11 @@ ExtMapTypeControl.prototype.assignButtonEvent_ = function (div, map, mapType, ot
  * @param {Boolean} boolCheck Used to decide to use on style or off style
  */
 ExtMapTypeControl.prototype.toggleButton_ = function (div, boolCheck) {
-   div.style.fontWeight = boolCheck ? "bold" : "";
-   div.style.border = "1px solid white";
-   var shadows = boolCheck ? ["Top", "Left"] : ["Bottom", "Right"];
-   for (var j = 0; j < shadows.length; j++) {
-     div.style["border" + shadows[j]] = "1px solid #b0b0b0";
+  div.style.fontWeight = boolCheck ? "bold" : "";
+  div.style.border = "1px solid white";
+  var shadows = boolCheck ? ["Top", "Left"] : ["Bottom", "Right"];
+  for (var j = 0; j < shadows.length; j++) {
+    div.style["border" + shadows[j]] = "1px solid #b0b0b0";
   }
 };
 
@@ -268,7 +271,7 @@ ExtMapTypeControl.prototype.setButtonStyle_ = function (button) {
   button.style.font = "small Arial";
   button.style.border = "1px solid black";
   button.style.padding = "0px";
-  button.style.margin= "0px";
+  button.style.margin = "0px";
   button.style.textAlign = "center";
   button.style.fontSize = "12px";
   button.style.cursor = "pointer";

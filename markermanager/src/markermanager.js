@@ -63,13 +63,13 @@ function MarkerManager(map, opt_opts) {
 
   var mapTypes = map.getMapTypes();
   var maxZoom = mapTypes[0].getMaximumResolution();
-  for (var i=0; i < mapTypes.length; i++) {
+  for (var i = 0; i < mapTypes.length; i++) {
     var mapTypeMaxZoom = mapTypes[i].getMaximumResolution();
     if (mapTypeMaxZoom > maxZoom) {
       maxZoom = mapTypeMaxZoom;
     }
-  };
-  if(opt_opts.maxZoom != undefined) {
+  }
+  if (opt_opts.maxZoom != undefined) {
     maxZoom = opt_opts.maxZoom;
   }
   me.maxZoom_ = maxZoom;
@@ -111,7 +111,7 @@ function MarkerManager(map, opt_opts) {
   me.shownMarkers_ = 0;
 
   me.shownBounds_ = me.getMapGridBounds_();
-};
+}
 
 // Static constants:
 MarkerManager.DEFAULT_TILE_SIZE_ = 1024;
@@ -129,7 +129,7 @@ MarkerManager.prototype.resetManager_ = function () {
   for (var zoom = 0; zoom <= me.maxZoom_; ++zoom) {
     me.grid_[zoom] = [];
     me.numMarkers_[zoom] = 0;
-    me.gridWidth_[zoom] = Math.ceil(mapWidth/me.tileSize_);
+    me.gridWidth_[zoom] = Math.ceil(mapWidth / me.tileSize_);
     mapWidth <<= 1;
   }
 };
@@ -295,8 +295,8 @@ MarkerManager.prototype.removeMarker = function (marker) {
     // of visible markers up to date.
     if (zoom == me.mapZoom_) {
       if (me.isGridPointVisible_(grid)) {
-          me.removeOverlay_(marker);
-          changed = true;
+        me.removeOverlay_(marker);
+        changed = true;
       }
     }
     grid.x = grid.x >> 1;
@@ -366,9 +366,9 @@ MarkerManager.prototype.addMarker = function (marker, minZoom, opt_maxZoom) {
   var maxZoom = this.getOptMaxZoom_(opt_maxZoom);
   me.addMarkerBatch_(marker, minZoom, maxZoom);
   var gridPoint = me.getTilePoint_(marker.getPoint(), me.mapZoom_, GSize.ZERO);
-  if(me.isGridPointVisible_(gridPoint) &&
-     minZoom <= me.shownBounds_.z &&
-     me.shownBounds_.z <= maxZoom ) {
+  if (me.isGridPointVisible_(gridPoint) &&
+      minZoom <= me.shownBounds_.z &&
+      me.shownBounds_.z <= maxZoom) {
     me.addOverlay_(marker);
     me.notifyListeners_();
   }
@@ -447,8 +447,7 @@ MarkerManager.prototype.getGridCellNoCreate_ = function (x, y, z) {
  * given bounds.
  * @return {GBounds} The bounds in grid space.
  */
-MarkerManager.prototype.getGridBounds_ = function (bounds, zoom, swPadding,
-                                                  nePadding) {
+MarkerManager.prototype.getGridBounds_ = function (bounds, zoom, swPadding, nePadding) {
   zoom = Math.min(zoom, this.maxZoom_);
 
   var bl = bounds.getSouthWest();
@@ -479,8 +478,7 @@ MarkerManager.prototype.getGridBounds_ = function (bounds, zoom, swPadding,
  */
 MarkerManager.prototype.getMapGridBounds_ = function () {
   var me = this;
-  return me.getGridBounds_(me.map_.getBounds(), me.mapZoom_,
-                           me.swPadding_, me.nePadding_);
+  return me.getGridBounds_(me.map_.getBounds(), me.mapZoom_, me.swPadding_, me.nePadding_);
 };
 
 

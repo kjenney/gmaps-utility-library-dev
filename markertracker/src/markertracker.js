@@ -53,39 +53,39 @@ function MarkerTracker(marker, map, opts) {
   // setup the options
   opts = opts || {};
   this.iconScale_ = MarkerTracker.DEFAULT_ICON_SCALE_;
-  if (opts.iconScale != undefined ) {
+  if (opts.iconScale != undefined) {
     this.iconScale_ = opts.iconScale;
   }
   this.padding_ = MarkerTracker.DEFAULT_EDGE_PADDING_;
-  if (opts.padding != undefined ) {
+  if (opts.padding != undefined) {
     this.padding_ = opts.padding;
   }
   this.color_ = MarkerTracker.DEFAULT_ARROW_COLOR_;
-  if (opts.color != undefined ) {
+  if (opts.color != undefined) {
     this.color_ = opts.color;
   }
   this.weight_ = MarkerTracker.DEFAULT_ARROW_WEIGHT_;
-  if (opts.weight != undefined ) {
+  if (opts.weight != undefined) {
     this.weight_ = opts.weight;
   }
   this.length_ = MarkerTracker.DEFAULT_ARROW_LENGTH_;
-  if (opts.length != undefined ) {
+  if (opts.length != undefined) {
     this.length_ = opts.length;
   }
   this.opacity_ = MarkerTracker.DEFAULT_ARROW_OPACITY_;
-  if (opts.opacity != undefined ) {
+  if (opts.opacity != undefined) {
     this.opacity_ = opts.opacity;
   }
   this.updateEvent_ = MarkerTracker.DEFAULT_UPDATE_EVENT_;
-  if (opts.updateEvent != undefined ) {
+  if (opts.updateEvent != undefined) {
     this.updateEvent_ = opts.updateEvent;
   }
   this.panEvent_ = MarkerTracker.DEFAULT_PAN_EVENT_;
-  if (opts.panEvent != undefined ) {
+  if (opts.panEvent != undefined) {
     this.panEvent_ = opts.panEvent;
   }
   this.quickPanEnabled_ = MarkerTracker.DEFAULT_QUICK_PAN_ENABLED_;
-  if (opts.quickPanEnabled != undefined ) {
+  if (opts.quickPanEnabled != undefined) {
     this.quickPanEnabled_ = opts.quickPanEnabled;
   }
 
@@ -93,25 +93,25 @@ function MarkerTracker(marker, map, opts) {
   var babyIcon = new GIcon(marker.getIcon());
   babyIcon.iconSize = new GSize(
     marker.getIcon().iconSize.width * this.iconScale_,
-    marker.getIcon().iconSize.height * this.iconScale_ );
+    marker.getIcon().iconSize.height * this.iconScale_);
   babyIcon.iconAnchor = new GPoint(
     marker.getIcon().iconAnchor.x * this.iconScale_,
-    marker.getIcon().iconAnchor.y * this.iconScale_/2);
+    marker.getIcon().iconAnchor.y * this.iconScale_ / 2);
   // kill the shadow
   babyIcon.shadow = null;
   this.babyMarker_ = new GMarker(new GPoint(0, 0), babyIcon);
 
   //bind the update task to the event trigger
-  GEvent.bind(this.map_, this.updateEvent_, this, this.updateArrow_ );
+  GEvent.bind(this.map_, this.updateEvent_, this, this.updateArrow_);
   //update the arrow if the marker moves
-  GEvent.bind(this.marker_, 'changed', this, this.updateArrow_ );
+  GEvent.bind(this.marker_, 'changed', this, this.updateArrow_);
   if (this.quickPanEnabled_) {
-    GEvent.bind(this.babyMarker_, this.panEvent_, this, this.panToMarker_ );
+    GEvent.bind(this.babyMarker_, this.panEvent_, this, this.panToMarker_);
   }
 
   //do an inital check
   this.updateArrow_();
-};
+}
 
 
 //Default Arrow Constants
@@ -149,9 +149,9 @@ MarkerTracker.prototype.enable = function () {
  */
 
 MarkerTracker.prototype.updateArrow_ = function () {
-  if(!this.map_.getBounds().containsLatLng(this.marker_.getLatLng()) && this.enabled_) {
+  if (!this.map_.getBounds().containsLatLng(this.marker_.getLatLng()) && this.enabled_) {
     this.drawArrow_();
-  } else if(this.arrowDisplayed_) {
+  } else if (this.arrowDisplayed_) {
     this.hideArrow_();
   }
 };
@@ -180,11 +180,11 @@ MarkerTracker.prototype.drawArrow_ = function () {
   var loc = this.map_.fromLatLngToDivPixel(this.marker_.getLatLng());
 
   //get the slope of the line
-  var m = (center.y-loc.y) / (center.x-loc.x);
-  var b = (center.y - m*center.x);
+  var m = (center.y - loc.y) / (center.x - loc.x);
+  var b = (center.y - m * center.x);
 
   // end the line within the bounds
-  if ( loc.x < maxX && loc.x > minX ) {
+  if (loc.x < maxX && loc.x > minX) {
     var x = loc.x;
   } else if (center.x > loc.x) {
     var x = minX;
@@ -194,17 +194,17 @@ MarkerTracker.prototype.drawArrow_ = function () {
 
   //calculate y and check boundaries again
   var y = m * x + b;
-  if( y > maxY ) {
+  if (y > maxY) {
     y = maxY;
-    x = (y - b)/m;
-  } else if(y < minY) {
+    x = (y - b) / m;
+  } else if (y < minY) {
     y = minY;
     x = (y - b) / m;
   }
 
   // get the proper angle of the arrow
   var ang = Math.atan(-m);
-  if(x > center.x ) {
+  if (x > center.x) {
     ang = ang + Math.PI;
   }
 
@@ -212,25 +212,21 @@ MarkerTracker.prototype.drawArrow_ = function () {
   var arrowLoc = this.map_.fromDivPixelToLatLng(new GPoint(x, y));
 
   // left side of marker is at -1,1
-  var arrowLeft = this.map_.fromDivPixelToLatLng(
-            this.getRotatedPoint_(((-1) * this.length_), this.length_, ang, x, y) );
+  var arrowLeft = this.map_.fromDivPixelToLatLng(this.getRotatedPoint_(((-1) * this.length_), this.length_, ang, x, y));
 
   // right side of marker is at -1,-1
-  var arrowRight = this.map_.fromDivPixelToLatLng(
-            this.getRotatedPoint_(((-1)*this.length_), ((-1)*this.length_), ang, x, y));
+  var arrowRight = this.map_.fromDivPixelToLatLng(this.getRotatedPoint_(((-1) * this.length_), ((-1) * this.length_), ang, x, y));
 
 
   var center = this.map_.getCenter();
   var loc = this.marker_.getLatLng();
 
   this.oldArrow_ = this.arrow_;
-  this.arrow_ = new GPolyline([arrowLeft, arrowLoc, arrowRight],
-                this.color_, this.weight_, this.opacity_) ;
+  this.arrow_ = new GPolyline([arrowLeft, arrowLoc, arrowRight], this.color_, this.weight_, this.opacity_);
   this.map_.addOverlay(this.arrow_);
 
   // move the babyMarker to -1,0
-  this.babyMarker_.setLatLng(this.map_.fromDivPixelToLatLng(
-            this.getRotatedPoint_(((-2)*this.length_), 0, ang, x, y)));
+  this.babyMarker_.setLatLng(this.map_.fromDivPixelToLatLng(this.getRotatedPoint_(((-2) * this.length_), 0, ang, x, y)));
 
   if (!this.arrowDisplayed_) {
     this.map_.addOverlay(this.babyMarker_);
@@ -249,10 +245,10 @@ MarkerTracker.prototype.drawArrow_ = function () {
 
 MarkerTracker.prototype.hideArrow_ = function () {
   this.map_.removeOverlay(this.babyMarker_);
-  if(this.arrow_) {
+  if (this.arrow_) {
     this.map_.removeOverlay(this.arrow_);
   }
-  if(this.oldArrow_) {
+  if (this.oldArrow_) {
     this.map_.removeOverlay(this.oldArrow_);
   }
   this.arrowDisplayed_ = false;
@@ -282,5 +278,5 @@ MarkerTracker.prototype.getRotatedPoint_ = function (x, y, ang, xoffset, yoffset
   var newx = y * Math.sin(ang) - x * Math.cos(ang) + xoffset;
   var newy = x * Math.sin(ang) + y * Math.cos(ang) + yoffset;
   var rotatedPoint = new GPoint(newx, newy);
-  return(rotatedPoint);
+  return rotatedPoint;
 };
