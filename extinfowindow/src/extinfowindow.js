@@ -1,11 +1,11 @@
 /*
-* ExtInfoWindow Class, v1.0 
+* ExtInfoWindow Class, v1.0
 *  Copyright (c) 2007, Joe Monahan (http://www.seejoecode.com)
-* 
+*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
-* 
+*
 *       http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
@@ -29,13 +29,13 @@
  * @param {String} windowId The DOM Id we will use to reference the info window
  * @param {String} html The HTML contents
  * @param {Object} opt_opts A contianer for optional arguments:
- *    {String} ajaxUrl The Url to hit on the server to request some contents 
- *    {Number} paddingX The padding size in pixels that the info window will leave on 
+ *    {String} ajaxUrl The Url to hit on the server to request some contents
+ *    {Number} paddingX The padding size in pixels that the info window will leave on
  *                    the left and right sides of the map when panning is involved.
- *    {Number} paddingY The padding size in pixels that the info window will leave on 
+ *    {Number} paddingY The padding size in pixels that the info window will leave on
  *                    the top and bottom sides of the map when panning is involved.
- *    {Number} beakOffset The repositioning offset for when aligning the beak element. 
- *                    This is used to make sure the beak lines up correcting if the 
+ *    {Number} beakOffset The repositioning offset for when aligning the beak element.
+ *                    This is used to make sure the beak lines up correcting if the
  *                    info window styling containers a border.
  */
 function ExtInfoWindow(marker, windowId, html, opt_opts) {
@@ -46,7 +46,7 @@ function ExtInfoWindow(marker, windowId, html, opt_opts) {
   this.options_ = opt_opts == null ? {} : opt_opts;
   this.ajaxUrl_ = this.options_.ajaxUrl == null ? null : this.options_.ajaxUrl;
   this.callback_ = this.options_.ajaxCallback == null ? null : this.options_.ajaxCallback;
-  
+
   this.maxContent_ = this.options_.maxContent == null ? null : this.options_.maxContent;
   this.maximizeEnabled_ = this.maxContent_ == null ? false : true;
   this.isMaximized_ = false;
@@ -116,7 +116,7 @@ ExtInfoWindow.prototype.initialize = function(map) {
     tempElement.style.visibility = 'hidden';
     document.body.appendChild(tempElement);
     tempElement = document.getElementById(this.infoWindowId_ + '_' + i);
-    var tempWrapperPart = this.wrapperParts[i];    
+    var tempWrapperPart = this.wrapperParts[i];
     tempWrapperPart.w = parseInt(this.getStyle_(tempElement, 'width'), 10);
     tempWrapperPart.h = parseInt(this.getStyle_(tempElement, 'height'), 10);
     document.body.removeChild(tempElement);
@@ -141,7 +141,7 @@ ExtInfoWindow.prototype.initialize = function(map) {
     wrapperPartsDiv.style.left = this.wrapperParts[i].l + 'px';
     this.wrapperParts[i].domElement = wrapperPartsDiv;
   }
-  
+
   this.map_.getPane(G_MAP_FLOAT_PANE).appendChild(this.container_);
   this.container_.id = this.infoWindowId_;
   var containerWidth  = this.getStyle_(document.getElementById(this.infoWindowId_), 'width');
@@ -153,35 +153,35 @@ ExtInfoWindow.prototype.initialize = function(map) {
   this.contentDiv_.style.position = 'absolute';
 
   this.container_.appendChild(this.wrapperDiv_);
-  
+
   if( this.maximizeEnabled_ ){
     this.minWidth_ = this.getDimensions_(this.container_).width;
     console.log(this.minWidth_);
   }
-  
+
   if (this.maximizeEnabled_) {
     thisMap = this.map_;
     thisMaxWidth = this.maxWidth_;
     thisMaxHeight = this.maxHeight_;
     thisContainer = this.container_;
     thisMaxContent = this.maxContent_;
-    
+
     thisMinWidth = this.container_.style.width;
     thisMinHeight = this.container_.style.height;
     //add event handler for maximize and minimize icons
-    GEvent.addDomListener(this.wrapperParts.max.domElement, 'click', 
+    GEvent.addDomListener(this.wrapperParts.max.domElement, 'click',
       function() {
         var infoWindow = thisMap.getExtInfoWindow();
         infoWindow.container_.style.width = thisMaxWidth + 'px';
         infoWindow.ajaxRequest_(thisMaxContent);
         infoWindow.isMaximized_ = true;
         infoWindow.redraw(true);
-      
+
         //swap min/max icons
         infoWindow.toggleMaxMin_();
       }
     );
-    GEvent.addDomListener(this.wrapperParts.min.domElement, 'click', 
+    GEvent.addDomListener(this.wrapperParts.min.domElement, 'click',
       function() {
         var infoWindow = thisMap.getExtInfoWindow();
         infoWindow.container_.style.width = thisMinWidth;
@@ -191,7 +191,7 @@ ExtInfoWindow.prototype.initialize = function(map) {
         }else{
           infoWindow.contentDiv_.innerHTML = infoWindow.html_;
         }
-        
+
         infoWindow.isMaximized_ = false;
         infoWindow.redraw(true);
         infoWindow.resize();
@@ -200,9 +200,9 @@ ExtInfoWindow.prototype.initialize = function(map) {
         infoWindow.toggleMaxMin_();
       }
     );
-    
+
     this.toggleMaxMin_();
-    
+
   }
 
   var stealEvents = ['mousedown', 'dblclick', 'DOMMouseScroll'];
@@ -218,7 +218,7 @@ ExtInfoWindow.prototype.initialize = function(map) {
 
 /**
  * Private function to steal mouse click events to prevent it from returning to the map.
- * Without this links in the ExtInfoWindow would not work, and you could click to zoom or drag 
+ * Without this links in the ExtInfoWindow would not work, and you could click to zoom or drag
  * the map behind it.
  * @private
  * @param {MouseEvent} e The mouse event caught by this function
@@ -234,12 +234,12 @@ ExtInfoWindow.prototype.onClick_ = function(e) {
 };
 
 /**
- * Remove the extInfoWindow container from the map pane. 
+ * Remove the extInfoWindow container from the map pane.
  */
 ExtInfoWindow.prototype.remove = function() {
   if (this.map_.getExtInfoWindow() != null) {
     GEvent.trigger(this.map_, 'extinfowindowbeforeclose');
-    
+
     GEvent.clearInstanceListeners(this.container_);
     if (this.container_.outerHTML) {
       this.container_.outerHTML = ''; //prevent pseudo-leak in IE
@@ -255,7 +255,7 @@ ExtInfoWindow.prototype.remove = function() {
 
 /**
  * Return a copy of this overlay, for the parent Map to duplicate itself in full. This
- * is part of the Overlay interface and is used, for example, to copy everything in the 
+ * is part of the Overlay interface and is used, for example, to copy everything in the
  * main view into the mini-map.
  * @return {GOverlay}
  */
@@ -265,16 +265,16 @@ ExtInfoWindow.prototype.copy = function() {
 
 /**
  * Draw extInfoWindow and wrapping decorators onto the map.  Resize and reposition
- * the map as necessary. 
+ * the map as necessary.
  * @param {Boolean} force Will be true when pixel coordinates need to be recomputed.
  */
 ExtInfoWindow.prototype.redraw = function(force) {
   if (!force || this.container_ == null) return;
-  
+
   //set the content section's height, needed so  browser font resizing does not affect the window's dimensions
   var contentHeight = this.contentDiv_.offsetHeight;
   this.contentDiv_.style.height = contentHeight + 'px';
-  
+
   this.contentWidth = this.getDimensions_(this.container_).width;
   this.contentDiv_.style.width = this.container_.style.width;
 
@@ -340,21 +340,21 @@ ExtInfoWindow.prototype.redraw = function(force) {
   //add event handler for the close icon
   var currentMarker = this.marker_;
   var thisMap = this.map_;
-  GEvent.addDomListener(this.wrapperParts.close.domElement, 'click', 
+  GEvent.addDomListener(this.wrapperParts.close.domElement, 'click',
     function() {
       thisMap.closeExtInfoWindow();
     }
   );
-  
-  
-  
+
+
+
   //position the container on the map, over the marker
   var pixelLocation = this.map_.fromLatLngToDivPixel(this.marker_.getPoint());
   this.container_.style.position = 'absolute';
   var markerIcon = this.marker_.getIcon();
-  this.container_.style.left = (pixelLocation.x 
-    - (this.contentWidth / 2) 
-    - markerIcon.iconAnchor.x 
+  this.container_.style.left = (pixelLocation.x
+    - (this.contentWidth / 2)
+    - markerIcon.iconAnchor.x
     + markerIcon.infoWindowAnchor.x
   ) + 'px';
 
@@ -388,16 +388,16 @@ ExtInfoWindow.prototype.toggleMaxMin_ = function(){
 }
 
 /**
- * Determine the dimensions of the contents to recalculate and reposition the 
+ * Determine the dimensions of the contents to recalculate and reposition the
  * wrapping decorator elements accordingly.
  */
 ExtInfoWindow.prototype.resize = function(){
-  
+
   //Create temporary DOM node for new contents to get new height
   //This is done because if you manipulate this.contentDiv_ directly it causes visual errors in IE6
   var tempElement = this.contentDiv_.cloneNode(true);
   tempElement.id = this.infoWindowId_ + '_tempContents';
-  tempElement.style.visibility = 'hidden';	
+  tempElement.style.visibility = 'hidden';
   tempElement.style.height = 'auto';
   document.body.appendChild(tempElement);
   tempElement = document.getElementById(this.infoWindowId_ + '_tempContents');
@@ -410,7 +410,7 @@ ExtInfoWindow.prototype.resize = function(){
   var contentWidth = this.container_.offsetWidth;
   var pixelLocation = this.map_.fromLatLngToDivPixel(this.marker_.getPoint());
 
-  var oldWindowHeight = this.wrapperParts.t.domElement.offsetHeight + this.wrapperParts.l.domElement.offsetHeight + this.wrapperParts.b.domElement.offsetHeight;	
+  var oldWindowHeight = this.wrapperParts.t.domElement.offsetHeight + this.wrapperParts.l.domElement.offsetHeight + this.wrapperParts.b.domElement.offsetHeight;
   var oldWindowPosTop = this.wrapperParts.t.domElement.offsetTop;
 
   //resize info window to look correct for new height
@@ -431,8 +431,8 @@ ExtInfoWindow.prototype.resize = function(){
 };
 
 /**
- * Check to see if the displayed extInfoWindow is positioned off the viewable 
- * map region and by how much.  Use that information to pan the map so that 
+ * Check to see if the displayed extInfoWindow is positioned off the viewable
+ * map region and by how much.  Use that information to pan the map so that
  * the extInfoWindow is completely displayed.
  * @private
  */
@@ -455,7 +455,7 @@ ExtInfoWindow.prototype.repositionMap_ = function(){
   var infoWindowAnchor = this.marker_.getIcon().infoWindowAnchor;
   var iconAnchor = this.marker_.getIcon().iconAnchor;
 
-  //test top of screen	
+  //test top of screen
   var windowT = this.wrapperParts.t.domElement;
   var windowL = this.wrapperParts.l.domElement;
   var windowB = this.wrapperParts.b.domElement;
@@ -521,7 +521,7 @@ ExtInfoWindow.prototype.ajaxRequest_ = function(url){
  * Private function derived from Prototype.js to get a given element's
  * height and width
  * @private
- * @param {Object} element The DOM element that will have height and 
+ * @param {Object} element The DOM element that will have height and
  *                    width will be calculated for it.
  * @return {Object} Object with keys: width, height
  */
@@ -581,7 +581,7 @@ ExtInfoWindow.prototype.getStyle_ = function(element, style) {
   }
   if (element.id == this.infoWindowId_ && style == 'width' && element.style.display != 'none') {
   	element.style.display = 'none';
-  	element.style.visibility = 'visible';	
+  	element.style.visibility = 'visible';
   }
   return (value == 'auto') ? null : value;
 };
@@ -611,22 +611,22 @@ GMap.prototype.ClickListener_ = null;
 GMap.prototype.InfoWindowListener_ = null;
 
 /**
- * Creates a new instance of ExtInfoWindow for the GMarker.  Register the newly created 
+ * Creates a new instance of ExtInfoWindow for the GMarker.  Register the newly created
  * instance with the map, ensuring only one window is open at a time. If this is the first
- * ExtInfoWindow ever opened, add event listeners to the map to close the ExtInfoWindow on 
+ * ExtInfoWindow ever opened, add event listeners to the map to close the ExtInfoWindow on
  * zoom and click, to mimic the default GInfoWindow behavior.
  *
  * @param {GMap} map The GMap2 object where the ExtInfoWindow will open
  * @param {String} cssId The id we will use to reference the info window
  * @param {String} html The HTML contents
  * @param {Object} opt_opts A contianer for optional arguments:
- *    {String} ajaxUrl The Url to hit on the server to request some contents 
- *    {Number} paddingX The padding size in pixels that the info window will leave on 
+ *    {String} ajaxUrl The Url to hit on the server to request some contents
+ *    {Number} paddingX The padding size in pixels that the info window will leave on
  *                    the left and right sides of the map when panning is involved.
- *    {Number} paddingX The padding size in pixels that the info window will leave on 
+ *    {Number} paddingX The padding size in pixels that the info window will leave on
  *                    the top and bottom sides of the map when panning is involved.
- *    {Number} beakOffset The repositioning offset for when aligning the beak element. 
- *                    This is used to make sure the beak lines up correcting if the 
+ *    {Number} beakOffset The repositioning offset for when aligning the beak element.
+ *                    This is used to make sure the beak lines up correcting if the
  *                    info window styling containers a border.
  */
 GMarker.prototype.openExtInfoWindow = function(map, cssId, html, opt_opts) {
@@ -638,7 +638,7 @@ GMarker.prototype.openExtInfoWindow = function(map, cssId, html, opt_opts) {
     throw 'Error in GMarker.openExtInfoWindow: must specify a cssId';
     return false;
   }
-  
+
   map.closeInfoWindow();
   if (map.getExtInfoWindow() != null) {
     map.closeExtInfoWindow();
@@ -662,7 +662,7 @@ GMarker.prototype.openExtInfoWindow = function(map, cssId, html, opt_opts) {
     }
     if (map.InfoWindowListener_ == null) {
       //listen for default info window open, close ExtInfoWindow if open
-      map.InfoWindowListener_ = GEvent.addListener(map, 'infowindowopen', 
+      map.InfoWindowListener_ = GEvent.addListener(map, 'infowindowopen',
       function(event) {
           if (map.getExtInfoWindow() != null) {
             map.closeExtInfoWindow();

@@ -1,4 +1,4 @@
-/* 
+/*
  * MarkerManager, v1.0
  * Copyright (c) 2007 Google Inc.
  *
@@ -12,11 +12,11 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  *
  *
  * Author: Doug Ricket, others
- * 
+ *
  * Marker manager is an interface between the map and the user, designed
  * to manage adding and removing many points when the viewport changes.
  *
@@ -122,7 +122,7 @@ MarkerManager.MERCATOR_ZOOM_LEVEL_ZERO_RANGE = 256;
 /**
  * Initializes MarkerManager arrays for all zoom levels
  * Called by constructor and by clearAllMarkers
- */ 
+ */
 MarkerManager.prototype.resetManager_ = function() {
   var me = this;
   var mapWidth = MarkerManager.MERCATOR_ZOOM_LEVEL_ZERO_RANGE;
@@ -297,7 +297,7 @@ MarkerManager.prototype.removeMarker = function(marker) {
       if (me.isGridPointVisible_(grid)) {
           me.removeOverlay_(marker);
           changed = true;
-      } 
+      }
     }
     grid.x = grid.x >> 1;
     grid.y = grid.y >> 1;
@@ -366,7 +366,7 @@ MarkerManager.prototype.addMarker = function(marker, minZoom, opt_maxZoom) {
   var maxZoom = this.getOptMaxZoom_(opt_maxZoom);
   me.addMarkerBatch_(marker, minZoom, maxZoom);
   var gridPoint = me.getTilePoint_(marker.getPoint(), me.mapZoom_, GSize.ZERO);
-  if(me.isGridPointVisible_(gridPoint) && 
+  if(me.isGridPointVisible_(gridPoint) &&
      minZoom <= me.shownBounds_.z &&
      me.shownBounds_.z <= maxZoom ) {
     me.addOverlay_(marker);
@@ -450,13 +450,13 @@ MarkerManager.prototype.getGridCellNoCreate_ = function(x, y, z) {
 MarkerManager.prototype.getGridBounds_ = function(bounds, zoom, swPadding,
                                                   nePadding) {
   zoom = Math.min(zoom, this.maxZoom_);
-  
+
   var bl = bounds.getSouthWest();
   var tr = bounds.getNorthEast();
   var sw = this.getTilePoint_(bl, zoom, swPadding);
   var ne = this.getTilePoint_(tr, zoom, nePadding);
   var gw = this.gridWidth_[zoom];
-  
+
   // Crossing the prime meridian requires correction of bounds.
   if (tr.lng() < bl.lng() || ne.x < sw.x) {
     sw.x -= gw;
@@ -541,7 +541,7 @@ MarkerManager.prototype.updateMarkers_ = function() {
   var me = this;
   me.mapZoom_ = this.map_.getZoom();
   var newBounds = me.getMapGridBounds_();
-  
+
   // If the move does not include new grid sections,
   // we have no work to do:
   if (newBounds.equals(me.shownBounds_) && newBounds.z == me.shownBounds_.z) {

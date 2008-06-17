@@ -1,12 +1,12 @@
 /*
-* ExtMapTypeControl Class v1.2 
-*  Copyright (c) 2007, Google 
+* ExtMapTypeControl Class v1.2
+*  Copyright (c) 2007, Google
 *  Author: Pamela Fox, others
-* 
+*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
-* 
+*
 *       http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
@@ -34,11 +34,11 @@ function ExtMapTypeControl(opt_opts) {
 ExtMapTypeControl.prototype = new GControl();
 
 /**
- * Is called by GMap2's addOverlay method. Creates the button 
+ * Is called by GMap2's addOverlay method. Creates the button
  *  and appends to the map div.
  * @param {GMap2} map The map that has had this ExtMapTypeControl added to it.
  * @return {DOM Object} Div that holds the control
- */ 
+ */
 ExtMapTypeControl.prototype.initialize = function(map) {
   var container = document.createElement("div");
   var me = this;
@@ -104,7 +104,7 @@ ExtMapTypeControl.prototype.initialize = function(map) {
       keyDiv.style.cssFloat = "left";
       keyDiv.style.styleFloat = "left";
       keyDiv.innerHTML = "&nbsp;?&nbsp;";
-  
+
       var keyExpandedDiv = document.createElement("div");
       keyExpandedDiv.style.clear = "both";
       keyExpandedDiv.style.padding = "2px";
@@ -114,7 +114,7 @@ ExtMapTypeControl.prototype.initialize = function(map) {
                      {"color": "#c0c0c0", "text": "No data"}];
       for (var i = 0; i < keyInfo.length; i++) {
         keyExpandedDiv.innerHTML += "<div style='text-align: left'><span style='background-color: " + keyInfo[i].color + "'>&nbsp;&nbsp</span>"
-            +  "<span style='color: " + keyInfo[i].color + "'> " + keyInfo[i].text + " </span>" + "</div>"; 
+            +  "<span style='color: " + keyInfo[i].color + "'> " + keyInfo[i].text + " </span>" + "</div>";
       }
       keyExpandedDiv.style.display = "none";
 
@@ -199,7 +199,7 @@ ExtMapTypeControl.prototype.resetButtonEvents_ = function(map, mapTypeDivs) {
 };
 
 /*
- * Creates simple buttons with text nodes. 
+ * Creates simple buttons with text nodes.
  * @param {String} text Text to display in button
  * @return {DOM Object} The div for the button.
  */
@@ -223,7 +223,7 @@ ExtMapTypeControl.prototype.createButton_ = function(text) {
  *  @param {GMap2} Map object to change maptype of.
  *  @param {Object} mapType GMapType to change map to when clicked
  *  @param {Array} otherDivs Array of other button divs to toggle off
- */  
+ */
 ExtMapTypeControl.prototype.assignButtonEvent_ = function(div, map, mapType, otherDivs) {
   var me = this;
 
@@ -247,11 +247,11 @@ ExtMapTypeControl.prototype.toggleButton_ = function(div, boolCheck) {
    var shadows = boolCheck ? ["Top", "Left"] : ["Bottom", "Right"];
    for (var j = 0; j < shadows.length; j++) {
      div.style["border" + shadows[j]] = "1px solid #b0b0b0";
-  } 
+  }
 };
 
 /*
- * Required by GMaps API for controls. 
+ * Required by GMaps API for controls.
  * @return {GControlPosition} Default location for control
  */
 ExtMapTypeControl.prototype.getDefaultPosition = function() {
@@ -270,6 +270,6 @@ ExtMapTypeControl.prototype.setButtonStyle_ = function(button) {
   button.style.padding = "0px";
   button.style.margin= "0px";
   button.style.textAlign = "center";
-  button.style.fontSize = "12px"; 
+  button.style.fontSize = "12px";
   button.style.cursor = "pointer";
 };
