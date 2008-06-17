@@ -86,7 +86,7 @@ DragZoomUtil.style = function (elements, styles) {
     elements = DragZoomUtil.getManyElements(elements);
   }
   for (var i = 0; i < elements.length; i++) {
-    for (var s in styles) {
+    for (var s in styles) if (styles.hasOwnProperty(s)) {
       elements[i].style[s] = styles[s];
     }
   }
@@ -197,7 +197,7 @@ function DragZoomControl(opts_boxStyle, opts_other, opts_callbacks) {
 
   var style = this.globals.style;
   var s;
-  for (s in opts_boxStyle) {
+  for (s in opts_boxStyle) if (opts_boxStyle.hasOwnProperty(s)) {
     style[s] = opts_boxStyle[s];
   }
 
@@ -226,7 +226,7 @@ function DragZoomControl(opts_boxStyle, opts_other, opts_callbacks) {
     minDragSize: 0
   };
 
-  for (s in opts_other) {
+  for (s in opts_other) if (opts_other.hasOwnProperty(s)) {
     this.globals.options[s] = opts_other[s];
   }
 

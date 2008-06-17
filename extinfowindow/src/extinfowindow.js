@@ -111,7 +111,7 @@ ExtInfoWindow.prototype.initialize = function (map) {
   }
 
   var i;
-  for (i in this.wrapperParts) {
+  for (i in this.wrapperParts) if (this.wrapperParts.hasOwnProperty(i)) {
     var tempElement = document.createElement('div');
     tempElement.id = this.infoWindowId_ + '_' + i;
     tempElement.style.visibility = 'hidden';
@@ -122,7 +122,7 @@ ExtInfoWindow.prototype.initialize = function (map) {
     tempWrapperPart.h = parseInt(this.getStyle_(tempElement, 'height'), 10);
     document.body.removeChild(tempElement);
   }
-  for (i in this.wrapperParts) {
+  for (i in this.wrapperParts) if (this.wrapperParts.hasOwnProperty(i)) {
     if (i == 'close') {
       //first append the content so the close button is layered above it
       this.wrapperDiv_.appendChild(this.contentDiv_);
@@ -313,7 +313,7 @@ ExtInfoWindow.prototype.redraw = function (force) {
 
   //create the decoration wrapper DOM objects
   //append the styled info window to the container
-  for (var i in this.wrapperParts) {
+  for (var i in this.wrapperParts) if (this.wrapperParts.hasOwnProperty(i)) {
     if (i == 'close') {
       //first append the content so the close button is layered above it
       this.wrapperDiv_.insertBefore(this.contentDiv_, this.wrapperParts[i].domElement);
