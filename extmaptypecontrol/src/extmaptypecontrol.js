@@ -163,7 +163,7 @@ ExtMapTypeControl.prototype.initialize = function (map) {
 ExtMapTypeControl.prototype.addMapTypeButtons_ = function (map) {
   var me = this;
   var mapTypes = map.getMapTypes();
-  var mapTypeDivs = new [];
+  var mapTypeDivs = [];
   for (var i = 0; i < mapTypes.length; i++) {
     mapTypeDivs[i] = me.createButton_(mapTypes[i].getName());
     mapTypeDivs[i].setAttribute('title', mapTypes[i].getAlt());
