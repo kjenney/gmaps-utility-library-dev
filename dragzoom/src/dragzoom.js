@@ -27,7 +27,8 @@
 
 
 /* utility functions in DragZoomUtil.namespace */
-var DragZoomUtil = {};
+/*global DragZoomUtil */
+DragZoomUtil = {};
 
 /**
  * Alias function for getting element by id

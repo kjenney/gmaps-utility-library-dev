@@ -80,22 +80,21 @@ LabeledMarker.prototype.initialize = function (map) {
 
   map.getPane(G_MAP_MARKER_PANE).appendChild(this.div_);
 
+  /**
+   * Creates a closure for passing events through to the source marker
+   * This is located in here to avoid cluttering the global namespace.
+   * The downside is that the local variables from initialize() continue
+   * to occupy space on the stack.
+   *
+   * @param {Object} object to receive event trigger.
+   * @param {GEventListener} event to be triggered.
+   */
+  function newEventPassthru(obj, event) {
+    return function () {
+      GEvent.trigger(obj, event);
+    };
+  }
   if (this.clickable_) {
-    /**
-     * Creates a closure for passing events through to the source marker
-     * This is located in here to avoid cluttering the global namespace.
-     * The downside is that the local variables from initialize() continue
-     * to occupy space on the stack.
-     *
-     * @param {Object} object to receive event trigger.
-     * @param {GEventListener} event to be triggered.
-     */
-    function newEventPassthru(obj, event) {
-      return function () {
-        GEvent.trigger(obj, event);
-      };
-    }
-
     // Pass through events fired on the text div to the marker.
     var eventPassthrus = ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseover', 'mouseout'];
     for (var i = 0; i < eventPassthrus.length; i++) {

@@ -161,14 +161,14 @@ ExtInfoWindow.prototype.initialize = function (map) {
   }
 
   if (this.maximizeEnabled_) {
-    var that = this;
+    var me = this;
 
     //add event handler for maximize and minimize icons
     GEvent.addDomListener(this.wrapperParts.max.domElement, 'click',
       function () {
-        var infoWindow = that.map_.getExtInfoWindow();
-        infoWindow.container_.style.width = that.maxWidth_ + 'px';
-        infoWindow.ajaxRequest_(that.maxContent_);
+        var infoWindow = me.map_.getExtInfoWindow();
+        infoWindow.container_.style.width = me.maxWidth_ + 'px';
+        infoWindow.ajaxRequest_(me.maxContent_);
         infoWindow.isMaximized_ = true;
         infoWindow.redraw(true);
 
@@ -178,9 +178,9 @@ ExtInfoWindow.prototype.initialize = function (map) {
     );
     GEvent.addDomListener(this.wrapperParts.min.domElement, 'click',
       function () {
-        var infoWindow = that.map_.getExtInfoWindow();
-        infoWindow.container_.style.width = that.container_.style.width;
-        infoWindow.container_.style.height = that.container_.style.height;
+        var infoWindow = me.map_.getExtInfoWindow();
+        infoWindow.container_.style.width = me.container_.style.width;
+        infoWindow.container_.style.height = me.container_.style.height;
         if (infoWindow.ajaxUrl_) {
           infoWindow.ajaxRequest_(this.ajaxUrl_);
         } else {
@@ -336,10 +336,10 @@ ExtInfoWindow.prototype.redraw = function (force) {
 
   //add event handler for the close icon
   var currentMarker = this.marker_;
-  var that = this;
+  var me = this;
   GEvent.addDomListener(this.wrapperParts.close.domElement, 'click',
     function () {
-      that.map_.closeExtInfoWindow();
+      me.map_.closeExtInfoWindow();
     }
   );
 
@@ -481,11 +481,11 @@ ExtInfoWindow.prototype.repositionMap_ = function () {
  * @param {String} url The Url of where to make the ajax request on the server
  */
 ExtInfoWindow.prototype.ajaxRequest_ = function (url) {
-  var that = this;
+  var me = this;
   var thisCallback = this.callback_;
-  GDownloadUrl(url, function (response, status) {
-    if (that.map_.getExtInfoWindow() !== null) {
-      var infoWindow = document.getElementById(that.map_.getExtInfoWindow().infoWindowId_ + '_contents');
+  GDownloadUrl(url, function (response, status) { // JSLint-OK: GDownloadUrl is a function, not a class.
+    if (me.map_.getExtInfoWindow() !== null) {
+      var infoWindow = document.getElementById(me.map_.getExtInfoWindow().infoWindowId_ + '_contents');
       if (!response || status === -1) {
         infoWindow.innerHTML = '<span class="error">ERROR: The Ajax request failed to get HTML content from "' + url + '"</span>';
       } else {
@@ -494,9 +494,9 @@ ExtInfoWindow.prototype.ajaxRequest_ = function (url) {
       if (thisCallback) {
         thisCallback();
       }
-      that.map_.getExtInfoWindow().resize();
+      me.map_.getExtInfoWindow().resize();
     }
-    GEvent.trigger(that.map_, 'extinfowindowupdate');
+    GEvent.trigger(me.map_, 'extinfowindowupdate');
   });
 };
 
@@ -615,11 +615,9 @@ GMap.prototype.InfoWindowListener_ = null;
 GMarker.prototype.openExtInfoWindow = function (map, cssId, html, opt_opts) {
   if (!map) {
     throw 'Error in GMarker.openExtInfoWindow: map cannot be null';
-    return false;
   }
   if (!cssId || cssId === '') {
     throw 'Error in GMarker.openExtInfoWindow: must specify a cssId';
-    return false;
   }
 
   map.closeInfoWindow();

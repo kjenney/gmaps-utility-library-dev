@@ -406,11 +406,11 @@ MarkerManager.prototype.getGridCellCreate_ = function (x, y, z) {
   var gridCol = grid[x];
   if (!gridCol) {
     gridCol = grid[x] = [];
-    return gridCol[y] = [];
+    return (gridCol[y] = []);
   }
   var gridCell = gridCol[y];
   if (!gridCell) {
-    return gridCol[y] = [];
+    return (gridCol[y] = []);
   }
   return gridCell;
 };

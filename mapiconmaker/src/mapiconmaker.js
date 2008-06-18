@@ -21,7 +21,8 @@
  *  colored marker icons using the Charts API marker output.
  */
 
-var MapIconMaker = {};
+/*global MapIconMaker*/
+MapIconMaker = {};
 
 MapIconMaker.createMarkerIcon = function (opts) {
   var width = opts.width || 32;
