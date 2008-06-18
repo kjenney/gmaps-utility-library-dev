@@ -53,8 +53,8 @@ DragZoomUtil.getMousePosition = function (ev) {
     posX = e.pageX;
     posY = e.pageY;
   } else if (e.clientX || e.clientY) {
-    posX = e.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
-    posY = e.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+    posX = e.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft);
+    posY = e.clientY + (document.documentElement.scrollTop || document.body.scrollTop);
   }
   return {left: posX, top: posY};
 };
@@ -356,7 +356,13 @@ DragZoomControl.prototype.initialize = function (map) {
     zoomDiv.appendChild(div);
     G[id] = div;
   }
-  DragZoomUtil.style([zoomDiv], {position: 'absolute', display: 'none', overflow: 'hidden', cursor: 'crosshair', zIndex: 101});
+  DragZoomUtil.style([zoomDiv], {
+    position: 'absolute',
+    display: 'none',
+    overflow: 'hidden',
+    cursor: 'crosshair',
+    zIndex: 101
+  });
   mapDiv.appendChild(zoomDiv);
 
   // add event listeners
@@ -424,7 +430,13 @@ DragZoomControl.prototype.coverMousedown_ = function (e) {
   G.draggingRightMouse = rightMouse;
 
   DragZoomUtil.style([G.mapCover], {background: 'transparent', opacity: 1, filter: 'alpha(opacity=100)'});
-  DragZoomUtil.style([G.outlineDiv], {left: G.startX + 'px', top: G.startY + 'px', display: 'block', width: '1px', height: '1px'});
+  DragZoomUtil.style([G.outlineDiv], {
+    left: G.startX + 'px',
+    top: G.startY + 'px',
+    display: 'block',
+    width: '1px',
+    height: '1px'
+  });
   G.draggingOn = true;
 
   G.cornerTopDiv.style.top = (G.startY - G.mapHeight) + 'px';
@@ -473,7 +485,13 @@ DragZoomControl.prototype.drag_ = function (e) {
       addY = 0;
     }
 
-    DragZoomUtil.style([G.outlineDiv], {left: G.startX + addX + 'px', top: G.startY + addY + 'px', display: 'block', width: '1px', height: '1px'});
+    DragZoomUtil.style([G.outlineDiv], {
+      left: G.startX + addX + 'px',
+      top: G.startY + addY + 'px',
+      display: 'block',
+      width: '1px',
+      height: '1px'
+    });
 
     G.outlineDiv.style.width = rect.width + "px";
     G.outlineDiv.style.height = rect.height + "px";
@@ -736,7 +754,11 @@ DragZoomControl.prototype.getRectangle_ = function (startX, startY, pos, ratio) 
  */
 DragZoomControl.prototype.resetDragZoom_ = function () {
   var G = this.globals;
-  DragZoomUtil.style([G.mapCover, G.cornerTopDiv, G.cornerRightDiv, G.cornerBottomDiv, G.cornerLeftDiv], {display: 'none', opacity: G.style.opacity, filter: G.style.alphaIE});
+  DragZoomUtil.style([G.mapCover, G.cornerTopDiv, G.cornerRightDiv, G.cornerBottomDiv, G.cornerLeftDiv], {
+    display: 'none',
+    opacity: G.style.opacity,
+    filter: G.style.alphaIE
+  });
   G.outlineDiv.style.display = 'none';
   this.setButtonMode_('normal');
   if (G.options.backButtonEnabled  && (G.backStack.length > 0)) {

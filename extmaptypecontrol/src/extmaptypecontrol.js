@@ -115,7 +115,10 @@ ExtMapTypeControl.prototype.initialize = function (map) {
                      {"color": "#ff0000", "text": "&lt; 25 MPH"},
                      {"color": "#c0c0c0", "text": "No data"}];
       for (i = 0; i < keyInfo.length; i++) {
-        keyExpandedDiv.innerHTML += "<div style='text-align: left'><span style='background-color: " + keyInfo[i].color + "'>&nbsp;&nbsp</span>" + "<span style='color: " + keyInfo[i].color + "'> " + keyInfo[i].text + " </span>" + "</div>";
+        keyExpandedDiv.innerHTML += "<div style='text-align: left'>" +
+                "<span style='background-color: " + keyInfo[i].color + "'>&nbsp;&nbsp</span>" +
+                "<span style='color: " + keyInfo[i].color + "'> " + keyInfo[i].text + " </span>" +
+            "</div>";
       }
       keyExpandedDiv.style.display = "none";
 

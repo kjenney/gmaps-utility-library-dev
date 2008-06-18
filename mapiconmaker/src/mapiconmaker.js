@@ -33,7 +33,13 @@ MapIconMaker.createMarkerIcon = function (opts) {
   var transparency = opts.transparency;
    
   var baseUrl = "http://chart.apis.google.com/chart?cht=mm";
-  var iconUrl = baseUrl + "&chs=" + width + "x" + height + "&chco=" + cornerColor.replace("#", "") + "," + primaryColor.replace("#", "") + "," + strokeColor.replace("#", "") + "&ext=.png";
+  var iconUrl = baseUrl +
+      "&chs=" + width + "x" + height +
+      "&chco=" +
+          cornerColor.replace("#", "") + "," +
+          primaryColor.replace("#", "") + "," +
+          strokeColor.replace("#", "") +
+      "&ext=.png";
   if (transparency) {
     iconUrl = iconUrl + "&chf=a,s,ffffff" + transparency;
   }
@@ -45,7 +51,13 @@ MapIconMaker.createMarkerIcon = function (opts) {
   icon.infoWindowAnchor = new GPoint(width / 2, Math.floor(height / 12));
   icon.printImage = iconUrl + "&chof=gif";
   icon.mozPrintImage = iconUrl + "&chf=bg,s,ECECD8" + "&chof=gif";
-  icon.transparent = baseUrl + "&chs=" + width + "x" + height + "&chco=" + cornerColor.replace("#", "") + "," + primaryColor.replace("#", "") + "," + strokeColor.replace("#", "") + "&chf=a,s,ffffff11&ext=.png";
+  icon.transparent = baseUrl +
+      "&chs=" + width + "x" + height +
+      "&chco=" +
+          cornerColor.replace("#", "") + "," +
+          primaryColor.replace("#", "") + "," +
+          strokeColor.replace("#", "") +
+      "&chf=a,s,ffffff11&ext=.png";
 
   icon.imageMap = [
     width / 2, height,
@@ -78,7 +90,11 @@ MapIconMaker.createFlatIcon = function (opts) {
   var typeCode = (type === "circle") ? "it" : "itr";
 
   var baseUrl = "http://chart.apis.google.com/chart?cht=" + typeCode;
-  var iconUrl = baseUrl + "&chs=" + width + "x" + height + "&chco=" + primaryColor.replace("#", "") + "," + shadowColor.replace("#", "") + "ff,ffffff01" + "&chl=" + text + "&chx=" + textColor.replace("#", "") + "," + textSize;
+  var iconUrl = baseUrl +
+      "&chs=" + width + "x" + height +
+      "&chco=" + primaryColor.replace("#", "") + "," + shadowColor.replace("#", "") + "ff,ffffff01" +
+      "&chl=" + text +
+      "&chx=" + textColor.replace("#", "") + "," + textSize;
   var icon = new GIcon(G_DEFAULT_ICON);
   icon.image = iconUrl + "&chf=bg,s,00000000" + "&ext=.png";
   icon.iconSize = new GSize(width, height);

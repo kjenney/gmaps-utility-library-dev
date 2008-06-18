@@ -187,10 +187,12 @@ MarkerTracker.prototype.drawArrow_ = function () {
   var arrowLoc = this.map_.fromDivPixelToLatLng(new GPoint(x, y));
 
   // left side of marker is at -1,1
-  var arrowLeft = this.map_.fromDivPixelToLatLng(this.getRotatedPoint_(((-1) * this.length_), this.length_, ang, x, y));
+  var rotatedPoint = this.getRotatedPoint_(((-1) * this.length_), this.length_, ang, x, y);
+  var arrowLeft = this.map_.fromDivPixelToLatLng(rotatedPoint);
 
   // right side of marker is at -1,-1
-  var arrowRight = this.map_.fromDivPixelToLatLng(this.getRotatedPoint_(((-1) * this.length_), ((-1) * this.length_), ang, x, y));
+  rotatedPoint = this.getRotatedPoint_(((-1) * this.length_), ((-1) * this.length_), ang, x, y);
+  var arrowRight = this.map_.fromDivPixelToLatLng(rotatedPoint);
 
   center = this.map_.getCenter();
   loc = this.marker_.getLatLng();
@@ -200,7 +202,8 @@ MarkerTracker.prototype.drawArrow_ = function () {
   this.map_.addOverlay(this.arrow_);
 
   // move the babyMarker to -1,0
-  this.babyMarker_.setLatLng(this.map_.fromDivPixelToLatLng(this.getRotatedPoint_(((-2) * this.length_), 0, ang, x, y)));
+  rotatedPoint = this.getRotatedPoint_(((-2) * this.length_), 0, ang, x, y);
+  this.babyMarker_.setLatLng(this.map_.fromDivPixelToLatLng(rotatedPoint));
 
   if (!this.arrowDisplayed_) {
     this.map_.addOverlay(this.babyMarker_);

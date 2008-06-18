@@ -285,7 +285,8 @@ ExtInfoWindow.prototype.redraw = function (force) {
   this.wrapperParts.tl.t = 0;
   this.wrapperParts.tl.l = 0;
   this.wrapperParts.t.l = this.wrapperParts.tl.w;
-  this.wrapperParts.t.w = (this.wrapperParts.l.w + this.contentWidth + this.wrapperParts.r.w) - this.wrapperParts.tl.w - this.wrapperParts.tr.w;
+  this.wrapperParts.t.w = (this.wrapperParts.l.w + this.contentWidth + this.wrapperParts.r.w) -
+      this.wrapperParts.tl.w - this.wrapperParts.tr.w;
   this.wrapperParts.t.h = this.wrapperParts.tl.h;
   this.wrapperParts.tr.l = this.wrapperParts.t.w + this.wrapperParts.tl.w;
   this.wrapperParts.l.t = this.wrapperParts.tl.h;
@@ -296,13 +297,15 @@ ExtInfoWindow.prototype.redraw = function (force) {
   this.wrapperParts.bl.t = contentHeight + this.wrapperParts.tl.h;
   this.wrapperParts.b.l = this.wrapperParts.bl.w;
   this.wrapperParts.b.t = contentHeight + this.wrapperParts.tl.h;
-  this.wrapperParts.b.w = (this.wrapperParts.l.w + this.contentWidth + this.wrapperParts.r.w) - this.wrapperParts.bl.w - this.wrapperParts.br.w;
+  this.wrapperParts.b.w = (this.wrapperParts.l.w + this.contentWidth + this.wrapperParts.r.w) -
+      this.wrapperParts.bl.w - this.wrapperParts.br.w;
   this.wrapperParts.b.h = this.wrapperParts.bl.h;
   this.wrapperParts.br.l = this.wrapperParts.b.w + this.wrapperParts.bl.w;
   this.wrapperParts.br.t = contentHeight + this.wrapperParts.tr.h;
   this.wrapperParts.beak.l = this.borderSize_ + (this.contentWidth / 2) - (this.wrapperParts.beak.w / 2);
   this.wrapperParts.beak.t = this.wrapperParts.bl.t + this.wrapperParts.bl.h - this.borderSize_;
-  this.wrapperParts.close.l = this.wrapperParts.tr.l + this.wrapperParts.tr.w - this.wrapperParts.close.w - this.borderSize_;
+  this.wrapperParts.close.l = this.wrapperParts.tr.l + this.wrapperParts.tr.w - this.wrapperParts.close.w -
+      this.borderSize_;
   this.wrapperParts.close.t = this.borderSize_;
   if (this.maximizeEnabled_) {
     this.wrapperParts.max.l = this.wrapperParts.close.l - this.wrapperParts.max.w - 5;
@@ -349,8 +352,11 @@ ExtInfoWindow.prototype.redraw = function (force) {
   var pixelLocation = this.map_.fromLatLngToDivPixel(this.marker_.getPoint());
   this.container_.style.position = 'absolute';
   var markerIcon = this.marker_.getIcon();
-  this.container_.style.left = (pixelLocation.x - (this.contentWidth / 2) - markerIcon.iconAnchor.x + markerIcon.infoWindowAnchor.x) + 'px';
-  this.container_.style.top = (pixelLocation.y - this.wrapperParts.bl.h - contentHeight - this.wrapperParts.tl.h - this.wrapperParts.beak.h - markerIcon.iconAnchor.y + markerIcon.infoWindowAnchor.y + this.borderSize_) + 'px';
+  this.container_.style.left = (pixelLocation.x - (this.contentWidth / 2) -
+      markerIcon.iconAnchor.x + markerIcon.infoWindowAnchor.x) + 'px';
+  this.container_.style.top = (pixelLocation.y - this.wrapperParts.bl.h -
+      contentHeight - this.wrapperParts.tl.h - this.wrapperParts.beak.h -
+      markerIcon.iconAnchor.y + markerIcon.infoWindowAnchor.y + this.borderSize_) + 'px';
   this.container_.style.display = 'block';
 
   if (this.map_.getExtInfoWindow()) {
@@ -393,7 +399,8 @@ ExtInfoWindow.prototype.resize = function () {
   var contentWidth = this.container_.offsetWidth;
   var pixelLocation = this.map_.fromLatLngToDivPixel(this.marker_.getPoint());
 
-  var oldWindowHeight = this.wrapperParts.t.domElement.offsetHeight + this.wrapperParts.l.domElement.offsetHeight + this.wrapperParts.b.domElement.offsetHeight;
+  var oldWindowHeight = this.wrapperParts.t.domElement.offsetHeight +
+      this.wrapperParts.l.domElement.offsetHeight + this.wrapperParts.b.domElement.offsetHeight;
   var oldWindowPosTop = this.wrapperParts.t.domElement.offsetTop;
 
   //resize info window to look correct for new height
@@ -445,7 +452,9 @@ ExtInfoWindow.prototype.repositionMap_ = function () {
   var windowR = this.wrapperParts.r.domElement;
   var windowBeak = this.wrapperParts.beak.domElement;
 
-  var offsetTop = markerPosition.y - (-infoWindowAnchor.y + iconAnchor.y + this.getDimensions_(windowBeak).height + this.getDimensions_(windowB).height + this.getDimensions_(windowL).height + this.getDimensions_(windowT).height + this.paddingY_);
+  var offsetTop = markerPosition.y - (-infoWindowAnchor.y + iconAnchor.y + this.getDimensions_(windowBeak).height +
+      this.getDimensions_(windowB).height + this.getDimensions_(windowL).height +
+      this.getDimensions_(windowT).height + this.paddingY_);
   if (offsetTop < mapNE.y) {
     panY = mapNE.y - offsetTop;
   } else {
@@ -457,12 +466,15 @@ ExtInfoWindow.prototype.repositionMap_ = function () {
   }
 
   //test right of screen
-  var offsetRight = Math.round(markerPosition.x + this.getDimensions_(this.container_).width / 2 + this.getDimensions_(windowR).width + this.paddingX_ + infoWindowAnchor.x - iconAnchor.x);
+  var offsetRight = Math.round(markerPosition.x + this.getDimensions_(this.container_).width / 2 +
+      this.getDimensions_(windowR).width + this.paddingX_ + infoWindowAnchor.x - iconAnchor.x);
   if (offsetRight > mapNE.x) {
     panX = -(offsetRight - mapNE.x);
   } else {
     //test left of screen
-    var offsetLeft = -(Math.round((this.getDimensions_(this.container_).width / 2 - this.marker_.getIcon().iconSize.width / 2) + this.getDimensions_(windowL).width + this.borderSize_ + this.paddingX_) - markerPosition.x - infoWindowAnchor.x + iconAnchor.x);
+    var offsetLeft = -(Math.round((this.getDimensions_(this.container_).width / 2 -
+        this.marker_.getIcon().iconSize.width / 2) + this.getDimensions_(windowL).width + this.borderSize_ +
+        this.paddingX_) - markerPosition.x - infoWindowAnchor.x + iconAnchor.x);
     if (offsetLeft < mapSW.x) {
       panX = mapSW.x - offsetLeft;
     }
@@ -487,7 +499,7 @@ ExtInfoWindow.prototype.ajaxRequest_ = function (url) {
     if (me.map_.getExtInfoWindow() !== null) {
       var infoWindow = document.getElementById(me.map_.getExtInfoWindow().infoWindowId_ + '_contents');
       if (!response || status === -1) {
-        infoWindow.innerHTML = '<span class="error">ERROR: The Ajax request failed to get HTML content from "' + url + '"</span>';
+        infoWindow.innerHTML = '<span>ERROR: The Ajax request failed to get HTML content from "' + url + '"</span>';
       } else {
         infoWindow.innerHTML = response;
       }
@@ -555,10 +567,10 @@ ExtInfoWindow.prototype.getStyle_ = function (element, style) {
       value = element.currentStyle[style];
     }
   }
-  if ((value === 'auto') && (style === 'width' || style === 'height') && (this.getStyle_(element, 'display') !== 'none')) {
+  if ((value === 'auto') && (this.getStyle_(element, 'display') !== 'none')) {
     if (style === 'width') {
       value = element.offsetWidth;
-    } else {
+    } else if (style === 'height') {
       value = element.offsetHeight;
     }
   }
