@@ -185,7 +185,7 @@ ExtMapTypeControl.prototype.resetButtonEvents_ = function (map, mapTypeDivs) {
   for (var i = 0; i < mapTypeDivs.length; i++) {
     var otherDivs = [];
     for (var j = 0; j < mapTypes.length; j++) {
-      if (j != i) {
+      if (j !== i) {
         otherDivs.push(mapTypeDivs[j]);
       }
     }
@@ -195,7 +195,7 @@ ExtMapTypeControl.prototype.resetButtonEvents_ = function (map, mapTypeDivs) {
     var divIndex = 0;
     var mapType = map.getCurrentMapType();
     for (var i = 0; i < mapTypes.length; i++) {
-      if (mapTypes[i] == mapType) {
+      if (mapTypes[i] === mapType) {
         divIndex = i;
       }
     }

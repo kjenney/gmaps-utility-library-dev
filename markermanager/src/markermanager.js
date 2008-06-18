@@ -69,7 +69,7 @@ function MarkerManager(map, opt_opts) {
       maxZoom = mapTypeMaxZoom;
     }
   }
-  if (opt_opts.maxZoom != undefined) {
+  if (opt_opts.maxZoom) {
     maxZoom = opt_opts.maxZoom;
   }
   me.maxZoom_ = maxZoom;
@@ -77,7 +77,7 @@ function MarkerManager(map, opt_opts) {
   me.trackMarkers_ = opt_opts.trackMarkers;
 
   var padding;
-  if (typeof opt_opts.borderPadding == "number") {
+  if (typeof opt_opts.borderPadding === "number") {
     padding = opt_opts.borderPadding;
   } else {
     padding = MarkerManager.DEFAULT_BORDER_PADDING_;
@@ -236,7 +236,7 @@ MarkerManager.prototype.onMarkerMoved_ = function (marker, oldPoint, newPoint) {
   var changed = false;
   var oldGrid = me.getTilePoint_(oldPoint, zoom, GSize.ZERO);
   var newGrid = me.getTilePoint_(newPoint, zoom, GSize.ZERO);
-  while (zoom >= 0 && (oldGrid.x != newGrid.x || oldGrid.y != newGrid.y)) {
+  while (zoom >= 0 && (oldGrid.x !== newGrid.x || oldGrid.y !== newGrid.y)) {
     var cell = me.getGridCellNoCreate_(oldGrid.x, oldGrid.y, zoom);
     if (cell) {
       if (me.removeFromArray(cell, marker)) {
@@ -247,7 +247,7 @@ MarkerManager.prototype.onMarkerMoved_ = function (marker, oldPoint, newPoint) {
     // longer are visible are removed from the map. Markers that moved into
     // the shown bounds are added to the map. This also lets us keep the count
     // of visible markers up to date.
-    if (zoom == me.mapZoom_) {
+    if (zoom === me.mapZoom_) {
       if (me.isGridPointVisible_(oldGrid)) {
         if (!me.isGridPointVisible_(newGrid)) {
           me.removeOverlay_(marker);
@@ -293,7 +293,7 @@ MarkerManager.prototype.removeMarker = function (marker) {
     // For the current zoom we also need to update the map. Markers that no
     // longer are visible are removed from the map. This also lets us keep the count
     // of visible markers up to date.
-    if (zoom == me.mapZoom_) {
+    if (zoom === me.mapZoom_) {
       if (me.isGridPointVisible_(grid)) {
         me.removeOverlay_(marker);
         changed = true;
@@ -335,7 +335,7 @@ MarkerManager.prototype.addMarkers = function (markers, minZoom, opt_maxZoom) {
  * @return The maximum zoom.
  */
 MarkerManager.prototype.getOptMaxZoom_ = function (opt_maxZoom) {
-  return opt_maxZoom != undefined ? opt_maxZoom : this.maxZoom_;
+  return opt_maxZoom || this.maxZoom_;
 };
 
 
@@ -542,11 +542,11 @@ MarkerManager.prototype.updateMarkers_ = function () {
 
   // If the move does not include new grid sections,
   // we have no work to do:
-  if (newBounds.equals(me.shownBounds_) && newBounds.z == me.shownBounds_.z) {
+  if (newBounds.equals(me.shownBounds_) && newBounds.z === me.shownBounds_.z) {
     return;
   }
 
-  if (newBounds.z != me.shownBounds_.z) {
+  if (newBounds.z !== me.shownBounds_.z) {
     me.processAll_(me.shownBounds_, me.removeOverlay_);
     me.processAll_(newBounds, me.addOverlay_);
   } else {
@@ -705,7 +705,7 @@ MarkerManager.prototype.rectangleDiffCoords = function (bounds1, bounds2, callba
 MarkerManager.prototype.removeFromArray = function (array, value, opt_notype) {
   var shift = 0;
   for (var i = 0; i < array.length; ++i) {
-    if (array[i] === value || (opt_notype && array[i] == value)) {
+    if (array[i] === value || (opt_notype && array[i] === value)) {
       array.splice(i--, 1);
       shift++;
     }

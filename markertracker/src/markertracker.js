@@ -52,42 +52,15 @@ function MarkerTracker(marker, map, opts) {
 
   // setup the options
   opts = opts || {};
-  this.iconScale_ = MarkerTracker.DEFAULT_ICON_SCALE_;
-  if (opts.iconScale != undefined) {
-    this.iconScale_ = opts.iconScale;
-  }
-  this.padding_ = MarkerTracker.DEFAULT_EDGE_PADDING_;
-  if (opts.padding != undefined) {
-    this.padding_ = opts.padding;
-  }
-  this.color_ = MarkerTracker.DEFAULT_ARROW_COLOR_;
-  if (opts.color != undefined) {
-    this.color_ = opts.color;
-  }
-  this.weight_ = MarkerTracker.DEFAULT_ARROW_WEIGHT_;
-  if (opts.weight != undefined) {
-    this.weight_ = opts.weight;
-  }
-  this.length_ = MarkerTracker.DEFAULT_ARROW_LENGTH_;
-  if (opts.length != undefined) {
-    this.length_ = opts.length;
-  }
-  this.opacity_ = MarkerTracker.DEFAULT_ARROW_OPACITY_;
-  if (opts.opacity != undefined) {
-    this.opacity_ = opts.opacity;
-  }
-  this.updateEvent_ = MarkerTracker.DEFAULT_UPDATE_EVENT_;
-  if (opts.updateEvent != undefined) {
-    this.updateEvent_ = opts.updateEvent;
-  }
-  this.panEvent_ = MarkerTracker.DEFAULT_PAN_EVENT_;
-  if (opts.panEvent != undefined) {
-    this.panEvent_ = opts.panEvent;
-  }
-  this.quickPanEnabled_ = MarkerTracker.DEFAULT_QUICK_PAN_ENABLED_;
-  if (opts.quickPanEnabled != undefined) {
-    this.quickPanEnabled_ = opts.quickPanEnabled;
-  }
+  this.iconScale_ = opts.iconScale_ || MarkerTracker.DEFAULT_ICON_SCALE_;
+  this.padding_ = opts.padding_ || MarkerTracker.DEFAULT_EDGE_PADDING_;
+  this.color_ = opts.color || MarkerTracker.DEFAULT_ARROW_COLOR_;
+  this.weight_ = opts.weight || MarkerTracker.DEFAULT_ARROW_WEIGHT_;
+  this.length_ = opts.length || MarkerTracker.DEFAULT_ARROW_LENGTH_;
+  this.opacity_ = opts.opacity || MarkerTracker.DEFAULT_ARROW_OPACITY_;
+  this.updateEvent_ = opts.updateEvent || MarkerTracker.DEFAULT_UPDATE_EVENT_;
+  this.panEvent_ = opts.panEvent || MarkerTracker.DEFAULT_PAN_EVENT_;
+  this.quickPanEnabled_ = opts.quickPanEnabled || MarkerTracker.DEFAULT_QUICK_PAN_ENABLED_;
 
   //replicate a different sized icon
   var babyIcon = new GIcon(marker.getIcon());

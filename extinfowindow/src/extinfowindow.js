@@ -48,7 +48,7 @@ function ExtInfoWindow(marker, windowId, html, opt_opts) {
   this.callback_ = this.options_.ajaxCallback || null;
 
   this.maxContent_ = this.options_.maxContent || null;
-  this.maximizeEnabled_ = this.maxContent_ == null ? false : true;
+  this.maximizeEnabled_ = this.maxContent_ ? true : false;
   this.isMaximized_ = false;
 
   this.borderSize_ = this.options_.beakOffset || 0;
@@ -123,12 +123,12 @@ ExtInfoWindow.prototype.initialize = function (map) {
     document.body.removeChild(tempElement);
   }
   for (i in this.wrapperParts) if (this.wrapperParts.hasOwnProperty(i)) {
-    if (i == 'close') {
+    if (i === 'close') {
       //first append the content so the close button is layered above it
       this.wrapperDiv_.appendChild(this.contentDiv_);
     }
     var wrapperPartsDiv = null;
-    if (this.wrapperParts[i].domElement == null) {
+    if (!this.wrapperParts[i].domElement) {
       wrapperPartsDiv = document.createElement('div');
       this.wrapperDiv_.appendChild(wrapperPartsDiv);
     } else {
@@ -146,7 +146,7 @@ ExtInfoWindow.prototype.initialize = function (map) {
   this.map_.getPane(G_MAP_FLOAT_PANE).appendChild(this.container_);
   this.container_.id = this.infoWindowId_;
   var containerWidth  = this.getStyle_(document.getElementById(this.infoWindowId_), 'width');
-  this.container_.style.width = (containerWidth == null ? this.defaultStyles.containerWidth : containerWidth);
+  this.container_.style.width = (containerWidth ? containerWidth : this.defaultStyles.containerWidth);
 
   this.map_.getContainer().appendChild(this.contentDiv_);
   this.contentWidth = this.getDimensions_(this.container_).width;
@@ -181,7 +181,7 @@ ExtInfoWindow.prototype.initialize = function (map) {
         var infoWindow = that.map_.getExtInfoWindow();
         infoWindow.container_.style.width = that.container_.style.width;
         infoWindow.container_.style.height = that.container_.style.height;
-        if (infoWindow.ajaxUrl_ != null) {
+        if (infoWindow.ajaxUrl_) {
           infoWindow.ajaxRequest_(this.ajaxUrl_);
         } else {
           infoWindow.contentDiv_.innerHTML = infoWindow.html_;
@@ -206,7 +206,7 @@ ExtInfoWindow.prototype.initialize = function (map) {
   }
 
   GEvent.trigger(this.map_, 'extinfowindowopen');
-  if (this.ajaxUrl_ != null) {
+  if (this.ajaxUrl_) {
     this.ajaxRequest_(this.ajaxUrl_);
   }
 };
@@ -219,7 +219,7 @@ ExtInfoWindow.prototype.initialize = function (map) {
  * @param {MouseEvent} e The mouse event caught by this function
  */
 ExtInfoWindow.prototype.onClick_ = function (e) {
-  if (navigator.userAgent.toLowerCase().indexOf('msie') != -1 && document.all) {
+  if (navigator.userAgent.toLowerCase().indexOf('msie') !== -1 && document.all) {
     window.event.cancelBubble = true;
     window.event.returnValue = false;
   } else {
@@ -232,7 +232,7 @@ ExtInfoWindow.prototype.onClick_ = function (e) {
  * Remove the extInfoWindow container from the map pane.
  */
 ExtInfoWindow.prototype.remove = function () {
-  if (this.map_.getExtInfoWindow() != null) {
+  if (this.map_.getExtInfoWindow()) {
     GEvent.trigger(this.map_, 'extinfowindowbeforeclose');
 
     GEvent.clearInstanceListeners(this.container_);
@@ -264,7 +264,7 @@ ExtInfoWindow.prototype.copy = function () {
  * @param {Boolean} force Will be true when pixel coordinates need to be recomputed.
  */
 ExtInfoWindow.prototype.redraw = function (force) {
-  if (!force || this.container_ == null) {
+  if (!force || !this.container_) {
     return;
   }
 
@@ -314,12 +314,12 @@ ExtInfoWindow.prototype.redraw = function (force) {
   //create the decoration wrapper DOM objects
   //append the styled info window to the container
   for (var i in this.wrapperParts) if (this.wrapperParts.hasOwnProperty(i)) {
-    if (i == 'close') {
+    if (i === 'close') {
       //first append the content so the close button is layered above it
       this.wrapperDiv_.insertBefore(this.contentDiv_, this.wrapperParts[i].domElement);
     }
     var wrapperPartsDiv = null;
-    if (this.wrapperParts[i].domElement == null) {
+    if (!this.wrapperParts[i].domElement) {
       wrapperPartsDiv = document.createElement('div');
       this.wrapperDiv_.appendChild(wrapperPartsDiv);
     } else {
@@ -353,13 +353,13 @@ ExtInfoWindow.prototype.redraw = function (force) {
   this.container_.style.top = (pixelLocation.y - this.wrapperParts.bl.h - contentHeight - this.wrapperParts.tl.h - this.wrapperParts.beak.h - markerIcon.iconAnchor.y + markerIcon.infoWindowAnchor.y + this.borderSize_) + 'px';
   this.container_.style.display = 'block';
 
-  if (this.map_.getExtInfoWindow() != null) {
+  if (this.map_.getExtInfoWindow()) {
     this.repositionMap_();
   }
 };
 
 ExtInfoWindow.prototype.toggleMaxMin_ = function () {
-  if (this.wrapperParts.max.domElement != null && this.wrapperParts.min.domElement != null) {
+  if (this.wrapperParts.max.domElement && this.wrapperParts.min.domElement) {
     if (this.isMaximized_) {
       this.wrapperParts.max.domElement.style.display = 'none';
       this.wrapperParts.min.domElement.style.display = 'block';
@@ -468,7 +468,7 @@ ExtInfoWindow.prototype.repositionMap_ = function () {
     }
   }
 
-  if (panX != 0 || panY != 0 && this.map_.getExtInfoWindow() != null) {
+  if (panX !== 0 || panY !== 0 && this.map_.getExtInfoWindow()) {
     this.map_.panBy(new GSize(panX, panY));
   }
 };
@@ -486,12 +486,12 @@ ExtInfoWindow.prototype.ajaxRequest_ = function (url) {
   GDownloadUrl(url, function (response, status) {
     if (that.map_.getExtInfoWindow() !== null) {
       var infoWindow = document.getElementById(that.map_.getExtInfoWindow().infoWindowId_ + '_contents');
-      if (response == null || status == -1) {
+      if (!response || status === -1) {
         infoWindow.innerHTML = '<span class="error">ERROR: The Ajax request failed to get HTML content from "' + url + '"</span>';
       } else {
         infoWindow.innerHTML = response;
       }
-      if (thisCallback != null) {
+      if (thisCallback) {
         thisCallback();
       }
       that.map_.getExtInfoWindow().resize();
@@ -510,7 +510,7 @@ ExtInfoWindow.prototype.ajaxRequest_ = function (url) {
  */
 ExtInfoWindow.prototype.getDimensions_ = function (element) {
   var display = this.getStyle_(element, 'display');
-  if (display != 'none' && display != null) { // Safari bug
+  if (display !== 'none' && display) { // Safari bug
     return {width: element.offsetWidth, height: element.offsetHeight};
   }
 
@@ -542,7 +542,7 @@ ExtInfoWindow.prototype.getDimensions_ = function (element) {
 ExtInfoWindow.prototype.getStyle_ = function (element, style) {
   var found = false;
   style = this.camelize_(style);
-  if (element.id == this.infoWindowId_ && style == 'width' && element.style.display == 'none') {
+  if (element.id === this.infoWindowId_ && style === 'width' && element.style.display === 'none') {
   	element.style.visibility = 'hidden';
 	  element.style.display = '';
   }
@@ -555,18 +555,18 @@ ExtInfoWindow.prototype.getStyle_ = function (element, style) {
       value = element.currentStyle[style];
     }
   }
-  if ((value == 'auto') && (style == 'width' || style == 'height') && (this.getStyle_(element, 'display') != 'none')) {
-    if (style == 'width') {
+  if ((value === 'auto') && (style === 'width' || style === 'height') && (this.getStyle_(element, 'display') !== 'none')) {
+    if (style === 'width') {
       value = element.offsetWidth;
     } else {
       value = element.offsetHeight;
     }
   }
-  if (element.id == this.infoWindowId_ && style == 'width' && element.style.display != 'none') {
+  if (element.id === this.infoWindowId_ && style === 'width' && element.style.display !== 'none') {
   	element.style.display = 'none';
   	element.style.visibility = 'visible';
   }
-  return (value == 'auto') ? null : value;
+  return (value === 'auto') ? null : value;
 };
 
 /**
@@ -578,10 +578,10 @@ ExtInfoWindow.prototype.getStyle_ = function (element, style) {
  */
 ExtInfoWindow.prototype.camelize_ = function (element) {
   var parts = element.split('-'), len = parts.length;
-  if (len == 1) {
+  if (len === 1) {
     return parts[0];
   }
-  var camelized = element.charAt(0) == '-' ? parts[0].charAt(0).toUpperCase() + parts[0].substring(1) : parts[0];
+  var camelized = element.charAt(0) === '-' ? parts[0].charAt(0).toUpperCase() + parts[0].substring(1) : parts[0];
 
   for (var i = 1; i < len; i++) {
     camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
@@ -613,36 +613,35 @@ GMap.prototype.InfoWindowListener_ = null;
  *                    info window styling containers a border.
  */
 GMarker.prototype.openExtInfoWindow = function (map, cssId, html, opt_opts) {
-  if (map == null) {
+  if (!map) {
     throw 'Error in GMarker.openExtInfoWindow: map cannot be null';
     return false;
   }
-  if (cssId == null || cssId == '') {
+  if (!cssId || cssId === '') {
     throw 'Error in GMarker.openExtInfoWindow: must specify a cssId';
     return false;
   }
 
   map.closeInfoWindow();
-  if (map.getExtInfoWindow() != null) {
+  if (map.getExtInfoWindow()) {
     map.closeExtInfoWindow();
-  }
-  if (map.getExtInfoWindow() == null) {
+  } else {
     map.setExtInfoWindow_(new ExtInfoWindow(this, cssId, html, opt_opts));
-    if (map.ClickListener_ == null) {
+    if (!map.ClickListener_) {
       //listen for map click, close ExtInfoWindow if open
       map.ClickListener_ = GEvent.addListener(map, 'click',
       function (event) {
-          if (!event && map.getExtInfoWindow() != null) {
+          if (!event && map.getExtInfoWindow()) {
             map.closeExtInfoWindow();
           }
         }
       );
     }
-    if (map.InfoWindowListener_ == null) {
+    if (!map.InfoWindowListener_) {
       //listen for default info window open, close ExtInfoWindow if open
       map.InfoWindowListener_ = GEvent.addListener(map, 'infowindowopen',
       function (event) {
-          if (map.getExtInfoWindow() != null) {
+          if (map.getExtInfoWindow()) {
             map.closeExtInfoWindow();
           }
         }
@@ -657,7 +656,7 @@ GMarker.prototype.openExtInfoWindow = function (map, cssId, html, opt_opts) {
  * @param {GMap2} map The map where the GMarker and ExtInfoWindow exist
  */
 GMarker.prototype.closeExtInfoWindow = function (map) {
-  if (map.getExtInfWindow() != null) {
+  if (map.getExtInfWindow()) {
     map.closeExtInfoWindow();
   }
 };
@@ -679,7 +678,7 @@ GMap2.prototype.setExtInfoWindow_ = function (extInfoWindow) {
  * Remove the ExtInfoWindow from the map
  */
 GMap2.prototype.closeExtInfoWindow = function () {
-  if (this.getExtInfoWindow() != null) {
+  if (this.getExtInfoWindow()) {
     this.ExtInfoWindowInstance_.remove();
   }
 };
