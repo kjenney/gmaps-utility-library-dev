@@ -1,32 +1,101 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset={+IO.encoding+}">
-<title>{+libName+}  V{+version+} Reference</title>
+<title>{+JSDOC.opt.D.libName+} <for each="symbol" in="data">
+  <if test="symbol.is('FILE')">{! output += "v" + symbol.version; var fileOverview = resolveLinks(symbol.desc); !}</if>
+</for> Reference</title>
 <link rel="stylesheet" type="text/css" href="http://code.google.com/css/dev_docs.css"></link>
 </head>
 <body>
-{+include("static/header.html")+}
-
-<div id="index">
-  {+publish.classesIndex+}
-</div>
-
-<div id="content">
-  <h1 class="classTitle">Class Index</h1>
-  <for each="thisClass" in="data">
-    <div>
-      <h2>{+(new Link().toSymbol(thisClass.alias))+}</h2>
-      {+resolveLinks(summarize(thisClass.classDesc))+}
-    </div>
-    <hr />
-  </for>
-</div>
+<h1>{+JSDOC.opt.D.libName+}</h1>
+<p>{+fileOverview+}</p>
+<for each="thisObject" in="data">{!
+    var objectType = undefined;
+    var propertyType = undefined;
+    var columns = undefined;
+    if (thisObject.is("FILE")) {
+      objectType = "file";
+    } else if (thisObject.comment.getTag("enum").length) {
+      objectType = "enum";
+    } else if (thisObject.comment.getTag("interface").length) {
+      objectType = "interface";
+    } else if (thisObject.isNamespace) {
+      objectType = "namespace";
+    } else if (thisObject.name.match(/^[A-Z]/)) {
+      objectType = "class";
+    }
+    if (thisObject.properties.length) {
+      propertyType = "Properties";
+      columns = ["Type"];
+    } else if (thisObject.is("CONSTRUCTOR")) {
+      propertyType = "Constructor";
+    } else if (thisObject.methods.length) {
+      propertyType = "Methods";
+      columns = ["Return Value"];
+    } else if (thisObject.isConstant) {
+      propertyType = "Constants";
+    } else if (thisObject.events.length) {
+      propertyType = "Events";
+      columns = ["Arguments"];
+    }
+  !}
+  <if test="objectType === 'namespace' || objectType === 'enum' || objectType === 'interface' || objectType === 'class'">
+    <if test="thisObject.name !== '_global_'">
+      <h2><a name="{+thisObject.alias+}"></a>{+objectType+} {+thisObject.name+}</h2>
+      <p>{+resolveLinks(thisObject.classDesc)+}
+      <if test="thisObject.name.match(/Options$/)">
+        There is no constructor for this {+objectType+}. Instead, this class is instantiated as a javascript object literal.
+      </if>
+      </p>
+    </if>
+  </if>
+  <if test="propertyType === 'Constructor' || propertyType === 'Properties'">
+    <h3>{+propertyType+}</h3>
+    <table summary="class {+thisObject.className+} - {+objectType+}">
+      <tbody>
+        <tr>
+          <th>{+propertyType+}</th>
+          <if test="columns && columns.length">
+            <for each="columnName" in="columns">
+              <th>{+columnName+}</th>
+            </for>
+          </if>
+          <th>Description</th>
+        </tr>
+        <if test="propertyType === 'Constructor'">
+          <tr class="odd">
+            <td><code>{!
+              output += thisObject.name + "(";
+              for (var i = 0; i < thisObject.params.length; i++) {
+                var param = thisObject.params[i];
+                output += '<span class="type" title="type:  ' + param.type + '">';
+                output += param.name + (param.isOptional ? "?": "");
+                output += '</span>';
+              }
+              output += ")";
+              !}</code></td>
+            <td>{+resolveLinks(thisObject.desc)+}</td>
+          </tr>
+        </if>
+        <if test="propertyType === 'Properties'">
+          <for each="property" in="thisObject.properties">
+            <tr class="odd">
+              <td><code>{+property.name+}</code></td>
+              <td><code>{+property.type+}</code></td>
+              <td>{+resolveLinks(property.desc)+}</td>
+            </tr>
+          </for>
+        </if>
+      </tbody>
+    </table>
+  </if>
+</for>
 
 <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
 </script>
 
 <script type="text/javascript">
 _uacct = "UA-964209-4";
-//urchinTracker();
+urchinTracker();
 </script>
 
 </body>

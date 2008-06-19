@@ -1,41 +1,57 @@
-/*
-* ExtMapTypeControl Class v1.2 
-*  Copyright (c) 2007, Google 
-*  Author: Pamela Fox, others
-* 
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-* 
-*       http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*
-* This class lets you add a control to the map which mimics GMapTypeControl
-*  and allows for the addition of a traffic button/traffic key.
-*/
+/**
+ * @name ExtMapTypeControl
+ * @version 1.2 
+ * @author Pamela Fox, others
+ * @copyright (c) 2007, Google
+ * @fileoverview This library lets you add a control to the map which mimics
+ *     {@link GMapTypeControl} and allows for the addition of a traffic
+ *     button/traffic key.
+ */
 
 /*
- * Constructor for ExtMapTypeControl, which uses an option hash
- * to decide what elements to put in the control.
- * @param {opt_opts} Named optional arguments:
- *   opt_opts.showTraffic {Boolean} Controls whether traffic button is shown
- *   opt_opts.showTrafficKey {Boolean} Controls whether traffic key is shown
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+/**
+ * @name ExtMapTypeControlOptions
+ * @class Instances of this class are used in the {@link opt_opts} argument to
+ *     the constructor of the {@link ExtMapTypeControl} class.
+ * @property {Boolean} [showTraffic=false] If set to true, Traffic button will
+ *     appear to left of other buttons.
+ * @property {Boolean} [showTrafficKey=false] If this option and showTraffic are
+ *     set to true, a "?" button will appear next to Traffic button, and show a
+ *     drop-down legend when clicked.
+ */
+
+/**
+ * Creates a ExtMapTypeControl with the specified option hash to decide what
+ *     elements to put in the control.
+ * @class This class lets you add a control to the map which looks like the
+ *     typical {@link GMapTypeControl} from the obfuscated API.  By specifying
+ *     additional options however, you can also add a Traffic button to the
+ *     control and a drop-down legend for that button.
+ * @param {ExtMapTypeControlOptions} [opt_opts] Named optional arguments
+ * @see ExtMapTypeControlOptions
  */
 function ExtMapTypeControl(opt_opts) {
   this.options = opt_opts || {};
 };
 
-
 ExtMapTypeControl.prototype = new GControl();
 
 /**
- * Is called by GMap2's addOverlay method. Creates the button 
- *  and appends to the map div.
+ * Called by GMap2's addOverlay method. Creates the control and appends it to the map div.
  * @param {GMap2} map The map that has had this ExtMapTypeControl added to it.
  * @return {DOM Object} Div that holds the control
  */ 
@@ -152,7 +168,7 @@ ExtMapTypeControl.prototype.initialize = function(map) {
   return container;
 };
 
-/*
+/**
  * Creates buttons for map types.
  * @param {GMap2} Map object for which to create buttons.
  * @return {Array} Divs containing the buttons.
@@ -169,7 +185,7 @@ ExtMapTypeControl.prototype.addMapTypeButtons_ = function(map) {
   return mapTypeDivs;
 };
 
-/*
+/**
  * Ensures that map type button events are assigned correctly.
  * @param {GMap2} Map object for which to reset events.
  * @param {Array} mapTypeDivs Divs containing map type buttons.
@@ -198,7 +214,7 @@ ExtMapTypeControl.prototype.resetButtonEvents_ = function(map, mapTypeDivs) {
   });
 };
 
-/*
+/**
  * Creates simple buttons with text nodes. 
  * @param {String} text Text to display in button
  * @return {DOM Object} The div for the button.
@@ -215,14 +231,13 @@ ExtMapTypeControl.prototype.createButton_ = function(text) {
   return buttonDiv;
 };
 
-/*
- * Assigns events to MapType buttons to change maptype
- *  and toggle button styles correctly for all buttons
- *  when button is clicked.
- *  @param {DOM Object} div Button's div to assign click to
- *  @param {GMap2} Map object to change maptype of.
- *  @param {Object} mapType GMapType to change map to when clicked
- *  @param {Array} otherDivs Array of other button divs to toggle off
+/**
+ * Assigns events to MapType buttons to change maptype and toggle button styles
+ * correctly for all buttons when button is clicked.
+ * @param {DOM Object} div Button's div to assign click to
+ * @param {GMap2} Map object to change maptype of.
+ * @param {Object} mapType GMapType to change map to when clicked
+ * @param {Array} otherDivs Array of other button divs to toggle off
  */  
 ExtMapTypeControl.prototype.assignButtonEvent_ = function(div, map, mapType, otherDivs) {
   var me = this;
@@ -236,7 +251,7 @@ ExtMapTypeControl.prototype.assignButtonEvent_ = function(div, map, mapType, oth
   });
 };
 
-/*
+/**
  * Changes style of button to appear on/off depending on boolean passed in.
  * @param {DOM Object} div  Button div to change style of
  * @param {Boolean} boolCheck Used to decide to use on style or off style
@@ -250,7 +265,7 @@ ExtMapTypeControl.prototype.toggleButton_ = function(div, boolCheck) {
   } 
 };
 
-/*
+/**
  * Required by GMaps API for controls. 
  * @return {GControlPosition} Default location for control
  */
@@ -258,7 +273,7 @@ ExtMapTypeControl.prototype.getDefaultPosition = function() {
   return new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(7, 7));
 };
 
-/*
+/**
  * Sets the proper CSS for the given button element.
  * @param {DOM Object} button Button div to set style for
  */
