@@ -212,7 +212,7 @@ function publish(symbolSet) {
   var referenceTemplate = new JSDOC.JsPlate(publish.conf.templatesDir + "reference.tmpl");
   var output = "";
   output = referenceTemplate.process(templateValues);
-  IO.saveFile(publish.conf.outDir, "reference2.html", output);
+  IO.saveFile(publish.conf.outDir, "reference.html", output);
 }
 
 /** make a symbol sorter by some attribute */

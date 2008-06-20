@@ -1,174 +1,244 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Marker Manager V1.0 Reference</title>
-<link rel="stylesheet" type="text/css" href="http://code.google.com/css/dev_docs.css"></link>
-</head>
-<body>
-<h2>
-<a name="MarkerManager"></a>class MarkerManager</h2>
-<p>
-    This class is used to manage visibility of hundreds of markers on a map,
-    based on the map's current viewport and zoom level.
-  </p>
-<h3>Constructor</h3>
-<table summary="class MarkerManager - Constructor">
-<tbody><tr>
-<th>Constructor</th>
-<th>Description</th>
-</tr>
-<tr class="odd">
-<td class="code">MarkerManager(<span class="type" title="type:  GMap">map</span>, <span class="type" title="type:  MarkerManagerOptions"> opts?</span>)</td>
-
-<td>
-        Creates a new marker manager that controlls visibility of
-        markers for the specified map.
-</td>
-</tr>
-</tbody></table>
-<h3>Methods</h3>
-<table summary="class MarkerManager - Methods">
-<tbody><tr>
-<th>Methods</th>
-<th>Return Value</th>
-<th>Description</th>
-</tr>
-
-<tr class="odd">
-<td class="code">addMarkers(<span class="type" title="type:  Array of GMarker">markers</span>, <span class="type" title="type:  Number"> minZoom</span>, <span class="type" title="type:  Number"> maxZoom?</span>)</td>
-<td class="code"><span class="void">none</span></td>
-<td>
-        Adds a batch of markers to this marker manager. The markers are not added
-        to the map, until the <code><span class="nomatch">refresh()</span></code> method is called. Once
-        placed on a map, the markers are shown if they fall within the map's
-        current viewport and the map's zoom level is greater than or equal
-        to the specified <code><span class="nomatch">minZoom</span></code>. If the <code><span class="nomatch">maxZoom</span></code>
-        was given, the markers are automatically removed if the map's zoom
-        is greater than the one specified.
-</td>
-</tr>
-<tr class="even">
-<td class="code">addMarker(<span class="type" title="type:  GMarker">marker</span>, <span class="type" title="type:  Number"> minZoom</span>, <span class="type" title="type:  Number"> maxZoom?</span>)</td>
-<td class="code"><span class="void">none</span></td>
-
-<td>
-        Adds a single marker to a collection of markers controlled by this
-        manager. If the marker's location falls within the map's current
-        viewport and the map's zoom level is within the specified zoom level
-        rage, the marker is immediately added to the map. Similar to the
-        <code><span class="nomatch">addMarkers</span></code> method, the <code><span class="nomatch">minZoom</span></code> and the
-        optional <code><span class="nomatch">maxZoom</span></code> parameters specify the range of zoom
-        levels at which the marker is shown.
-</td>
-</tr>
-
-<tr class="even">
-<td class="code">removeMarker(<span class="type" title="type:  GMarker">marker</span>)</td>
-<td class="code"><span class="void">none</span></td>
-<td>
-        Removes marker from the MarkerManager by
-        searching at every zoom level to find grid cell
-        that marker would be in, removing from that array if found.
-        Also calls removeOverlay on marker if currently visible.
-</td>
-</tr>
-
-<tr class="odd">
-<td class="code">clearMarkers()</td>
-<td class="code"><span class="void">none</span></td>
-<td>
-	Removes all currently displayed markers and clears grid arrays.
-</td>
-</tr>
-
-<tr class="odd">
-<td class="code">refresh()</td>
-
-<td class="code"><span class="void">none</span></td>
-<td>
-        Forces the manager to update markers shown on the map. This method must
-        be called if markers were added using the <code><span class="nomatch">addMarkers</span></code>
-        method.
-</td>
-</tr>
-
-<tr class="even">
-<td class="code">getMarkerCount(<span class="type" title="type:  Number">zoom</span>)</td>
-<td class="code"><span class="nomatch">Number</span></td>
-
-<td>
-        Returns the total number of markers potentially visible at the given
-        zoom level. This may include markers at lower zoom levels.
-</td>
-</tr>
-</tbody></table>
-<h3>Events</h3>
-<table summary="class MarkerManager - Events">
-<tbody><tr>
-<th>Events</th>
-<th>Arguments</th>
-<th>Description</th>
-</tr>
-
-<tr class="odd">
-<td class="code">changed</td>
-<td class="code">
-<span class="type" title="type:  GBounds">bounds</span>, <span class="type" title="type:  Number"> markerCount</span>
-</td>
-<td>This event is fired when markers managed by a manager have been added
-        to or removed from the map. The event handler function should be
-        prepared to accept two arguments. The first one is the rectangle
-        definining the bounds of the visible grid. The second one carries the
-        number of markers currently shown on the map.
-</td>
-</tr>
-</tbody></table>
-<h2>
-<a name="MarkerManagerOptions"></a>class MarkerManagerOptions</h2>
-
-<p>This class represents optional arguments to the
-  <code><span class="xref"><a href="#MarkerManager">MarkerManager</a></span></code> constructor. It has no constructor, but is
-  instantiated as object literal.</p>
-<h3>Properties</h3>
-<table summary="class MarkerManagerOptions - Properties">
-<tbody><tr>
-<th>Properties</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-<tr class="odd">
-
-<td class="code">borderPadding</td>
-<td class="code"> Number</td>
-<td>
-        Specifies, in pixels, the extra padding outside the map's current
-        viewport monitored by a manager. Markers that fall within this
-        padding are added to the map, even if they are not fully
-        visible.
-</td>
-</tr>
-<tr class="even">
-<td class="code">maxZoom</td>
-<td class="code"> Number</td>
-<td>
-
-        Sets the maximum zoom level monitored by a marker manager. If not
-        given, the manager assumes the maximum map zoom level. This value is also
-        used when markers are added to the manager without the optional
-        <code><span class="nomatch">maxZoom</span></code> parameter.
-</td>
-</tr>
-<tr class="odd">
-<td class="code">trackMarkers</td>
-<td class="code"> Boolean</td>
-<td>
-        Indicates whether or not a marker manager should track markers'
-        movements. If you wish to move managed markers using the
-        <code><span class="nomatch">setPoint</span></code> method, this option should be set to
-        <code><span class="nomatch">true</span></code>. The default value is <code><span class="nomatch">false</span></code>.
-</td>
-</tr>
-</tbody></table>
-<h2>
-
-</body>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>MarkerManager v1.0 Reference</title>
+    <link rel="stylesheet" type="text/css" href="http://code.google.com/css/dev_docs.css"></link>
+    <!-- <link rel="stylesheet" type="text/css" href="../../util/docs/dev_docs.css"></link> -->
+  </head>
+  <body>
+    <h1>MarkerManager</h1>
+    <p>
+Marker manager is an interface between the map and the user,
+designed to manage adding and removing many points when the viewport changes.
+<br /><br />
+Algorithm: The MM places its markers onto a grid, similar to the map tiles.
+When the user moves the viewport, the MM computes which grid cells have
+entered or left the viewport, and shows or hides all the markers in those
+cells.
+<br />
+(If the users scrolls the viewport beyond the markers that are loaded,
+no markers will be visible until the EVENT_moveend triggers an update.)
+<br /><br />
+In practical consequences, this allows 10,000 markers to be distributed over
+a large area, and as long as only 100-200 are visible in any given viewport,
+the user will see good performance corresponding to the 100 visible markers,
+rather than poor performance corresponding to the total 10,000 markers.
+<br /><br />
+Note that some code is optimized for speed over space,
+with the goal of accommodating thousands of markers.</p>
+    
+      <h2><a name="MarkerManager"></a>class MarkerManager</h2>
+      <p>This class is used to manage visibility of hundreds of markers on a
+    map, based on the map's current viewport and zoom level.</p>
+      
+        <h3>Constructor</h3>
+        <table summary="class MarkerManager - Constructor">
+          
+          <tbody>
+            <tr>
+              <th>Constructor</th>
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>MarkerManager(map, opt_opts?)</code></td>
+                
+                <td>Creates a new marker manager that controlls visibility of markers for the specified map.</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3>Methods</h3>
+        <table summary="class MarkerManager - Methods">
+          
+          <tbody>
+            <tr>
+              <th>Methods</th>
+              
+                
+                  <th>Return Value</th>
+                
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>addMarker(marker, minZoom, opt_maxZoom?)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Adds a single marker to a collection of markers controlled by this manager.
+    If the marker's location falls within the map's current viewport and the
+    map's zoom level is within the specified zoom level rage, the marker is
+    immediately added to the map. Similar to the <code>addMarkers</code> method,
+    the <code>minZoom</code> and the optional <code>maxZoom</code> parameters specify
+    the range of zoom levels at which the marker is shown.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>addMarkers(markers, minZoom, opt_maxZoom?)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Adds a batch of markers to this marker manager. The markers are not added to
+    the map, until the <code>refresh()</code> method is called.  Once placed on a
+    map, the markers are shown if they fall within the map's current viewport
+    and the map's zoom level is greater than or equal to the specified
+    <code>minZoom</code>. If the <code>maxZoom</code> was given, the markers are
+    automatically removed if the map's zoom is greater than the one specified.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>clearMarkers()</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Removes all currently displayed markers and clears grid arrays.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>getMarkerCount(zoom)</code></td>
+                
+                  
+                    <td><code>Number</code></td>
+                  
+                
+                <td>Calculates the total number of markers potentially visible at a given
+zoom level.  This may include markers at lower zoom levels.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>refresh()</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Forces the manager to update markers shown on the map.  This method must be
+    called if markers were added using the <code>addMarkers</code> method.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>removeMarker(marker)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Removes marker from the MarkerManager by searching at every zoom level to
+    find grid cell that marker would be in, removing from that array if
+    found. Also calls <code>removeOverlay</code> on marker if currently visible.</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3>Events</h3>
+        <table summary="class MarkerManager - Events">
+          
+          <tbody>
+            <tr>
+              <th>Events</th>
+              
+                
+                  <th>Arguments</th>
+                
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>changed</code></td>
+                
+                  
+                    <td><code><span class="type" title="type:  GBounds">bounds</span>, <span class="type" title="type:  Number">markerCount</span></code></td>
+                  
+                
+                <td>This event is fired when markers managed by a manager have been added to or
+    removed from the map. The event handler function should be prepared to
+    accept two arguments. The first one is the rectangle definining the
+    bounds of the visible grid. The second one carries the number of markers
+    currently shown on the map.</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+    
+      <h2><a name="MarkerManagerOptions"></a>class MarkerManagerOptions</h2>
+      <p>This class represents optional arguments to the <code><a href="reference.html#MarkerManager">MarkerManager</a></code>
+    constructor.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
+      
+        <h3>Properties</h3>
+        <table summary="class MarkerManagerOptions - Properties">
+          
+          <tbody>
+            <tr>
+              <th>Properties</th>
+              
+                
+                  <th>Type</th>
+                
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>borderPadding</code></td>
+                
+                  
+                    <td><code>Number</code></td>
+                  
+                
+                <td>Specifies, in pixels, the extra padding
+    outside the map's current viewport monitored by a manager. Markers that
+    fall within this padding are added to the map, even if they are not fully
+    visible.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>maxZoom</code></td>
+                
+                  
+                    <td><code>Number</code></td>
+                  
+                
+                <td>Sets the maximum zoom level monitored by a
+    marker manager. If not given, the manager assumes the maximum map zoom
+    level. This value is also used when markers are added to the manager
+    without the optional <code>maxZoom</code> parameter.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>trackMarkers</code></td>
+                
+                  
+                    <td><code>Boolean</code></td>
+                  
+                
+                <td>Indicates whether or not a marker
+    manager should track markers' movements. If you wish to move managed
+    markers using the <code>setPoint</code> method, this option should be set to
+    <code>true</code>.  The default value is <code>false</code>.</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+    
+    <!-- <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-964209-4";
+      urchinTracker();
+    </script> -->
+  </body>
 </html>

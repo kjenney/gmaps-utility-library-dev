@@ -4,7 +4,6 @@ for LIBNAME in `ls ../../`; do
     java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js \
     --allfunctions \
     --suppress \
-    --verbose \
     -t=templates \
     --directory=../../$LIBNAME/docs \
     ../../$LIBNAME/src/$LIBNAME.js

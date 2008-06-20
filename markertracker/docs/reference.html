@@ -1,130 +1,194 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Marker Tracker V1.0 Reference</title>
-<link rel="stylesheet" type="text/css" href="http://code.google.com/css/dev_docs.css"></link>
-</head>
-<body>
-<h2>
-<a name="MarkerTracker"></a>class MarkerTracker</h2>
-<p>
-  This class will display directional indicators for markers as they move out of a maps view.
-</p>
-<h3>Constructor</h3>
-<table summary="class MarkerTracker - Constructor">
-<tbody><tr>
-<th>Constructor</th>
-<th>Description</th>
-</tr>
-<tr class="odd">
-<td class="code">MarkerTracker(<span class="type" title="type:  GMarker">marker</span>, <span class="type" title="type:  GMap">map</span>, <span class="type" title="type:  MarkerTrackerOptions"> opts?</span>)</td>
-
-<td>
-  Creates a MarkerTracker for the given marker and displays it on the map as needed.
-</td>
-</tr>
-</tbody></table>
-<h3>Methods</h3>
-<table summary="class MarkerTracker - Methods">
-<tbody><tr>
-<th>Methods</th>
-<th>Return Value</th>
-<th>Description</th>
-</tr>
-
-<tr class="odd">
-<td class="code">disable()</td>
-<td class="code"><span class="void">none</span></td>
-<td>
-  Disables the marker tracker.
-</td>
-</tr>
-
-<tr class="even">
-<td class="code">enable()</td>
-<td class="code"><span class="void">none</span></td>
-
-<td>
-  Enables the marker tracker.
-</td>
-</tr>
-
-</tbody></table>
-
-<h2>
-<a name="MarkerTrackerOptions"></a>class MarkerTrackerOptions</h2>
-
-<p>This class represents optional arguments to the
-  <code><span class="xref"><a href="#MarkerTracker">MarkerTracker</a></span></code>
-  constructor. It has no constructor, but is instantiated as object literal.</p>
-<h3>Properties</h3>
-<table summary="class MarkerTrackerOptions - Properties">
-<tbody><tr>
-<th>Properties</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-<tr class="odd">
-<td class="code">iconScale</td>
-<td class="code"> Number</td>
-<td>
-  Scales the icon size by this value, 0 = no icon. The default value is 0.6.
-</td>
-</tr>
-<tr class="even">
-<td class="code">padding</td>
-<td class="code"> Number</td>
-<td>
-  The number of pixels between the arrow and the edge of the map. The default value is 25.
-</td>
-</tr>
-<tr class="odd">
-<td class="code">color</td>
-<td class="code"> String</td>
-<td>
-  Specifies the color of the arrow. The default value is '#ff0000'.
-</td>
-</tr><tr class="even">
-<td class="code">weight</td>
-<td class="code"> Number</td>
-<td>
-  Thickness of the lines that make up the arrows. The default value is 20.
-</td>
-</tr>
-<tr class="odd">
-<td class="code">length</td>
-<td class="code"> Number</td>
-<td>
-  Specifies the length of the arrow. The default value is 20.
-</td>
-</tr><tr class="even">
-<td class="code">opacity</td>
-<td class="code"> Number</td>
-<td>
-  Specifies the opacity of the arrow. The default value is 0.8.
-</td>
-</tr>
-<tr class="odd">
-<td class="code">updateEvent</td>
-<td class="code"> String</td>
-<td>
-  This parameter changes the <a href='http://code.google.com/apis/maps/documentation/reference.html#GMap2'>GMap2</a> event name that triggers the arrows to update, ( i.e. using 'moveend' reduces processing when using many MarkerTrackers).The default value is 'move'.
-</td>
-</tr>
-<tr class="even">
-<td class="code">panEvent</td>
-<td class="code"> String</td>
-<td>
-  This parameter specifies a <a href='http://code.google.com/apis/maps/documentation/reference.html#GMarker'>GMarker</a> event name that triggers a quick pan to the tracked marker. The default value is 'click'.
-</td>
-</tr>
-<tr class="even">
-<td class="code">quickPanEnabled</td>
-<td class="code"> Boolean</td>
-<td>
-  Setting this value to false will disable the quick pan described above. The default value is <code>true</code>.
-</td>
-</tr>
-</tbody></table>
-<h2/>
-</body>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>MarkerTracker v1.0 Reference</title>
+    <link rel="stylesheet" type="text/css" href="http://code.google.com/css/dev_docs.css"></link>
+    <!-- <link rel="stylesheet" type="text/css" href="../../util/docs/dev_docs.css"></link> -->
+  </head>
+  <body>
+    <h1>MarkerTracker</h1>
+    <p>
+This ulitily displays directional indicators for "important"
+    markers on that are out of your maps view.</p>
+    
+      <h2><a name="MarkerTracker"></a>class MarkerTracker</h2>
+      <p>This class will display directional indicators for markers as they move out of a maps view.</p>
+      
+        <h3>Constructor</h3>
+        <table summary="class MarkerTracker - Constructor">
+          
+          <tbody>
+            <tr>
+              <th>Constructor</th>
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>MarkerTracker(map, marker, opts?)</code></td>
+                
+                <td>Creates a MarkerTracker for the given marker and displays it on the map as needed.</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3>Methods</h3>
+        <table summary="class MarkerTracker - Methods">
+          
+          <tbody>
+            <tr>
+              <th>Methods</th>
+              
+                
+                  <th>Return Value</th>
+                
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>disable()</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Disables the marker tracker.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>enable()</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Enables the marker tracker.</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+    
+      <h2><a name="MarkerTrackerOptions"></a>class MarkerTrackerOptions</h2>
+      <p>This class represents optional arguments to the <code><a href="reference.html#MarkerTracker">MarkerTracker</a></code> constructor.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
+      
+        <h3>Properties</h3>
+        <table summary="class MarkerTrackerOptions - Properties">
+          
+          <tbody>
+            <tr>
+              <th>Properties</th>
+              
+                
+                  <th>Type</th>
+                
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>color</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>Color of the arrow.  The default value is <code>"#ff0000"</code>.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>iconScale</code></td>
+                
+                  
+                    <td><code>Number</code></td>
+                  
+                
+                <td>Scales the icon size by this value, 0 = no icon.  The default value is <code>0.6</code>.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>length</code></td>
+                
+                  
+                    <td><code>Number</code></td>
+                  
+                
+                <td>length of the arrow.  The default value is <code>20</code>.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>opacity</code></td>
+                
+                  
+                    <td><code>Number</code></td>
+                  
+                
+                <td>opacity of the arrow.  The default value is <code>0.8</code>.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>padding</code></td>
+                
+                  
+                    <td><code>Number</code></td>
+                  
+                
+                <td>The padding between the arrow and the edge of the map.  The default value is <code>25</code>.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>panEvent</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>The <code>GMarker</code> event name that
+    triggers a quick zoom to the tracked marker.  The default value is <code>"click"</code>.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>quickPanEnabled</code></td>
+                
+                  
+                    <td><code>Boolean</code></td>
+                  
+                
+                <td>Setting this value to false will
+    disable the quick pan feature.  The default value is <code>true</code>.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>updateEvent</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>The <code>GMap2</code> event name that triggers the arrows to update.  The default value is <code>"move"</code>.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>weight</code></td>
+                
+                  
+                    <td><code>Number</code></td>
+                  
+                
+                <td>Thickness of the lines that make up the arrows.  The default value is <code>20</code>.</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+    
+    <!-- <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-964209-4";
+      urchinTracker();
+    </script> -->
+  </body>
 </html>
