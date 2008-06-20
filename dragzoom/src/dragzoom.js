@@ -1,92 +1,116 @@
+/**
+ * @name DragZoomControl
+ * @version 1.2 
+ * @author Andre Lewis, andre@earthcode.com
+ * @copyright (c) 2005-2007, Andre Lewis, andre@earthcode.com
+ * @author Richard Garland, papabear.newyork@gmail.com
+ * @copyright Back Button functionality Copyright (c) 2007, Richard Garland,
+ *     papabear.newyork@gmail.com
+ * @fileoverview This library lets you add a control to the map which will let
+ *     the user zoom by dragging a rectangle.
+ *     Back Button functionality provides the user with a one click means to
+ *     return the map state to its state prior to the DragZoom.  Sequential
+ *     DragZooms are backed out in reverse order.
+ * @see More info on original GZoom at http://earthcode.com
+ */
+
 /*
-* DragZoomControl Class v1.2 
-*  Copyright (c) 2005-2007, Andre Lewis, andre@earthcode.com
-*
-* Back Button functionality
-*  Copyright (c)  2007, Richard Garland, papabear.newyork@gmail.com
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-* 
-*       http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*
-* This class lets you add a control to the map which will let the user
-*  zoom by dragging a rectangle.
-*  More info on original GZoom at http://earthcode.com
-*
-* Back Button functionality provides the user with a one click means to return the map state 
-*  to its state prior to the DragZoom.  Sequential DragZooms are backed out in reverse order.
-*/
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 /**
- * Constructor for DragZoomControl, which takes 3 option hashes and
- *  uses them to customize the control.
- * @param {opts_boxStyle} Named optional arguments:
- *   opts_boxStyle.opacity {Number} Opacity from 0-1
- *   opts_boxStyle.fillColor {String} Hex value of fill color
- *   opts_boxStyle.border {String} CSS-style declaration of border
- * @param {opts_other} Named optional arguments:
- *   opts_other.buttonHTML {String} The zoom button HTML in non-activated state
- *   opts_other.buttonStartingStyle {Object} A hash of css styles for the 
- *     zoom button which are common to both un-activated and activated state
- *   opts_other.buttonStyle {Object} A hash of css styles for the zoom button 
- *     which will be applied when the button is in un-activated state.
- *   opts_other.rightMouseZoomOutEnabled {Boolean} Whether to zoom out when a drag
- *     with the right mouse button occurs.
- *   opts_other.buttonZoomingHTML {String} HTML which is placed in the 
- *     zoom button when the button is activated. 
- *   opts_other.buttonZoomingStyle {Object} A hash of css styles for the 
- *    zoom button which will be applied when the button is activated.
- *   opts_other.overlayRemoveTime {Number} The number of milliseconds to wait before
- *     removing the rectangle indicating the zoomed-in area after the zoom has happened.
- *   opts_other.stickyZoomEnabled {Boolean} Whether or not the control stays in 
- *     "zoom mode" until turned off. When true, the user can zoom repeatedly, 
- *     until clicking on the zoom button again to turn zoom mode off.
- *   opts_other.backButtonEnabled {Boolean} enables Back Button functionality
- *   opts_other.backButtonHTML {String} The back button HTML
- *   opts_other.backButtonStyle {Object} A hash of css styles for the back button
- *     which will be applied when the button is created.
- *   opts_other.minDragSize {Number} The minimum size of the rectangle when it is
- *     released for a zoom to happen.
- * @param {opts_callbacks} Named optional arguments:
- *   opts_callbacks.buttonclick {Function} Called when the DragZoom is activated 
- *     by clicking on the "zoom" button. 
- *   opts_callbacks.dragstart {Function} Called when user starts to drag a rectangle.
- *     Callback args are x,y -- the PIXEL values, relative to the upper-left-hand 
- *     corner of the map, where the user began dragging.
- *   opts_callbacks.dragging {Function} Called repeatedly while the user is dragging.
- *     Callback args are startX,startY, currentX,currentY -- the PIXEL values of the 
- *     start of the drag, and the current drag point, respectively.
- *   opts_callbacks.dragend {Function} Called when the user releases the mouse button 
- *     after dragging the rectangle. Callback args are: NW {GLatLng}, NE {GLatLng}, 
- *     SE {GLatLng}, SW {GLatLng}, NW {GPoint}, NE {GPoint}, SE {GPoint}, SW {GPoint}.
- *     The first 4 are the latitudes/longitudes; the last 4 are the pixel coords on the map.
- *   opts_callbacks.backbuttonclick {Function} Called when the back button is activated 
- *     after the map context is restored. Callback args: methodCall (boolean) set true if
- *     this backbuttonclick was to restore context set by the mathod call, else false.
- * Method
- *    this.saveMapContext(text) Call to push map context onto the backStack and set the button text 
- *    this.initiateZoom() Call to simulate clicking the dragZoom button
- *    this.initiateZoomBack() Call to simulate clicking the dragZoom back button
- **/
+ * @name DragZoomControlBoxStyleOptions
+ * @class Instances of this class are used in the {@link opts_boxStyle} argument
+ *     to the constructor of the {@link DragZoomControl} class.
+ * @property {Number} [opacity=0.2] Opacity of the veil from 0-1.
+ * @property {String} [fillColor="#000"] Hex value of fill color.
+ * @property {String} [border="2px solid blue"] CSS-style declaration of border.
+ */
 
 /**
- *  Versions
- *  1.0 original version (v 189) 5/24/2007
- *  1.1 backbutton functionality added  (v 211) 7/30/2007
- *  1.2 bug fixes and 2 new methods 9/6/2007
- *    fix text selection conflict in IE
- *    fix align-text:center inheritance problem in IE
- *    create methods initiateZoom and initiateZoomBack which call buttonclick_() and backbuttonclick_()
- **/
+ * @name DragZoomControlOtherOptions
+ * @class Instances of this class are used in the {@link opts_other} argument
+ *     to the constructor of the {@link DragZoomControl} class.
+ * @property {String} [buttonHTML="zoom ..."] The zoom button HTML in
+ *     non-activated state.
+ * @property {Object} [buttonStartingStyle={width: '52px', border: '1px solid
+ *     black', padding: '2px'}] A hash of css
+ *     styles for the zoom button which are common to both un-activated and activated state.
+ * @property {Object} [buttonStyle={background: '#FFF'}] A hash of css styles
+ *     for the zoom button which will be applied when the button is in
+ *     un-activated state.
+ * @property {Boolean} [rightMouseZoomOutEnabled=false] Whether to zoom out when
+ *     a drag with the right mouse button occurs.
+ * @property {String} [buttonZoomingHTML="Drag a region on the map"] HTML which
+ *     is placed in the zoom button when the button is activated. 
+ * @property {Object} [buttonZoomingStyle={background: '#FF0'}] A hash of css
+ *     styles for the zoom button which will be applied when the button is
+ *     activated.
+ * @property {Number} [overlayRemoveTime=6000] The number of milliseconds to
+ *     wait before removing the rectangle indicating the zoomed-in area after
+ *     the zoom has happened.
+ * @property {Boolean} [stickyZoomEnabled=false] Whether or not the control
+ *     stays in "zoom mode" until turned off. When true, the user can zoom
+ *     repeatedly, until clicking on the zoom button again to turn zoom mode
+ *     off.
+ * @property {Boolean} [backButtonEnabled=false] Determines whether or not the
+ *     back button functionality is turned on.
+ * @property {String} backButtonHTML HTML which is placed in the back button
+ *     when the button is activated.
+ * @property {Object} [backButtonStyle={background: '#FFF', display: 'none'}] A
+ *     hash of CSS styles for the back button which will be applied when the
+ *     button is activated.
+ * @property {Number} [minDragSize=0] Often, users will try to "cancel" a
+ *     dragzoom operation by resizing their selected rectangle to a point.
+ *     This specifies a minimum size in pixels for the dragged rectangle to
+ *     trigger a zoom.  Something like 3-5 is sensible for most cases.
+ */
 
+/**
+ * @name DragZoomControlCallbackOptions
+ * @class Instances of this class are used in the {@link opts_callbacks}
+ *     argument to the constructor of the {@link DragZoomControl} class, and
+ *     allow you to set callback functions for various DragZoom events.
+ * @property {Function} [buttonclick] Called when DragZoom is activated by
+ *     clicking on the DragZoom button or by calling the buttonclick() method.
+ * @property {Function} [dragstart] Called when user starts to drag a rectangle.
+ *     Callback args are x,y -- the pixel values, relative to the
+ *     upper-left-hand corner of the map, where the user began dragging.
+ * @property {Function} [dragging] Called repeatedly while the user is dragging.
+ *     Callback args are startX,startY, currentX,currentY -- the pixel values of
+ *     the start of the drag, and the current drag point, respectively.
+ * @property {Function} [dragend] Called when the user releases the mouse button
+ *     after dragging the rectangle.  Callback args are: NW {GLatLng}, NE
+ *     {GLatLng}, SE {GLatLng}, SW {GLatLng}, NW {GPoint}, NE {GPoint}, SE
+ *     {GPoint}, SW {GPoint}.  The first 4 are the latitudes/longitudes; the
+ *     last 4 are the pixel coords on the map.
+ * @property {Function} [backbuttonclick] Called after the map context is
+ *     restored as a result of clicking the DragZoom back button or by calling
+ *     the initiateZoomBack() method.  Callback args are: method {Boolean} --
+ *     set true if this backbuttonclick was to restore context set by the
+ *     saveMapContext(text) method, else false.
+ */
+
+/**
+ * Ceates a DragZoomControl with the specified options (hashes). All parameters
+ *     are required, even if empty hashes.
+ * @class This class lets you add a control to the map which, when clicked, will
+ *     let the map user zoom by dragging a rectangle on the map.
+ * @extends GControl
+ * @param {DragZoomControlBoxStyleOptions} opts_boxStyle
+ * @param {DragZoomControlOtherOptions} opts_other
+ * @param {DragZoomControlCallbackOptions} opts_callbacks
+ **/
 function DragZoomControl(opts_boxStyle, opts_other, opts_callbacks) {
   // Holds all information needed globally
   // Not all globals are initialized here
@@ -161,9 +185,10 @@ DragZoomControl.prototype = new GControl();
  */
 
 /**
- * Method called to save the map context before the zoom.
- * Back Button functionality:	
- * @param {text} text string for the back button
+ * Method called to save the map context before the zoom.  The map state is
+ *     pushed onto the context stack, the backButtonHTML is set to 'text', and
+ *     the back button is made visible.
+ * @param {String} text String for the back button
  */
 DragZoomControl.prototype.saveMapContext = function(text) {
   if (this.globals.options.backButtonEnabled) {
@@ -173,13 +198,14 @@ DragZoomControl.prototype.saveMapContext = function(text) {
 };
 
 /**
- * Method called to initiate a dragZoom as if the user had clicked the dragZoom button.
+ * A DragZoom operation is initiated as if the user had clicked the DragZoom
+ *     button.  For use in custom map controls.
  */
 DragZoomControl.prototype.initiateZoom = function() {this.buttonclick_()};
 
 /**
- * Method called to initiate a dragZoom back operation as if the user had clicked the dragZoom back button.
- * Back Button functionality:	
+ * A DragZoom back operation is initiated as if the user had clicked the
+ *     DragZoom back button.  For use in custom map controls.
  */
 DragZoomControl.prototype.initiateZoomBack = function() {if (this.globals.options.backButtonEnabled) this.backbuttonclick_()};	
 
@@ -233,6 +259,7 @@ DragZoomControl.prototype.setButtonMode_ = function(mode){
 /**
  * Is called by GMap2's addOverlay method. Creates the zoom control
  * divs and appends to the map div.
+ * @private
  * @param {GMap2} map The map that has had this DragZoomControl added to it.
  * @return {DOM Object} Div that holds the gzoomcontrol button
  */ 
@@ -306,7 +333,8 @@ DragZoomControl.prototype.initialize = function(map) {
 };
 
 /**
- * Required by GMaps API for controls. 
+ * Required by GMaps API for controls.
+ * @private
  * @return {GControlPosition} Default location for control
  */
 DragZoomControl.prototype.getDefaultPosition = function() {
@@ -431,7 +459,25 @@ DragZoomControl.prototype.mouseup_ = function(e){
       var zoomAreaPoly = new GPolyline([nw, ne, se, sw, nw], G.style.outlineColor, G.style.outlineWidth + 1,.4);
 
       try{
+        /**
+         * This event is fired when the mouse button is released after a zoom
+         *     rectangle has been specified.
+         * @name DragZoomControl#addOverlay
+         * @event
+         * @param {GPolyline} overlay The {@link GPolyline} representing the
+         *     frame around the selected area
+         */
         G.map.addOverlay(zoomAreaPoly);
+        /**
+         *  This event is fired when the {@link GPolyline} representing the
+         *     frame around the selected area is removed. This occurs
+         *     {@link overlayRemoveTime} milliseconds after the area was
+         *     specified.
+         * @name DragZoomControl#removeoverlay
+         * @event
+         * @param {GPolyline} overlay The {@link GPolyline} representing the
+         *     frame around the selected area
+         */
         setTimeout (function() {G.map.removeOverlay(zoomAreaPoly)}, G.options.overlayRemoveTime);  
       }catch(e) {}
 
@@ -630,7 +676,10 @@ DragZoomControl.prototype.resetDragZoom_ = function() {
   if (G.options.backButtonEnabled  && (G.backStack.length > 0)) G.backButtonDiv.style.display = 'block'; // show the back button
 };
 
-/* utility functions in DragZoomUtil.namespace */
+/**
+ * @namespace
+ * @private
+ */
 var DragZoomUtil={};
 
 /**

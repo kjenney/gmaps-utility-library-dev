@@ -1,42 +1,66 @@
-/*
-* ExtInfoWindow Class, v1.0 
-*  Copyright (c) 2007, Joe Monahan (http://www.seejoecode.com)
-* 
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-* 
-*       http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*
-* This class lets you add an info window to the map which mimics GInfoWindow
-* and allows for users to skin it via CSS.  Additionally it has options to
-* pull in HTML content from an ajax request, triggered when a user clicks on
-* the associated marker.
-*/
+/**
+ * @name ExtInfoWindow
+ * @version 1.0 
+ * @author Joe Monahan (http://www.seejoecode.com)
+ * @copyright (c) 2007, Joe Monahan (http://www.seejoecode.com)
+ * @fileoverview This class lets you add an info window to the map which mimics
+ *     {@link GInfoWindow} and allows for users to skin it via CSS.
+ *     Additionally it has options to pull in HTML content from an ajax request,
+ *     triggered when a user clicks on the associated marker.
+ */
 
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 /**
+ * @name ExtInfoWindowOptions
+ * @class This class represents optional arguments to the {@link ExtInfoWindow} constructor.
+ * @property {String} [ajaxUrl] A string of the url where the
+ *     {@link ExtInfoWindow} should request HTML data.  Notice that, since the
+ *     XmlHttpRequest object is used to execute the request, it is subject to
+ *     the same-origin restriction of cross-site scripting, i.e. the URL must
+ *     refer to the same server as the URL of the current document that executes
+ *     this code. NOTE: content returned is assumed to be valid HTML content.
+ * @property {Number} [paddingX=0] The number, in pixels, that
+ *     {@link ExtInfoWindow} should pad on the left and right sides when
+ *     positioning itself inside the viewable map region.
+ * @property {Number} [paddingY=0] The number, in pixels, that
+ *     {@link ExtInfoWindow} should pad on the top and bottom sides when
+ *     positioning itself inside the viewable map region.
+ * @property {Number} [beakOffset=0] The number of pixels a the beak, or pointer
+ *     end, of the {@link ExtInfoWindow} should be moved up vertically. This is
+ *     useful when working with an {@link ExtInfoWindow} with a border.
+ */
+
+/**
+ * This class is used to create a custom info window that will mimic the
+ *     behavior of the standard {@link GInfoWindow}.  Additionally this class
+ *     lets you easily theme your {@link GInfoWindow} through CSS id attributes
+ *     and even asynchronously pull content from a supplied url in the
+ *     constructor options, giving the user a more control over every aspect of
+ *     the {@link GInfoWindow}.  {@link ExtInfoWindow} has no constructor. It is
+ *     created by {@link GMarker.openExtInfoWindow}.
+ * @name ExtInfoWindow
+ * @namespace
+ */
+/**
  * Creates a new ExtInfoWindow that will initialize by reading styles from css
- *
- * @constructor
+ * @private
  * @param {GMarker} marker The marker associated with the info window
  * @param {String} windowId The DOM Id we will use to reference the info window
  * @param {String} html The HTML contents
- * @param {Object} opt_opts A contianer for optional arguments:
- *    {String} ajaxUrl The Url to hit on the server to request some contents 
- *    {Number} paddingX The padding size in pixels that the info window will leave on 
- *                    the left and right sides of the map when panning is involved.
- *    {Number} paddingY The padding size in pixels that the info window will leave on 
- *                    the top and bottom sides of the map when panning is involved.
- *    {Number} beakOffset The repositioning offset for when aligning the beak element. 
- *                    This is used to make sure the beak lines up correcting if the 
- *                    info window styling containers a border.
+ * @param {ExtInfoWindowOptions} [opt_opts] A contianer for optional arguments
  */
 function ExtInfoWindow(marker, windowId, html, opt_opts) {
   this.html_ = html;
@@ -78,6 +102,7 @@ ExtInfoWindow.prototype = new GOverlay();
  * it to the relevant map pane.  Also binds mousedown event to a private function so that they
  * are not passed to the underlying map.  Finally, performs ajax request if set up to use ajax
  * in the constructor.
+ * @private
  * @param {GMap2} map The map that has had this extInfoWindow is added to it.
  */
 ExtInfoWindow.prototype.initialize = function(map) {
@@ -210,6 +235,11 @@ ExtInfoWindow.prototype.initialize = function(map) {
     GEvent.bindDom(this.container_, stealEvents[i], this, this.onClick_);
   }
 
+  /**
+   * This event is fired when the {@link ExtInfoWindow} opens.
+   * @name GMap2#extinfowindowopen
+   * @event
+   */
   GEvent.trigger(this.map_, 'extinfowindowopen');
   if (this.ajaxUrl_ != null ) {
     this.ajaxRequest_(this.ajaxUrl_);
@@ -234,10 +264,16 @@ ExtInfoWindow.prototype.onClick_ = function(e) {
 };
 
 /**
- * Remove the extInfoWindow container from the map pane. 
+ * Remove the extInfoWindow container from the map pane.
+ * @private
  */
 ExtInfoWindow.prototype.remove = function() {
   if (this.map_.getExtInfoWindow() != null) {
+    /**
+     * This event is fired before the {@link ExtInfoWindow} closes.
+     * @name GMap2#extinfowindowbeforeclose
+     * @event
+     */
     GEvent.trigger(this.map_, 'extinfowindowbeforeclose');
     
     GEvent.clearInstanceListeners(this.container_);
@@ -248,6 +284,12 @@ ExtInfoWindow.prototype.remove = function() {
       this.container_.parentNode.removeChild(this.container_);
     }
     this.container_ = null;
+    /**
+     * This event is fired when the {@link ExtInfoWindow} closes. The event
+     *     {@link extinfowindowbeforeclose} is fired before this event.
+     * @name GMap2#extinfowindowclose
+     * @event
+     */
     GEvent.trigger(this.map_, 'extinfowindowclose');
     this.map_.setExtInfoWindow_(null);
   }
@@ -257,6 +299,7 @@ ExtInfoWindow.prototype.remove = function() {
  * Return a copy of this overlay, for the parent Map to duplicate itself in full. This
  * is part of the Overlay interface and is used, for example, to copy everything in the 
  * main view into the mini-map.
+ * @private
  * @return {GOverlay}
  */
 ExtInfoWindow.prototype.copy = function() {
@@ -265,7 +308,8 @@ ExtInfoWindow.prototype.copy = function() {
 
 /**
  * Draw extInfoWindow and wrapping decorators onto the map.  Resize and reposition
- * the map as necessary. 
+ * the map as necessary.
+ * @private
  * @param {Boolean} force Will be true when pixel coordinates need to be recomputed.
  */
 ExtInfoWindow.prototype.redraw = function(force) {
@@ -388,8 +432,10 @@ ExtInfoWindow.prototype.toggleMaxMin_ = function(){
 }
 
 /**
- * Determine the dimensions of the contents to recalculate and reposition the 
- * wrapping decorator elements accordingly.
+ * Recalculate the size of the info window and reposition the map if required.
+ *     This method is important to use if you are doing any kind of manipulation
+ *     on the contents of an {@link ExtInfoWindow} prior to it opening or
+ *     updating via ajax.
  */
 ExtInfoWindow.prototype.resize = function(){
   
@@ -513,6 +559,11 @@ ExtInfoWindow.prototype.ajaxRequest_ = function(url){
       }
       thisMap.getExtInfoWindow().resize();
     }
+    /**
+     * This event is fired when the {@link ExtInfoWindow} is done pulling in new content from its ajax request.
+     * @name GMap2#extinfowindowupdate
+     * @event
+     */
     GEvent.trigger(thisMap, 'extinfowindowupdate');
   });
 };
@@ -611,25 +662,31 @@ GMap.prototype.ClickListener_ = null;
 GMap.prototype.InfoWindowListener_ = null;
 
 /**
- * Creates a new instance of ExtInfoWindow for the GMarker.  Register the newly created 
- * instance with the map, ensuring only one window is open at a time. If this is the first
- * ExtInfoWindow ever opened, add event listeners to the map to close the ExtInfoWindow on 
- * zoom and click, to mimic the default GInfoWindow behavior.
+ * @name GMarker
+ * @class These are the new methods added on to the {@link GMarker} class. For
+ *     further details on the {@link GMarker} class please visit the official
+ *     <a href="http://www.google.com/apis/maps/documentation/reference.html">
+ *     Google Maps API documents</a>.
+ */
+
+/**
+ * Opens the {@link ExtInfoWindow} over the icon of the marker. The content of
+ *     the info window is given as a string that contains HTML text.
+ *     Additionally, if an optional ajax url is passed, process that request to
+ *     get the new contents of info window.
  *
  * @param {GMap} map The GMap2 object where the ExtInfoWindow will open
  * @param {String} cssId The id we will use to reference the info window
  * @param {String} html The HTML contents
- * @param {Object} opt_opts A contianer for optional arguments:
- *    {String} ajaxUrl The Url to hit on the server to request some contents 
- *    {Number} paddingX The padding size in pixels that the info window will leave on 
- *                    the left and right sides of the map when panning is involved.
- *    {Number} paddingX The padding size in pixels that the info window will leave on 
- *                    the top and bottom sides of the map when panning is involved.
- *    {Number} beakOffset The repositioning offset for when aligning the beak element. 
- *                    This is used to make sure the beak lines up correcting if the 
- *                    info window styling containers a border.
+ * @param {ExtInfoWindowOptions} [opt_opts] A contianer for optional arguments:
  */
 GMarker.prototype.openExtInfoWindow = function(map, cssId, html, opt_opts) {
+  /*
+   * Creates a new instance of ExtInfoWindow for the GMarker.  Register the newly created 
+   * instance with the map, ensuring only one window is open at a time. If this is the first
+   * ExtInfoWindow ever opened, add event listeners to the map to close the ExtInfoWindow on 
+   * zoom and click, to mimic the default GInfoWindow behavior.
+   */
   if (map == null) {
     throw 'Error in GMarker.openExtInfoWindow: map cannot be null';
     return false;
@@ -675,7 +732,7 @@ GMarker.prototype.openExtInfoWindow = function(map, cssId, html, opt_opts) {
 };
 
 /**
- * Remove the ExtInfoWindow instance
+ * Closes the {@link ExtInfoWindow}.
  * @param {GMap2} map The map where the GMarker and ExtInfoWindow exist
  */
 GMarker.prototype.closeExtInfoWindow = function(map) {
@@ -685,7 +742,17 @@ GMarker.prototype.closeExtInfoWindow = function(map) {
 };
 
 /**
- * Get the ExtInfoWindow instance from the map
+ * @name GMap2
+ * @class These are the new methods added on to the {@link GMap2} class. For
+ *     further details on the {@link GMap2} class please visit the official
+ *     <a href="http://www.google.com/apis/maps/documentation/reference.html">
+ *     Google Maps API documents</a>.
+ */
+
+/**
+ * Returns the instance {@link ExtInfoWindow} currently open on the map, or
+ *     {@link null} if none exists.
+ * @return {ExtInfoWindow} The ExtInfoWindow instance from the map
  */
 GMap2.prototype.getExtInfoWindow = function(){
   return this.ExtInfoWindowInstance_;
@@ -698,7 +765,7 @@ GMap2.prototype.setExtInfoWindow_ = function( extInfoWindow ){
   this.ExtInfoWindowInstance_ = extInfoWindow;
 }
 /**
- * Remove the ExtInfoWindow from the map
+ * Closes the ExtInfoWindow currently open on the map.
  */
 GMap2.prototype.closeExtInfoWindow = function(){
   if( this.getExtInfoWindow() != null ){

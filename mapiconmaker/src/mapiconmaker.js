@@ -1,7 +1,13 @@
 /**
- * MapIconMaker v1.0
- * Copyright (c) 2008 Pamela Fox
- *
+ * @name MapIconMaker
+ * @version 1.0
+ * @author Pamela Fox
+ * @copyright (c) 2008 Pamela Fox
+ * @fileoverview This gives you static function(s) for creating dynamically
+ *     sized and colored marker icons using the Charts API marker output.
+ */
+
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,16 +19,39 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. 
- *
- *
- *  Author: Pamela Fox
- *
- *  This gives you static function(s) for creating dynamically sized and
- *  colored marker icons using the Charts API marker output.
  */
 
+/**
+ * @name MarkerIconOptions
+ * @class This class represents optional arguments to {@link createMarkerIcon}.
+ * @property {Number} [width=32] Specifies, in pixels, the width of the icon.
+ *     The width may include some blank space on the side, depending on the
+ *     height of the icon, as the icon will scale its shape proportionately.
+ * @property {Number} [height=32] Specifies, in pixels, the height of the icon.
+ * @property {String} [primaryColor="#ff0000"] Specifies, as a hexadecimal
+ *     string, the color used for the majority of the icon body.
+ * @property {String} [cornerColor="#ffffff"] Specifies, as a hexadecimal
+ *     string, the color used for the top corner of the icon. If you'd like the
+ *     icon to have a consistent color, make the this the same as the
+ *     {@link primaryColor}.
+ * @property {String} [strokeColor="#000000"] Specifies, as a hexadecimal
+ *     string, the color used for the outside line (stroke) of the icon.
+ */
+
+/**
+ * This namespace contains functions that you can use to easily create
+ *     dynamically sized and colored icons.
+ * @namespace
+ */
 var MapIconMaker = {};
 
+/**
+ * Creates an icon based on the specified options in the {@link MarkerIconOptions} argument.
+ * @static
+ * @function
+ * @param {MarkerIconOptions} [opts]
+ * @return {GIcon}
+ */
 MapIconMaker.createMarkerIcon = function(opts) {
   var width = opts.width || 32;
   var height = opts.height || 32;
@@ -67,6 +96,7 @@ MapIconMaker.createMarkerIcon = function(opts) {
   return icon;
 }
 
+/** @private */
 MapIconMaker.createFlatIcon = function(opts) {
   var width = opts.width || 32;
   var height = opts.height || 32;

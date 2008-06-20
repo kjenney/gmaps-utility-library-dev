@@ -1,7 +1,30 @@
-/* 
- * MarkerManager, v1.0
- * Copyright (c) 2007 Google Inc.
+/**
+ * @name MarkerManager
+ * @version 1.0
+ * @copyright (c) 2007 Google Inc.
+ * @author Doug Ricket, others
  *
+ * @fileoverview Marker manager is an interface between the map and the user,
+ * designed to manage adding and removing many points when the viewport changes.
+ * <br /><br />
+ * Algorithm: The MM places its markers onto a grid, similar to the map tiles.
+ * When the user moves the viewport, the MM computes which grid cells have
+ * entered or left the viewport, and shows or hides all the markers in those
+ * cells.
+ * <br />
+ * (If the users scrolls the viewport beyond the markers that are loaded,
+ * no markers will be visible until the EVENT_moveend triggers an update.)
+ * <br /><br />
+ * In practical consequences, this allows 10,000 markers to be distributed over
+ * a large area, and as long as only 100-200 are visible in any given viewport,
+ * the user will see good performance corresponding to the 100 visible markers,
+ * rather than poor performance corresponding to the total 10,000 markers.
+ * <br /><br />
+ * Note that some code is optimized for speed over space,
+ * with the goal of accommodating thousands of markers.
+ */
+
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,44 +36,33 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. 
- *
- *
- * Author: Doug Ricket, others
- * 
- * Marker manager is an interface between the map and the user, designed
- * to manage adding and removing many points when the viewport changes.
- *
- *
- * Algorithm: The MM places its markers onto a grid, similar to the map tiles.
- * When the user moves the viewport, the MM computes which grid cells have
- * entered or left the viewport, and shows or hides all the markers in those
- * cells.
- * (If the users scrolls the viewport beyond the markers that are loaded,
- * no markers will be visible until the EVENT_moveend triggers an update.)
- *
- * In practical consequences, this allows 10,000 markers to be distributed over
- * a large area, and as long as only 100-200 are visible in any given viewport,
- * the user will see good performance corresponding to the 100 visible markers,
- * rather than poor performance corresponding to the total 10,000 markers.
- *
- * Note that some code is optimized for speed over space,
- * with the goal of accommodating thousands of markers.
- *
  */
 
-
+/**
+ * @name MarkerManagerOptions
+ * @class This class represents optional arguments to the {@link MarkerManager}
+ *     constructor.
+ * @property {Number} [maxZoom] Sets the maximum zoom level monitored by a
+ *     marker manager. If not given, the manager assumes the maximum map zoom
+ *     level. This value is also used when markers are added to the manager
+ *     without the optional {@link maxZoom} parameter.
+ * @property {Number} [borderPadding] Specifies, in pixels, the extra padding
+ *     outside the map's current viewport monitored by a manager. Markers that
+ *     fall within this padding are added to the map, even if they are not fully
+ *     visible.
+ * @property {Boolean} [trackMarkers=false] Indicates whether or not a marker
+ *     manager should track markers' movements. If you wish to move managed
+ *     markers using the {@link setPoint} method, this option should be set to
+ *     {@link true}.
+ */
 
 /**
- * Creates a new MarkerManager that will show/hide markers on a map.
- *
+ * Creates a new marker manager that controlls visibility of markers for the specified map.
+ * @class This class is used to manage visibility of hundreds of markers on a
+ *     map, based on the map's current viewport and zoom level.
  * @constructor
  * @param {Map} map The map to manage.
- * @param {Object} opt_opts A container for optional arguments:
- *   {Number} maxZoom The maximum zoom level for which to create tiles.
- *   {Number} borderPadding The width in pixels beyond the map border,
- *                   where markers should be display.
- *   {Boolean} trackMarkers Whether or not this manager should track marker
- *                   movements.
+ * @param {MarkerManagerOptions} [opt_opts] A container for optional arguments:
  */
 function MarkerManager(map, opt_opts) {
   var me = this;
@@ -135,8 +147,7 @@ MarkerManager.prototype.resetManager_ = function() {
 };
 
 /**
- * Removes all currently displayed markers
- * and calls resetManager to clear arrays
+ * Removes all currently displayed markers and clears grid arrays.
  */
 MarkerManager.prototype.clearMarkers = function() {
   var me = this;
@@ -273,9 +284,9 @@ MarkerManager.prototype.onMarkerMoved_ = function(marker, oldPoint, newPoint) {
 
 
 /**
- * Searches at every zoom level to find grid cell
- * that marker would be in, removes from that array if found.
- * Also removes marker with removeOverlay if visible.
+ * Removes marker from the MarkerManager by searching at every zoom level to
+ *     find grid cell that marker would be in, removing from that array if
+ *     found. Also calls {@link removeOverlay} on marker if currently visible.
  * @param {GMarker} marker The marker to delete.
  */
 MarkerManager.prototype.removeMarker = function(marker) {
@@ -310,12 +321,16 @@ MarkerManager.prototype.removeMarker = function(marker) {
 
 
 /**
- * Add many markers at once.
- * Does not actually update the map, just the internal grid.
+ * Adds a batch of markers to this marker manager. The markers are not added to
+ *     the map, until the {@link refresh()} method is called.  Once placed on a
+ *     map, the markers are shown if they fall within the map's current viewport
+ *     and the map's zoom level is greater than or equal to the specified
+ *     {@link minZoom}. If the {@link maxZoom} was given, the markers are
+ *     automatically removed if the map's zoom is greater than the one specified.
  *
- * @param {Array of Marker} markers The markers to add.
+ * @param {Array} markers The markers to add.
  * @param {Number} minZoom The minimum zoom level to display the markers.
- * @param {Number} opt_maxZoom The maximum zoom level to display the markers.
+ * @param {Number} [opt_maxZoom] The maximum zoom level to display the markers.
  */
 MarkerManager.prototype.addMarkers = function(markers, minZoom, opt_maxZoom) {
   var maxZoom = this.getOptMaxZoom_(opt_maxZoom);
@@ -331,8 +346,8 @@ MarkerManager.prototype.addMarkers = function(markers, minZoom, opt_maxZoom) {
  * Returns the value of the optional maximum zoom. This method is defined so
  * that we have just one place where optional maximum zoom is calculated.
  *
- * @param {Number} opt_maxZoom The optinal maximum zoom.
- * @return The maximum zoom.
+ * @param {Number} [opt_maxZoom] The optinal maximum zoom.
+ * @return {Number} The maximum zoom.
  */
 MarkerManager.prototype.getOptMaxZoom_ = function(opt_maxZoom) {
   return opt_maxZoom != undefined ? opt_maxZoom : this.maxZoom_;
@@ -341,9 +356,10 @@ MarkerManager.prototype.getOptMaxZoom_ = function(opt_maxZoom) {
 
 /**
  * Calculates the total number of markers potentially visible at a given
- * zoom level.
- *
+ * zoom level.  This may include markers at lower zoom levels.
+ * 
  * @param {Number} zoom The zoom level to check.
+ * @return {Number}
  */
 MarkerManager.prototype.getMarkerCount = function(zoom) {
   var total = 0;
@@ -355,11 +371,16 @@ MarkerManager.prototype.getMarkerCount = function(zoom) {
 
 
 /**
- * Add a single marker to the map.
+ * Adds a single marker to a collection of markers controlled by this manager.
+ *     If the marker's location falls within the map's current viewport and the
+ *     map's zoom level is within the specified zoom level rage, the marker is
+ *     immediately added to the map. Similar to the {@link addMarkers} method,
+ *     the {@link minZoom} and the optional {@link maxZoom} parameters specify
+ *     the range of zoom levels at which the marker is shown.
  *
  * @param {Marker} marker The marker to add.
  * @param {Number} minZoom The minimum zoom level to display the marker.
- * @param {Number} opt_maxZoom The maximum zoom level to display the marker.
+ * @param {Number} [opt_maxZoom] The maximum zoom level to display the marker.
  */
 MarkerManager.prototype.addMarker = function(marker, minZoom, opt_maxZoom) {
   var me = this;
@@ -518,13 +539,17 @@ MarkerManager.prototype.objectSetTimeout_ = function(object, command, millisecon
 
 
 /**
- * Refresh forces the marker-manager into a good state.
- * <ol>
- *   <li>If never before initialized, shows all the markers.</li>
- *   <li>If previously initialized, removes and re-adds all markers.</li>
- * </ol>
+ * Forces the manager to update markers shown on the map.  This method must be
+ *     called if markers were added using the {@link addMarkers} method.
  */
 MarkerManager.prototype.refresh = function() {
+  /*
+   * Refresh forces the marker-manager into a good state.
+   * <ol>
+   *   <li>If never before initialized, shows all the markers.</li>
+   *   <li>If previously initialized, removes and re-adds all markers.</li>
+   * </ol>
+   */
   var me = this;
   if (me.shownMarkers_ > 0) {
     me.processAll_(me.shownBounds_, me.removeOverlay_);
@@ -564,6 +589,17 @@ MarkerManager.prototype.updateMarkers_ = function() {
 };
 
 
+/**
+ * This event is fired when markers managed by a manager have been added to or
+ *     removed from the map. The event handler function should be prepared to
+ *     accept two arguments. The first one is the rectangle definining the
+ *     bounds of the visible grid. The second one carries the number of markers
+ *     currently shown on the map.
+ * @name MarkerManager#changed
+ * @event
+ * @param {GBounds} bounds The rectangle definining the bounds of the visible grid.
+ * @param {Number} markerCount The number of markers currently shown on the map.
+ */
 /**
  * Notify listeners when the state of what is displayed changes.
  */
@@ -652,6 +688,7 @@ MarkerManager.prototype.rectangleDiff_ = function(bounds1, bounds2, callback) {
 /**
  * Calls the function for all points in bounds1, not in bounds2
  *
+ * @private
  * @param {Bounds} bounds1 The bounds of all points we may process.
  * @param {Bounds} bounds2 The bounds of points to exclude.
  * @param {Function} callback The callback function to call
@@ -697,10 +734,10 @@ MarkerManager.prototype.rectangleDiffCoords = function(bounds1, bounds2, callbac
 
 /**
  * Removes value from array. O(N).
- *
+ * @private
  * @param {Array} array  The array to modify.
  * @param {any} value  The value to remove.
- * @param {Boolean} opt_notype  Flag to disable type checking in equality.
+ * @param {Boolean} [opt_notype]  Flag to disable type checking in equality.
  * @return {Number}  The number of instances of value that were removed.
  */
 MarkerManager.prototype.removeFromArray = function(array, value, opt_notype) {

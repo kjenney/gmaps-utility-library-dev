@@ -1,7 +1,13 @@
 /**
- * MarkerTracker v1.0
- * Copyright (c) 2008 Dan Rummel
- *
+ * @name MarkerTracker
+ * @version 1.0
+ * @author Dan Rummel (www.seero.com)
+ * @copyright (c) 2008 Dan Rummel
+ * @fileoverview This ulitily displays directional indicators for "important"
+ *     markers on that are out of your maps view.
+ */
+
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,34 +19,33 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. 
- *
- *
- * Author: Dan Rummel (www.seero.com)
- *
- *  This ulitily displays directional indicators for "important" markers
- *  on that are out of your maps view.
  */
-
 
 /**
- *  Creates a MarkerTracker for the given marker and displays it ont he map as needed.
- *
- * @constructor
- * @param {Map} map The map that will display the MarkerTracker. 
- * @param {GMarker} marker the marker to be tracked.
- * @param {Object} opts? Object that contains the options for coustomizing the 
- *                  look and behavior of arrows:
- *   {Number} iconScale Scales the icon size by this value, 0 = no icon.
- *   {Number} padding The padding between the arrow and the edge of the map.
- *   {String} color Color of the arrow.
- *   {Number} weight Thickness of the lines that make up the arrows.
- *   {Number} length length of the arrow.
- *   {Number} opacity opacity of the arrow.
- *   {String} updateEvent The GMap2 event name that triggers the arrows to update.
- *   {String} panEvent The GMarker event name that triggers a quick zoom to the tracked marker.
- *   {Boolean} quickPanEnabled The GMarker event name that triggers a quick zoom to the tracked marker.
+ * @name MarkerTrackerOptions
+ * @class This class represents optional arguments to the {@link MarkerTracker} constructor.
+ * @property {Number} [iconScale=0.6] Scales the icon size by this value, 0 = no icon.
+ * @property {Number} [padding=25] The padding between the arrow and the edge of the map.
+ * @property {String} [color="#ff0000"] Color of the arrow.
+ * @property {Number} [weight=20] Thickness of the lines that make up the arrows.
+ * @property {Number} [length=20] length of the arrow.
+ * @property {Number} [opacity=0.8] opacity of the arrow.
+ * @property {String} [updateEvent="move"] The {@link GMap2} event name that triggers the arrows to update.
+ * @property {String} [panEvent="click"] The {@link GMarker} event name that
+ *     triggers a quick zoom to the tracked marker.
+ * @property {Boolean} [quickPanEnabled=true] Setting this value to false will
+ *     disable the quick pan feature.
  */
 
+/**
+ * Creates a MarkerTracker for the given marker and displays it on the map as needed.
+ * @class This class will display directional indicators for markers as they move out of a maps view.
+ * @constructor
+ * @param {Map} map The map that will display the MarkerTracker.
+ * @param {GMarker} marker The marker to be tracked.
+ * @param {MarkerTrackerOptions} [opts] Object that contains the options for
+ *     coustomizing the look and behavior of arrows.
+ */
 function MarkerTracker(marker, map, opts) {
   this.map_ = map;
   this.marker_ = marker;

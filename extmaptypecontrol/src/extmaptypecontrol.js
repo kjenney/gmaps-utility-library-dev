@@ -20,7 +20,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 /**
@@ -41,6 +40,7 @@
  *     typical {@link GMapTypeControl} from the obfuscated API.  By specifying
  *     additional options however, you can also add a Traffic button to the
  *     control and a drop-down legend for that button.
+ * @extends GControl
  * @param {ExtMapTypeControlOptions} [opt_opts] Named optional arguments
  * @see ExtMapTypeControlOptions
  */
@@ -52,6 +52,7 @@ ExtMapTypeControl.prototype = new GControl();
 
 /**
  * Called by GMap2's addOverlay method. Creates the control and appends it to the map div.
+ * @private
  * @param {GMap2} map The map that has had this ExtMapTypeControl added to it.
  * @return {DOM Object} Div that holds the control
  */ 
@@ -266,7 +267,8 @@ ExtMapTypeControl.prototype.toggleButton_ = function(div, boolCheck) {
 };
 
 /**
- * Required by GMaps API for controls. 
+ * Required by GMaps API for controls.
+ * @private
  * @return {GControlPosition} Default location for control
  */
 ExtMapTypeControl.prototype.getDefaultPosition = function() {

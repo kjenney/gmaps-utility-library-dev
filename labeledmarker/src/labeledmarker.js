@@ -1,38 +1,55 @@
+/**
+ * @name LabeledMarker
+ * @version 1.1
+ * @author Mike Purvis (http://uwmike.com)
+ * @copyright 2007 Mike Purvis (http://uwmike.com)
+ * @fileoverview This library extends the Maps API's standard {@link GMarker}
+ *     class with the ability to support markers with textual labels.  Please
+ *     see articles here:
+ *<ul>
+ *  <li><a href="http://googlemapsbook.com/2007/01/22/extending-gmarker/">
+ *      http://googlemapsbook.com/2007/01/22/extending-gmarker/</a></li>
+ *  <li><a href="http://googlemapsbook.com/2007/03/06/clickable-labeledmarker/">
+ *      http://googlemapsbook.com/2007/03/06/clickable-labeledmarker/</a></li>
+ *</ul>
+ */
+
 /*
-* LabeledMarker Class, v1.1
-*
-* Copyright 2007 Mike Purvis (http://uwmike.com)
-* 
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-* 
-*       http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*
-* This class extends the Maps API's standard GMarker class with the ability
-* to support markers with textual labels. Please see articles here:
-*
-*       http://googlemapsbook.com/2007/01/22/extending-gmarker/
-*       http://googlemapsbook.com/2007/03/06/clickable-labeledmarker/
-*/
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 /**
- * Constructor for LabeledMarker, which picks up on strings from the GMarker
- * options array, and then calls the GMarker constructor.
- *
+ * @name LabeledMarkerOptions
+ * @class Instances of this class are used in the {@link opt_opts} argument to
+ *     the constructor of the {@link LabeledMarker} class.   At this time, the
+ *     draggable property is not supported.
+ * @extends GMarkerOptions
+ * @property {String} [labelText] Text to place in the overlay div.
+ * @property {String} [labelClass="LabeledMarker_markerLabel"] Class to use for
+ *     the overlay div.
+ * @property {GSize} [labelOffset] The x- and y-distance between the marker's
+ *     latlng and the upper-left corner of the text div.
+ */
+
+/**
+ * Creates a marker at point with options specified in
+ *     {@link LabeledMarkerOptions} (extension of {@link GMarkerOptions}).  By
+ *     default markers are clickable & have the default icon
+ *     {@link G_DEFAULT_ICON}.
+ * @class This class adds the ability to support markers with textual labels.
+ * @extends GMarker
  * @param {GLatLng} latlng
- * @param {GMarkerOptions} Named optional arguments:
- *   opt_opts.labelText {String} text to place in the overlay div.
- *   opt_opts.labelClass {String} class to use for the overlay div.
- *     (default "LabeledMarker_markerLabel")
- *   opt_opts.labelOffset {GSize} label offset, the x- and y-distance between
- *     the marker's latlng and the upper-left corner of the text div.
+ * @param {GMarkerOptions} [opt_opts] Named optional arguments:
  */
 function LabeledMarker(latlng, opt_opts){
   this.latlng_ = latlng;
@@ -63,7 +80,7 @@ LabeledMarker.prototype = new GMarker(new GLatLng(0, 0));
 /**
  * Is called by GMap2's addOverlay method. Creates the text div and adds it
  * to the relevant parent div.
- *
+ * @private
  * @param {GMap2} map the map that has had this labeledmarker added to it.
  */
 LabeledMarker.prototype.initialize = function(map) {
@@ -107,7 +124,7 @@ LabeledMarker.prototype.initialize = function(map) {
 
 /**
  * Call the redraw() handler in GMarker and our our redrawLabel() function.
- *
+ * @private
  * @param {Boolean} force will be true when pixel coordinates need to be recomputed.
  */
 LabeledMarker.prototype.redraw = function(force) {
@@ -133,6 +150,7 @@ LabeledMarker.prototype.redrawLabel_ = function() {
 /**
  * Remove the text div from the map pane, destroy event passthrus, and calls the
  * default remove() handler in GMarker.
+ * @private
  */
  LabeledMarker.prototype.remove = function() {
   GEvent.clearInstanceListeners(this.div_);
@@ -150,6 +168,7 @@ LabeledMarker.prototype.redrawLabel_ = function() {
  * Return a copy of this overlay, for the parent Map to duplicate itself in full. This
  * is part of the Overlay interface and is used, for example, to copy everything in the 
  * main view into the mini-map.
+ * @private
  */
 LabeledMarker.prototype.copy = function() {
   return new LabeledMarker(this.latlng_, this.opts_);
@@ -159,6 +178,7 @@ LabeledMarker.prototype.copy = function() {
 /**
  * Shows the marker, and shows label if it wasn't hidden. Note that this function 
  * triggers the event GMarker.visibilitychanged in case the marker is currently hidden.
+ * @private
  */
 LabeledMarker.prototype.show = function() {
   GMarker.prototype.show.apply(this, arguments);
@@ -173,6 +193,7 @@ LabeledMarker.prototype.show = function() {
 /**
  * Hides the marker and label if it is currently visible. Note that this function 
  * triggers the event GMarker.visibilitychanged in case the marker is currently visible.
+ * @private
  */
 LabeledMarker.prototype.hide = function() {
   GMarker.prototype.hide.apply(this, arguments);
@@ -182,6 +203,7 @@ LabeledMarker.prototype.hide = function() {
 
 /**
  * Repositions label and marker when setLatLng is called.
+ * @private
  */
 LabeledMarker.prototype.setLatLng = function(latlng) {
   this.latlng_ = latlng;
@@ -192,6 +214,7 @@ LabeledMarker.prototype.setLatLng = function(latlng) {
 /**
  * Sets the visibility of the label, which will be respected during show/hides.
  * If marker is visible when set, it will show or hide label appropriately.
+ * @param {Boolean} visibility
  */
 LabeledMarker.prototype.setLabelVisibility = function(visibility) {
   this.labelVisibility_ = visibility;
@@ -207,7 +230,7 @@ LabeledMarker.prototype.setLabelVisibility = function(visibility) {
 
 /**
  * Returns whether label visibility is set on.
- * @return {Boolean}  
+ * @return {Boolean}
  */
 LabeledMarker.prototype.getLabelVisibility = function() {
   return this.labelVisibility_;
