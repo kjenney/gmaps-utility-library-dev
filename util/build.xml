@@ -5,22 +5,21 @@
     </classpath>
   </taskdef>
   <target name="all">
-    <foreach param="LIBNAME" target="docs">
+    <foreach param="LIBLOC" target="docs">
       <path>
         <dirset dir="${basedir}" includes="*" excludes="util"/>
       </path>
     </foreach>
   </target>
   <target name="docs" description="Generates reference documentation.">
-    <echo>Generating reference documentation for ${LIBNAME}.</echo>
     <java failonerror="true" jar="${basedir}/util/docs/jsdoc-toolkit/jsrun.jar" fork="true">
       <arg value="${basedir}/util/docs/jsdoc-toolkit/app/run.js"/>
       <arg value="--allfunctions"/>
       <arg value="--verbose"/>
       <arg value="--suppress"/>
-      <arg value="-t=util/docs/templates"/>
-      <arg value="--directory=${basedir}/${LIBNAME}/docs"/>
-      <arg value="${basedir}/${LIBNAME}/src/${LIBNAME}.js"/>
+      <arg value="-t=${basedir}/util/docs/templates"/>
+      <arg value="--directory=${LIBLOC}/docs"/>
+      <arg value="${LIBLOC}/src"/>
     </java>
   </target>
 </project>
