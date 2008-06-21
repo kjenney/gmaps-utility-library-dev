@@ -1,0 +1,38 @@
+<project default="all" basedir="..">
+  <scriptdef name="executeForEachDirectory" language="javascript">
+    <attribute name="varname"/>
+    <attribute name="target"/>
+    <classpath><fileset dir="util/java" includes="*.jar" /></classpath>
+    <element name="fileset" type="fileset"/>
+    <![CDATA[
+
+      var fileset = elements.get("fileset").get(0);
+      var directories = fileset.getDirectoryScanner(project).getIncludedDirectories();
+
+      for (var i = 0; i < directories.length; i++) {
+        var antcall = project.createTask("antcall");
+        project.setProperty(attributes.get("varname"), directories[i]);
+        antcall.target = attributes.get("target");
+        antcall.perform();
+      }
+
+    ]]>
+  </scriptdef>
+  <target name="all">
+    <executeForEachDirectory varname="LIBNAME" target="docs">
+      <fileset dir="${basedir}" includes="*" excludes="util"/>
+    </executeForEachDirectory>
+  </target>
+  <target name="docs" description="Generates reference documentation.">
+    <echo>Generating reference documentation for ${LIBNAME}.</echo>
+    <java failonerror="true" jar="${basedir}/util/docs/jsdoc-toolkit/jsrun.jar" fork="true">
+      <arg value="${basedir}/util/docs/jsdoc-toolkit/app/run.js"/>
+      <arg value="--allfunctions"/>
+      <arg value="--verbose"/>
+      <arg value="--suppress"/>
+      <arg value="-t=util/docs/templates"/>
+      <arg value="--directory=${basedir}/${LIBNAME}/docs"/>
+      <arg value="${basedir}/${LIBNAME}/src/${LIBNAME}.js"/>
+    </java>
+  </target>
+</project>
