@@ -1,27 +1,15 @@
 <project default="all" basedir="..">
-  <scriptdef name="executeForEachDirectory" language="javascript">
-    <attribute name="varname"/>
-    <attribute name="target"/>
-    <classpath><fileset dir="util/java" includes="*.jar" /></classpath>
-    <element name="fileset" type="fileset"/>
-    <![CDATA[
-
-      var fileset = elements.get("fileset").get(0);
-      var directories = fileset.getDirectoryScanner(project).getIncludedDirectories();
-
-      for (var i = 0; i < directories.length; i++) {
-        var antcall = project.createTask("antcall");
-        project.setProperty(attributes.get("varname"), directories[i]);
-        antcall.target = attributes.get("target");
-        antcall.perform();
-      }
-
-    ]]>
-  </scriptdef>
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+    <classpath>
+      <pathelement location="${basedir}/util/java/ant-contrib-1.0b3.jar"/>
+    </classpath>
+  </taskdef>
   <target name="all">
-    <executeForEachDirectory varname="LIBNAME" target="docs">
-      <fileset dir="${basedir}" includes="*" excludes="util"/>
-    </executeForEachDirectory>
+    <foreach param="LIBNAME" target="docs">
+      <path>
+        <dirset dir="${basedir}" includes="*" excludes="util"/>
+      </path>
+    </foreach>
   </target>
   <target name="docs" description="Generates reference documentation.">
     <echo>Generating reference documentation for ${LIBNAME}.</echo>
