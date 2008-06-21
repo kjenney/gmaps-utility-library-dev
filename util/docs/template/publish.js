@@ -2,8 +2,8 @@ function publish(symbolSet) {
   // semi-required configuration options
   publish.conf = {
     ext: "",
-    outDir: JSDOC.opt.d || SYS.pwd+"../out/jsdoc/",
-    templatesDir: SYS.pwd + "../../templates/",
+    outDir: JSDOC.opt.d,
+    templatesDir: JSDOC.opt.t,
     symbolsDir: "reference.html#"
   };
 
@@ -60,7 +60,10 @@ function publish(symbolSet) {
     return $.isEvent;
   }
 
-  var topLevelObjects = symbolSet.toArray().filter(isaTopLevelObject).sort(makeSortby("alias"));
+  var topLevelObjects = symbolSet.toArray().filter(function ($) {return !(
+    $.srcFile.match(/_packed/) ||
+    $.name === "_global_"
+  );}).filter(isaTopLevelObject).sort(makeSortby("alias"));
   for (var i = 0; i < topLevelObjects.length; i++) {
     var topLevelObject = topLevelObjects[i];
     var constructedTopLevelObject = {
@@ -204,9 +207,7 @@ function publish(symbolSet) {
       constructedTopLevelObject.properties.push(constructedProperty);
     }
 
-    if (topLevelObject.name !== "_global_") {
-      templateValues.objects.push(constructedTopLevelObject);
-    }
+    templateValues.objects.push(constructedTopLevelObject);
   }
 
   var referenceTemplate = new JSDOC.JsPlate(publish.conf.templatesDir + "reference.tmpl");

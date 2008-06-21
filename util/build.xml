@@ -1,7 +1,7 @@
 <project default="all" basedir="..">
   <taskdef resource="net/sf/antcontrib/antcontrib.properties">
     <classpath>
-      <pathelement location="${basedir}/util/java/ant-contrib-1.0b3.jar"/>
+      <pathelement location="util/java/ant-contrib-1.0b3.jar"/>
     </classpath>
   </taskdef>
   <target name="all">
@@ -12,14 +12,16 @@
     </foreach>
   </target>
   <target name="docs" description="Generates reference documentation.">
+    <fileset id="LIBRARY" dir="${LIBLOC}" includes="src/*.js" excludes="src/*_packed.js"/>
+    <property name="LIBRARY" refid="LIBRARY"></property>
     <java failonerror="true" jar="${basedir}/util/docs/jsdoc-toolkit/jsrun.jar" fork="true">
       <arg value="${basedir}/util/docs/jsdoc-toolkit/app/run.js"/>
       <arg value="--allfunctions"/>
       <arg value="--verbose"/>
       <arg value="--suppress"/>
-      <arg value="-t=${basedir}/util/docs/templates"/>
-      <arg value="--directory=${LIBLOC}/docs"/>
-      <arg value="${LIBLOC}/src"/>
+      <arg value="--template=${basedir}/util/docs/template/"/>
+      <arg value="--directory=${LIBLOC}/docs/"/>
+      <arg value="${LIBLOC}/${LIBRARY}"/>
     </java>
   </target>
 </project>
