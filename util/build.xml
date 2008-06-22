@@ -5,7 +5,7 @@
     </classpath>
   </taskdef>
   <target name="all">
-    <foreach param="LIBLOC" target="lint">
+    <foreach param="LIBLOC" target="pack">
       <path>
         <dirset dir="${basedir}" includes="*" excludes="util"/>
       </path>
@@ -13,9 +13,17 @@
   </target>
   <target name="lint" description="Checks code style and syntax.">
     <fileset id="LIBRARY" dir="${LIBLOC}" includes="src/*.js" excludes="src/*_packed.js"/>
-    <property name="LIBRARY" refid="LIBRARY"></property>
+    <property name="LIBRARY" refid="LIBRARY"/>
     <java failonerror="true" jar="${basedir}/util/java/js.jar" fork="true">
-      <arg value="${basedir}/util/lint/jslint.js"/>
+      <arg value="${basedir}/util/lint/lint.js"/>
+      <arg value="${LIBLOC}/${LIBRARY}"/>
+    </java>
+  </target>
+  <target name="pack" depends="lint" description="Creates packed versions of libraries.">
+    <fileset id="LIBRARY" dir="${LIBLOC}" includes="src/*.js" excludes="src/*_packed.js"/>
+    <property name="LIBRARY" refid="LIBRARY"/>
+    <java failonerror="true" jar="${basedir}/util/java/js.jar" fork="true">
+      <arg value="${basedir}/util/pack/pack.js"/>
       <arg value="${LIBLOC}/${LIBRARY}"/>
     </java>
   </target>
