@@ -1,0 +1,22 @@
+<project default="all" basedir="..">
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+    <classpath>
+      <pathelement location="util/java/ant-contrib-1.0b3.jar"/>
+    </classpath>
+  </taskdef>
+  <target name="all">
+    <foreach param="LIBLOC" target="lint">
+      <path>
+        <dirset dir="${basedir}" includes="*" excludes="util"/>
+      </path>
+    </foreach>
+  </target>
+  <target name="lint" description="Checks code style and syntax.">
+    <fileset id="LIBRARY" dir="${LIBLOC}" includes="src/*.js" excludes="src/*_packed.js"/>
+    <property name="LIBRARY" refid="LIBRARY"></property>
+    <java failonerror="true" jar="${basedir}/util/java/js.jar" fork="true">
+      <arg value="${basedir}/util/lint/jslint.js"/>
+      <arg value="${LIBLOC}/${LIBRARY}"/>
+    </java>
+  </target>
+</project>
