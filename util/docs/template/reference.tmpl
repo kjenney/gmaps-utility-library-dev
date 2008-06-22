@@ -3,7 +3,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset={+IO.encoding+}">
     <title>{+ data.library.name + " v" + data.library.version + " Reference" +}</title>
-    <link rel="stylesheet" type="text/css" href="http://code.google.com/css/dev_docs.css"></link>
+    <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
+    <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
   </head>
   <body>
     <h1>{+data.library.name+}</h1>
@@ -13,7 +14,7 @@
       <p>{+resolveLinks(thisObject.desc)+}</p>
       <for each="thisProperty" in="thisObject.properties">
         <h3>{+thisProperty.type+}</h3>
-        <table summary="{+ thisObject.type + ' ' + thisObject.name + ' - ' + thisProperty.type +}">
+        <table summary="{+ thisObject.type + ' ' + thisObject.name + ' - ' + thisProperty.type +}" width="90%">
           {! var evenOrOdd = 0; var columns = []; !}
           <tbody>
             <tr>
