@@ -39,6 +39,7 @@
  *   {String} updateEvent The GMap2 event name that triggers the arrows to update.
  *   {String} panEvent The GMarker event name that triggers a quick zoom to the tracked marker.
  *   {Boolean} quickPanEnabled The GMarker event name that triggers a quick zoom to the tracked marker.
+ *   {GMarkerOptions} gmarkerOptions Any additional options supported by GMarker.
  */
 
 function MarkerTracker(marker, map, opts) {
@@ -88,6 +89,7 @@ function MarkerTracker(marker, map, opts) {
   if (opts.quickPanEnabled != undefined ) {
     this.quickPanEnabled_ = opts.quickPanEnabled;
   }
+  var gmarkerOptions = opts.gmarkerOptions || {};
   
   //replicate a different sized icon 
   var babyIcon = new GIcon(marker.getIcon());
@@ -99,7 +101,8 @@ function MarkerTracker(marker, map, opts) {
     marker.getIcon().iconAnchor.y * this.iconScale_/2);
   // kill the shadow
   babyIcon.shadow = null;
-  this.babyMarker_ = new GMarker(new GPoint(0, 0), babyIcon);
+  gmarkerOptions.icon = babyIcon;
+  this.babyMarker_ = new GMarker(new GPoint(0, 0), gmarkerOptions);
   
   //bind the update task to the event trigger
   GEvent.bind(this.map_, this.updateEvent_, this, this.updateArrow_ );
