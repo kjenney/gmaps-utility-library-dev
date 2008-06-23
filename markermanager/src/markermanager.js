@@ -62,16 +62,14 @@ function MarkerManager(map, opt_opts) {
   me.tileSize_ = MarkerManager.DEFAULT_TILE_SIZE_;
 
   var mapTypes = map.getMapTypes();
-  var maxZoom = mapTypes[0].getMaximumResolution();
+  var mapMaxZoom = mapTypes[0].getMaximumResolution();
   for (var i=0; i < mapTypes.length; i++) {
     var mapTypeMaxZoom = mapTypes[i].getMaximumResolution();
-    if (mapTypeMaxZoom > maxZoom) {
-      maxZoom = mapTypeMaxZoom;
+    if (mapTypeMaxZoom > mapMaxZoom) {
+      mapMaxZoom = mapTypeMaxZoom;
     }
   };
-  if(opt_opts.maxZoom != undefined) {
-    maxZoom = opt_opts.maxZoom;
-  }
+  maxZoom = opt_opts.maxZoom || mapMaxZoom;
   me.maxZoom_ = maxZoom;
 
   me.trackMarkers_ = opt_opts.trackMarkers;
