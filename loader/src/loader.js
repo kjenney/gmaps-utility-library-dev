@@ -1,8 +1,32 @@
-(function () {// New scope
+/**
+ * @name Loader
+ * @version 1.0 
+ * @author Randy Becker
+ * @copyright (c) 2008, Randy Becker
+ * @fileoverview This library lets you load requested versions of other
+ *     libraries from the GMaps Utility Library project on demand and within a
+ *     unified global namespace.
+ */
+
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+(function () {// New Scope
   // Library locations
   var releaseProjectBase = "http://gmaps-utility-library.googlecode.com/svn/trunk";
-  var devProjectBase = "http://gmaps-utility-library-dev.googlecode.com/svn/trunk";
-  
+  var devProjectBase = "http://gmaps-utility-library-dev.googlecode.com/svn/branches/lemnar-loader-branch/";
+
   // Library versions
   var libraries = {
     "dragzoom" : ["1.0", "1.1", "1.2", "1.3"],
@@ -21,17 +45,27 @@
   var callbacks = {};
 
   /**
-   * @name loadOptions
-   * @class Optional parameters for load()
+   * All GMaps Utility Libraries will be available in both their old namespaces
+   *     and the new <code>google.extenstions.maps</code> namespace.  New
+   *     libraries will only be available in the new namespace.
+   * @name google.extensions.maps
+   * @namespace
+   */
+
+  /**
+   * @name LoadOptions
+   * @class This class represents optional arguments to <code>google.extensions.maps.load</code>.
    * @property {Boolean} [uncompressed=false] Load the uncompressed version of a library.
    * @property {Function} [callback] A function to call after this library has been loaded.
    */
 
   /**
    * Loads one of the GMaps Utility Libraries.
+   * @name google.extensions.maps.load
+   * @function
    * @param {String} libName The name of the library to load
    * @param {String} libVersionRequested The version to load.  Specify "x" to load the development version.
-   * @param {loadOptions} [opt_libOptions] Optional load parameters.
+   * @param {LoadOptions} [opt_libOptions] Optional load parameters.
    */
   function load(libName, libVersionRequested, opt_libOptions) {
     // Determine which version to load
@@ -86,6 +120,7 @@
 
   /**
    * Called by a library after it has loaded
+   * @name google.extensions.maps.loader.loaded
    * @private
    * @param {String} libName The name of the library that has just loaded.
    */
@@ -103,15 +138,19 @@
 
   /**
    * Registers a function to be called once all requested libraries have been
-   *     loaded.  This must be called before any calls to load().
+   *     loaded.  This must be called before any calls to <code>google.extensions.maps.load</code>.
+   * @name google.extensions.maps.setOnLoadCallback
+   * @function
    * @param {Function} callback The function to be called once the libraries have been loaded.
    */
   function setOnLoadCallback(callback) {
     callbacks.loader = callback;
   }
-    
+  
   /**
    * Places a library's functionality into our unified global namespace.
+   * @name google.extensions.maps.loader.exportSymbol
+   * @function
    * @private
    * @param {String} symbolName The name of the library.
    * @param {Object} symbol The library's top-level object.
@@ -129,7 +168,7 @@
     }
     currentNamespace[symbolNameParts[(symbolNameParts.length - 1)]] = symbol;
   }
-  
+
   // Put our own functionality into our namespace
   exportSymbol("load", load);
   exportSymbol("setOnLoadCallback", setOnLoadCallback);

@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Loader Documentation: Examples</title>
+    <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
+    <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
+    <script type="text/javascript" src="http://code.google.com/js/prettify.js"></script>
+  </head>
+  <body onload="prettyPrint()">
+<h1><a name="Loader_Examples" id="Loader_Examples"></a>Loader Examples</h1>
+
+<p>
+You can use the loader with a couple of lines of code.
+</p>
+<ol>
+  <li>Include the loader in your document header.</li>
+    <pre class="prettyprint">&lt;script src=&quot;http://gmaps-utility-library.googlecode.com/svn/trunk/loader/release/loader_packed.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</pre>
+  <li>Call the load() function.</li>
+    <pre class="prettyprint">
+google.load("maps", "2");
+google.setOnLoadCallback(mapsLoaded);
+
+function mapsLoaded () {
+  if (google.maps.BrowserIsCompatible()) {
+    map = new google.maps.Map2(document.getElementById("map"));
+    map.addControl(new google.maps.SmallMapControl());
+    map.setCenter(new google.maps.LatLng(48.25, 11.00), 4);
+    map.enableDoubleClickZoom();
+    google.extensions.maps.load("markermanager", "x", {uncompressed: true, callback: doWeatherDemo});
+    google.extensions.maps.load("dragzoom", "x", {callback: addZoomer});
+    google.extensions.maps.setOnloadCallback(function () {alert("All Libraries Loaded.");});
+  }
+}
+
+function addZoomer () {
+  map.addControl(new google.extensions.maps.DragZoom.Control());
+}
+
+function doWeatherDemo () {
+  var IMAGES = [ "sun", "rain", "snow", "storm" ];
+  var ICONS = [];
+  function getWeatherIcon() {
+    var i = Math.floor(IMAGES.length*Math.random());
+    if (!ICONS[i]) {
+      var icon = new google.maps.Icon();
+      icon.image = "../markermanager/examples/images/" + IMAGES[i] + ".png";
+      icon.iconAnchor = new google.maps.Point(16, 16);
+      icon.infoWindowAnchor = new google.maps.Point(16, 0);
+      icon.iconSize = new google.maps.Size(32, 32);
+      icon.shadow = "../markermanager/examples/images/" + IMAGES[i] + "-shadow.png";
+      icon.shadowSize = new google.maps.Size(59, 32);
+      ICONS[i] = icon;
+    }
+    return ICONS[i];
+  }
+  function getRandomPoint() {
+    var lat = 48.25 + (Math.random() - 0.5)*14.5;
+    var lng = 11.00 + (Math.random() - 0.5)*36.0;
+    return new google.maps.LatLng(Math.round(lat*10)/10, Math.round(lng*10)/10);
+  }
+  function getWeatherMarkers(n) {
+    var batch = [];
+    for (var i = 0; i < n; ++i) {
+      batch.push(new google.maps.Marker(getRandomPoint(), { icon: getWeatherIcon() }));
+    }
+    return batch;
+  }
+  var mgr = new google.extensions.maps.MarkerManager(map);
+  mgr.addMarkers(getWeatherMarkers(20), 3);
+  mgr.addMarkers(getWeatherMarkers(200), 6);
+  mgr.addMarkers(getWeatherMarkers(1000), 8);
+  mgr.refresh();
+}
+</pre>
+
+<p><a href="../examples/loader.html">View example (loader.html)</a>
+
+
+</body>
+</html>
