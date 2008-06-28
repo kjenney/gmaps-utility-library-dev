@@ -21,7 +21,7 @@
               <th>{+thisProperty.type+}</th>
               <if test="thisProperty.columns && thisProperty.columns.length">
                 <for each="columnName" in="thisProperty.columns">
-                  <th>{! output += columnName; columns.push(columnName) !}</th>
+                  <th>{! output += columnName.replace(/\s+/g, "&nbsp;"); columns.push(columnName) !}</th>
                 </for>
               </if>
               <th>Description</th>
