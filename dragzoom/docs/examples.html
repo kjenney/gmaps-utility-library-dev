@@ -3,9 +3,9 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <title>DragZoomControl Documentation: Examples</title>
-   <link rel="stylesheet" type="text/css" href="http://code.google.com/apis/maps/documentation/local_extensions.css" /> 
-   <link rel="stylesheet" type="text/css" href="http://code.google.com/css/dev_docs.css" />
-   <script type="text/javascript" src="http://code.google.com/apis/maps/include/prettify.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
+    <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
+    <script type="text/javascript" src="http://code.google.com/js/prettify.js"></script>
   </head>
   <body onload="prettyPrint()">
 <h1><a></a>DragZoomControl Examples</h1>
@@ -26,24 +26,24 @@ You can add the DragZoomControl to any Google map with a couple of lines of code
 </p>
 <ol>
   <li>Include draggzoom.js in your document header. </li>
-    <pre class="code">&lt;script src=&quot;dragzoom.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</pre>
+    <pre class="prettyprint">&lt;script src=&quot;dragzoom.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</pre>
 
   <li>Add the DragZoomControl to your map like any other control. Example:</li>
-    <pre class="code">map = new GMap2(document.getElementById('map'));<br />map.addControl(new GSmallMapControl());<br /><strong>map.addControl(new DragZoomControl());
+    <pre class="prettyprint">map = new GMap2(document.getElementById('map'));<br />map.addControl(new GSmallMapControl());<br /><strong>map.addControl(new DragZoomControl());
 </strong></pre>
   <li><strong>Important!</strong> Make sure your and doctype and namespaces are set correctly:</li>
-    <pre class="code">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;<br />
+    <pre class="prettyprint">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;<br />
 &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;<br />
 &lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:v=&quot;urn:schemas-microsoft-com:vml&quot; &gt;</pre>
   <li>For Internet Explorer: make sure you enable the VML behavior:
-    <pre class="code">&lt;style type=&quot;text/css&quot;&gt;v\:* {behavior:url(#default#VML);}&lt;/style&gt;</pre>
+    <pre class="prettyprint">&lt;style type=&quot;text/css&quot;&gt;v\:* {behavior:url(#default#VML);}&lt;/style&gt;</pre>
   </li>
 </ol>
 
 <h2><a name="Simple"></a>Simple Example</h2>
 <p> This is the &quot;Hello World&quot; code from the GMaps documentation. The lines you need to add for DragZoom are in bold. </p>
 
-<pre class="code">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;<br />   &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;<br />&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:v=&quot;urn:schemas-microsoft-com:vml&quot; &gt;<br />  &lt;head&gt;<br />    &lt;style type=&quot;text/css&quot;&gt;v\:* {behavior:url(#default#VML);}&lt;/style&gt;<br />     &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot;/&gt;<br />    &lt;title&gt;Google Maps JavaScript API Example&lt;/title&gt;
+<pre class="prettyprint">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;<br />   &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;<br />&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:v=&quot;urn:schemas-microsoft-com:vml&quot; &gt;<br />  &lt;head&gt;<br />    &lt;style type=&quot;text/css&quot;&gt;v\:* {behavior:url(#default#VML);}&lt;/style&gt;<br />     &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot;/&gt;<br />    &lt;title&gt;Google Maps JavaScript API Example&lt;/title&gt;
 		<br />    &lt;script src=&quot;http://maps.google.com/maps?file=api&amp;v=2&amp;key=YOUR_KEY_HERE&quot;<br />      type=&quot;text/javascript&quot;&gt;&lt;/script&gt;<br />    <strong>&lt;script src=&quot;../src/dragzoom.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</strong><br />    &lt;script type=&quot;text/javascript&quot;&gt;<br /><br />    //&lt;![CDATA[<br /><br />    function load() {<br />      if (GBrowserIsCompatible()) {<br />        var map = new GMap2(document.getElementById(&quot;map&quot;));<br />        map.setCenter(new GLatLng(37.4419, -122.1419), 13);<br />       <strong> map.addControl(new DragZoomControl());</strong><br />      }<br />    }<br /><br />    //]]&gt;<br />    &lt;/script&gt;<br />  &lt;/head&gt;<br />  &lt;body onload=&quot;load()&quot; onunload=&quot;GUnload()&quot;&gt;<br />    &lt;div id=&quot;map&quot; style=&quot;width: 900px; height: 600px&quot;&gt;&lt;/div&gt;<br />  &lt;/body&gt;<br />&lt;/html&gt;</pre>
 
 <p>
@@ -59,7 +59,7 @@ The example uses the &quot;Hello World&quot; code again (but this time moved to 
 Note the one option added to the DragZoom initialization call which enables the back button.  When you 
 run this example, do a DragZoom and you will see the back button appear.  Do several successive DragZooms and you can back them out  in reverse order.
 
-<pre class="code">
+<pre class="prettyprint">
     function load() {
       if (GBrowserIsCompatible()) {
         var map = new GMap2(document.getElementById('map'));
@@ -102,7 +102,7 @@ right of the map.
 <p>Like all controls, DragZoomControl can be placed anywhere you want on the map by specifying an optional GControlPosition.  (Note this
 is a <b>map.addControl</b> option, not a <b>DragZoomControl</b> option.)</p>
 
-<pre class="code">map.addControl(new DragZoomControl(),new GControlPosition(G_ANCHOR_TOP_RIGHT,new GSize(10,10)));</pre>
+<pre class="prettyprint">map.addControl(new DragZoomControl(),new GControlPosition(G_ANCHOR_TOP_RIGHT,new GSize(10,10)));</pre>
 
 <p>All the following examples use this option to control the control button(s) position.</p>
 
@@ -113,7 +113,7 @@ Google Maps API documentation page</a>) and the DragZoomControl with a consistan
 parmeter in the DragZoomControl initialization call (see the section above for all the DragZoomControl options): 
 <p>
 These are the styles and other parameters used in this example:
-<pre class="code">
+<pre class="prettyprint">
         var otherOpts = { 
           buttonStartingStyle: {display:'block',color:'black',background:'white',width:'7em',textAlign:'center',
             fontFamily:'Verdana',fontSize:'12px',fontWeight:'bold',border:'1px solid gray',paddingBottom:'1px',cursor:'pointer'},
@@ -140,7 +140,7 @@ These are the styles and other parameters used in this example:
 <p>
 This example uses simple "zoom in" and "zoom out" icons for the DragZoom and back buttons, but uses text for the zooming button.  
 These are the styles and parameters used in this example:
-<pre class="code">
+<pre class="prettyprint">
         var otherOpts = { 
           buttonStartingStyle: {background: '#FFF', paddingTop: '4px', paddingLeft: '4px', border:'1px solid black'},
           buttonHTML: '&lt;img title='Drag Zoom In' src='zoomin.gif'&gt;',
@@ -164,7 +164,7 @@ These are the styles and parameters used in this example:
   options (with DragZoomOtherOptions), and all of the callbacks (with DragZoomCallbacks): <a href="http://earthcode.com/demo/gzoom/demo1.html">see 
   example</a>. The DragZoom instantiation code:</p>
 	
-<pre class="code">
+<pre class="prettyprint">
   /* first set of options is for the visual overlay.*/
   var boxStyleOpts = {
     opacity:.2,
@@ -218,7 +218,7 @@ with the DragZoom.
 <p>
 This code shows the creation of the map, it's controls and the labels and markers for the example.  
 Remember in order to use the method, the control needs a name:
-<pre class="code">
+<pre class="prettyprint">
     function load() {
       if (GBrowserIsCompatible()) {
         map = new GMap2(document.getElementById('map'));
@@ -250,7 +250,7 @@ Remember in order to use the method, the control needs a name:
 </pre>
 <p>
 This shows how the method is invoked:
-<pre class="code">
+<pre class="prettyprint">
 
     // Function to save the map context via the DragZoomControl method and then zoom in to the (lat,lng)
     // called when the cluster marker is clicked
@@ -263,7 +263,7 @@ This shows how the method is invoked:
 </pre>
 <p>
 This shows the callback function:
-<pre class="code">
+<pre class="prettyprint">
 
     // Function called after the map context is restored from the cluster zoom
     // This callback clears the infoWindow if it is open

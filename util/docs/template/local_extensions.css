@@ -75,3 +75,11 @@ table {
   border-collapse: collapse;
   clear: right;
 }
+
+pre {
+  margin-left: 2em;
+}
+
+ol, ul {
+  margin-left: 2em;
+}
