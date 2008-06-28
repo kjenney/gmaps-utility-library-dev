@@ -106,8 +106,10 @@ function publish(symbolSet) {
       var constructorArguments = [];
       for (var k = 0; k < constructorSymbol.params.length; k++) {
         var constructorParameter = constructorSymbol.params[k];
-        var argumentString = constructorParameter.name;
+        var argumentString = '<span class="type" title="type:  ' + constructorParameter.type + '">';
+        argumentString += constructorParameter.name;
         argumentString += constructorParameter.isOptional ? "?" : "";
+        argumentString += '</span>';
         constructorArguments.push(argumentString);
       }
       instance.Constructor += "(" + constructorArguments.join(", ") + ")";
@@ -168,8 +170,10 @@ function publish(symbolSet) {
         var methodArguments = [];
         for (var m = 0; m < methodSymbol.params.length; m++) {
           var methodParameter = methodSymbol.params[m];
-          var argumentString = methodParameter.name;
+          var argumentString = '<span class="type" title="type:  ' + methodParameter.type + '">';
+          argumentString += methodParameter.name;
           argumentString += methodParameter.isOptional ? "?" : "";
+          argumentString += '</span>';
           methodArguments.push(argumentString);
         }
         instance[otherMethodType + "Methods"] += "(" + methodArguments.join(", ") + ")";
