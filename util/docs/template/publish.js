@@ -172,7 +172,7 @@ function publish(symbolSet) {
           argumentString += methodParameter.isOptional ? "?" : "";
           methodArguments.push(argumentString);
         }
-        instance.Methods += "(" + methodArguments.join(", ") + ")";
+        instance[otherMethodType + "Methods"] += "(" + methodArguments.join(", ") + ")";
         constructedProperty.instances.push(instance);
       }
       constructedTopLevelObject.properties.push(constructedProperty);

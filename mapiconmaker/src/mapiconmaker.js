@@ -47,8 +47,6 @@ var MapIconMaker = {};
 
 /**
  * Creates an icon based on the specified options in the {@link MarkerIconOptions} argument.
- * @static
- * @function
  * @param {MarkerIconOptions} [opts]
  * @return {GIcon}
  */
