@@ -85,6 +85,7 @@ function publish(symbolSet) {
       }
     } else if (topLevelObject.isNamespace) {
       constructedTopLevelObject.type = "namespace"
+      constructedTopLevelObject.name = topLevelObject.alias
     } else {
       constructedTopLevelObject.type = "class"; // unknown
     }
