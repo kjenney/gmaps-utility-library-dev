@@ -50,7 +50,7 @@ ExtMapTypeControl.prototype.initialize = function (map) {
     var newMapTypes = map.getMapTypes();
     var newMapType = newMapTypes.pop();
     var newMapTypeDiv = me.createButton_(newMapType.getName());
-    newMapTypeDiv.setAttribute('title', newMapType.getAlt());
+    newMapTypeDiv.setAttribute("title", newMapType.getAlt());
     mapTypes.push(newMapType);
     mapTypeDivs.push(newMapTypeDiv);
     me.resetButtonEvents_(map, mapTypeDivs);
@@ -72,9 +72,9 @@ ExtMapTypeControl.prototype.initialize = function (map) {
   var i;
   if (me.options.showTraffic) {
     var trafficDiv = me.createButton_("Traffic");
-    trafficDiv.setAttribute('title', 'Show Traffic');
+    trafficDiv.setAttribute("title", "Show Traffic");
     trafficDiv.style.marginRight = "8px";
-    trafficDiv.style.visibility = 'hidden';
+    trafficDiv.style.visibility = "hidden";
     trafficDiv.firstChild.style.cssFloat = "left";
     trafficDiv.firstChild.style.styleFloat = "left";
     // Sending true makes overlay hidden by default
@@ -83,9 +83,9 @@ ExtMapTypeControl.prototype.initialize = function (map) {
     // We have to do this so that we can sense if traffic is in view
     GEvent.addListener(me.trafficInfo, "changed", function (hasTrafficInView) {
       if (hasTrafficInView) {
-        trafficDiv.style.visibility = 'visible';
+        trafficDiv.style.visibility = "visible";
       } else {
-        trafficDiv.style.visibility = 'hidden';
+        trafficDiv.style.visibility = "hidden";
       }
     });
     map.addOverlay(me.trafficInfo);
@@ -115,9 +115,9 @@ ExtMapTypeControl.prototype.initialize = function (map) {
                      {"color": "#ff0000", "text": "&lt; 25 MPH"},
                      {"color": "#c0c0c0", "text": "No data"}];
       for (i = 0; i < keyInfo.length; i++) {
-        keyExpandedDiv.innerHTML += "<div style='text-align: left'>" +
-                "<span style='background-color: " + keyInfo[i].color + "'>&nbsp;&nbsp</span>" +
-                "<span style='color: " + keyInfo[i].color + "'> " + keyInfo[i].text + " </span>" +
+        keyExpandedDiv.innerHTML += '<div style="text-align: left">' +
+                '<span style="background-color: ' + keyInfo[i].color + '">&nbsp;&nbsp</span>' +
+                '<span style="color: ' + keyInfo[i].color + '"> ' + keyInfo[i].text + " </span>" +
             "</div>";
       }
       keyExpandedDiv.style.display = "none";
@@ -171,7 +171,7 @@ ExtMapTypeControl.prototype.addMapTypeButtons_ = function (map) {
   var mapTypeDivs = [];
   for (var i = 0; i < mapTypes.length; i++) {
     mapTypeDivs[i] = me.createButton_(mapTypes[i].getName());
-    mapTypeDivs[i].setAttribute('title', mapTypes[i].getAlt());
+    mapTypeDivs[i].setAttribute("title", mapTypes[i].getAlt());
   }
   me.resetButtonEvents_(map, mapTypeDivs);
   return mapTypeDivs;

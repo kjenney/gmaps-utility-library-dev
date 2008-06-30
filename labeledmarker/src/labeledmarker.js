@@ -96,7 +96,7 @@ LabeledMarker.prototype.initialize = function (map) {
   }
   if (this.clickable_) {
     // Pass through events fired on the text div to the marker.
-    var eventPassthrus = ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseover', 'mouseout'];
+    var eventPassthrus = ["click", "dblclick", "mousedown", "mouseup", "mouseover", "mouseout"];
     for (var i = 0; i < eventPassthrus.length; i++) {
       var name = eventPassthrus[i];
       GEvent.addDomListener(this.div_, name, newEventPassthru(this, name));
@@ -217,7 +217,7 @@ LabeledMarker.prototype.getLabelVisibility = function () {
  * Hides the label of the marker.
  */
 LabeledMarker.prototype.hideLabel = function () {
-  this.div_.style.visibility = 'hidden';
+  this.div_.style.visibility = "hidden";
 };
 
 
@@ -225,5 +225,5 @@ LabeledMarker.prototype.hideLabel = function () {
  * Shows the label of the marker.
  */
 LabeledMarker.prototype.showLabel = function () {
-  this.div_.style.visibility = 'visible';
+  this.div_.style.visibility = "visible";
 };

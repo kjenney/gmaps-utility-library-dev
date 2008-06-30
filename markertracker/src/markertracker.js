@@ -77,7 +77,7 @@ function MarkerTracker(marker, map, opts) {
   //bind the update task to the event trigger
   GEvent.bind(this.map_, this.updateEvent_, this, this.updateArrow_);
   //update the arrow if the marker moves
-  GEvent.bind(this.marker_, 'changed', this, this.updateArrow_);
+  GEvent.bind(this.marker_, "changed", this, this.updateArrow_);
   if (this.quickPanEnabled_) {
     GEvent.bind(this.babyMarker_, this.panEvent_, this, this.panToMarker_);
   }
@@ -90,12 +90,12 @@ function MarkerTracker(marker, map, opts) {
 //Default Arrow Constants
 MarkerTracker.DEFAULT_EDGE_PADDING_ = 25;
 MarkerTracker.DEFAULT_ICON_SCALE_ = 0.6;
-MarkerTracker.DEFAULT_ARROW_COLOR_ = '#ff0000';
+MarkerTracker.DEFAULT_ARROW_COLOR_ = "#ff0000";
 MarkerTracker.DEFAULT_ARROW_WEIGHT_ = 20;
 MarkerTracker.DEFAULT_ARROW_LENGTH_ = 20;
 MarkerTracker.DEFAULT_ARROW_OPACITY_ = 0.8;
-MarkerTracker.DEFAULT_UPDATE_EVENT_ = 'move';
-MarkerTracker.DEFAULT_PAN_EVENT_ = 'click';
+MarkerTracker.DEFAULT_UPDATE_EVENT_ = "move";
+MarkerTracker.DEFAULT_PAN_EVENT_ = "click";
 MarkerTracker.DEFAULT_QUICK_PAN_ENABLED_ = true;
 
 //Default Control Constants

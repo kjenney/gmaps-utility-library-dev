@@ -57,17 +57,17 @@ function ExtInfoWindow(marker, windowId, html, opt_opts) {
 
   this.map_ = null;
 
-  this.container_ = document.createElement('div');
-  this.container_.style.position = 'relative';
-  this.container_.style.display = 'none';
+  this.container_ = document.createElement("div");
+  this.container_.style.position = "relative";
+  this.container_.style.display = "none";
 
-  this.contentDiv_ = document.createElement('div');
-  this.contentDiv_.id = this.infoWindowId_ + '_contents';
+  this.contentDiv_ = document.createElement("div");
+  this.contentDiv_.id = this.infoWindowId_ + "_contents";
   this.contentDiv_.innerHTML = this.html_;
-  this.contentDiv_.style.display = 'block';
-  this.contentDiv_.style.visibility = 'hidden';
+  this.contentDiv_.style.display = "block";
+  this.contentDiv_.style.visibility = "hidden";
 
-  this.wrapperDiv_ = document.createElement('div');
+  this.wrapperDiv_ = document.createElement("div");
 }
 
 //use the GOverlay class
@@ -112,46 +112,46 @@ ExtInfoWindow.prototype.initialize = function (map) {
 
   var i;
   for (i in this.wrapperParts) if (this.wrapperParts.hasOwnProperty(i)) {
-    var tempElement = document.createElement('div');
-    tempElement.id = this.infoWindowId_ + '_' + i;
-    tempElement.style.visibility = 'hidden';
+    var tempElement = document.createElement("div");
+    tempElement.id = this.infoWindowId_ + "_" + i;
+    tempElement.style.visibility = "hidden";
     document.body.appendChild(tempElement);
-    tempElement = document.getElementById(this.infoWindowId_ + '_' + i);
+    tempElement = document.getElementById(this.infoWindowId_ + "_" + i);
     var tempWrapperPart = this.wrapperParts[i];
-    tempWrapperPart.w = parseInt(this.getStyle_(tempElement, 'width'), 10);
-    tempWrapperPart.h = parseInt(this.getStyle_(tempElement, 'height'), 10);
+    tempWrapperPart.w = parseInt(this.getStyle_(tempElement, "width"), 10);
+    tempWrapperPart.h = parseInt(this.getStyle_(tempElement, "height"), 10);
     document.body.removeChild(tempElement);
   }
   for (i in this.wrapperParts) if (this.wrapperParts.hasOwnProperty(i)) {
-    if (i === 'close') {
+    if (i === "close") {
       //first append the content so the close button is layered above it
       this.wrapperDiv_.appendChild(this.contentDiv_);
     }
     var wrapperPartsDiv = null;
     if (!this.wrapperParts[i].domElement) {
-      wrapperPartsDiv = document.createElement('div');
+      wrapperPartsDiv = document.createElement("div");
       this.wrapperDiv_.appendChild(wrapperPartsDiv);
     } else {
       wrapperPartsDiv = this.wrapperParts[i].domElement;
     }
-    wrapperPartsDiv.id = this.infoWindowId_ + '_' + i;
-    wrapperPartsDiv.style.position = 'absolute';
-    wrapperPartsDiv.style.width = this.wrapperParts[i].w + 'px';
-    wrapperPartsDiv.style.height = this.wrapperParts[i].h + 'px';
-    wrapperPartsDiv.style.top = this.wrapperParts[i].t + 'px';
-    wrapperPartsDiv.style.left = this.wrapperParts[i].l + 'px';
+    wrapperPartsDiv.id = this.infoWindowId_ + "_" + i;
+    wrapperPartsDiv.style.position = "absolute";
+    wrapperPartsDiv.style.width = this.wrapperParts[i].w + "px";
+    wrapperPartsDiv.style.height = this.wrapperParts[i].h + "px";
+    wrapperPartsDiv.style.top = this.wrapperParts[i].t + "px";
+    wrapperPartsDiv.style.left = this.wrapperParts[i].l + "px";
     this.wrapperParts[i].domElement = wrapperPartsDiv;
   }
 
   this.map_.getPane(G_MAP_FLOAT_PANE).appendChild(this.container_);
   this.container_.id = this.infoWindowId_;
-  var containerWidth  = this.getStyle_(document.getElementById(this.infoWindowId_), 'width');
+  var containerWidth  = this.getStyle_(document.getElementById(this.infoWindowId_), "width");
   this.container_.style.width = (containerWidth ? containerWidth : this.defaultStyles.containerWidth);
 
   this.map_.getContainer().appendChild(this.contentDiv_);
   this.contentWidth = this.getDimensions_(this.container_).width;
-  this.contentDiv_.style.width = this.contentWidth + 'px';
-  this.contentDiv_.style.position = 'absolute';
+  this.contentDiv_.style.width = this.contentWidth + "px";
+  this.contentDiv_.style.position = "absolute";
 
   this.container_.appendChild(this.wrapperDiv_);
 
@@ -164,10 +164,10 @@ ExtInfoWindow.prototype.initialize = function (map) {
     var me = this;
 
     //add event handler for maximize and minimize icons
-    GEvent.addDomListener(this.wrapperParts.max.domElement, 'click',
+    GEvent.addDomListener(this.wrapperParts.max.domElement, "click",
       function () {
         var infoWindow = me.map_.getExtInfoWindow();
-        infoWindow.container_.style.width = me.maxWidth_ + 'px';
+        infoWindow.container_.style.width = me.maxWidth_ + "px";
         infoWindow.ajaxRequest_(me.maxContent_);
         infoWindow.isMaximized_ = true;
         infoWindow.redraw(true);
@@ -176,7 +176,7 @@ ExtInfoWindow.prototype.initialize = function (map) {
         infoWindow.toggleMaxMin_();
       }
     );
-    GEvent.addDomListener(this.wrapperParts.min.domElement, 'click',
+    GEvent.addDomListener(this.wrapperParts.min.domElement, "click",
       function () {
         var infoWindow = me.map_.getExtInfoWindow();
         infoWindow.container_.style.width = me.container_.style.width;
@@ -200,12 +200,12 @@ ExtInfoWindow.prototype.initialize = function (map) {
 
   }
 
-  var stealEvents = ['mousedown', 'dblclick', 'DOMMouseScroll'];
+  var stealEvents = ["mousedown", "dblclick", "DOMMouseScroll"];
   for (i = 0; i < stealEvents.length; i++) {
     GEvent.bindDom(this.container_, stealEvents[i], this, this.onClick_);
   }
 
-  GEvent.trigger(this.map_, 'extinfowindowopen');
+  GEvent.trigger(this.map_, "extinfowindowopen");
   if (this.ajaxUrl_) {
     this.ajaxRequest_(this.ajaxUrl_);
   }
@@ -219,7 +219,7 @@ ExtInfoWindow.prototype.initialize = function (map) {
  * @param {MouseEvent} e The mouse event caught by this function
  */
 ExtInfoWindow.prototype.onClick_ = function (e) {
-  if (navigator.userAgent.toLowerCase().indexOf('msie') !== -1 && document.all) {
+  if (navigator.userAgent.toLowerCase().indexOf("msie") !== -1 && document.all) {
     window.event.cancelBubble = true;
     window.event.returnValue = false;
   } else {
@@ -233,17 +233,17 @@ ExtInfoWindow.prototype.onClick_ = function (e) {
  */
 ExtInfoWindow.prototype.remove = function () {
   if (this.map_.getExtInfoWindow()) {
-    GEvent.trigger(this.map_, 'extinfowindowbeforeclose');
+    GEvent.trigger(this.map_, "extinfowindowbeforeclose");
 
     GEvent.clearInstanceListeners(this.container_);
     if (this.container_.outerHTML) {
-      this.container_.outerHTML = ''; //prevent pseudo-leak in IE
+      this.container_.outerHTML = ""; //prevent pseudo-leak in IE
     }
     if (this.container_.parentNode) {
       this.container_.parentNode.removeChild(this.container_);
     }
     this.container_ = null;
-    GEvent.trigger(this.map_, 'extinfowindowclose');
+    GEvent.trigger(this.map_, "extinfowindowclose");
     this.map_.setExtInfoWindow_(null);
   }
 };
@@ -270,16 +270,16 @@ ExtInfoWindow.prototype.redraw = function (force) {
 
   //set the content section's height, needed so  browser font resizing does not affect the window's dimensions
   var contentHeight = this.contentDiv_.offsetHeight;
-  this.contentDiv_.style.height = contentHeight + 'px';
+  this.contentDiv_.style.height = contentHeight + "px";
 
   this.contentWidth = this.getDimensions_(this.container_).width;
   this.contentDiv_.style.width = this.container_.style.width;
 
   //reposition contents depending on wrapper parts.
   //this is necessary for content that is pulled in via ajax
-  this.contentDiv_.style.left = this.wrapperParts.l.w + 'px';
-  this.contentDiv_.style.top = this.wrapperParts.tl.h + 'px';
-  this.contentDiv_.style.visibility = 'visible';
+  this.contentDiv_.style.left = this.wrapperParts.l.w + "px";
+  this.contentDiv_.style.top = this.wrapperParts.tl.h + "px";
+  this.contentDiv_.style.visibility = "visible";
 
   //Finish configuring wrapper parts that were not set in initialization
   this.wrapperParts.tl.t = 0;
@@ -317,30 +317,30 @@ ExtInfoWindow.prototype.redraw = function (force) {
   //create the decoration wrapper DOM objects
   //append the styled info window to the container
   for (var i in this.wrapperParts) if (this.wrapperParts.hasOwnProperty(i)) {
-    if (i === 'close') {
+    if (i === "close") {
       //first append the content so the close button is layered above it
       this.wrapperDiv_.insertBefore(this.contentDiv_, this.wrapperParts[i].domElement);
     }
     var wrapperPartsDiv = null;
     if (!this.wrapperParts[i].domElement) {
-      wrapperPartsDiv = document.createElement('div');
+      wrapperPartsDiv = document.createElement("div");
       this.wrapperDiv_.appendChild(wrapperPartsDiv);
     } else {
       wrapperPartsDiv = this.wrapperParts[i].domElement;
     }
-    wrapperPartsDiv.id = this.infoWindowId_ + '_' + i;
-    wrapperPartsDiv.style.position = 'absolute';
-    wrapperPartsDiv.style.width = this.wrapperParts[i].w + 'px';
-    wrapperPartsDiv.style.height = this.wrapperParts[i].h + 'px';
-    wrapperPartsDiv.style.top = this.wrapperParts[i].t + 'px';
-    wrapperPartsDiv.style.left = this.wrapperParts[i].l + 'px';
+    wrapperPartsDiv.id = this.infoWindowId_ + "_" + i;
+    wrapperPartsDiv.style.position = "absolute";
+    wrapperPartsDiv.style.width = this.wrapperParts[i].w + "px";
+    wrapperPartsDiv.style.height = this.wrapperParts[i].h + "px";
+    wrapperPartsDiv.style.top = this.wrapperParts[i].t + "px";
+    wrapperPartsDiv.style.left = this.wrapperParts[i].l + "px";
     this.wrapperParts[i].domElement = wrapperPartsDiv;
   }
 
   //add event handler for the close icon
   var currentMarker = this.marker_;
   var me = this;
-  GEvent.addDomListener(this.wrapperParts.close.domElement, 'click',
+  GEvent.addDomListener(this.wrapperParts.close.domElement, "click",
     function () {
       me.map_.closeExtInfoWindow();
     }
@@ -350,14 +350,14 @@ ExtInfoWindow.prototype.redraw = function (force) {
 
   //position the container on the map, over the marker
   var pixelLocation = this.map_.fromLatLngToDivPixel(this.marker_.getPoint());
-  this.container_.style.position = 'absolute';
+  this.container_.style.position = "absolute";
   var markerIcon = this.marker_.getIcon();
   this.container_.style.left = (pixelLocation.x - (this.contentWidth / 2) -
-      markerIcon.iconAnchor.x + markerIcon.infoWindowAnchor.x) + 'px';
+      markerIcon.iconAnchor.x + markerIcon.infoWindowAnchor.x) + "px";
   this.container_.style.top = (pixelLocation.y - this.wrapperParts.bl.h -
       contentHeight - this.wrapperParts.tl.h - this.wrapperParts.beak.h -
-      markerIcon.iconAnchor.y + markerIcon.infoWindowAnchor.y + this.borderSize_) + 'px';
-  this.container_.style.display = 'block';
+      markerIcon.iconAnchor.y + markerIcon.infoWindowAnchor.y + this.borderSize_) + "px";
+  this.container_.style.display = "block";
 
   if (this.map_.getExtInfoWindow()) {
     this.repositionMap_();
@@ -367,11 +367,11 @@ ExtInfoWindow.prototype.redraw = function (force) {
 ExtInfoWindow.prototype.toggleMaxMin_ = function () {
   if (this.wrapperParts.max.domElement && this.wrapperParts.min.domElement) {
     if (this.isMaximized_) {
-      this.wrapperParts.max.domElement.style.display = 'none';
-      this.wrapperParts.min.domElement.style.display = 'block';
+      this.wrapperParts.max.domElement.style.display = "none";
+      this.wrapperParts.min.domElement.style.display = "block";
     } else {
-      this.wrapperParts.max.domElement.style.display = 'block';
-      this.wrapperParts.min.domElement.style.display = 'none';
+      this.wrapperParts.max.domElement.style.display = "block";
+      this.wrapperParts.min.domElement.style.display = "none";
     }
   }
 };
@@ -385,16 +385,16 @@ ExtInfoWindow.prototype.resize = function () {
   //Create temporary DOM node for new contents to get new height
   //This is done because if you manipulate this.contentDiv_ directly it causes visual errors in IE6
   var tempElement = this.contentDiv_.cloneNode(true);
-  tempElement.id = this.infoWindowId_ + '_tempContents';
-  tempElement.style.visibility = 'hidden';
-  tempElement.style.height = 'auto';
+  tempElement.id = this.infoWindowId_ + "_tempContents";
+  tempElement.style.visibility = "hidden";
+  tempElement.style.height = "auto";
   document.body.appendChild(tempElement);
-  tempElement = document.getElementById(this.infoWindowId_ + '_tempContents');
+  tempElement = document.getElementById(this.infoWindowId_ + "_tempContents");
   var contentHeight = tempElement.offsetHeight;
   document.body.removeChild(tempElement);
 
   //Set the new height to eliminate visual defects that can be caused by font resizing in browser
-  this.contentDiv_.style.height = contentHeight + 'px';
+  this.contentDiv_.style.height = contentHeight + "px";
 
   var contentWidth = this.container_.offsetWidth;
   var pixelLocation = this.map_.fromLatLngToDivPixel(this.marker_.getPoint());
@@ -404,18 +404,18 @@ ExtInfoWindow.prototype.resize = function () {
   var oldWindowPosTop = this.wrapperParts.t.domElement.offsetTop;
 
   //resize info window to look correct for new height
-  this.wrapperParts.l.domElement.style.height = contentHeight + 'px';
-  this.wrapperParts.r.domElement.style.height = contentHeight + 'px';
+  this.wrapperParts.l.domElement.style.height = contentHeight + "px";
+  this.wrapperParts.r.domElement.style.height = contentHeight + "px";
   var newPosTop = this.wrapperParts.b.domElement.offsetTop - contentHeight;
-  this.wrapperParts.l.domElement.style.top = newPosTop + 'px';
-  this.wrapperParts.r.domElement.style.top = newPosTop + 'px';
-  this.contentDiv_.style.top = newPosTop + 'px';
+  this.wrapperParts.l.domElement.style.top = newPosTop + "px";
+  this.wrapperParts.r.domElement.style.top = newPosTop + "px";
+  this.contentDiv_.style.top = newPosTop + "px";
   var windowTHeight = parseInt(this.wrapperParts.t.domElement.style.height, 10);
   newPosTop -= windowTHeight;
-  this.wrapperParts.close.domElement.style.top = newPosTop + this.borderSize_ + 'px';
-  this.wrapperParts.tl.domElement.style.top = newPosTop + 'px';
-  this.wrapperParts.t.domElement.style.top = newPosTop + 'px';
-  this.wrapperParts.tr.domElement.style.top = newPosTop + 'px';
+  this.wrapperParts.close.domElement.style.top = newPosTop + this.borderSize_ + "px";
+  this.wrapperParts.tl.domElement.style.top = newPosTop + "px";
+  this.wrapperParts.t.domElement.style.top = newPosTop + "px";
+  this.wrapperParts.tr.domElement.style.top = newPosTop + "px";
 
   this.repositionMap_();
 };
@@ -497,7 +497,7 @@ ExtInfoWindow.prototype.ajaxRequest_ = function (url) {
   var thisCallback = this.callback_;
   GDownloadUrl(url, function (response, status) { // JSLint-OK: GDownloadUrl is a function, not a class.
     if (me.map_.getExtInfoWindow() !== null) {
-      var infoWindow = document.getElementById(me.map_.getExtInfoWindow().infoWindowId_ + '_contents');
+      var infoWindow = document.getElementById(me.map_.getExtInfoWindow().infoWindowId_ + "_contents");
       if (!response || status === -1) {
         infoWindow.innerHTML = '<span>ERROR: The Ajax request failed to get HTML content from "' + url + '"</span>';
       } else {
@@ -508,7 +508,7 @@ ExtInfoWindow.prototype.ajaxRequest_ = function (url) {
       }
       me.map_.getExtInfoWindow().resize();
     }
-    GEvent.trigger(me.map_, 'extinfowindowupdate');
+    GEvent.trigger(me.map_, "extinfowindowupdate");
   });
 };
 
@@ -521,8 +521,8 @@ ExtInfoWindow.prototype.ajaxRequest_ = function (url) {
  * @return {Object} Object with keys: width, height
  */
 ExtInfoWindow.prototype.getDimensions_ = function (element) {
-  var display = this.getStyle_(element, 'display');
-  if (display !== 'none' && display) { // Safari bug
+  var display = this.getStyle_(element, "display");
+  if (display !== "none" && display) { // Safari bug
     return {width: element.offsetWidth, height: element.offsetHeight};
   }
 
@@ -532,9 +532,9 @@ ExtInfoWindow.prototype.getDimensions_ = function (element) {
   var originalVisibility = els.visibility;
   var originalPosition = els.position;
   var originalDisplay = els.display;
-  els.visibility = 'hidden';
-  els.position = 'absolute';
-  els.display = 'block';
+  els.visibility = "hidden";
+  els.position = "absolute";
+  els.display = "block";
   var originalWidth = element.clientWidth;
   var originalHeight = element.clientHeight;
   els.display = originalDisplay;
@@ -554,9 +554,9 @@ ExtInfoWindow.prototype.getDimensions_ = function (element) {
 ExtInfoWindow.prototype.getStyle_ = function (element, style) {
   var found = false;
   style = this.camelize_(style);
-  if (element.id === this.infoWindowId_ && style === 'width' && element.style.display === 'none') {
-  	element.style.visibility = 'hidden';
-	  element.style.display = '';
+  if (element.id === this.infoWindowId_ && style === "width" && element.style.display === "none") {
+  	element.style.visibility = "hidden";
+	  element.style.display = "";
   }
   var value = element.style[style];
   if (!value) {
@@ -567,18 +567,18 @@ ExtInfoWindow.prototype.getStyle_ = function (element, style) {
       value = element.currentStyle[style];
     }
   }
-  if ((value === 'auto') && (this.getStyle_(element, 'display') !== 'none')) {
-    if (style === 'width') {
+  if ((value === "auto") && (this.getStyle_(element, "display") !== "none")) {
+    if (style === "width") {
       value = element.offsetWidth;
-    } else if (style === 'height') {
+    } else if (style === "height") {
       value = element.offsetHeight;
     }
   }
-  if (element.id === this.infoWindowId_ && style === 'width' && element.style.display !== 'none') {
-  	element.style.display = 'none';
-  	element.style.visibility = 'visible';
+  if (element.id === this.infoWindowId_ && style === "width" && element.style.display !== "none") {
+  	element.style.display = "none";
+  	element.style.visibility = "visible";
   }
-  return (value === 'auto') ? null : value;
+  return (value === "auto") ? null : value;
 };
 
 /**
@@ -589,11 +589,11 @@ ExtInfoWindow.prototype.getStyle_ = function (element, style) {
  * @return {String}
  */
 ExtInfoWindow.prototype.camelize_ = function (element) {
-  var parts = element.split('-'), len = parts.length;
+  var parts = element.split("-"), len = parts.length;
   if (len === 1) {
     return parts[0];
   }
-  var camelized = element.charAt(0) === '-' ? parts[0].charAt(0).toUpperCase() + parts[0].substring(1) : parts[0];
+  var camelized = element.charAt(0) === "-" ? parts[0].charAt(0).toUpperCase() + parts[0].substring(1) : parts[0];
 
   for (var i = 1; i < len; i++) {
     camelized += parts[i].charAt(0).toUpperCase() + parts[i].substring(1);
@@ -626,10 +626,10 @@ GMap.prototype.InfoWindowListener_ = null;
  */
 GMarker.prototype.openExtInfoWindow = function (map, cssId, html, opt_opts) {
   if (!map) {
-    throw 'Error in GMarker.openExtInfoWindow: map cannot be null';
+    throw "Error in GMarker.openExtInfoWindow: map cannot be null";
   }
-  if (!cssId || cssId === '') {
-    throw 'Error in GMarker.openExtInfoWindow: must specify a cssId';
+  if (!cssId || cssId === "") {
+    throw "Error in GMarker.openExtInfoWindow: must specify a cssId";
   }
 
   map.closeInfoWindow();
@@ -639,7 +639,7 @@ GMarker.prototype.openExtInfoWindow = function (map, cssId, html, opt_opts) {
     map.setExtInfoWindow_(new ExtInfoWindow(this, cssId, html, opt_opts));
     if (!map.ClickListener_) {
       //listen for map click, close ExtInfoWindow if open
-      map.ClickListener_ = GEvent.addListener(map, 'click',
+      map.ClickListener_ = GEvent.addListener(map, "click",
       function (event) {
           if (!event && map.getExtInfoWindow()) {
             map.closeExtInfoWindow();
@@ -649,7 +649,7 @@ GMarker.prototype.openExtInfoWindow = function (map, cssId, html, opt_opts) {
     }
     if (!map.InfoWindowListener_) {
       //listen for default info window open, close ExtInfoWindow if open
-      map.InfoWindowListener_ = GEvent.addListener(map, 'infowindowopen',
+      map.InfoWindowListener_ = GEvent.addListener(map, "infowindowopen",
       function (event) {
           if (map.getExtInfoWindow()) {
             map.closeExtInfoWindow();
