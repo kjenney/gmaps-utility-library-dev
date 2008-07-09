@@ -679,7 +679,7 @@ GMarker.prototype.openExtInfoWindow = function(map, cssId, html, opt_opts) {
  * @param {GMap2} map The map where the GMarker and ExtInfoWindow exist
  */
 GMarker.prototype.closeExtInfoWindow = function(map) {
-  if( map.getExtInfWindow() != null ){
+  if( map.getExtInfoWindow() != null ){
     map.closeExtInfoWindow();
   }
 };
