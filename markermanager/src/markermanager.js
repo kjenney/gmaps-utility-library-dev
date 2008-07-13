@@ -173,6 +173,7 @@ MarkerManager.prototype.getTilePoint_ = function(latlng, zoom, padding) {
  */
 MarkerManager.prototype.addMarkerBatch_ = function(marker, minZoom, maxZoom) {
   var mPoint = marker.getPoint();
+  marker.MarkerManager_minZoom = minZoom;
   // Tracking markers is expensive, so we do this only if the
   // user explicitly requested it when creating marker manager.
   if (this.trackMarkers_) {
@@ -284,7 +285,6 @@ MarkerManager.prototype.removeMarker = function(marker) {
   var grid = me.getTilePoint_(point, zoom, GSize.ZERO);
   while (zoom >= 0) {
     var cell = me.getGridCellNoCreate_(grid.x, grid.y, zoom);
-
     if (cell) {
       me.removeFromArray(cell, marker);
     }
@@ -304,6 +304,7 @@ MarkerManager.prototype.removeMarker = function(marker) {
   if (changed) {
     me.notifyListeners_();
   }
+  me.numMarkers_[marker.MarkerManager_minZoom]--;
 };
 
 

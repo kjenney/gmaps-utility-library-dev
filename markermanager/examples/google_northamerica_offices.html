@@ -23,6 +23,9 @@
         map.enableDoubleClickZoom();
         mgr = new MarkerManager(map, {trackMarkers:true});
         window.setTimeout(setupOfficeMarkers, 0);
+        GEvent.addListener(map, 'zoomend', function() { 
+          updateStatus(mgr.getMarkerCount(map.getZoom()));
+        }); 
       }
     }
 
@@ -65,25 +68,35 @@
         mgr.addMarkers(markers, layer["zoom"][0], layer["zoom"][1]);
       }
       mgr.refresh();
+      updateStatus(mgr.getMarkerCount(map.getZoom()));
     }
   
     function createMarker(posn, title, icon) {
       var marker = new GMarker(posn, {title: title, icon: icon, draggable:true });
-      GEvent.addListener(marker, 'dblclick', function() { mgr.removeMarker(marker) } ); 
+      GEvent.addListener(marker, 'dblclick', function() { 
+        mgr.removeMarker(marker) 
+        updateStatus(mgr.getMarkerCount(map.getZoom()));
+      } ); 
       return marker;
     }
 
     function deleteMarker() {
       var markerNum = parseInt(document.getElementById("markerNum").value);
       mgr.removeMarker(allmarkers[markerNum]);
+      updateStatus(mgr.getMarkerCount(map.getZoom()));
     }
    
     function clearMarkers() {
       mgr.clearMarkers();
+      updateStatus(mgr.getMarkerCount(map.getZoom()));
     }
    
     function reloadMarkers() {
       setupOfficeMarkers();
+    }
+    
+    function updateStatus(html) {
+      document.getElementById("status").innerHTML = html;
     }
     //]]>
     </script>
@@ -100,6 +113,7 @@
 
     <br/>
     <div id="map" style="width: 600px; height: 400px;"></div>
+    <div id="status"></div>
   </body>
 </html>
 
