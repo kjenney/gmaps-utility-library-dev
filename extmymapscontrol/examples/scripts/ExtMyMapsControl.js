@@ -122,6 +122,10 @@ ExtMyMapsControl.prototype.initialize = function(map){
     map.addControl(me.controls[name]);
   }
   
+  //initialize the maps's infowindow (it appears it takes longer the first time it is created, so avoid this timing issue)
+  //as of v=2.123
+  map.getInfoWindow();
+  
   return me.container;
 };
 
