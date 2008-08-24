@@ -1,70 +1,27 @@
 <project default="all" basedir="..">
-  <path id="lib.path">
-    <fileset dir="util/java" includes="*.jar"/>
-  </path>
-  <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="lib.path"/>
-  <taskdef resource="svntask.properties" classpathref="lib.path"/>
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+    <classpath>
+      <pathelement location="util/java/ant-contrib-1.0b3.jar"/>
+    </classpath>
+  </taskdef>
   <target name="all">
-    <foreach param="LIBLOC" target="setalltypes">
+    <foreach param="LIBLOC" target="docs">
       <path>
         <dirset dir="${basedir}" includes="*" excludes="util"/>
       </path>
     </foreach>
   </target>
-  <target name="setalltypes" description="Sets svn mime-types.">
-    <!-- html -->
-    <foreach param="FILE" target="propset">
-      <path>
-        <fileset dir="${LIBLOC}" includes="**/*.html"/>
-      </path>
-      <param name="MIMETYPE" value="text/html"/>
-    </foreach>
-    <!-- css -->
-    <foreach param="FILE" target="propset">
-      <path>
-        <fileset dir="${LIBLOC}" includes="**/*.css"/>
-      </path>
-      <param name="MIMETYPE" value="text/css"/>
-    </foreach>
-    <!-- js -->
-    <foreach param="FILE" target="propset">
-      <path>
-        <fileset dir="${LIBLOC}" includes="**/*.js"/>
-      </path>
-      <param name="MIMETYPE" value="text/javascript"/>
-    </foreach>
-    <!-- xml -->
-    <foreach param="FILE" target="propset">
-      <path>
-        <fileset dir="${LIBLOC}" includes="**/*.xml"/>
-      </path>
-      <param name="MIMETYPE" value="text/xml"/>
-    </foreach>
-    <!-- png -->
-    <foreach param="FILE" target="propset">
-      <path>
-        <fileset dir="${LIBLOC}" includes="**/*.png"/>
-      </path>
-      <param name="MIMETYPE" value="image/png"/>
-    </foreach>
-    <!-- gif -->
-    <foreach param="FILE" target="propset">
-      <path>
-        <fileset dir="${LIBLOC}" includes="**/*.gif"/>
-      </path>
-      <param name="MIMETYPE" value="image/gif"/>
-    </foreach>
-    <!-- jpg -->
-    <foreach param="FILE" target="propset">
-      <path>
-        <fileset dir="${LIBLOC}" includes="**/*.jpg"/>
-      </path>
-      <param name="MIMETYPE" value="image/jpeg"/>
-    </foreach>
-  </target>
-  <target name="propset" description="Runs svn propset svn:mime-type.">
-    <svn javahl="false">
-      <propset path="${FILE}" name="svn:mime-type" value="${MIMETYPE}"/>
-    </svn>
+  <target name="docs" description="Generates reference documentation.">
+    <fileset id="LIBRARY" dir="${LIBLOC}" includes="src/*.js" excludes="src/*_packed.js"/>
+    <property name="LIBRARY" refid="LIBRARY"></property>
+    <java failonerror="true" jar="${basedir}/util/docs/jsdoc-toolkit/jsrun.jar" fork="true">
+      <arg value="${basedir}/util/docs/jsdoc-toolkit/app/run.js"/>
+      <arg value="--allfunctions"/>
+      <arg value="--verbose"/>
+      <arg value="--suppress"/>
+      <arg value="--template=${basedir}/util/docs/template/"/>
+      <arg value="--directory=${LIBLOC}/docs/"/>
+      <arg value="${LIBLOC}/${LIBRARY}"/>
+    </java>
   </target>
 </project>
