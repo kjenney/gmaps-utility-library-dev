@@ -186,7 +186,6 @@ LabeledMarker.prototype.hide = function() {
 LabeledMarker.prototype.setLatLng = function(latlng) {
   this.latlng_ = latlng;
   GMarker.prototype.setLatLng.apply(this, arguments);
-  this.redrawLabel_();
 };
 
 /**
