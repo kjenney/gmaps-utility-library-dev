@@ -1,6 +1,6 @@
 /**
  * @name MapIconMaker
- * @version 1.0
+ * @version 1.1
  * @author Pamela Fox
  * @copyright (c) 2008 Pamela Fox
  * @fileoverview This gives you static functions for creating dynamically
@@ -194,7 +194,7 @@ MapIconMaker.createLabeledMarkerIcon = function(opts) {
   iconUrl += "Lauto'f\\";
 
   var icon = new GIcon(G_DEFAULT_ICON);
-  icon.image = iconUrl;
+  icon.image = iconUrl + "&ext=.png";
   icon.iconSize = (addStar) ? new GSize(23, 39) : new GSize(21, 34);
   return icon;
 };
