@@ -25,6 +25,27 @@
       </path>
     </foreach>
   </target>
+  <target name="all-pack">
+    <foreach param="LIBLOC" target="pack">
+      <path>
+        <dirset dir="${basedir}" includes="*" excludes="util"/>
+      </path>
+    </foreach>
+  </target>
+  <target name="all-docs">
+    <foreach param="LIBLOC" target="docs">
+      <path>
+        <dirset dir="${basedir}" includes="*" excludes="util"/>
+      </path>
+    </foreach>
+  </target>
+  <target name="all-setalltypes">
+    <foreach param="LIBLOC" target="setalltypes">
+      <path>
+        <dirset dir="${basedir}" includes="*" excludes="util"/>
+      </path>
+    </foreach>
+  </target>
   <target name="docs" description="Generates reference documentation.">
     <fileset id="LIBRARY" dir="${LIBLOC}" includes="src/*.js" excludes="src/*_packed.js"/>
     <property name="LIBRARY" refid="LIBRARY"></property>
