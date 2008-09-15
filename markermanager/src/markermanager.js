@@ -62,17 +62,14 @@ function MarkerManager(map, opt_opts) {
   me.tileSize_ = MarkerManager.DEFAULT_TILE_SIZE_;
 
   var mapTypes = map.getMapTypes();
-  var maxZoom = mapTypes[0].getMaximumResolution();
+  var mapMaxZoom = mapTypes[0].getMaximumResolution();
   for (var i = 0; i < mapTypes.length; i++) {
     var mapTypeMaxZoom = mapTypes[i].getMaximumResolution();
-    if (mapTypeMaxZoom > maxZoom) {
-      maxZoom = mapTypeMaxZoom;
+    if (mapTypeMaxZoom > mapMaxZoom) {
+      mapMaxZoom = mapTypeMaxZoom;
     }
   }
-  if (opt_opts.maxZoom) {
-    maxZoom = opt_opts.maxZoom;
-  }
-  me.maxZoom_ = maxZoom;
+  me.maxZoom_  = opt_opts.maxZoom || mapMaxZoom;
 
   me.trackMarkers_ = opt_opts.trackMarkers;
 
@@ -90,9 +87,9 @@ function MarkerManager(map, opt_opts) {
   me.gridWidth_ = [];
 
   me.grid_ = [];
-  me.grid_[maxZoom] = [];
+  me.grid_[me.maxZoom_] = [];
   me.numMarkers_ = [];
-  me.numMarkers_[maxZoom] = 0;
+  me.numMarkers_[me.maxZoom_] = 0;
 
   GEvent.bind(map, "moveend", me, me.onMapMoveEnd_);
 
@@ -175,6 +172,7 @@ MarkerManager.prototype.getTilePoint_ = function (latlng, zoom, padding) {
  */
 MarkerManager.prototype.addMarkerBatch_ = function (marker, minZoom, maxZoom) {
   var mPoint = marker.getPoint();
+  marker.MarkerManager_minZoom = minZoom;
   // Tracking markers is expensive, so we do this only if the
   // user explicitly requested it when creating marker manager.
   if (this.trackMarkers_) {
@@ -306,6 +304,7 @@ MarkerManager.prototype.removeMarker = function (marker) {
   if (changed) {
     me.notifyListeners_();
   }
+  me.numMarkers_[marker.MarkerManager_minZoom]--;
 };
 
 
