@@ -352,6 +352,36 @@ MarkerManager.prototype.getMarkerCount = function (zoom) {
   return total;
 };
 
+/** 
+ * Returns a marker given latitude, longitude and zoom. If the marker does not exist, 
+ * the method will return a new marker. If a new marker is created, it will NOT be 
+ * added to the MarkerManager. 
+ * 
+ * @param {Number} lat - the latitude of a marker. 
+ * @param {Number} lng - the longitude of a marker. 
+ * @param {Number} zoom - the zoom level 
+ * @return {GMarker} marker - the marker found at lat and lng 
+ */ 
+MarkerManager.prototype.getMarker = function(lat, lng, zoom) 
+{ 
+  var me = this; 
+  var mPoint = new GLatLng(lat, lng); 
+  var gridPoint = me.getTilePoint_(mPoint, zoom, GSize.ZERO); 
+
+  var marker = new GMarker(mPoint); 
+  var cellArray = me.getGridCellNoCreate_(gridPoint.x, gridPoint.y, zoom); 
+  if(cellArray != undefined){ 
+    for (var i = 0; i < cellArray.length; i++) 
+    { 
+      if(lat == cellArray[i].getLatLng().lat() && 
+         lng == cellArray[i].getLatLng().lng()) 
+      { 
+        marker = cellArray[i]; 
+      } 
+    } 
+  } 
+  return marker; 
+}; 
 
 /**
  * Add a single marker to the map.
