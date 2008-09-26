@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+
+
+<head>
+<title>Google Maps JavaScript API Example - Snap to Polyline</title>
+<link rel="stylesheet" type="text/css" href="/mapStyle.css" />
+
+    
+<script>
+    var scriptTag = '<' + 'script src="http://maps.google.com/maps?file=api&v=2.x&key=ABQIAAAAbRm2TpqQOvF3ceP4wzWXeBRjPdZ0Gi1PU2qzQdsg6xUdJcVS0BSQaZWcYAi4GWkHQIVPn4t32q1Jfw">'+'<'+'/script>';
+    document.write(scriptTag);
+</script>
+
+<script type="text/javascript" src="cSnapToRoute.js"></script>
+
+<script type="text/javascript">
+
+var map;
+var centerPoint = new GLatLng(40.078071,-101.689453);
+var routePoints = Array();
+var routePixels = Array();
+var routeOverlay = null;
+var normalProj = G_NORMAL_MAP.getProjection();    
+var threshold = 15; //pixels for proximity
+var oSnap;
+
+function load() {
+    doLoad();
+}
+
+function doLoad() {
+    if (GBrowserIsCompatible()) {
+        map = new GMap2(document.getElementById("map"), {draggableCursor:"crosshair"});
+        map.setCenter(centerPoint, 7);
+        map.addControl(new GScaleControl());
+        map.addControl(new GLargeMapControl());
+        map.addControl(new GMapTypeControl());
+        GEvent.addListener(map, 'click', mapClick);
+        GEvent.addListener(map, 'mousemove', mapMove);
+    }
+}
+
+
+
+function mapClick(marker, point) {
+    if (!marker) {
+        unboundedPoint = new GLatLng(point.lat(),point.lng())
+        addRoutePoint(unboundedPoint);
+    }
+}
+
+function mapMove(point) {
+    if(oSnap){
+        var oStatusDiv = document.getElementById("statusDiv")    
+        oStatusDiv.innerHTML = oSnap.getDistAlongRoute(point).toFixed(0) + " metres from start at " + point.toUrlValue();
+    }
+}
+
+
+function addRoutePoint(point) {
+    var zoom = map.getZoom();
+    routePoints.push(point);
+    var Px = normalProj.fromLatLngToPixel(point, zoom);
+    routePixels.push(Px);
+
+    if (routePoints.length > 1)    {
+        plotRoute();
+        if ( !oSnap ) {
+            oSnap = new cSnapToRoute();
+            oSnap.init(map, startMarker, routeOverlay);
+        } else {
+            oSnap.updateTargets(null, routeOverlay);
+        }
+    }
+    else {
+        startMarker = createMarker(point,'Start')
+        map.addOverlay(startMarker);
+    }
+}
+
+function plotRoute() {
+    if ( routeOverlay ) {
+        map.removeOverlay(routeOverlay);
+    }
+    routeOverlay = new GPolyline(routePoints,'#FF9601',3,1);
+    map.addOverlay(routeOverlay);
+}
+
+
+function createMarker(point, title) {
+    var marker = new GMarker(point,{title:title});
+    GEvent.addListener(marker, "click", function() {
+        marker.openInfoWindowHtml(title + '<hr>Lat: ' + point.y + '<br>Lon: ' + point.x);
+    });
+    return marker;
+}
+
+
+function resetRoute() {
+    routePoints = new Array();
+    routePixels = new Array();
+    map.clearOverlays();
+    var oStatusDiv = document.getElementById("statusDiv")    
+    oStatusDiv.innerHTML = '';
+}
+
+
+function getProximity(mouseLatLng) {
+    var zoom = map.getZoom();
+    var oStatusDiv = document.getElementById("statusDiv")    
+    oStatusDiv.innerHTML = 'Mouse LatLng: ' + mouseLatLng.y.toFixed(6) + ', ' + mouseLatLng.x.toFixed(6) ;
+
+    var mousePx = normalProj.fromLatLngToPixel(mouseLatLng, zoom);
+    oStatusDiv.innerHTML += '<br>Mouse Px: ' + mousePx.x + ', ' + mousePx.y;
+
+    var minDist = threshold;
+    if (routePixels.length > 1){
+        for (var n = 1 ; n < routePixels.length ; n++ ) {
+            var a = (routePixels[n].y - routePixels[n-1].y) / (routePixels[n].x - routePixels[n-1].x);
+            var b = routePixels[n].y - a * routePixels[n].x;
+            var dist = Math.abs(a*mousePx.x + b - mousePx.y) / Math.sqrt(a*a+1);
+            oStatusDiv.innerHTML += '<br>Mouse distance to line ' + n + ': ' + dist.toFixed(2);
+            minDist = Math.min(minDist,dist);
+        }
+
+        if (minDist < threshold) {
+            map.openInfoWindowHtml(mouseLatLng,'Proximity Alert<br>Mouse distance to line: ' + minDist.toFixed(2));
+        }
+        else {
+            map.closeInfoWindow();
+        }
+    }
+}
+
+
+
+
+
+
+var oBounds;
+var aResults;
+function getProximity2(mouseLatLng) {
+    
+
+    var zoom = map.getZoom();
+    var oStatusDiv = document.getElementById("statusDiv");
+    oStatusDiv.innerHTML = 'Mouse LatLng: ' + mouseLatLng.y.toFixed(6) + ', ' + mouseLatLng.x.toFixed(6) ;
+
+    var mousePx = normalProj.fromLatLngToPixel(mouseLatLng, zoom);
+    oStatusDiv.innerHTML += '<br>Mouse Px: ' + mousePx.x + ', ' + mousePx.y;
+
+    var minDist;
+    
+     aResults = new Array();
+    
+    if (routePixels.length > 1){
+
+    
+        for (var n = 1 ; n < routePixels.length ; n++ ) {
+            if (routePixels[n].x != routePixels[n-1].x) {
+                var a = (routePixels[n].y - routePixels[n-1].y) / (routePixels[n].x - routePixels[n-1].x);
+                var b = routePixels[n].y - a * routePixels[n].x;
+                var dist = Math.abs(a*mousePx.x + b - mousePx.y) / Math.sqrt(a*a+1);
+            }
+            else {
+                var dist = Math.abs(mousePx.x - routePixels[n].x)
+            };
+
+            // length^2 of line segment 
+            var rl2 = Math.pow(routePixels[n].y - routePixels[n-1].y,2) + Math.pow(routePixels[n].x - routePixels[n-1].x,2);
+            
+            // distance^2 of pt to end line segment
+            var ln2 = Math.pow(routePixels[n].y - mousePx.y,2) + Math.pow(routePixels[n].x - mousePx.x,2);
+
+            // distance^2 of pt to begin line segment
+            var lnm12 = Math.pow(routePixels[n-1].y - mousePx.y,2) + Math.pow(routePixels[n-1].x - mousePx.x,2);
+
+            // minimum distance^2 of pt to infinite line
+            var dist2 = Math.pow(dist,2);
+            
+            // calculated length^2 of line segment
+            var calcrl2 = ln2 - dist2 + lnm12 - dist2;
+
+            // redefine minimum distance to line segment (not infinite line) if necessary
+            if (calcrl2 > rl2) {
+                dist = Math.sqrt( Math.min(ln2,lnm12) );
+            };
+
+
+            oStatusDiv.innerHTML += '<br>Mouse distance to line ' + n + ': ' + dist.toFixed(2) + '<br/>'+
+                'Distance to start:' + (Math.sqrt(ln2))  + '. And end: ' + Math.sqrt(lnm12) + "<br />" +
+                "Offset in line: " + Math.sqrt(lnm12 - dist2) + "<br />" +
+                "Line segment: " + Math.sqrt(rl2) + "<br />" + 
+                "(Lat/Lng)/% : " + ( (Math.sqrt(lnm12 - dist2)) / Math.sqrt(rl2) * 100 ) + "<br />" +
+                "(Lat/Lng)/% : " + ( (Math.sqrt(ln2 - dist2)) / Math.sqrt(rl2) * 100 ) + "<br />";
+                
+                var latSpan = routeOverlay.getVertex(0).lat() - routeOverlay.getVertex(1).lat();
+                var lngSpan = routeOverlay.getVertex(0).lng() - routeOverlay.getVertex(1).lng();
+                
+                
+                // LNG horizontal
+                
+            
+            var newLat = routeOverlay.getVertex(0).lat() - ( latSpan * ((Math.sqrt(lnm12 - dist2)) / Math.sqrt(rl2)) );
+            var newLng = routeOverlay.getVertex(0).lng() - ( lngSpan * ((Math.sqrt(lnm12 - dist2)) / Math.sqrt(rl2)) );
+            
+            aResults[n] = { 'dist'           : dist,
+                            "iPercentageTo"  : ((Math.sqrt(lnm12 - dist2)) / Math.sqrt(rl2)),
+                            "iPercentageFrom": ((Math.sqrt(ln2 - dist2)) / Math.sqrt(rl2))};
+            
+            if ( typeof(minDist) == 'undefined' || minDist.dist > aResults[n].dist ) {
+                minDist = { 'line'      : n,
+                            'dist'      : aResults[n].dist };                
+            }
+        }
+        var iLine = minDist.line;
+        startMarker.setPoint(getClosestPoint(iLine, aResults[iLine].iPercentageTo, aResults[iLine].iPercentageFrom));
+    }
+     
+          
+}
+
+function getClosestPoint(iLine, iPercentageTo, iPercentageFrom){
+    if ( iPercentageTo > 1 ) {
+        iPercentage = 1;        
+    } else if ( iPercentageFrom > 1 ) {
+        iPercentage = 0;
+    } else {
+        iPercentage = iPercentageTo;
+    }
+
+    var latSpan = routeOverlay.getVertex(iLine-1).lat() - routeOverlay.getVertex(iLine).lat();
+    var lngSpan = routeOverlay.getVertex(iLine-1).lng() - routeOverlay.getVertex(iLine).lng();
+
+    var newLat = routeOverlay.getVertex(iLine-1).lat() - ( latSpan * (iPercentage) );
+    var newLng = routeOverlay.getVertex(iLine-1).lng() - ( lngSpan * (iPercentage) );
+    
+    return new GLatLng(parseFloat(newLat), parseFloat(newLng));
+}
+
+
+
+
+</script>
+
+</head>
+
+
+<body onload="load()" onunload="GUnload()">
+
+    <div id="header" style="color: #FFFFC0; font: normal 14px verdana; padding:3px; margin:10px;">
+    <a href="http://www.geostart.nl/">Part of GeoStart</a> (<a href="http://demo.geostart.nl">demo</a>)
+    </div>
+
+
+
+<div id="msg" style="width: 680px; font: bold 12px verdana;padding:3px;margin:10px;">
+
+Click the map two or more times to create polylines. The marker wil snap to the polyline at all times.<br><br>
+<pre>
+/**
+*   Snap marker to closest point on a line.
+*
+*   @author Bj&ouml;rn Brala - Swis BV
+*
+*   Based on Distance to line example by Marcelo, maps.forum.nu
+*   http://maps.forum.nu/gm_mouse_dist_to_line.html
+*
+*   Additions: Calculate closest latlng on the closest line to current mouse.
+*
+*
+*   Usage:
+*
+*   Create the class
+*       var oSnap = new cSnapToRoute();
+*
+*   Initialize the subjects
+*       oSnap.init(oMap, oMarker, oPolyline);
+*
+*   If needed change the marker or polyline subjects. use null when no update
+*       Change Both:
+*           oSnap.updateTargets(oMarker, oPolyline); 
+*       Change marker:
+*           oSnap.updateTargets(oMarker, null); 
+*       Change polyline:
+*           oSnap.updateTargets(null, oPolyline); 
+*
+*
+*   Distance along route for point
+*       oSnap.getDistAlongRoute(latlng);
+**/
+</pre>
+Click the map two or more times to create polylines. The marker wil snap to the polyline at all times.<br><br>
+</div>
+
+
+<table cellspacing="0" cellpadding="0" style="-moz-outline-width:8px; -moz-outline-radius:15px; -moz-outline-style:solid;-moz-outline-color:#838FBB;margin:20px;">
+
+    <tr>
+
+        <td valign="top">
+            <div id="map" style="width: 700px; height: 500px"></div>
+            <div id="statusDiv" style="width: 660px; height: 50px; border: 1px solid gray;font: bold 12px verdana;padding:3px;margin:15px;"></div>
+        </td>
+    </tr>
+</table>
+
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+
+<script type="text/javascript">
+_uacct = "UA-1221628-1";
+urchinTracker();
+</script>
+
+</body>
+</html>
