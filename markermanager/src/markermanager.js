@@ -1,7 +1,30 @@
-/*
- * MarkerManager, v1.0
- * Copyright (c) 2007 Google Inc.
+/**
+ * @name MarkerManager
+ * @version 1.0
+ * @copyright (c) 2007 Google Inc.
+ * @author Doug Ricket, others
  *
+ * @fileoverview Marker manager is an interface between the map and the user,
+ * designed to manage adding and removing many points when the viewport changes.
+ * <br /><br />
+ * Algorithm: The MM places its markers onto a grid, similar to the map tiles.
+ * When the user moves the viewport, the MM computes which grid cells have
+ * entered or left the viewport, and shows or hides all the markers in those
+ * cells.
+ * <br />
+ * (If the users scrolls the viewport beyond the markers that are loaded,
+ * no markers will be visible until the EVENT_moveend triggers an update.)
+ * <br /><br />
+ * In practical consequences, this allows 10,000 markers to be distributed over
+ * a large area, and as long as only 100-200 are visible in any given viewport,
+ * the user will see good performance corresponding to the 100 visible markers,
+ * rather than poor performance corresponding to the total 10,000 markers.
+ * <br /><br />
+ * Note that some code is optimized for speed over space,
+ * with the goal of accommodating thousands of markers.
+ */
+
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,33 +35,26 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- *
- * Author: Doug Ricket, others
- *
- * Marker manager is an interface between the map and the user, designed
- * to manage adding and removing many points when the viewport changes.
- *
- *
- * Algorithm: The MM places its markers onto a grid, similar to the map tiles.
- * When the user moves the viewport, the MM computes which grid cells have
- * entered or left the viewport, and shows or hides all the markers in those
- * cells.
- * (If the users scrolls the viewport beyond the markers that are loaded,
- * no markers will be visible until the EVENT_moveend triggers an update.)
- *
- * In practical consequences, this allows 10,000 markers to be distributed over
- * a large area, and as long as only 100-200 are visible in any given viewport,
- * the user will see good performance corresponding to the 100 visible markers,
- * rather than poor performance corresponding to the total 10,000 markers.
- *
- * Note that some code is optimized for speed over space,
- * with the goal of accommodating thousands of markers.
- *
+ * limitations under the License. 
  */
 
-
+/**
+ * @name MarkerManagerOptions
+ * @class This class represents optional arguments to the {@link MarkerManager}
+ *     constructor.
+ * @property {Number} [maxZoom] Sets the maximum zoom level monitored by a
+ *     marker manager. If not given, the manager assumes the maximum map zoom
+ *     level. This value is also used when markers are added to the manager
+ *     without the optional {@link maxZoom} parameter.
+ * @property {Number} [borderPadding] Specifies, in pixels, the extra padding
+ *     outside the map's current viewport monitored by a manager. Markers that
+ *     fall within this padding are added to the map, even if they are not fully
+ *     visible.
+ * @property {Boolean} [trackMarkers=false] Indicates whether or not a marker
+ *     manager should track markers' movements. If you wish to move managed
+ *     markers using the {@link setPoint} method, this option should be set to
+ *     {@link true}.
+ */
 
 /**
  * Creates a new MarkerManager that will show/hide markers on a map.
@@ -362,8 +378,7 @@ MarkerManager.prototype.getMarkerCount = function (zoom) {
  * @param {Number} zoom - the zoom level 
  * @return {GMarker} marker - the marker found at lat and lng 
  */ 
-MarkerManager.prototype.getMarker = function(lat, lng, zoom) 
-{ 
+MarkerManager.prototype.getMarker = function(lat, lng, zoom) { 
   var me = this; 
   var mPoint = new GLatLng(lat, lng); 
   var gridPoint = me.getTilePoint_(mPoint, zoom, GSize.ZERO); 
