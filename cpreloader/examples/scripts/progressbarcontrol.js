@@ -1,5 +1,44 @@
 ﻿/**
-*   progress class.
+*    Custom progress control.
+*    Possibly extendable with other styles later on?
+*   @return GControl object
+**/    
+function LoaderControl(oMap, iWidth) { 
+	this.oMap = oMap; this.iWidth = iWidth; 
+};
+
+
+
+
+LoaderControl.prototype = new GControl(true, false);
+LoaderControl.prototype.initialize = function () {
+	var oContainer = document.createElement("div");
+	oContainer.innerHTML         = "<div style='position:absolute;width:100%;border:5px;text-align:center;vertical-align:bottom;' id='geo_progress_text'></div><div style='background-color:green;height:100%;' id='geo_progress'></div>";
+	oContainer.id                 = "geo_progress_container";
+	oContainer.style.display       = "none";
+	oContainer.style.width       = this.iWidth + "px";
+	//oContainer.style.marginLeft = "-2.5em";
+	oContainer.style.fontSize    = "0.8em";
+	oContainer.style.height        = "1.3em";
+	oContainer.style.border      = "1px solid #555"; 
+	oContainer.style.backgroundColor = "white";
+	oContainer.style.textAlign     = "left";
+	this.oMap.getContainer().appendChild(oContainer);            
+	
+	return oContainer;
+}
+/**
+*   @return GControlPosition
+**/
+LoaderControl.prototype.getDefaultPosition = function () {
+		return new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(30,56));
+};   
+
+
+
+		
+/**
+*   progress bar class.
 *
 *   Usage:
 *   oProgressbarControl = new ProgressbarControl(oMap, opt_opts);
@@ -15,37 +54,6 @@
 *   Author: Björn Brala SWIS BV
 **/
 function ProgressbarControl(oMap, opt_opts){
-    /**
-    *    Custom progress control.
-    *    Possibly extendable with other styles later on?
-    *   @return GControl object
-    **/    
-    var LoaderControl = function(oMap, iWidth) { this.oMap = oMap; this.iWidth = iWidth; };
-        LoaderControl.prototype = new GControl(true, false);
-        LoaderControl.prototype.initialize = function () {
-                var oContainer = document.createElement("div");
-                oContainer.innerHTML         = "<div style='position:absolute;width:100%;border:5px;text-align:center;vertical-align:bottom;' id='geo_progress_text'></div><div style='background-color:green;height:100%;' id='geo_progress'></div>";
-                oContainer.id                 = "geo_progress_container";
-                oContainer.style.display       = "none";
-                oContainer.style.width       = this.iWidth + "px";
-                //oContainer.style.marginLeft = "-2.5em";
-                oContainer.style.fontSize    = "0.8em";
-                oContainer.style.height        = "1.3em";
-                oContainer.style.border      = "1px solid #555"; 
-                oContainer.style.backgroundColor = "white";
-                oContainer.style.textAlign     = "left";
-                this.oMap.getContainer().appendChild(oContainer);            
-                
-                return oContainer;
-            }
-        /**
-        *   @return GControlPosition
-        **/
-        LoaderControl.prototype.getDefaultPosition = function () {
-                return new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(30,56));
-        };   
-
-
     /**
     *   @desc  Init the progress bar, Create a Control on the map.
     *    Loader:     geo_progress_container
