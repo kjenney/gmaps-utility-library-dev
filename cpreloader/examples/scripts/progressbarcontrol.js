@@ -1,11 +1,11 @@
-/**
-*   Preloader class.
+﻿/**
+*   progress class.
 *
 *   Usage:
-*   oPreloader = new cPreloader(oMap, opt_opts);
-*   oPreloader.start(500); // Amount of operations, unhides the preloader.
-*   oPreloader.updateLoader(iAdded); // Add amount of operations just done
-*   oPreloader.remove(); // Hide the preloader.
+*   oProgressbarControl = new ProgressbarControl(oMap, opt_opts);
+*   oProgressbarControl.(500); // Amount of operations, unhides the control
+*   oProgressbarControl.(iAdded); // Add amount of operations just done
+*   oProgressbarControl.(); // Hide the control.
 *   
 *   opt_opts: Object containing options:
 *               {Number} iWidth Width of the control
@@ -14,9 +14,9 @@
 *   Part of GeoStart (www.geostart.nl)
 *   Author: Björn Brala SWIS BV
 **/
-function cPreloader(oMap, opt_opts){
+function ProgressbarControl(oMap, opt_opts){
     /**
-    *    Custom preloader control.
+    *    Custom progress control.
     *    Possibly extendable with other styles later on?
     *   @return GControl object
     **/    
@@ -24,8 +24,8 @@ function cPreloader(oMap, opt_opts){
         LoaderControl.prototype = new GControl(true, false);
         LoaderControl.prototype.initialize = function () {
                 var oContainer = document.createElement("div");
-                oContainer.innerHTML         = "<div style='position:absolute;width:100%;border:5px;text-align:center;vertical-align:bottom;' id='geo_preloader_text'></div><div style='background-color:green;height:100%;' id='geo_preloader'></div>";
-                oContainer.id                 = "geo_preloader_container";
+                oContainer.innerHTML         = "<div style='position:absolute;width:100%;border:5px;text-align:center;vertical-align:bottom;' id='geo_progress_text'></div><div style='background-color:green;height:100%;' id='geo_progress'></div>";
+                oContainer.id                 = "geo_progress_container";
                 oContainer.style.display       = "none";
                 oContainer.style.width       = this.iWidth + "px";
                 //oContainer.style.marginLeft = "-2.5em";
@@ -47,9 +47,9 @@ function cPreloader(oMap, opt_opts){
 
 
     /**
-    *   @desc  Init the preloader. Create a Control on the map.
-    *    Loader:     geo_preloader_container
-    *    Info:        geo_preloader
+    *   @desc  Init the progress bar, Create a Control on the map.
+    *    Loader:     geo_progress_container
+    *    Info:        geo_progress
     *   @param object GMap2 object
     **/    
     this.options_ = opt_opts == null ? {} : opt_opts;
@@ -62,9 +62,9 @@ function cPreloader(oMap, opt_opts){
 
     this.oMap_ = oMap;                                                      // GMap2 reference
     this.oMap_.addControl(this.oControl_);                                  // Load control into map
-    this.oDiv_ = document.getElementById('geo_preloader');                  // Preloader DIV
-    this.oText_ = document.getElementById('geo_preloader_text');            // Preloader text DIV
-    this.oContainer_ = document.getElementById('geo_preloader_container');  // Preloader container
+    this.oDiv_ = document.getElementById('geo_progress');                  // progress DIV
+    this.oText_ = document.getElementById('geo_progress_text');            // progress text DIV
+    this.oContainer_ = document.getElementById('geo_progress_container');  // progress container
 
     this.iOperations_ = 0;
     this.iCurrent_ = 0;
@@ -74,10 +74,10 @@ function cPreloader(oMap, opt_opts){
 }
 
 /**
-*    @desc Start preloader
+*    @desc Start progress bar
 *    @param int iOperations Counter for the amount of operations that will be executed.
 **/
-cPreloader.prototype.start = function(iOperations) {
+ProgressbarControl.prototype.start = function(iOperations) {
     this.oDiv_.style.width = '0%'; 
     this.iOperations_ = iOperations || 0;
     this.iCurrent_ = 0;
@@ -88,10 +88,10 @@ cPreloader.prototype.start = function(iOperations) {
 
 
 /**
-*   @desc  Set preloader info.
-*   @param int iStep Add number of operations to preloader.
+*   @desc  Set progress info.
+*   @param int iStep Add number of operations to progress.
 **/
-cPreloader.prototype.updateLoader = function( iStep ){
+ProgressbarControl.prototype.updateLoader = function( iStep ){
     this.iCurrent_ += iStep;
     if ( this.iCurrent_ > 0){
         var percentage = Math.ceil((this.iCurrent_ / this.iOperations_) * 100);
@@ -102,8 +102,8 @@ cPreloader.prototype.updateLoader = function( iStep ){
 }
 
 /**
-*    @desc Remove preloader. Well, hide actually.
+*    @desc Remove control. Well, hide actually.
 **/
-cPreloader.prototype.remove = function() {
+ProgressbarControl.prototype.remove = function() {
     this.oContainer_.style.display = 'none';
 }

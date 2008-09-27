@@ -10,12 +10,12 @@
     document.write(scriptTag);
 </script>
 
-<script type="text/javascript" src="script/preloader.class.js"></script>
+<script type="text/javascript" src="scripts/progressbarcontrol.js"></script>
 
 <script type="text/javascript">
 
 var map;
-var oPreloader;
+var oProgressBar;
 
 function load() {
     doLoad();
@@ -29,8 +29,7 @@ function doLoad() {
         map.addControl(new GLargeMapControl());
         map.addControl(new GMapTypeControl());
         
-        oPreloader = new cPreloader();
-        oPreloader.init(map, 150);
+        oProgressBar = new ProgressbarControl(map, 150);
     }
 }
 
@@ -41,14 +40,14 @@ var i = 0;
 
 // Load 25 markers on map
 function loadMarkers(){
-    oPreloader.start(iMax);
+    oProgressBar.start(iMax);
     setTimeout('createMarker()', 10);
 }
 
 // create a marker
 function createMarker(){
     i++;
-    oPreloader.updateLoader(1);
+    oProgressBar.updateLoader(1);
     // Add 10 markers to the map at random locations
       var bounds = map.getBounds();
       var southWest = bounds.getSouthWest();
@@ -66,7 +65,7 @@ function createMarker(){
     if ( i < iMax ) {
         setTimeout('createMarker()', 10);
     } else {
-        oPreloader.remove();
+        oProgressBar.remove();
         i = 0;
     }
         
@@ -75,19 +74,19 @@ function createMarker(){
 
 
 function removeMarkers(){
-    oPreloader.start(aMarkers.length);
+    oProgressBar.start(aMarkers.length);
     setTimeout("removeMarker()", 10);
     
 }
 
 
 function removeMarker(){
-    oPreloader.updateLoader(1);
+    oProgressBar.updateLoader(1);
     map.removeOverlay(aMarkers.pop());
     if ( aMarkers.length > 0 ) {
         setTimeout("removeMarker()", 10);
     } else {
-        oPreloader.remove();
+        oProgressBar.remove();
     }
 }
 
@@ -111,16 +110,20 @@ function removeMarker(){
 
 <pre>
 /**
-*   Preloader class.
+*   progress class.
 *
 *   Usage:
-*   oPreloader = new cPreloader(oMap, iWidth);
-*   oPreloader.start(500); // Amount of operations, unhides the preloader.
-*   oPreloader.updateLoader(iAdded); // Add amount of operations just done
-*   oPreloader.remove(); // Hide the preloader.
+*   oProgressbarControl = new ProgressbarControl(oMap, opt_opts);
+*   oProgressbarControl.(500); // Amount of operations, unhides the control
+*   oProgressbarControl.(iAdded); // Add amount of operations just done
+*   oProgressbarControl.(); // Hide the control.
 *   
+*   opt_opts: Object containing options:
+*               {Number} iWidth Width of the control
+*               {String} sLoadstring String displayed when first starting the control
+*
 *   Part of GeoStart (www.geostart.nl)
-*   Author: Bjorn Brala SWIS BV
+*   Author: Björn Brala SWIS BV
 **/
 </pre>
 </div>
@@ -129,9 +132,9 @@ function removeMarker(){
 <table cellspacing="0" cellpadding="0" style="-moz-outline-width:8px; -moz-outline-radius:15px; -moz-outline-style:solid;-moz-outline-color:#838FBB;margin:20px;">
     <tr>
         <td class="menu" width="188">
-            <a href="#bottom" onclick="oPreloader.start(500);">oPreloader.start(500);</a>
-            <a href="#bottom" onclick="oPreloader.updateLoader(7);">oPreloader.updateLoader(7);</a>
-            <a href="#bottom" onclick="oPreloader.remove();">oPreloader.remove();</a>
+            <a href="#bottom" onclick="oProgressBar.start(500);">oProgressBar.start(500);</a>
+            <a href="#bottom" onclick="oProgressBar.updateLoader(7);">oProgressBar.updateLoader(7);</a>
+            <a href="#bottom" onclick="oProgressBar.remove();">oProgressBar.remove();</a>
             <a href="#bottom" onclick="loadMarkers();">loadMarkers();</a>
             <a href="#bottom" onclick="removeMarkers();">removeMarkers();</a>
         </td>
