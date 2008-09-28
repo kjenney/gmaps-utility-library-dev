@@ -8,7 +8,7 @@
 <br>progressbar = new ProgressbarControl(oMap, opt_opts);
 <br>progressbar.(500); // Amount of operations, unhides the control
 <br>progressbar.(iAdded); // Add amount of operations just done
-<br>progressbar.(); // Hide the control.
+<br>progressbar.hide(); // Hide the control.
 <br>   
 <br>opt_opts: Object containing options:
 <br>               {Number} [width=176] Width of the control
