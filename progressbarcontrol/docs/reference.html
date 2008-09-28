@@ -17,8 +17,8 @@ Creates a progressbar control for usage in google maps.<br>
 <br>oProgressbarControl.(); // Hide the control.
 <br>   
 <br>opt_opts: Object containing options:
-<br>               {Number} iWidth Width of the control
-<br>               {String} sLoadstring String displayed when first starting the control</p>
+<br>               {Number} [width=176] Width of the control
+<br>               {String} [loadstring=Loading...] String displayed when first starting the control</p>
     
       <h2><a name="ProgressbarControl"></a>class ProgressbarControl</h2>
       <p></p>
@@ -48,7 +48,7 @@ Creates a progressbar control for usage in google maps.<br>
               </tr>
             
               <tr class="even">
-                <td><code>start(<span class="type" title="type:  int">iOperations</span>)</code></td>
+                <td><code>start(<span class="type" title="type:  int">operations</span>)</code></td>
                 
                   
                     <td><code>None</code></td>
@@ -58,54 +58,13 @@ Creates a progressbar control for usage in google maps.<br>
               </tr>
             
               <tr class="odd">
-                <td><code>updateLoader(<span class="type" title="type:  int">iStep</span>)</code></td>
+                <td><code>updateLoader(<span class="type" title="type:  int">step</span>)</code></td>
                 
                   
                     <td><code>None</code></td>
                   
                 
                 <td>Update the progress. Adds Step amount of operations to the bar.</td>
-              </tr>
-            
-          </tbody>
-        </table>
-      
-    
-      <h2><a name="ProgressbarMapControl"></a>class ProgressbarMapControl</h2>
-      <p></p>
-      
-        <h3>Methods</h3>
-        <table summary="class ProgressbarMapControl - Methods" width="90%">
-          
-          <tbody>
-            <tr>
-              <th>Methods</th>
-              
-                
-                  <th>Return&nbsp;Value</th>
-                
-              
-              <th>Description</th>
-            </tr>
-            
-              <tr class="odd">
-                <td><code>getDefaultPosition()</code></td>
-                
-                  
-                    <td><code></code></td>
-                  
-                
-                <td>Return the default position for the control</td>
-              </tr>
-            
-              <tr class="even">
-                <td><code>initialize()</code></td>
-                
-                  
-                    <td><code></code></td>
-                  
-                
-                <td>Initilizes the GControl. Created the HTML and styles.</td>
               </tr>
             
           </tbody>
@@ -130,23 +89,23 @@ Creates a progressbar control for usage in google maps.<br>
             </tr>
             
               <tr class="odd">
-                <td><code>iWidth</code></td>
+                <td><code>loadstring</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>Specifies the string displayed when first starting the control. Before any update!  The default value is <code>Loading...</code>.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>width</code></td>
                 
                   
                     <td><code>Number</code></td>
                   
                 
                 <td>Specifies, in pixels, the width of the progress bar.  The default value is <code>176</code>.</td>
-              </tr>
-            
-              <tr class="even">
-                <td><code>sLoadstring</code></td>
-                
-                  
-                    <td><code>String</code></td>
-                  
-                
-                <td>Specifies the string displayed when first starting the control. Before any update!  The default value is <code>Loading</code>.</td>
               </tr>
             
           </tbody>
