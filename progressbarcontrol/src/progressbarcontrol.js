@@ -5,10 +5,10 @@
 * @copyright (c) 2008 SWIS BV
 * @fileoverview Creates a progressbar control for usage in google maps.<br>
 <br>Usage:
-<br>oProgressbarControl = new ProgressbarControl(oMap, opt_opts);
-<br>oProgressbarControl.(500); // Amount of operations, unhides the control
-<br>oProgressbarControl.(iAdded); // Add amount of operations just done
-<br>oProgressbarControl.(); // Hide the control.
+<br>progressbar = new ProgressbarControl(oMap, opt_opts);
+<br>progressbar.(500); // Amount of operations, unhides the control
+<br>progressbar.(iAdded); // Add amount of operations just done
+<br>progressbar.(); // Hide the control.
 <br>   
 <br>opt_opts: Object containing options:
 <br>               {Number} [width=176] Width of the control
