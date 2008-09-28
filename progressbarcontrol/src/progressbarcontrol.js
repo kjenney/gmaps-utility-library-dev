@@ -6,7 +6,7 @@
 * @fileoverview Creates a progressbar control for usage in google maps.<br>
 <br>Usage:
 <br>progressbar = new ProgressbarControl(oMap, opt_opts);
-<br>progressbarstart.(500); // Amount of operations, unhides the control
+<br>progressbar.start(500); // Amount of operations, unhides the control
 <br>progressbar.updateLoader(step); // Add amount of operations just done
 <br>progressbar.remove(); // Hide the control.
 <br>   
