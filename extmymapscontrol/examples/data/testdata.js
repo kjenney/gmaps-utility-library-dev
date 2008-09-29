@@ -37,6 +37,20 @@
 				        clickable:true
 				      }
 						}
+					},
+					{
+						type:"line",
+						coordinates:[{lat:37.991,lng:-122.0034},{lat:37.991,lng:-121.1034},{lat:38.3981,lng:-121.1034}],
+						title:"hello, i'm a line",
+						description:"json made me",
+						style:{
+				      strokeColor:"#0000FF",
+				      strokeWeight:3,
+				      strokeOpacity:0.45,
+				      opts:{
+				        clickable:true
+				      }
+						}
 					}
 		 		]
 		}

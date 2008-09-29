@@ -1,16 +1,15 @@
 /**
  * Main Map Script
  */
-var map;
-var myMapsControl; //for testing, give firebug access
+var geometryControls; //for testing, give firebug access
 var markerControl; //ditto
 var polygonControl;
-var temp;
+var polylineControl;
 
 GEvent.addDomListener(window,"load",function(){
   if (GBrowserIsCompatible()) {
   
-    map = new GMap2(document.getElementById("map_canvas"));
+    var map = new GMap2(document.getElementById("map_canvas"));
     map.setCenter(new GLatLng(37.88, -122.442626), 10);
     map.addControl(new GLargeMapControl());
     map.addControl(new GHierarchicalMapTypeControl());
@@ -18,29 +17,46 @@ GEvent.addDomListener(window,"load",function(){
     map.addMapType(G_SATELLITE_3D_MAP);
     map.enableScrollWheelZoom();
 		
-    myMapsControl = new ExtMyMapsControl();
+    geometryControls = new GeometryControls();
     markerControl = new MarkerControl();
     polygonControl = new PolygonControl();
-    myMapsControl.addControl(markerControl);
-    myMapsControl.addControl(polygonControl);
-    map.addControl(myMapsControl);
+    polylineControl = new PolylineControl();
+    geometryControls.addControl(markerControl);
+    geometryControls.addControl(polygonControl);
+    geometryControls.addControl(polylineControl);
+    map.addControl(geometryControls);
     
-    myMapsControl.loadData({
+    geometryControls.loadData({
       type:"json",
       url:"data/testdata.js"
     });
     
-    myMapsControl.loadData({
+    geometryControls.loadData({
       type:"kml",
       url:"data/example.xml"
     });
     
     //for testing
-    myMapsControl.options.autoSave = false;
-    
+   geometryControls.Options.autoSave = false;    
   }
 });
 
 GEvent.addDomListener(window,"unload",function(){
 	GUnload();
 });
+
+/**
+ * Toggles the autoSaveProperty which determines if ajax post requests are made
+ * after changing geometries
+ * For testing only
+ * @param {Object} button
+ */
+function mockAutoSave(button){
+  if(button.value.indexOf("On") > -1){
+    geometryControls.Options.autoSave = true;
+    button.value = "Turn AutoSave Off";
+  } else {
+    geometryControls.Options.autoSave = false;
+    button.value = "Turn AutoSave On";
+  }
+}

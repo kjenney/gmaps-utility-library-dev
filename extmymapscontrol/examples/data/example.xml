@@ -48,10 +48,11 @@
     </Point>
   </Placemark>
   
+  <!-- Innerboundaries not yet supported -->
   <Placemark>
     <styleUrl>#examplePolyStyle</styleUrl>
     <name>hollow box</name>
-    <description>I'm from km</description>
+    <description>I'm from kml</description>
     <Polygon>
       <extrude>1</extrude>
       <altitudeMode>relativeToGround</altitudeMode>
@@ -79,6 +80,22 @@
       </innerBoundaryIs>
     </Polygon>
   </Placemark>  
+  
+  <Placemark>
+    <styleUrl>#examplePolyStyle</styleUrl>
+    <name>purple line</name>
+    <description>I'm a line from kml</description>
+    <LineString>
+      <extrude>1</extrude>
+      <tessellate>1</tessellate>
+      <altitudeMode>absolute</altitudeMode>
+      <coordinates> -121.586565,37.523425,2357
+        -121.886565,37.523425,2357
+        -122.086565,37.923425,2357
+        -122.086565,37.523425,2357
+      </coordinates>
+     </LineString>
+  </Placemark>   
 
 </Document>
 </kml>
