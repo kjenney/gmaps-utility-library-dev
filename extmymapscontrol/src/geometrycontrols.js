@@ -1,7 +1,7 @@
 /**
-* ExtMyMapsControl Class v0.2
-*  Copyright (c) 2008, Google 
-*  Author: Chris Marx and Pamela Fox and others
+* GeometryControls Class v0.2
+* Copyright (c) 2008, Google 
+* Author: Chris Marx and Pamela Fox and others
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 
 /**
  * Global wrapper function for getElementsById()
- * @param {String} id - Element's id
+ * @param {String} id Element's id
  */
 function get$(id) {
   return document.getElementById(id);
@@ -29,87 +29,104 @@ function get$(id) {
 };
 
 /**
- * Creates the parent class for My Maps Controls
+ * Creates the parent class for Geometry Controls
  * @constructor
- * @param {Object} opt_opts
- *   @param {Object} controlPositionFloat A GControlAnchor for positioning the parent control container (if used)
- *   @param {Object} controlPosition An array with pixel values for parent control position
- *   @param {String} buttonWidth Button width in pixels
- *   @param {String} buttonHeight Button height in pixels
- *   @param {String} buttonBorder Button border in pixels
- *   @param {String} infoWindowHtmlURL The url if the html template file, containing configurable html and json for control infowindows and options
- *   @param {Object} stylesheets An array of urls of stylesheets to be appended 
- *   @param {Boolean} autoSave Determines whether the autoSave feature (via AOP) is turned on or off
- *   @param {String} cssId The base name for css styles
- *   @param {Boolean} debug Sets debug statements to GLog or turns them off for production
+ * @param {Object} opt_opts Named optional arguments:
+ *   @param {Object} opt_opts.controlPositionFloat A GControlAnchor for positioning the parent control container (if used)
+ *   @param {Object} opt_opts.controlPosition An array with pixel values for parent control position
+ *   @param {String} opt_opts.buttonWidth Button width in pixels
+ *   @param {String} opt_opts.buttonHeight Button height in pixels
+ *   @param {String} opt_opts.buttonBorder Button border in pixels
+ *   @param {String} opt_opts.infoWindowHtmlURL The url if the html template file, containing configurable html and json for control infowindows and options
+ *   @param {Object} opt_opts.stylesheets An array of urls of stylesheets to be appended 
+ *   @param {Boolean} opt_opts.autoSave Determines whether the autoSave feature (via AOP) is turned on or off
+ *   @param {String} opt_opts.cssId The base name for css styles
+ *   @param {Boolean} opt_opts.debug Sets debug statements to GLog or turns them off for production
  */
-function ExtMyMapsControl(opt_opts){
+function GeometryControls(opt_opts){
   var me = this;
   
-  //self documenting object with default settings shared by mymaps controls
-  me.options = {
-    controlPostitionFloat:G_ANCHOR_TOP_RIGHT,
+  //self documenting object with default settings shared by geometry controls
+  me.Options = {
+    controlPostitionFloat:G_ANCHOR_TOP_RIGHT, 
     controlPosition:[0,0],
     buttonWidth:'33',
     buttonHeight:'33',
     buttonBorder:'0',
     buttonCursor:'pointer',
-    infoWindowHtmlURL:"data/mymaps_html_template.html",
-    stylesheets:["styles/google.maps.2.css","styles/google.maps.ms.css"],
+    infoWindowHtmlURL:"data/geometry_html_template.html",
+    stylesheets:["styles/google.maps.base.css","styles/google.maps.ms_styles.css"],
     autoSave:true, //TODO have option to turn on autoSave for individual controls?
     cssId:"emmc-geom", //for generic components shared between multiple controls 
     debug:true   
-  }
+  };
   
-  //overide the default options
+  //overide the default Options
   if(opt_opts){
   	for (var o in opt_opts) {
-  		me.options[o] = opt_opts[o];
+  		me.Options[o] = opt_opts[o];
   	}
   } else {
   	//me.debug("??");
   }
   
-  me.ie = (navigator.appName.indexOf('Explorer')>-1)?true:false;
+  me.isIE = navigator.appName.indexOf('Explorer') > -1;
+  me.isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1; 
   me.map = null;
   me.container = null;
   me.controls = {};
   me.buttons_ = {};
   me.stopDigitizingFuncs_ = {};
-  me.infoWindowHtml = {};
+  me.infoWindowHtmlTemplates = {};
   me.bounds = new GLatLngBounds(); //for setting bounds when loading data
   me.autoSaveListener = null;  //external handle for aop
   
-  //call functions that need to load content when object is instantiated
-  me.getInfoWindowHtml();  
-  me.addGoogleMapsCSS();
-  if(me.options.autoSave){
-    me.addAutoSaveAspect();
-  }
+  //run functions that need to be initialized at startup
+  me.runInitFunctions_();
 };
 
-//inherits from GControl only to make it convenient to use map.addControl()
-ExtMyMapsControl.prototype = new GControl();
+/**
+ * Inherits from GControl, makes it convenient to use map.addControl()
+ */
+GeometryControls.prototype = new GControl();
+
+/**
+ * Run functions that need to load content when class is instantiated
+ */
+GeometryControls.prototype.runInitFunctions_ = function(){
+  var me = this;
+  me.getInfoWindowHtml_();  
+  me.addGoogleMapsCSS_();
+  if(me.Options.autoSave){
+    me.addAutoSaveAspect();
+  };
+};
 
 /**
  * Required by GMaps API for controls.
  * @param {Object} opt_opts  
- *   @param {Object} controlPosition An array with top/left offset for control
+ *   @param {Object} opt_opts.controlPositionFloat Constant for float position
+ *   @param {Object} opt_opts.controlPosition An array with top/left offset for control
  * @return {GControlPosition} Default location for control
  */
-ExtMyMapsControl.prototype.getDefaultPosition = function(opt_opts) {
-  var me = this, opt = me.options;
-  return (opt_opts) ? new GControlPosition(opt_opts.controlPositionFloat,new GSize(opt_opts.controlPosition[0],opt_opts.controlPosition[1]))
-                     : new GControlPosition(opt.controlPositionFloat, new GSize(opt.controlPosition[0],opt.controlPosition[1]));
+GeometryControls.prototype.getDefaultPosition = function(opt_opts) {
+  var me = this, opt = me.Options, ctrlPosition;
+  if (opt_opts) {
+    ctrlPosition = new GControlPosition(opt_opts.controlPositionFloat,new GSize(opt_opts.controlPosition[0],opt_opts.controlPosition[1]));
+  } else {
+    ctrlPosition = new GControlPosition(opt.controlPositionFloat, new GSize(opt.controlPosition[0],opt.controlPosition[1]));
+  }
+  return ctrlPosition;
 };
 
 /**
- * Is called by GMap2's addOverlay method. Creates the button 
- *  and appends to the map div.
+ * Is called by GMap2's addOverlay method. Creates the button and appends to the map div.
+ * Since this is called after being added to map, we can access #addControl to add geometry controls and 
+ * make them available here. 
  * @param {GMap2} map The map that has had this ExtMapTypeControl added to it.
  * @return {DOM Object} Div that holds the control
  */ 
-ExtMyMapsControl.prototype.initialize = function(map){
+GeometryControls.prototype.initialize = function(map){
   var me = this;
   me.map = map;
   
@@ -118,29 +135,32 @@ ExtMyMapsControl.prototype.initialize = function(map){
   map.getContainer().appendChild(me.container);
   
   //initialize the controls added with #addControl
-  for(name in me.controls){
+  for(var name in me.controls){
     map.addControl(me.controls[name]);
   }
+  
+  //initialize the maps's infowindow (it appears it takes longer the first time it is created, so avoid this timing issue)
+  map.getInfoWindow();
   
   return me.container;
 };
 
 /**
  * Creates a button, and attaches listeners
- * @param {Object} required All parameters are required!!
- *   @param {String} controlName Name of control
- *   @param {Object} button_opts 
- *     @param {String} img_up_url Url of up image
- *     @param {String} img_down_url Url of down image
- *     @param {String} tooltip Text of tooltip
- *   @param {Function} startDigitizing Function for turning on this digitizer control
- *   @param {Function} stopDigitizing Function for turnong off this digitizer control
+ * @param {Object} required_opts All parameters are required!!
+ *   @param {String} required_opts.controlName Name of control
+ *   @param {Object} required_opts.button_opts 
+ *     @param {String} button_opts.img_up_url Url of up image
+ *     @param {String} button_opts.img_down_url Url of down image
+ *     @param {String} button_opts.tooltip Text of tooltip
+ *   @param {Function} required_opts.startDigitizing Function for turning on this digitizer control
+ *   @param {Function} required_opts.stopDigitizing Function for turnong off this digitizer control
  */
-ExtMyMapsControl.prototype.createButton = function(required_opts){
-  var me = this, opts = required_opts;
+GeometryControls.prototype.createButton = function(required_opts){
+  var me = this, opts = required_opts, Options = me.Options;
   
   //make sure a digitizing function is present
-  if((typeof(opts.startDigitizing) && typeof(opts.stopDigitizing)) !== "function"){
+  if(typeof(opts.startDigitizing) && typeof(opts.stopDigitizing) !== "function"){
     me.debug("Digitizing functions for #createButton are required");
     return;
   }
@@ -148,10 +168,10 @@ ExtMyMapsControl.prototype.createButton = function(required_opts){
   var button = {};
   button.opts = opts.button_opts;  
   var button_img = document.createElement('img');
-  button_img.style.cursor = button.opts.buttonCursor || me.options.buttonCursor;
-  button_img.width = button.opts.buttonWidth || me.options.buttonWidth;
-  button_img.height = button.opts.buttonHeight || me.options.buttonHeight;
-  button_img.border = button.opts.buttonBorder || me.options.buttonBorder;
+  button_img.style.cursor = button.opts.buttonCursor || Options.buttonCursor;
+  button_img.width = button.opts.buttonWidth || Options.buttonWidth;
+  button_img.height = button.opts.buttonHeight || Options.buttonHeight;
+  button_img.border = button.opts.buttonBorder || Options.buttonBorder;
   button_img.src = button.opts.img_up_url;
   button_img.title = button.opts.tooltip;
     
@@ -174,11 +194,11 @@ ExtMyMapsControl.prototype.createButton = function(required_opts){
 };
 
 /**
- * Turns on selected digitizer, turns off the others
+ * Turns on selected digitizer button, turns off the other buttons
  * At the moment, name reference is passed rather than object, is this necessary?
- * @param {Object} button_name
+ * @param {String} button_name
  */
-ExtMyMapsControl.prototype.toggleButtons = function(button_name){
+GeometryControls.prototype.toggleButtons = function(button_name){
   var me = this;
   
   //Calls with no name will turn everything off. Calls with a name will turn all off except the named button
@@ -201,11 +221,13 @@ ExtMyMapsControl.prototype.toggleButtons = function(button_name){
 };
 
 /**
- * Would like to use the constructor name of control, so that name is not hard-coded
+ * Adds a geometry control to this.controls, which are then added to the map
+ * Note: Would like to use the constructor name of control, so that name is not hard-coded
  * but inheriting from GControl overrides the original constructor name :(
  * @param {Object} control
+ * @see #initialize
  */
-ExtMyMapsControl.prototype.addControl = function(control){
+GeometryControls.prototype.addControl = function(control){
   var me = this;
   
   //thanks Ates Goral
@@ -227,14 +249,33 @@ ExtMyMapsControl.prototype.addControl = function(control){
   //TODO turn on auto-save?
 };
 
-ExtMyMapsControl.prototype.tooltipFactory = function(tooltip_opts){
-  var me = this;
+/**
+ * Returns a custom tooltip function. 
+ * Takes care of one time setup variables and functions and stores then in closure.
+ * @param {Object} tooltip_opts
+ *           {Array} tooltip_opts.anchor The position offsets for tooltip anchor
+ *           {String} tooltip_opts.cursor_on The url for a custom cursor
+ *           {String} tooltip_opts.curson_off The url for a custom cursor
+ *           {Object} titles
+ *             {String} titles.start The text displayed at start of shape digitizing
+ *             {String} titles.middle The text displayed at the middle of shape digitizing
+ *             {String} titles.end The text displayed at the end of shape digitizing
+ * @return {Object} tooltipFunc
+ *           {Object} me This
+ *           {Object} tooltip_opts See tooltip_opts param
+ *           {Object} tooltipHandler 
+ *           {DOM Object} tooltipContainer The div container for the tooltip
+ *           {Function} on Turns the tooltip on
+ *           {Function} off Turns the tooltip off
+ */
+GeometryControls.prototype.tooltipFactory = function(tooltip_opts){
+  var me = this, map = me.map;
   
   //One time setup (memoization)
   var tooltipContainer = document.createElement("div");
   tooltipContainer.id = "tooltipContainer";
-  tooltipContainer.className = "emmc-tooltip"
-  me.map.getContainer().appendChild(tooltipContainer);
+  tooltipContainer.className = "emmc-tooltip";
+  map.getContainer().appendChild(tooltipContainer);
   
   var calculatePosition = function(latlng,tooltipContainer) {
 		var offset=map.getCurrentMapType().getProjection().fromLatLngToPixel(map.getBounds().getSouthWest(),map.getZoom());
@@ -243,7 +284,19 @@ ExtMyMapsControl.prototype.tooltipFactory = function(tooltip_opts){
 		var width = -12;
 		var position = new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(point.x - offset.x - anchor.x + width,- point.y + offset.y +anchor.y)); 
 		position.apply(tooltipContainer);
-	}
+	};
+  
+  //TODO Chrome interprets hotspot on cursor incorrectly, so don't use custom cursor for now. 
+  var customCursorFunc = function(){
+    if(tooltip_opts.cursor_on !== "" && !me.isChrome){
+      var dragObject = me.map.getDragObject();
+      return function(){
+        dragObject.setDraggableCursor(tooltip_opts.cursor_on); 
+      };
+    } else {
+      return function(){};
+    }
+  }();
   
   //Returns custom tooltip function/object
   var tooltipFunc = {
@@ -252,14 +305,16 @@ ExtMyMapsControl.prototype.tooltipFactory = function(tooltip_opts){
     tooltipHandler:null,
     tooltipContainer:tooltipContainer,
     on:function(message,callback){
-      this.me.map.getDragObject().setDraggableCursor(this.tooltip_opts.cursor_on); 
+      var self_ = this;      
       tooltipContainer.innerHTML = message;
       tooltipContainer.style.display = "block";
-      //TODO add listener for map drag
-      this.tooltipHandler = GEvent.addListener(this.me.map,"mousemove", function(latlng){
+      //TODO add listener for map drag (tooltip doesnt follow cursor during map drag)
+      //TODO execute less often (not every mousemove)?
+      this.tooltipHandler = GEvent.addListener(self_.me.map,"mousemove", function(latlng){ //really need local reference to me?
         calculatePosition(latlng,tooltipContainer);
+        customCursorFunc();
         if(typeof(callback)==="function"){
-          callback(tooltipContainer);
+          callback(latlng,tooltipContainer);
         }
       });
     },
@@ -268,42 +323,45 @@ ExtMyMapsControl.prototype.tooltipFactory = function(tooltip_opts){
       tooltipContainer.style.display = "none";
       try{GEvent.removeListener(this.tooltipHandler);}catch(e){};
     }
-  }
+  };
+  
   me.tooltip = function(tooltip_opts){
     tooltipFunc.tooltip_opts = tooltip_opts;
     return tooltipFunc;
-  }
+  };
+  
   return tooltipFunc;
 };
 
 /**
- * Create, then store and show/hide an event bound color picker
+ * Create, then store and show/hide an event-bound color picker
  * @param opts
- *   @param {DOMElement} target - element to receive the selected color
- *   @param {Function} callback - callback function
+ *   @param {DOM Object} opts.target - element to receive the selected color
+ *   @param {Function} opts. callback - callback function
  */
-ExtMyMapsControl.prototype.showColorPicker = function(opts){
+GeometryControls.prototype.showColorPicker = function(opts){
   var me = this, row, cell;
   
   //one time setup
-  var colors = eval(me.infoWindowHtml["colorTable"]);
+  //TODO could be moved to separate function
+  var colors = eval(me.infoWindowHtmlTemplates["colorTable"]);
   var div = document.createElement("div");
   document.getElementsByTagName("body")[0].appendChild(div);
-  div.innerHTML = me.infoWindowHtml["colorTableHtml"];
+  div.innerHTML = me.infoWindowHtmlTemplates["colorTableHtml"];
   var colorPicker = get$("emmc-menu-color");
   var colorPickerTable = get$("emmc-color-table");
   row = colorPickerTable.insertRow(0);
   for(var i in colors){
-    if(i%7 == 0 && i!=0){ row = colorPickerTable.insertRow(i/7);}
-    cell = row.insertCell(i%7)
-    cell.innerHTML = '<div id="menu_cp_'+colors[i]+'" bgcolor="'+colors[i]+'" style="border: 1px solid rgb(187, 187, 187); margin: 0px;' 
-                     + 'padding: 0px; width: 15px; height: 15px; background-color:'+colors[i]+'" unselectable="on"><img height="1" width="1"/></div>';
+    if(i%7 === 0 && i!==0){ row = colorPickerTable.insertRow(i/7);}
+    cell = row.insertCell(i%7);
+    cell.innerHTML = '<div id="menu_cp_'+colors[i]+'" bgcolor="'+colors[i]+'" style="border: 1px solid rgb(187, 187, 187); margin: 0px;' +
+                     'padding: 0px; width: 15px; height: 15px; background-color:'+colors[i]+'" unselectable="on"><img height="1" width="1"/></div>';
   }
   
   //private scope variables for use by stored function
   var target, color, callback;//DOM node
   
-  //hide the color picker (better way??)
+  //hide the color picker. TODO : better way??
   var colorPickerHandler = GEvent.addDomListener(colorPicker,"mouseover",function(){
     var tempHandler = GEvent.addDomListener(me.map.getInfoWindow().getContentContainers()[0],"mouseover",function(){
       colorPicker.style.display = "none"; 
@@ -312,12 +370,12 @@ ExtMyMapsControl.prototype.showColorPicker = function(opts){
     var tempHandler2 = GEvent.addListener(me.map,"infowindowclose",function(){
       colorPicker.style.display = "none"; 
       GEvent.removeListener(tempHandler2);
-    })  
+    });  
   });
   //attach listeners for color picker behaviors
   var cells = colorPickerTable.getElementsByTagName("div");
-  for(var i=0; i<cells.length; i++){
-    var td = cells[i]; 
+  for(var j=0; j<cells.length; j++){
+    var td = cells[j]; 
     //add hover effect
     GEvent.addDomListener(td,"mouseover",function(){
       this.style.borderColor = "#FFFFFF";
@@ -345,17 +403,20 @@ ExtMyMapsControl.prototype.showColorPicker = function(opts){
     target = opts.target;
     callback = opts.callback;
     return colorPicker;
-  }
+  };
   
   //avoid memory leaks
-  colors = colorPickerTable = rows = cells = null;
+  colors = colorPickerTable = row = cells = null;
   
   me.showColorPicker = newFunc;   //override itself
   return newFunc(opts);   //one time execution
-}
+};
 
-ExtMyMapsControl.prototype.addGoogleMapsCSS = function(){
-  var me = this;
+/**
+ * Dynamically append CSS stylesheets
+ */
+GeometryControls.prototype.addGoogleMapsCSS_ = function(){
+  var me = this, css;
   
   //attempt to add the css and then keep trying till it happens
   var appendCSS = function(css) {
@@ -363,13 +424,13 @@ ExtMyMapsControl.prototype.addGoogleMapsCSS = function(){
       document.getElementsByTagName("head")[0].appendChild(css);
     } catch(e) {
       me.debug("Having trouble adding stylesheets, trying again....");
-      setTimeout(function(){appendCSS(css)}, 100);
+      setTimeout(function(){appendCSS(css);}, 100);
     }
-  }
+  };
    
-  for(var i=0; i<me.options.stylesheets.length; i++){
-    var css = document.createElement("link");
-    css.setAttribute("href",me.options.stylesheets[i]);
+  for(var i=0; i<me.Options.stylesheets.length; i++){
+    css = document.createElement("link");
+    css.setAttribute("href",me.Options.stylesheets[i]);
     css.setAttribute("rel","stylesheet");
     css.setAttribute("type","text/css");
     appendCSS(css);
@@ -378,34 +439,35 @@ ExtMyMapsControl.prototype.addGoogleMapsCSS = function(){
   css = null;
 };
 
-ExtMyMapsControl.prototype.getInfoWindowHtml = function(){
+/**
+ * Makes XHR for html template file, and stores the data in the infoWindowHtmlTemplates object. 
+ * Note: IE gaves errors on textContent, had to use childNode.data
+ */
+GeometryControls.prototype.getInfoWindowHtml_ = function(){
   var me = this;
   
   //clean-up content from html file
   var trim = function(stringToTrim) {
     return stringToTrim.replace(/^\s+|\s+$/g,"");
-  }
+  };
   
   var processHtml = function(doc) {
-    sections = doc.split("<!-- DELIMITER -->");
-    if (sections.length > 1) {
-      for (var i=0; i<sections.length; i++) {      
-        parts = sections[i].split("|");
-        //requires eval? eval is evil....
-        if(parts[1] === "true"){
-          parts[2] = eval(parts[2]); //evaled objects should probably be in their object (not infoWindowHtml)
-        }
-        me.infoWindowHtml[trim(parts[0])] = parts[2];
-      } 
+    var nodes = doc.getElementsByTagName("script");
+    if (nodes.length >= 1) {
+      for(var i=0;i<nodes.length;i++){
+        var str = nodes[i].getAttribute("id");
+        var content = trim( (me.isIE) ? nodes[i].childNodes[0].data : nodes[i].textContent );
+        me.infoWindowHtmlTemplates[str] = (nodes[i].getAttribute('evalRequired') === "true") ? eval(content) : content;
+    	}  
     } else {
-      me.debug("failed to get infowindowhtml??"); 
+      me.debug("GeometryControls#getInfoWindowHtml says: failed to get html from template"); 
     }
-  }          
+  };          
   
   try{      
-    //note: a synchonous call is made, because other functions depend on this data being available
+    //a synchonous call is made, because other functions depend on this data being available
     var request = GXmlHttp.create();
-    request.open("GET", me.options.infoWindowHtmlURL, false);
+    request.open("GET", me.Options.infoWindowHtmlURL, false);
     /*request.onreadystatechange = function() { //doesnt work synchronously
       alert(request.responseText);
       if (request.readyState == 4) {
@@ -413,37 +475,74 @@ ExtMyMapsControl.prototype.getInfoWindowHtml = function(){
       }
     }*/
     request.send(null);
-    processHtml(request.responseText);    //workaround, dont check for readyState
+    var doc = GXml.parse(request.responseText);
+    processHtml(doc); //workaround, dont check for readyState
   } catch(e) {
-    me.debug("Looks like you provided an invalid URL. The URL is "+ me.options.infoWindowHtmlURL + "The error is: " + e);
+    me.debug("GeometryControls#getInfoWindowHtml says: looks like you provided an invalid URL. The URL is "+ me.Options.infoWindowHtmlURL + 
+            " The error is: " + e + " " + e.description);
   }
 };
 
 /**
+ * Loads html fragments from a .html template file, and inserts dynamically added values. 
+ * Note: Public function, called from child controls.
+ * Simple JavaScript Templating
+ * John Resig - http://ejohn.org/ - MIT Licensed
+ * @param {String} str Name used to reference this template in the local cache
+ * @param {Object} data A JSON object with values matching dynamic placeholders in template
+ * @param {Object} node Target script in html template 
+ */
+GeometryControls.prototype.parseMicroTemplate = function(str, data, node){
+
+  var cache = {};
+  
+  this.parseMicroTmpl = function tmpl(str, data, node){
+    // Figure out if we're getting a template, or if we need to load the template, and be sure to cache the result.
+    var nodeOrStr = (typeof(node) !== "undefined") ? node : str;
+    var fn = !/\W/.test(str) ? cache[str] = cache[str] || tmpl(nodeOrStr) :
+      
+      // Generate a reusable function that will serve as a template generator (and which will be cached).
+      new Function("obj","var p=[],print=function(){p.push.apply(p,arguments);};" +
+        
+        // Introduce the data as local variables using with(){}
+        "with(obj){p.push('" +
+        
+        // Convert the template into pure JavaScript
+        str
+          .replace(/[\r\t\n]/g, " ")
+          .split("<%").join("\t")
+          .replace(/((^|%>)[^\t]*)'/g, "$1\r")
+          .replace(/\t=(.*?)%>/g, "',$1,'")
+          .split("\t").join("');")
+          .split("%>").join("p.push('")
+          .split("\r").join("\\'") +
+        "');}return p.join('');");
+    
+    // Provide some basic currying to the user
+    return data ? fn( data ) : fn;
+  };
+  
+  return this.parseMicroTmpl(str,data,node);
+};
+
+/**
+ * Binds elements shared between all geometry tools
  * Assumes common id naming between different geometry infowindows 
  * Rich text editor might need to be some kind of pre-packaged javascript library
  * @param geomInfo
- *   @param {String} type - Type of geometry
- *   @param {Integer} index - Index of geometry in storage arrays
- *   @param {String} cssId - Id of css styles
- *   ....etc //TODO
+ *   @param {Number} geomInfo.index The index of the geometry in the storage array
+ *   @param {Array} geomInfo.storage The array used to store geometries
+ *   @param {Function} geomInfo.geometryStyleFunc The function which will bind behaviors for the style pane in the infowindow
+ *   @param {Function} geomInfo.undoStyling A function to undo unstored style changes
+ *   @param {Function} geomInfo.commitStyling A function to commit any unstored style changes
  */
-ExtMyMapsControl.prototype.bindInfoWindow = function(geomInfo){
-  var me = this, map = me.map, index = geomInfo.index;
+GeometryControls.prototype.bindInfoWindow = function(geomInfo){
+  var me = this, map = me.map, index = geomInfo.index, cssId = me.Options.cssId;   
   
-  var cssId = geomInfo.cssId || me.options.cssId;   
-  
-  //TODO resolves differences in marker and shape storages
-  if(geomInfo.type === "point"){
-    var geometry = geomInfo.geometry[index];
-    var title = geomInfo.title[index]; 
-    var description = geomInfo.description[index];
-  } else {
-    var record = geomInfo.geometry[index]; //TODO
-    var geometry = record.geometry;
-    var title = record.title; 
-    var description = record.description;
-  }
+  var record = geomInfo.storage[index];
+  var geometry = record.geometry;
+  var title = record.title; 
+  var description = record.description;
     
   //store references to id's that can be called multiple times
   var geomStyleLink = get$("msiwsi");
@@ -452,15 +551,15 @@ ExtMyMapsControl.prototype.bindInfoWindow = function(geomInfo){
   var descriptionInput = get$(cssId + "-description");
   
   //flag - indicates whether the styleInfoWindow window has already been bound
-  var styleInfoWindowBound = false;
+  var isStyleInfoWindowBound = false;
   
-  //bind geometry style links and "back" link
+  //bind geometry style links and "back" link, using function supplied in parameters
   GEvent.addDomListener(geomStyleLink,"click", function(){
     geomStyleDiv.style.display = "block";
-    if(styleInfoWindowBound === false){
+    if(isStyleInfoWindowBound === false){
       //call controls's custom styling functions, and update the flag
       geomInfo.geometryStyleFunc();
-      styleInfoWindowBound = true;
+      isStyleInfoWindowBound = true;
     }    
   });
   GEvent.addDomListener(get$("emmc-geom-style-back"),"click",function(){
@@ -477,7 +576,7 @@ ExtMyMapsControl.prototype.bindInfoWindow = function(geomInfo){
     description[1] = descriptionInput.value;
   });
   //onchange doesnt fire when infowindow is closed by clicking on the map, so add a listener for that too
-  //have to add to map, because polys dont have the event, so make it garbage collect itself
+  //listener has to be added to map, because polys dont have the event, so make it garbage collect itself
   var windowOnCloseHandler = GEvent.addListener(map,"infowindowbeforeclose",function(){
     title[1] = titleInput.value;
     description[1] = descriptionInput.value;
@@ -485,17 +584,10 @@ ExtMyMapsControl.prototype.bindInfoWindow = function(geomInfo){
   });  
   
   //Bind Delete/Cancel/OK buttons
-  //TODO -- remove entries when geometeries are not passed in as arrays!!!!!!
   GEvent.addDomListener(get$(cssId + "-delete"),"click",function(){
-    if(confirm("Are You Sure You Want To Delete This?")){
+    if(confirm("Are you sure you want to delete this?")){
       map.removeOverlay(geometry);
-      if(record){ //TODO standard storage formats
-        geomInfo.geometry[index] = null;
-      } else {
-        geomInfo.geometry[index] = null;
-        geomInfo.title[index] = null;
-        geomInfo.description[index] = null;
-      }
+      geomInfo.storage[index] = null;
       map.closeInfoWindow();
     } 
   });
@@ -519,10 +611,10 @@ ExtMyMapsControl.prototype.bindInfoWindow = function(geomInfo){
 /**
  * Data Services
  * @param {Object} opts
- *   @param {String} type - json or kml
- *   @param {String} url - url of the resource
+ *   @param {String} type Json or kml
+ *   @param {String} url Url of the resource
  */
-ExtMyMapsControl.prototype.loadData = function(opts){
+GeometryControls.prototype.loadData = function(opts){
   var me = this;
   GDownloadUrl(opts.url, function(data, responseCode){
     (opts.type === "kml") ? me.handleKmlDataResponse_(data, responseCode) : me.handleJsonDataResponse_(data, responseCode);  
@@ -532,15 +624,16 @@ ExtMyMapsControl.prototype.loadData = function(opts){
 /**
  * EGeoXml Kml Processing (modified)
  * http://econym.googlepages.com/egeoxml.htm (Thanks Mike!)
+ * TODO This code could be optimized, should I fix?
  * @param {XMLDocument} data - data from #loadData
  * @param {String} responseCode - response code from ajax GDownloadUrl
  */
-ExtMyMapsControl.prototype.handleKmlDataResponse_ = function(data, responseCode){
+GeometryControls.prototype.handleKmlDataResponse_ = function(data, responseCode){
   var me = this;
   
   //Helper functions
   var EGeoXml = {
-    value: function(e){
+    value:function(e){
       a = GXml.value(e);
       a = a.replace(/^\s*/, "");
       a = a.replace(/\s*$/, "");
@@ -548,6 +641,12 @@ ExtMyMapsControl.prototype.handleKmlDataResponse_ = function(data, responseCode)
     },
     styles:{}
   }  
+  
+  //called if there are errors in kml parsing
+  function error(e) {
+    me.debug("Looks like you provided an invalid URL or parameters or invalid xml. The URL is  ____ ."+
+             "The error is:"+e+" at line "+e.lineNumber+" in file "+e.fileName); //TODO
+  }
   
   if (responseCode == 200) {
     try{
@@ -565,13 +664,14 @@ ExtMyMapsControl.prototype.handleKmlDataResponse_ = function(data, responseCode)
           if (!!href) {
             var icon = {name:styleID};
             //get names of defined icons 
-            var markerIcons = {}
-            for(var j in me.infoWindowHtml.markerIcons){
-              markerIcons[me.infoWindowHtml.markerIcons[j].name] = me.infoWindowHtml.markerIcons[j];                   
+            var markerIcons = {};
+            for(var j in me.infoWindowHtmlTemplates["markerIcons"]){
+              markerIcons[me.infoWindowHtmlTemplates["markerIcons"][j].name] = me.infoWindowHtmlTemplates["markerIcons"][j];                   
             }
+            //can't use href[index] in ie :(
             switch(true){
-              case(href.indexOf("kml") > -1):             
-                icon.y = parseInt(href[href.indexOf("pal")+3])+1; //TODO to match with MarkerControl.checkIconStatus
+              case(href.indexOf("kml") > -1):          
+                icon.y = parseInt(href.charAt(href.indexOf("pal")+3))+1; //TODO to match with MarkerControl.checkIconStatus
                 icon.x = parseInt(href.substring(href.indexOf("icon")+4,href.indexOf(".png")));
               break;
               case(href.indexOf("dot") > -1):
@@ -628,8 +728,8 @@ ExtMyMapsControl.prototype.handleKmlDataResponse_ = function(data, responseCode)
           var outline = parseInt(GXml.value(polystyles[0].getElementsByTagName("outline")[0]));
           var color = EGeoXml.value(polystyles[0].getElementsByTagName("color")[0]);
   
-          if (polystyles[0].getElementsByTagName("fill").length == 0) {fill = 1;}
-          if (polystyles[0].getElementsByTagName("outline").length == 0) {outline = 1;}
+          if (polystyles[0].getElementsByTagName("fill").length === 0) {fill = 1;}
+          if (polystyles[0].getElementsByTagName("outline").length === 0) {outline = 1;}
           var aa = color.substr(0,2);
           var bb = color.substr(2,2);
           var gg = color.substr(4,2);
@@ -642,8 +742,12 @@ ExtMyMapsControl.prototype.handleKmlDataResponse_ = function(data, responseCode)
           }
           EGeoXml.styles["#"+styleID].fillcolor=color;
           EGeoXml.styles["#"+styleID].fillopacity=opacity;
-          if (!fill) EGeoXml.styles["#"+styleID].fillopacity = 0; 
-          if (!outline) EGeoXml.styles["#"+styleID].opacity = 0; 
+          if (!fill) {
+            EGeoXml.styles["#" + styleID].fillopacity = 0;
+          }
+          if (!outline) {
+            EGeoXml.styles["#" + styleID].opacity = 0;
+          }
         }
       }
 
@@ -672,8 +776,8 @@ ExtMyMapsControl.prototype.handleKmlDataResponse_ = function(data, responseCode)
           var points = [];
           //var pbounds = new GLatLngBounds(); //TODO what does this do?
           for (var p=0; p<path.length; p++) {
-            var bits = path[p].split(",");
-            var point = new GLatLng(parseFloat(bits[1]),parseFloat(bits[0]));
+            var latlng = path[p].split(",");
+            var point = new GLatLng(parseFloat(latlng[1]),parseFloat(latlng[0]));
             points.push(point);
             me.bounds.extend(point);
             //pbounds.extend(point);
@@ -690,7 +794,20 @@ ExtMyMapsControl.prototype.handleKmlDataResponse_ = function(data, responseCode)
             /*if (!!me.opts.createpolyline) {
               me.opts.createpolyline(points,color,width,opacity,pbounds,name,desc);
             } else {*/
-              me.createPolyline(points,color,width,opacity,pbounds,name,desc);
+              me.createGeometry_({
+                type:"line",
+                coordinates:points,
+                title:name,
+                description:desc,
+                style: {
+                  strokeColor:style.fillcolor,
+                  strokeWeight:3,
+                  strokeOpacity:style.fillopacity,
+                  opts:{
+                    clickable:true //TODO make option configurable
+                  } 
+                }
+              });
             //}
           }
   
@@ -794,18 +911,14 @@ ExtMyMapsControl.prototype.handleKmlDataResponse_ = function(data, responseCode)
     error();
   }
   
-  function error(e){
-    me.debug("Looks like you provided an invalid URL or parameters or invalid xml. The URL is  ____ ."+
-               "The error is:"+e+" at line "+e.lineNumber+" in file "+e.fileName); //TODO
-  }
-}
+};
 
 /**
  * Create geometries from JSON
  * @param {Object} data 
  * @param {Integer} responseCode
  */
-ExtMyMapsControl.prototype.handleJsonDataResponse_ = function(data, responseCode){
+GeometryControls.prototype.handleJsonDataResponse_ = function(data, responseCode){
   var me = this;
   
   if (responseCode == 200) {
@@ -842,66 +955,68 @@ ExtMyMapsControl.prototype.handleJsonDataResponse_ = function(data, responseCode
   } else {
     me.debug("Looks like you provided an invalid URL or parameters. The URL is ___"); //TODO
   }
-}
+};
 
 /**
  * Set map center and zoom to a GBounds
  * @param {Object} record - see #createGeometry_
  */
-ExtMyMapsControl.prototype.zoomToBounds = function(record){
+GeometryControls.prototype.zoomToBounds = function(record){
   var me = this, bounds = me.bounds;
   
   if  (!bounds.isEmpty()) {
     me.map.setCenter(bounds.getCenter());
     me.map.setZoom(me.map.getBoundsZoomLevel(bounds));
   }
-}
+};
 
 /**
  * Delegate object creation to appropriate geometry control
+ * TODO - If all controls come in with a standardized property (point,line,poly,etc), 
+ * then you could replace the switch with a simple lookup, and a generic call to a loading method
  * @param {Object} record
- *   @param {String} type - the type of geometry
- *   @param {Object} coordinates - an array of objects {lat,lng}
- *   @param {S
+ *   @param {String} type The type of geometry
+ *   @param {Object} coordinates An array of objects {lat,lng}
+ *   @param {String} title The text used for geometry infowindow title
+ *   @param {String} description The text used for geometry infowindow description
+ *   @param {Object} style The full style definition for the geometry
  */
-ExtMyMapsControl.prototype.createGeometry_ = function(record){
+GeometryControls.prototype.createGeometry_ = function(record){
   var me = this;
   
   try {
     switch (record.type) {
       case "point":
         return me.controls["markerControl"].loadMarkers(record);
-        break;
       case "line":
-        return me.controls["lineControl"].loadLines(record);
-        break;
+        return me.controls["polylineControl"].loadPolylines(record);
       case "poly":
         return me.controls["polygonControl"].loadPolygons(record);
-        break;
     }
   } 
   catch (e) {
     me.debug("A geometry Control has not been added for the geometry type you are trying to load or there is an error." +
              "Your error is: " + e + " at line " + e.lineNumber + " in file " + e.fileName);
   }
-}
+};
 
 /**
  * Add aspects that listen for "Ok" button clicks, triggering an upload to the db
+ * TODO - need explicit extra variable (autoSaveListener) for passing references?
  */
-ExtMyMapsControl.prototype.addAutoSaveAspect = function(){
+GeometryControls.prototype.addAutoSaveAspect = function(){
   var me = this;
   
   me.aop.addBefore(me, 'bindInfoWindow', function(args){
     var geomInfo = args[0];
-    //expose the function 
+    //expose the function by passing reference to autoSaveListener variable
     me.autoSaveListener = geomInfo.commitStyling;
     geomInfo.commitStyling = function(){
       me.autoSaveListener();
-    }
+    };
     //attach the listener
     me.aop.addAfter(me, 'autoSaveListener', function(){
-      if(me.options.autoSave){
+      if(me.Options.autoSave){
         me.saveData({
           allData:false,
           geomInfo:geomInfo
@@ -910,7 +1025,7 @@ ExtMyMapsControl.prototype.addAutoSaveAspect = function(){
     }); 
     return args;
   });
-}
+};
 
 /**
  * Post data for storage to a db. Options to send all information or just one object?
@@ -918,134 +1033,194 @@ ExtMyMapsControl.prototype.addAutoSaveAspect = function(){
  * @param {Object} opts
  *   @param {Object} geomInfo - @see #bindInfoWindow
  */
-ExtMyMapsControl.prototype.saveData = function(opts){
+GeometryControls.prototype.saveData = function(opts){
   var me = this;
   if(opts.allData === true){
-    //TODO
+    //me.saveAllData();
   } else {
     //construct a json data record
-    var geomInfo = opts.geomInfo, index = opts.geomInfo.index;    
-    var record = {};
-    record.type = geomInfo.type;
-    record.coordinates = [];
-    if(geomInfo.type === "point"){
-      record.coordinates.push({lat:geomInfo.geometry[index].getLatLng().lat(),lng:geomInfo.geometry[index].getLatLng().lng()});
-      record.title = geomInfo.title[index][0];
-      record.description = geomInfo.description[index][0];
+    var geomInfo = opts.geomInfo, index = opts.geomInfo.index;
+    var record = geomInfo.storage[index];  
+    var recordJSON = {};
+    recordJSON.type = record.type;
+    recordJSON.coordinates = [];
+    
+    //determine geometry type, and copy geometry appropriately
+    if(record.type === "point"){
+      recordJSON.coordinates.push({lat:record.geometry.getLatLng().lat(),lng:record.geometry.getLatLng().lng()});
     } else {
-      var geometry = geomInfo.geometry[index].geometry, vertex;
-      for(var i=0;i<geometry.getVertexCount();i++){
-        vertex = geometry.getVertex(i);
-        record.coordinates.push({lat:vertex.lat(),lng:vertex.lng()});
+      var vertex;
+      for(var i=0;i<record.geometry.getVertexCount();i++){
+        vertex = record.geometry.getVertex(i);
+        recordJSON.coordinates.push({lat:vertex.lat(),lng:vertex.lng()});
       }
-      //TODO standardize storage names
-      record.title = geomInfo.geometry[index].title[0];
-      record.description = geomInfo.geometry[index].description[0];
     }
+    
+    //add title and description
+    recordJSON.title = record.title[0];
+    recordJSON.description = record.description[0];
+    
     //TODO add styles 
-    record.style = ""; //TODO
+    recordJSON.style = ""; //TODO
   }  
   
+  //TODO Make separate prototype function?
   function postData(data){
     //TODO 
     me.debug(data);
   };
   
-  postData(me.serialize(record));
+  postData(me.serialize(recordJSON));
+};
+
+/**
+ * Loops through all stored geometries by accessing variable for storage
+ * In all of the the controls that have been added.
+ * @see #addControl
+ */
+GeometryControls.prototype.saveAllData = function(){
+  var me = this;
+  //TODO
+  //call save data with each geometry?
 };
 
 //================================================================= Utility Methods ========================================================//
+
+/**
+ * Javascript Beans (Value Objects)
+ * @static
+ */
+GeometryControls.prototype.beans = {
+  /**
+   * Geometry Class
+   * Titles/descriptions are stored as [][0,1] with 0,1 entries representing current(0)/previous(1) values
+   * TODO change title/desc storage to use hash, rather than array
+   * @param {Object} p 
+   */
+  Geometry:function(p){
+    this.type = p.type;
+    this.geometry = p.geometry;
+    this.title = p.title || ["",""];
+    this.description = p.description || ["",""];
+  },
+  /**
+   * Style Class
+   * @param {Object} p
+   */
+  Style:function(p){
+    //TODO
+  }
+};
 
 /**
  * Utility function for executing functions not in global scope
  * @param {Object} milliseconds
  * @param {Object} func
  */
-ExtMyMapsControl.prototype.setLocalTimeout = function(func,milliseconds){
+GeometryControls.prototype.setLocalTimeout = function(func,milliseconds){
   function delayedFunction(){
     func();
   }
   setTimeout(delayedFunction, milliseconds);
-}
+};
 
 /**
- * Utility fnction for getting the absolute position of an element
+ * Utility function for getting the absolute position of an element
+ * @param {DOM Object} el The element of which to get the position
  * @see http://www.faqts.com/knowledge_base/view.phtml/aid/9095
  */
-ExtMyMapsControl.prototype.getAbsolutePosition = function(el){
-	for (var lx=0,ly=0;el!=null;lx+=el.offsetLeft,ly+=el.offsetTop,el=el.offsetParent);
+GeometryControls.prototype.getAbsolutePosition = function(el){
+	for (var lx=0,ly=0;el!==null;lx+=el.offsetLeft,ly+=el.offsetTop,el=el.offsetParent){};
 	return {x:lx,y:ly};
-}
+};
 
+/**
+ * Returns the distance of one of the sum of two distances in feet/miles with appropriate units
+ * @param {Integer} distance1 The distance to convert
+ * @param {Integer} opt_distance2 Optional second distance to add to first, and then convert
+ */
+GeometryControls.prototype.convertFromMetric = function(distance1, opt_distance2){
+  var distance = opt_distance2 + distance1 || distance1;
+  return (distance < 1609.344) ? (distance * 3.2808399).toFixed(2) + "ft" : (distance * 0.0006213711).toFixed(2) + "mi";
+};   
+        
 /**
  * Wrapper function for GLog.write, allows debugging to be turned on/off globally
  * Note: debugging mode is set at instantiation, so that production mode does not incur processing
  * @param {Object} msg
  */
-ExtMyMapsControl.prototype.debug = function(msg){
+GeometryControls.prototype.debug = function(msg){
   var me = this, tempFunc;
-  if(me.options.debug){
+  if(me.Options.debug){
     tempFunc = function(msg){
       GLog.write(msg);
-    }
+    };
   } else {
     tempFunc = function(){};
   }
   me.debug = tempFunc;
   return tempFunc(msg);
-}
+};
 
 /**
  * Serialize JSON to parameters
+ * @param {Object} obj Object to serialize
  */
-ExtMyMapsControl.prototype.serialize = function(obj){
+GeometryControls.prototype.serialize = function(obj){
   var me = this;
   var params = [];
-  for(var prop in obj){
-    if(typeof(obj[prop]) === "object"){
-      obj[prop] = (!me.ie) ? obj[prop].toSource() : obj[prop].toString(); //TODO fix for ie  
+  
+  function traverseObject(myObj){
+    for (var prop in myObj) {
+      if (typeof(myObj[prop]) === "object") {
+        traverseObject(myObj[prop]);
+      } else {
+        params.push(prop + "=" + myObj[prop]);      
+      }
     }
-    params.push(prop + "=" + obj[prop]);
-  }
+  };
+  
+  traverseObject(obj);
+  
   return params.join("&");
-}
+};
 
 /**
  * Ajaxpect 0.9.0 (AOP)
  * http://code.google.com/p/ajaxpect
  * With slight formatting modifications (switched "_process" -> "process_", etc.)
  */
-ExtMyMapsControl.prototype.aop = {
+GeometryControls.prototype.aop = {
   addBefore: function(obj, filter, before) {
     var link = function(orig) {
       return function() {
         return orig.apply(this, before(arguments, orig, this));
-      }
-    }
+      };
+    };
     this.process_(obj, filter, link);
   },
   addAfter: function(obj, filter, after) {
     var link = function(orig) {
       return function() {
         return after(orig.apply(this, arguments), arguments, orig, this);
-      }
-    }
+      };
+    };
     this.process_(obj, filter, link);
   },
   addAround: function(obj, filter, around) {
     var link = function(orig) {
       return function() {
         return around(arguments, orig, this);
-      }
-    }
+      };
+    };
     this.process_(obj, filter, link);
   },  
   process_: function(obj, filter, link) {
     var check;
     if (filter.exec) {
-      check = function(str) { return filter.exec(str) }
+      check = function(str) { return filter.exec(str); };
     } else if (filter.call) {
-      check = function(str) { return filter.call(this, str) }
+      check = function(str) { return filter.call(this, str); };
     }
     if (check) {
       for (var member in obj) {
