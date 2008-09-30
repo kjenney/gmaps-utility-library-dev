@@ -1,4 +1,4 @@
-﻿/**
+/**
 * @name ProgressbarControl
 * @version 1.0
 * @author Bjorn BRala
