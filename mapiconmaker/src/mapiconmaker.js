@@ -153,7 +153,7 @@ MapIconMaker.createFlatIcon = function (opts) {
   icon.mozPrintImage = iconUrl + "&chf=bg,s,ECECD8" + "&chof=gif";
   icon.transparent = iconUrl + "&chf=a,s,ffffff01&ext=.png";
   icon.imageMap = []; 
-  if (shapeCode === "roundrect") {
+  if (shapeCode === "itr") {
     icon.imageMap = [0, 0, width, 0, width, height, 0, height];
   } else {
     var polyNumSides = 8;
