@@ -128,7 +128,8 @@
     <property name="LIBRARY" refid="LIBRARY"/>
     <java failonerror="true" jar="${basedir}/util/java/js.jar" fork="true">
       <arg value="${basedir}/util/pack/pack.js"/>
-      <arg value="${LIBLOC}/${LIBRARY}"/>
+      <arg value="${LIBLOC}"/>
+      <arg value="${LIBRARY}"/>
     </java>
   </target>
 </project>

@@ -7,20 +7,26 @@
   load(pwd + "packer/Packer.js");
   load(pwd + "packer/Words.js");
 
-  // arguments
-  var inFile = a[0];
-  var outFile = a[1] || inFile.replace(/\.js$/, "_packed.js");
+  baseDir = a[0];
+  filesArray = a[1].split(";");
+  for (var i = 0; i < filesArray.length; i++) {
+    var currentFile = filesArray[i];
 
-  // options
-  var base62 = true;
-  var shrink = true;
+    // arguments
+    var inFile = baseDir + "/" + currentFile;
+    var outFile = inFile.replace(/\.js$/, "_packed.js");
+    print("Packing " + inFile + " to output " + outFile);
 
-  // do the packing
-  var script = readFile(inFile);
-  var packer = new Packer;
-  var packedScript = packer.pack(script, base62, shrink);
+    // options
+    var base62 = true;
+    var shrink = true;
 
-  // write the output
-  writeFile(outFile, packedScript);
+    // do the packing
+    var script = readFile(inFile);
+    var packer = new Packer;
+    var packedScript = packer.pack(script, base62, shrink);
 
+    // write the output
+    writeFile(outFile, packedScript);
+  }
 })(arguments);

@@ -17,13 +17,17 @@ Copyright (c) 2002 Douglas Crockford  (www.JSLint.com) Rhino Edition
         print("Usage: jslint.js file.js");
         quit(1);
     }
-    var input = readFile(a[0]);
-    if (!input) {
-        print("jslint: Couldn't open file '" + a[0] + "'.");
+    filesArray = a[0].split(";");
+    for (var i = 0; i < filesArray.length; i++) {
+      var currentFile = filesArray[i];
+      print(currentFile);
+      var input = readFile(currentFile);
+      if (!input) {
+        print("jslint: Couldn't open file '" + currentFile + "'.");
         quit(1);
-    }
-    load(pwd + "jslint.conf");
-    if (!JSLINT(input, JSLINT_OPTIONS)) {
+      }
+      load(pwd + "jslint.conf");
+      if (!JSLINT(input, JSLINT_OPTIONS)) {
         for (var i = 0; i < JSLINT.errors.length; i += 1) {
             var e = JSLINT.errors[i];
             if (e) {
@@ -34,8 +38,9 @@ Copyright (c) 2002 Douglas Crockford  (www.JSLint.com) Rhino Edition
                 print('');
             }
         }
-    } else {
+      } else {
         print("jslint: No problems found in " + a[0]);
         quit();
+      }
     }
 })(arguments);
