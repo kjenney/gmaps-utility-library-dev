@@ -2,7 +2,7 @@
 * @name ProgressbarControl
 * @version 1.0
 * @author Bjorn BRala
-* @copyright (c) 2008 SWIS BV
+* @copyright (c) 2008 SWIS BV - www.geostart.nl
 * @fileoverview Creates a progressbar control for usage in google maps.<br>
 <br>Usage:
 <br>progressbar = new ProgressbarControl(oMap, opt_opts);
