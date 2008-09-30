@@ -34,7 +34,7 @@
 function ProgressbarMapControl(map, width) { 
   this.map_ = map; 
   this.width_ = width; 
-};
+}
 
 
 /**
@@ -60,14 +60,15 @@ ProgressbarMapControl.prototype.initialize = function () {
   this.map_.getContainer().appendChild(container_);            
 
   return container_;
-}
+};
+
 /**
 *   @private 
 *   @desc Return the default position for the control
 *   @return GControlPosition
 **/
 ProgressbarMapControl.prototype.getDefaultPosition = function () {
-  return new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(30,56));
+  return new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(30, 56));
 };   
 
 
@@ -80,26 +81,26 @@ ProgressbarMapControl.prototype.getDefaultPosition = function () {
 *   Part of GeoStart (www.geostart.nl)
 *   Author: Bjorn Brala SWIS BV
 **/
-function ProgressbarControl(map, opt_opts){
+function ProgressbarControl(map, opt_opts) {
   /**
   *   @desc  Init the progress bar, Create a Control on the map.
   *    Loader:     geo_progress_container
   *    Info:        geo_progress
   *   @param {GMap2} GMap2 object
   **/    
-  this.options_ = opt_opts == null ? {} : opt_opts;
+  this.options_ = opt_opts === null ? {} : opt_opts;
 
 
-  this.width_ = this.options_.width == null ? 176 : this.options_.width;
-  this.loadstring_ = this.options_.loadstring == null ? 'Loading...' : this.options_.loadstring;                             // String for when loading ( before counter )        
+  this.width_ = this.options_.width === null ? 176 : this.options_.width;
+  this.loadstring_ = this.options_.loadstring === null ? 'Loading...' : this.options_.loadstring;                             // String for when loading ( before counter )        
 
-  this.control_ = new ProgressbarMapControl(map, this.width_);                               // Control object reference
+  this.control_ = new ProgressbarMapControl(map, this.width_);          /* Control object reference */
 
-  this.map_ = map;                                                      // GMap2 reference
-  this.map_.addControl(this.control_);                                  // Load control into map
-  this.div_ = document.getElementById('geo_progress');                  // progress DIV
-  this.text_ = document.getElementById('geo_progress_text');            // progress text DIV
-  this.container_ = document.getElementById('geo_progress_container');  // progress container
+  this.map_ = map;                                                      /* GMap2 reference  */
+  this.map_.addControl(this.control_);                                  /* Load control into map  */
+  this.div_ = document.getElementById('geo_progress');                  /* progress DIV  */
+  this.text_ = document.getElementById('geo_progress_text');            /* progress text DIV  */
+  this.container_ = document.getElementById('geo_progress_container');  /* progress container  */
 
   this.operations_ = 0;
   this.current_ = 0;
@@ -109,33 +110,35 @@ function ProgressbarControl(map, opt_opts){
 *    @desc Start the progress bar. Argumnent is the amount of operations the full bar will represent.
 *    @param {int} operations Counter for the amount of operations that will be executed.
 **/
-ProgressbarControl.prototype.start = function(operations) {
+ProgressbarControl.prototype.start = function (operations) {
   this.div_.style.width = '0%'; 
   this.operations_ = operations || 0;
   this.current_ = 0;
   this.text_.style.color = "#111";
   this.text_.innerHTML = this.loadstring_;
   this.container_.style.display = "block";
-}
+};
 
 
 /**
 *   @desc  Update the progress. Adds Step amount of operations to the bar.
 *   @param {int} step Add number of operations to progress.
 **/
-ProgressbarControl.prototype.updateLoader = function( step ){
+ProgressbarControl.prototype.updateLoader = function (step) {
   this.current_ += step;
-  if ( this.current_ > 0){
+  if (this.current_ > 0) {
     var percentage_ = Math.ceil((this.current_ / this.operations_) * 100);
-  if ( percentage_ > 100 ) { percentage_ = 100; }
+    if (percentage_ > 100) { 
+      percentage_ = 100; 
+    }
     this.div_.style.width = percentage_ + '%'; 
     this.text_.innerHTML = this.current_ + ' / ' + this.operations_;
   } 
-}
+};
 
 /**
 *    @desc Remove control. Well, hide it actually, since the call to create a new one when its needed again would create to much overhead.
 **/
-ProgressbarControl.prototype.remove = function() {
+ProgressbarControl.prototype.remove = function () {
   this.container_.style.display = 'none';
-}
+};
