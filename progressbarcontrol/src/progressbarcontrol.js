@@ -88,11 +88,11 @@ function ProgressbarControl(map, opt_opts) {
   *    Info:        geo_progress
   *   @param {GMap2} GMap2 object
   **/    
-  this.options_ = opt_opts === null ? {} : opt_opts;
+  this.options_ = opt_opts == null ? {} : opt_opts;
 
 
-  this.width_ = this.options_.width === null ? 176 : this.options_.width;
-  this.loadstring_ = this.options_.loadstring === null ? 'Loading...' : this.options_.loadstring;                             // String for when loading ( before counter )        
+  this.width_ = this.options_.width == null ? 176 : this.options_.width;
+  this.loadstring_ = this.options_.loadstring == null ? 'Loading...' : this.options_.loadstring;                             // String for when loading ( before counter )        
 
   this.control_ = new ProgressbarMapControl(map, this.width_);          /* Control object reference */
 
