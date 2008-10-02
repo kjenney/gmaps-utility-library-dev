@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>ProgressbarControl Documentation: Examples</title>
+   <link rel="stylesheet" type="text/css" href="http://code.google.com/apis/maps/documentation/local_extensions.css" /> 
+   <link rel="stylesheet" type="text/css" href="http://code.google.com/css/dev_docs.css" />
+   <script type="text/javascript" src="http://code.google.com/apis/maps/include/prettify.js"></script>
+  </head>
+
+  <body onload="prettyPrint()">
+<h1>SnapToRoute Examples</h1>
+
+<p>To use the class, create a <code>SnapToRoute</code> object by passing 
+the GMap2 object and target GPolyline and GMarker to the constructor.</p>
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map"));
+map.setCenter(new GLatLng(37, -122), 13);
+
+var marker = new GMarker(map.getCenter(),{title:title});
+map.addOverlay(marker);
+
+var polyline = new GPolyline([new GLatLng(37.1, -122.1), new GLatLng(37.2, -122.2)]);
+map.addOverlay(polyline);
+
+var snapToRoute = new SnapToRoute(map, marker, polyline);
+</pre>
+
+<p>This will make the marker snap tot the polyline at all times.</p>
+
+<p>Its also possible to get information about how far alone the line 
+the current point is. This can be dont by calling the methode 
+<code>SnapToRoute.getDistAlongRoute(point)</code>. Optionally you can 
+give a GLatLng object as parameter to use a different point.</p>
+
+<pre class="prettyprint">
+var distanceInMeters = snapToRoute.getDistAlongRoute();
+
+var latlng = map.getCenter();
+var distanceInMetersFromCenter = snapToRoute.getDistAlongRoute(latlng);
+</pre>
+
+
+<h2>SnapToRoute Example</h2>
+
+<p>The following example show how you can use the SnapToRoute class:</p>
+
+<h3> An example printing the distance along the route into a div:</h3>
+
+<p>There are some extra function in there to create the polyline and 
+marker onclick. Also a a listener is created to update some extra information 
+in a div.</p>
+
+
+
+<pre class="prettyprint">
+var map;
+var centerPoint = new GLatLng(40.078071,-101.689453);
+var routePoints = Array();
+var routePixels = Array();
+var routeOverlay = null;
+var normalProj = G_NORMAL_MAP.getProjection();    
+var threshold = 15; //pixels for proximity
+var oSnap;
+
+function load() {
+    doLoad();
+}
+
+function doLoad() {
+    if (GBrowserIsCompatible()) {
+        map = new GMap2(document.getElementById("map"), {draggableCursor:"crosshair"});
+        map.setCenter(centerPoint, 7);
+        map.addControl(new GScaleControl());
+        map.addControl(new GLargeMapControl());
+        map.addControl(new GMapTypeControl());
+        GEvent.addListener(map, 'click', mapClick);
+        GEvent.addListener(map, 'mousemove', mapMove);
+    }
+}
+
+
+
+function mapClick(marker, point) {
+    if (!marker) {
+        unboundedPoint = new GLatLng(point.lat(),point.lng())
+        addRoutePoint(unboundedPoint);
+    }
+}
+
+function mapMove(point) {
+    if(oSnap){
+        var oStatusDiv = document.getElementById("statusDiv")    
+        oStatusDiv.innerHTML = oSnap.getDistAlongRoute().toFixed(0) + " metres from start at " + point.toUrlValue();
+    }
+}
+
+
+function addRoutePoint(point) {
+    var zoom = map.getZoom();
+    routePoints.push(point);
+    var Px = normalProj.fromLatLngToPixel(point, zoom);
+    routePixels.push(Px);
+
+    if (routePoints.length > 1)    {
+        plotRoute();
+        if ( !oSnap ) {
+            oSnap = new SnapToRoute(map, startMarker, routeOverlay);
+        } else {
+            oSnap.updateTargets(null, routeOverlay);
+        }
+    }
+    else {
+        startMarker = createMarker(point,'Start')
+        map.addOverlay(startMarker);
+    }
+}
+
+function plotRoute() {
+    if ( routeOverlay ) {
+        map.removeOverlay(routeOverlay);
+    }
+    routeOverlay = new GPolyline(routePoints,'#FF9601',3,1);
+    map.addOverlay(routeOverlay);
+}
+
+
+function createMarker(point, title) {
+    var marker = new GMarker(point,{title:title});
+    return marker;
+}
+
+
+function resetRoute() {
+    routePoints = new Array();
+    routePixels = new Array();
+    map.clearOverlays();
+    var oStatusDiv = document.getElementById("statusDiv")    
+    oStatusDiv.innerHTML = '';
+}
+
+</pre>
+<p><a href="../examples/demonstration.html">View example (howtouse.html)</a></p>
+
+</body>
+</html>

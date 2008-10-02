@@ -1,0 +1,171 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+
+
+<head>
+<title>Google Maps JavaScript API Example - Snap to Polyline</title>
+<link rel="stylesheet" type="text/css" href="/mapStyle.css" />
+
+    
+<script>
+    var scriptTag = '<' + 'script src="http://maps.google.com/maps?file=api&v=2.x&key=ABQIAAAAbRm2TpqQOvF3ceP4wzWXeBQGj0PqsCtxKvarsoS-iqLdqZSKfxQU7evjDDIaBB_enSeWW-bsfxdKuQ">'+'<'+'/script>';
+    document.write(scriptTag);
+</script>
+
+<script type="text/javascript" src="../src/snaptoroute.js"></script>
+
+<script type="text/javascript">
+
+var map;
+var centerPoint = new GLatLng(40.078071,-101.689453);
+var routePoints = Array();
+var routePixels = Array();
+var routeOverlay = null;
+var normalProj = G_NORMAL_MAP.getProjection();    
+var threshold = 15; //pixels for proximity
+var oSnap;
+
+function load() {
+    doLoad();
+}
+
+function doLoad() {
+    if (GBrowserIsCompatible()) {
+        map = new GMap2(document.getElementById("map"), {draggableCursor:"crosshair"});
+        map.setCenter(centerPoint, 7);
+        map.addControl(new GScaleControl());
+        map.addControl(new GLargeMapControl());
+        map.addControl(new GMapTypeControl());
+        GEvent.addListener(map, 'click', mapClick);
+        GEvent.addListener(map, 'mousemove', mapMove);
+    }
+}
+
+
+
+function mapClick(marker, point) {
+    if (!marker) {
+        unboundedPoint = new GLatLng(point.lat(),point.lng())
+        addRoutePoint(unboundedPoint);
+    }
+}
+
+function mapMove(point) {
+    if(oSnap){
+        var oStatusDiv = document.getElementById("statusDiv")    
+        oStatusDiv.innerHTML = oSnap.getDistAlongRoute().toFixed(0) + " metres from start at " + point.toUrlValue();
+    }
+}
+
+
+function addRoutePoint(point) {
+    var zoom = map.getZoom();
+    routePoints.push(point);
+    var Px = normalProj.fromLatLngToPixel(point, zoom);
+    routePixels.push(Px);
+
+    if (routePoints.length > 1)    {
+        plotRoute();
+        if ( !oSnap ) {
+            oSnap = new SnapToRoute(map, startMarker, routeOverlay);
+        } else {
+            oSnap.updateTargets(null, routeOverlay);
+        }
+    }
+    else {
+        startMarker = createMarker(point,'Start')
+        map.addOverlay(startMarker);
+    }
+}
+
+function plotRoute() {
+    if ( routeOverlay ) {
+        map.removeOverlay(routeOverlay);
+    }
+    routeOverlay = new GPolyline(routePoints,'#FF9601',3,1);
+    map.addOverlay(routeOverlay);
+}
+
+
+function createMarker(point, title) {
+    var marker = new GMarker(point,{title:title});
+    return marker;
+}
+
+
+function resetRoute() {
+    routePoints = new Array();
+    routePixels = new Array();
+    map.clearOverlays();
+    var oStatusDiv = document.getElementById("statusDiv")    
+    oStatusDiv.innerHTML = '';
+}
+
+
+
+
+</script>
+
+</head>
+
+
+<body onload="load()" onunload="GUnload()">
+
+    <div id="header" style="color: #FFFFC0; font: normal 14px verdana; padding:3px; margin:10px;">
+    <a href="http://www.geostart.nl/">Part of GeoStart</a> (<a href="http://demo.geostart.nl">demo</a>)
+    </div>
+
+
+
+<div id="msg" style="width: 680px; font: bold 12px verdana;padding:3px;margin:10px;">
+
+Click the map two or more times to create polylines. The marker wil snap to the polyline at all times.<br><br>
+<pre>
+/**
+*   Snap marker to closest point on a line.
+*
+*   @author Bj&ouml;rn Brala - Swis BV
+*
+*   Based on Distance to line example by Marcelo, maps.forum.nu
+*   http://maps.forum.nu/gm_mouse_dist_to_line.html
+*
+*   Additions: Calculate closest latlng on the closest line to current mouse.
+*
+*
+*   Usage:
+*
+*   Create the class
+*       var snapToRoute = new SnapToRoute(map, marker, polyline);
+*
+*   If needed change the marker or polyline subjects. use null when no update
+*       Change Both:
+*           snapToRoute.updateTargets(marker, polyline); 
+*       Change marker:
+*           snapToRoute.updateTargets(marker, null); 
+*       Change polyline:
+*           snapToRoute.updateTargets(null, polyline); 
+*
+*
+*   Distance along route for point
+*       snapToRoute.getDistAlongRoute(latlng);
+**/
+</pre>
+Click the map two or more times to create polylines. The marker wil snap to the polyline at all times.<br><br>
+</div>
+
+
+<table cellspacing="0" cellpadding="0" style="-moz-outline-width:8px; -moz-outline-radius:15px; -moz-outline-style:solid;-moz-outline-color:#838FBB;margin:20px;">
+
+    <tr>
+
+        <td valign="top">
+            <div id="map" style="width: 700px; height: 500px"></div>
+            <div id="statusDiv" style="width: 660px; height: 50px; border: 1px solid gray;font: bold 12px verdana;padding:3px;margin:15px;"></div>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
