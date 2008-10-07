@@ -14,8 +14,9 @@
     document.write(scriptTag);
 </script>
 
-<script type="text/javascript" src="../src/snaptoroute.js"></script>
-
+<script type="text/javascript">
+        document.write('<' + 'script type="text/javascript" src="../src/snaptoroute.js' + (document.location.search.indexOf('packed')>-1?'_packed':'') +'.js"><'+'/script>');
+</script>
 <script type="text/javascript">
 
 var map;
