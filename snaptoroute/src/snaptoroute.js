@@ -62,7 +62,7 @@ function SnapToRoute(map, startMarker, polyline) {
 SnapToRoute.prototype.init = function () {
   this.loadLineData();
   this.loadMapListener();    
-}   
+};
 
 /**
 *   @desc Change the marker or polyline the class looks at.
@@ -73,7 +73,7 @@ SnapToRoute.prototype.updateTargets = function (marker, polyline) {
   this.marker_   = marker   || this.marker_;
   this.polyline_ = polyline || this.polyline_;
   this.loadLineData();
-}
+};
   
 /**
 *   @desc internal use only, Load map listeners to calculate and update this.marker position.
@@ -83,7 +83,8 @@ SnapToRoute.prototype.loadMapListener = function () {
   var self = this;
   GEvent.addListener(self.map_, 'mousemove', GEvent.callback(self, self.updateMarkerLocation));
   GEvent.addListener(self.map_, 'zoomend', GEvent.callback(self, self.loadLineData));
-}
+};
+
     
 /**
 *   @desc internal use only, Load route points into RoutePixel array for calculations, do this whenever zoom changes 
@@ -96,7 +97,8 @@ SnapToRoute.prototype.loadLineData = function () {
     var Px = this.normalProj.fromLatLngToPixel(this.polyline_.getVertex(i), zoom);
     this.routePixels.push(Px);
   }
-}
+};
+
 
 /**
 *   @desc internal use only, Handle the move listeners output and move the given marker.
@@ -106,7 +108,8 @@ SnapToRoute.prototype.loadLineData = function () {
 SnapToRoute.prototype.updateMarkerLocation = function (mouseLatLng) {
   var markerLatLng = this.getClosestLatLng(mouseLatLng);
   this.marker_.setPoint(markerLatLng);
-}
+};
+
 
 /**
 *   @desc Get closest point on route to test point
@@ -116,7 +119,8 @@ SnapToRoute.prototype.updateMarkerLocation = function (mouseLatLng) {
 SnapToRoute.prototype.getClosestLatLng = function (latlng) {
   var r = this.distanceToLines(latlng);
   return this.normalProj.fromPixelToLatLng(new GPoint(r.x, r.y), this.map_.getZoom());
-}
+};
+
 
 /**
 *   @desc Get distance along route in meters of closest point on route to test point
@@ -124,13 +128,15 @@ SnapToRoute.prototype.getClosestLatLng = function (latlng) {
 *   @return {Number} Distance in meters;
 **/
 SnapToRoute.prototype.getDistAlongRoute = function (latlng) {
-  if ( latlng == null ) {
-    var latlng = this.marker_.getLatLng();
+  if (typeof(latlng) === 'undefined') {
+    latlng = this.marker_.getLatLng();
   }
   
   var r = this.distanceToLines(latlng);
   return this.getDistToLine(r.i, r.to);
-} 
+};
+
+
 
 /**
 *   @desc internal use only, gets test point xy and then calls fundamental algorithm
@@ -140,8 +146,9 @@ SnapToRoute.prototype.distanceToLines = function (mouseLatLng) {
   var zoom        = this.map_.getZoom();
   var mousePx     = this.normalProj.fromLatLngToPixel(mouseLatLng, zoom);
   var routePixels = this.routePixels;                
-  return getClosestPointOnLines(mousePx,routePixels);
-}  
+  return getClosestPointOnLines(mousePx, routePixels);
+};
+  
   
 /**
 *   @desc internal use only, find distance along route to point nearest test point
@@ -156,7 +163,8 @@ SnapToRoute.prototype.getDistToLine = function (line, to) {
   d += routeOverlay.getVertex(line - 1).distanceFrom(routeOverlay.getVertex(line)) * to;
   
   return d;
-}
+};
+
 
   
 
@@ -173,7 +181,7 @@ SnapToRoute.prototype.getDistToLine = function (line, to) {
 *   @param array aXys
 *   @private
 **/
-function getClosestPointOnLines (pXy,aXys) {
+function getClosestPointOnLines (pXy, aXys) {
   var minDist;       
   var to;
   var from;
@@ -184,7 +192,7 @@ function getClosestPointOnLines (pXy,aXys) {
       
   if (aXys.length > 1) {
     for (var n = 1; n < aXys.length ; n++) {
-      if (aXys[n].x != aXys[n - 1].x) {
+      if (aXys[n].x !== aXys[n - 1].x) {
         var a = (aXys[n].y - aXys[n - 1].y) / (aXys[n].x - aXys[n - 1].x);
         var b = aXys[n].y - a * aXys[n].x;
         dist = Math.abs(a * pXy.x + b - pXy.y) / Math.sqrt(a * a + 1);
