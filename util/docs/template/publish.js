@@ -107,9 +107,10 @@ function publish(symbolSet) {
       var constructorArguments = [];
       for (var k = 0; k < constructorSymbol.params.length; k++) {
         var constructorParameter = constructorSymbol.params[k];
-        var argumentString = '<span class="type" title="type:  ' + constructorParameter.type + '">';
+        var argumentString = '<span class="type">';
         argumentString += constructorParameter.name;
         argumentString += constructorParameter.isOptional ? "?" : "";
+        argumentString += ':' + constructorParameter.type;
         argumentString += '</span>';
         constructorArguments.push(argumentString);
       }
@@ -170,10 +171,11 @@ function publish(symbolSet) {
         instance[otherMethodType + "Methods"] = methodSymbol.name;
         var methodArguments = [];
         for (var m = 0; m < methodSymbol.params.length; m++) {
-          var methodParameter = methodSymbol.params[m];
-          var argumentString = '<span class="type" title="type:  ' + methodParameter.type + '">';
+          var methodParameter = methodSymbol.params[m]
+          var argumentString = '<span class="type">';
           argumentString += methodParameter.name;
           argumentString += methodParameter.isOptional ? "?" : "";
+          argumentString += ":" + methodParameter.type;
           argumentString += '</span>';
           methodArguments.push(argumentString);
         }
@@ -198,8 +200,9 @@ function publish(symbolSet) {
         var eventArguments = [];
         for (var m = 0; m < thisEvent.params.length; m++) {
           var thisArgument = thisEvent.params[m];
-          var argumentString = '<span class="type" title="type:  ' + thisArgument.type + '">'
-          argumentString += thisArgument.name + '</span>';
+          var argumentString = '<span class="type">'
+          argumentString += thisArgument.name;
+          argumentString += ':' + thisArgument.type + '</span>';
           eventArguments.push(argumentString);
         }
         var instance = {

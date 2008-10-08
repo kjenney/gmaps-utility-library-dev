@@ -9,6 +9,7 @@
   <body>
     <h1>{+data.library.name+}</h1>
     <p>{+resolveLinks(data.library.desc)+}</p>
+    <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
     <for each="thisObject" in="data.objects">
       <h2><a name="{+thisObject.anchor+}"></a>{+thisObject.type+} {+thisObject.name+}</h2>
       <p>{+resolveLinks(thisObject.desc)+}</p>
