@@ -2,22 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <title>ProgressbarControl Documentation: Examples</title>
-   <link rel="stylesheet" type="text/css" href="http://code.google.com/apis/maps/documentation/local_extensions.css" /> 
-   <link rel="stylesheet" type="text/css" href="http://code.google.com/css/dev_docs.css" />
-   <script type="text/javascript" src="http://code.google.com/apis/maps/include/prettify.js"></script>
+    <title>SnapToRoute Documentation: Examples</title>
+    <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
+    <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
+    <script type="text/javascript" src="http://code.google.com/js/prettify.js"></script>
   </head>
-
   <body onload="prettyPrint()">
 <h1>SnapToRoute Examples</h1>
 
-<p>To use the class, create a <code>SnapToRoute</code> object by passing 
-the GMap2 object and target GPolyline and GMarker to the constructor.</p>
+<p>To use the class, create a <code>SnapToRoute</code> object and pass
+the <code>GMap2</code> object and target <code>GPolyline</code> and <code>GMarker</code>
+objects to the constructor.</p>
+
 <pre class="prettyprint">
 var map = new GMap2(document.getElementById("map"));
 map.setCenter(new GLatLng(37, -122), 13);
 
-var marker = new GMarker(map.getCenter(),{title:title});
+var marker = new GMarker(map.getCenter());
 map.addOverlay(marker);
 
 var polyline = new GPolyline([new GLatLng(37.1, -122.1), new GLatLng(37.2, -122.2)]);
@@ -26,11 +27,11 @@ map.addOverlay(polyline);
 var snapToRoute = new SnapToRoute(map, marker, polyline);
 </pre>
 
-<p>This will make the marker snap tot the polyline at all times.</p>
+<p>This will make the marker snap to the polyline at all times.</p>
 
-<p>Its also possible to get information about how far alone the line 
-the current point is. This can be dont by calling the methode 
-<code>SnapToRoute.getDistAlongRoute(point)</code>. Optionally you can 
+<p>It is also possible to get information about how far along the line 
+the current point is. This can be dont by calling the method 
+<code>SnapToRoute.getDistAlongRoute(latlng)</code>. Optionally you can 
 give a GLatLng object as parameter to use a different point.</p>
 
 <pre class="prettyprint">
