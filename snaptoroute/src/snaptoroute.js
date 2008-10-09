@@ -191,7 +191,7 @@ function getClosestPointOnLines (pXy, aXys) {
       var ln2 = Math.pow(aXys[n].y - pXy.y, 2) + Math.pow(aXys[n].x - pXy.x, 2);
 
       // distance^2 of pt to begin line segment
-      var lnm12 = Math.pow(aXys[n - 1].y - pXy.y, 2) + Math.pow(aXys[n - 1].x - pXy.x, 2);
+      var lnm12 = Math.pow(aXys[n - 1].y - pXy.y, 2) + Math.pow(aXys[n - 1].x - pXy.x, 2);   
 
       // minimum distance^2 of pt to infinite line
       var dist2 = Math.pow(dist, 2);
