@@ -5,9 +5,9 @@
  * @author Bjorn Brala (www.geostart.nl), Marcelo (maps.forum.nu), Bill Chadwick
  * @fileoverview This class is used to snap a marker to closest point on a line,
  *   based on the current position of the cursor.
- *   This is based on Marcelo's <a href="http://maps.forum.nu/gm_mouse_dist_to_line.html">
- *   "Distance to line" example</a>.
  *   <!--  
+ *   This is based on Marcelo's <a href="http://maps.forum.nu/gm_mouse_dist_to_line.html">
+ *   "Distance to line" example</a>
  *   Work was done by Björn Brala to wrap the algorithm in a class operating on Maps API objects,
  *   and by Bill Chadwick to factor the basic algorithm out of the class and add distance along line
  *   to nearest point calculation.
@@ -24,24 +24,22 @@
  */
 function SnapToRoute(map, startMarker, polyline) {
       
-  this.routePoints    = [];
-  this.routePixels    = [];
-  this.routeOverlay   = null;
-  this.normalProj     = G_NORMAL_MAP.getProjection();    
+  this.routePixels_    = [];
+  this.normalProj_     = G_NORMAL_MAP.getProjection();    
   this.map_           = map;
   this.marker_        = startMarker;
   this.polyline_     = polyline;
 
-  this.init();
+  this.init_();
 }
 
 /**
  * Initialize the objects.
  * @private
  */ 
-SnapToRoute.prototype.init = function () {
-  this.loadLineData();
-  this.loadMapListener();    
+SnapToRoute.prototype.init_ = function () {
+  this.loadLineData_();
+  this.loadMapListener_();    
 };
 
 /**
@@ -54,19 +52,19 @@ SnapToRoute.prototype.init = function () {
 SnapToRoute.prototype.updateTargets = function (marker, polyline) {
   this.marker_   = marker   || this.marker_;
   this.polyline_ = polyline || this.polyline_;
-  this.loadLineData();
+  this.loadLineData_();
 };
   
 /**
  * Set up map listeners to calculate and update the marker position.
  * @private
  */
-SnapToRoute.prototype.loadMapListener = function () {
+SnapToRoute.prototype.loadMapListener_ = function () {
   var me = this;
   GEvent.addListener(me.map_, 'mousemove', 
-      GEvent.callback(me, me.updateMarkerLocation));
+    GEvent.callback(me, me.updateMarkerLocation_));
   GEvent.addListener(me.map_, 'zoomend', 
-     GEvent.callback(me, me.loadLineData));
+    GEvent.callback(me, me.loadLineData_));
 };
 
     
@@ -75,12 +73,12 @@ SnapToRoute.prototype.loadMapListener = function () {
  * whenever zoom changes 
  * @private
  */
-SnapToRoute.prototype.loadLineData = function () {
+SnapToRoute.prototype.loadLineData_ = function () {
   var zoom = this.map_.getZoom();
-  this.routePixels = [];
+  this.routePixels_ = [];
   for (var i = 0; i < this.polyline_.getVertexCount(); i++) {
-    var Px = this.normalProj.fromLatLngToPixel(this.polyline_.getVertex(i), zoom);
-    this.routePixels.push(Px);
+    var Px = this.normalProj_.fromLatLngToPixel(this.polyline_.getVertex(i), zoom);
+    this.routePixels_.push(Px);
   }
 };
 
@@ -90,7 +88,7 @@ SnapToRoute.prototype.loadLineData = function () {
  * @param {GLatLng} mouseLatLng
  * @private
  */
-SnapToRoute.prototype.updateMarkerLocation = function (mouseLatLng) {
+SnapToRoute.prototype.updateMarkerLocation_ = function (mouseLatLng) {
   var markerLatLng = this.getClosestLatLng(mouseLatLng);
   this.marker_.setPoint(markerLatLng);
 };
@@ -102,8 +100,8 @@ SnapToRoute.prototype.updateMarkerLocation = function (mouseLatLng) {
  * @return {GLatLng} The closest coordinate.
  */
 SnapToRoute.prototype.getClosestLatLng = function (latlng) {
-  var r = this.distanceToLines(latlng);
-  return this.normalProj.fromPixelToLatLng(new GPoint(r.x, r.y), this.map_.getZoom());
+  var r = this.distanceToLines_(latlng);
+  return this.normalProj_.fromPixelToLatLng(new GPoint(r.x, r.y), this.map_.getZoom());
 };
 
 
@@ -119,8 +117,8 @@ SnapToRoute.prototype.getDistAlongRoute = function (latlng) {
     latlng = this.marker_.getLatLng();
   }
   
-  var r = this.distanceToLines(latlng);
-  return this.getDistToLine(r.i, r.to);
+  var r = this.distanceToLines_(latlng);
+  return this.getDistToLine_(r.i, r.to);
 };
 
 
@@ -130,11 +128,11 @@ SnapToRoute.prototype.getDistAlongRoute = function (latlng) {
  * @param {GLatLng} mouseLatLng
  * @private
  */
-SnapToRoute.prototype.distanceToLines = function (mouseLatLng) {
+SnapToRoute.prototype.distanceToLines_ = function (mouseLatLng) {
   var zoom        = this.map_.getZoom();
-  var mousePx     = this.normalProj.fromLatLngToPixel(mouseLatLng, zoom);
-  var routePixels = this.routePixels;
-  return getClosestPointOnLines(mousePx, routePixels);
+  var mousePx     = this.normalProj_.fromLatLngToPixel(mouseLatLng, zoom);
+  var routePixels_ = this.routePixels_;
+  return this.getClosestPointOnLines_(mousePx, routePixels_);
 };
 
 /**
@@ -143,7 +141,7 @@ SnapToRoute.prototype.distanceToLines = function (mouseLatLng) {
  * @param {Number} to
  * @private
  */
-SnapToRoute.prototype.getDistToLine = function (line, to) {
+SnapToRoute.prototype.getDistToLine_ = function (line, to) {
   var routeOverlay = this.polyline_;
   var d = 0;
   for (var n = 1; n < line; n++) {
@@ -165,7 +163,7 @@ SnapToRoute.prototype.getDistToLine = function (line, to) {
  * @param {Array<Point>} aXys
  * @private
  */
-function getClosestPointOnLines (pXy, aXys) {
+SnapToRoute.prototype.getClosestPointOnLines_ = function (pXy, aXys) {
   var minDist;       
   var to;
   var from;
