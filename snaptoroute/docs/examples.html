@@ -10,6 +10,14 @@
   <body onload="prettyPrint()">
 <h1>SnapToRoute Examples</h1>
 
+<p>
+<ul>
+    <li><a href="#basic">Basic example</a></li>
+    <li><a href="#advanced">Advanced example</a></li>
+    <li><a href="#reallife">Real life example</a></li>
+</ul>
+</p>
+
 <p>To use the class, create a <code>SnapToRoute</code> object and pass
 the <code>GMap2</code> object and target <code>GPolyline</code> and <code>GMarker</code>
 objects to the constructor.</p>
@@ -41,11 +49,11 @@ var latlng = map.getCenter();
 var distanceInMetersFromCenter = snapToRoute.getDistAlongRoute(latlng);
 </pre>
 
-
 <h2>SnapToRoute Example</h2>
 
 <p>The following example show how you can use the SnapToRoute class:</p>
 
+<a name="basic"></a>
 <h3>An example using the class to zoom to a polyline:</h3>
 
 <p>The following example shows a real life use for SnapToRoute. You can use the class to snap a looking glass to a route. This way you can zoom to a detail view of the route!</p>
@@ -107,9 +115,8 @@ function plotRoute() {
 <p><a href="../examples/detailzoom.html">View example (detailzoom.html)</a></p>
 
 
-
-
-<h3> An example printing the distance along the route into a div:</h3>
+<a name="advanced"></a>
+<h3>An example printing the distance along the route into a div:</h3>
 
 <p>There are some extra function in there to create the polyline and 
 marker onclick. Also a a listener is created to update some extra information 
@@ -205,6 +212,20 @@ function resetRoute() {
 
 </pre>
 <p><a href="../examples/demonstration.html">View example (demonstration.html)</a></p>
+
+<a name="reallife"></a>
+<h3>A real life example in the GeoStart CMS:</h3>
+
+<p>The following example is a usage for SnapToRoute in a CMS. This was the reason to built the class. To log in into the CMS use:</p>
+
+<pre>
+Username: snaptoroutedemo
+Password: demo
+</pre>
+
+<p>To see the demo, click a few times on the map to create a polyline. Then scroll down and push the button 'toevoegen'. This will open a popup and load your route. This screen is the place where you can add a Point of Interest. You can see the little cross glide along the line and when you click, a marker appears on the route.</p>
+
+<p><a target="_blank" href="http://demo.geostart.nl/webbeheer/modules/routes/index.php">View example (external site)</a></p>
 
 </body>
 </html>
