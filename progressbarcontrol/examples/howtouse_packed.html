@@ -10,7 +10,7 @@
     document.write(scriptTag);
 </script>
 
-<script type="text/javascript" src="scripts/progressbarcontrol_packed.js"></script>
+<script type="text/javascript" src="../src/progressbarcontrol_packed.js"></script>
 
 <script type="text/javascript">
 
@@ -100,35 +100,6 @@ function removeMarker(){
 
 <body onload="load()" onunload="GUnload()">
 
-    <div id="header" style="color: #FFFFC0; font: normal 14px verdana; padding:3px; margin:10px;">
-    <a href="http://www.geostart.nl/">Part of GeoStart</a> (<a href="http://demo.geostart.nl">demo</a>)
-    </div>
-
-
-
-<div id="msg" style="width: 680px; font: bold 12px verdana;padding:3px;margin:10px;">
-
-<pre>
-/**
-*   progress class.
-*
-*   Usage:
-*   oProgressbarControl = new ProgressbarControl(oMap, opt_opts);
-*   oProgressbarControl.(500); // Amount of operations, unhides the control
-*   oProgressbarControl.(iAdded); // Add amount of operations just done
-*   oProgressbarControl.(); // Hide the control.
-*   
-*   opt_opts: Object containing options:
-*               {Number} iWidth Width of the control
-*               {String} sLoadstring String displayed when first starting the control
-*
-*   Part of GeoStart (www.geostart.nl)
-*   Author: Björn Brala SWIS BV
-**/
-</pre>
-</div>
-
-
 <table cellspacing="0" cellpadding="0" style="-moz-outline-width:8px; -moz-outline-radius:15px; -moz-outline-style:solid;-moz-outline-color:#838FBB;margin:20px;">
     <tr>
         <td class="menu" width="188">
@@ -141,7 +112,7 @@ function removeMarker(){
         </tr><tr>
         <td valign="top">
             <div id="map" style="width: 700px; height: 500px"></div>            
-            <a title="bottom">
+            <a title="bottom"></a>
         </td>
     </tr>
 </table>
