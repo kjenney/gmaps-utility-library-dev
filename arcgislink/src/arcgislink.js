@@ -3254,7 +3254,7 @@
               html +=  '<tr class="ags-row-' + (odd ? 'odd' : 'even') + '">';
               html +=  '<td class="ags-fieldname">' + x + '</td>';
               var val  =  a[x];
-              val= val?'':''+val;
+              val= (val===null||typeof val=== 'undefined') ?'':''+val;
               html +=  '<td class="ags-fieldvalue">' + val + '</td></tr>';
             }
           }
