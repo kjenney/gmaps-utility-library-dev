@@ -3,16 +3,7 @@
 * @version 1.0
 * @author Bjorn BRala
 * @copyright (c) 2008 SWIS BV - www.geostart.nl
-* @fileoverview Creates a progressbar control for usage in google maps.<br>
-<br>Usage:
-<br>progressbar = new ProgressbarControl(oMap, opt_opts);
-<br>progressbar.start(500); // Amount of operations, unhides the control
-<br>progressbar.updateLoader(step); // Add amount of operations just done
-<br>progressbar.remove(); // Hide the control.
-<br>   
-<br>opt_opts: Object containing options:
-<br>               {Number} [width=176] Width of the control
-<br>               {String} [loadstring=Loading...] String displayed when first starting the control
+* @fileoverview Creates a progressbar control for usage in google maps. Use to show your users the progress of loading markers for example.<br>
 */
 
 /**
@@ -50,13 +41,13 @@ ProgressbarMapControl.prototype.initialize = function () {
   var container_ = document.createElement("div");
   container_.innerHTML         = "<div style='position:absolute;width:100%;border:5px;text-align:center;vertical-align:bottom;' id='geo_progress_text'></div><div style='background-color:green;height:100%;' id='geo_progress'></div>";
   container_.id                 = "geo_progress_container";
-  container_.style.display       = "none";
-  container_.style.width       = this.width_ + "px";
-  container_.style.fontSize    = "0.8em";
-  container_.style.height        = "1.3em";
-  container_.style.border      = "1px solid #555"; 
+  container_.style.display      = "none";
+  container_.style.width        = this.width_ + "px";
+  container_.style.fontSize     = "0.8em";
+  container_.style.height       = "1.3em";
+  container_.style.border       = "1px solid #555"; 
   container_.style.backgroundColor = "white";
-  container_.style.textAlign     = "left";
+  container_.style.textAlign    = "left";
   this.map_.getContainer().appendChild(container_);            
 
   return container_;

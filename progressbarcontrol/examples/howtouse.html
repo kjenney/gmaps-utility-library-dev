@@ -10,7 +10,10 @@
     document.write(scriptTag);
 </script>
 
-<script type="text/javascript" src="../src/progressbarcontrol.js"></script>
+<script type="text/javascript">
+        document.write('<script type="text/javascript" src="../src/progressbarcontrol'+(document.location.search.indexOf('packed')>-1?'_packed':'')+'.js"><'+'/script>');
+</script>
+
 
 <script type="text/javascript">
 
@@ -101,12 +104,14 @@ function removeMarker(){
 <body onload="load()" onunload="GUnload()">
     <table cellspacing="0" cellpadding="0" style="-moz-outline-width:8px; -moz-outline-radius:15px; -moz-outline-style:solid;-moz-outline-color:#838FBB;margin:20px;">
         <tr>
-            <td class="menu" width="188">
-                <a href="#bottom" onclick="oProgressBar.start(500);">oProgressBar.start(500);</a>
-                <a href="#bottom" onclick="oProgressBar.updateLoader(7);">oProgressBar.updateLoader(7);</a>
-                <a href="#bottom" onclick="oProgressBar.remove();">oProgressBar.remove();</a>
-                <a href="#bottom" onclick="loadMarkers();">loadMarkers();</a>
-                <a href="#bottom" onclick="removeMarkers();">removeMarkers();</a>
+            <td class="menu" width="188" style="text-align:center;">
+                <br>
+                <button onclick="oProgressBar.start(500);">start</button>
+                <button onclick="oProgressBar.updateLoader(7);">updateLoader</button>
+                <button onclick="oProgressBar.remove();">remove</button>
+                <button onclick="loadMarkers();">loadMarkers()</button>
+                <button onclick="removeMarkers();">removeMarkers()</button>
+                
             </td>
             </tr><tr>
             <td valign="top">
