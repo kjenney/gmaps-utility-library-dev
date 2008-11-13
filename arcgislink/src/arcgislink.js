@@ -1,5 +1,5 @@
 /**
- * @name ArcGIS Server Link for Google Maps Javascript API
+ * @name ArcGISServer Link for Google Maps Javascript API
  * @version 1.0
  * @author: Nianwei Liu 
  * @fileoverview 
@@ -12,10 +12,20 @@
  *    href='http://code.google.com/apis/maps/documentation/reference.html'>
  *    Google Maps </a> and provide some additional support for map tiles created with 
  *    different spatial reference and tiling scheme.</p>
+ *    <p style='background-color:#E5ECF9'>All classes are available under namespace 
+ *    <code>google.maputils.arcgis.*</code>. 
+ *    You can replace the normal <code>ArcGIS</code> prefix with the namespace.<br/>
+ *    For example, the <code>ArcGISTileLayer</code> can also be defined
+ *    as <code>google.maputils.arcgis.TileLayer</code>. <br/>
+ *    If you choose to load namespace only without all any global 
+ *    <code>G</code> symbols by passing file=googleapionly in script URL, 
+ *    the <code>ArcGIS</code> prefix will not be exported to global scope either. 
+ *    You must use namespace for all classes in this library.
+ *     </p>.
  *    <table style = 'border:0px'>
  *    <tr>
- *    <td colspan = 2 style = 'border:0px;'>GMaps API related classes</td>
- *    <td colspan = 2 style = 'border:0px;'>REST API related classes</td>
+ *    <td colspan=2 style='border:0px;'>GMaps API related classes</td>
+ *    <td colspan=2 style='border:0px;'>REST API related classes</td>
  *    </tr>
  *    <tr>
  *    <td style = 'border:0px;width:200px'>
@@ -30,71 +40,68 @@
  *    <td style = 'border:0px;width:200px'>
  *    {@link ArcGISProjection}<br/>
  *    {@link ArcGISUtil} <br/> 
- *    <!--{@link ArcGISClickOptions} <br/> 
- *    {@link ArcGISClickServiceOptions} <br/> 
- *    {@link ArcGISClickLayerOptions} <br/> 
- *    {@link ArcGISAddMapOptions} <br/> -->
  *    {@link ArcGISConfig} <br/> 
  *    <i> {@link GMercatorProjection}</i>  <br/>
  *    <i> {@link GMap2} </i> <br/>
  *    <i> {@link GMapType}</i> <br/>
  *    </td>
  *    <td style = 'border:0px;width:200px'>
- *    {@link MapService}<br/></b>
- *    {@link MapLayer}<br/>
- *    {@link GeocodeService}<br/>
- *    {@link GeometryService}<br/>
+ *    {@link ArcGISMapService}<br/></b>
+ *    {@link ArcGISLayer}<br/>
+ *    {@link ArcGISGeocodeService}<br/>
+ *    {@link ArcGISGeometryService}<br/>
  *     <br/></td>
  *     <td style = 'border:0px;width:200px'>
- *    {@link SpatialReference}<br/>
- *    {@link SpatialReferences}<br/>
- *    {@link Geographic}<br/>
- *    {@link LambertConformalConic}<br/>
- *    {@link TransverseMercator}<br/>
- *    {@link SphereMercator}<br/>
- *    {@link FlatSpatialReference}<br/>
+ *    {@link ArcGISSpatialReference}<br/>
+ *    {@link ArcGISSpatialReferences}<br/>
+ *    {@link ArcGISGeographic}<br/>
+ *    {@link ArcGISLambertConformalConic}<br/>
+ *    {@link ArcGISTransverseMercator}<br/>
+ *    {@link ArcGISSphereMercator}<br/>
+ *    {@link ArcGISFlatSpatialReference}<br/>
  *     </td>
  *    </tr></table>
  *    <p> There are many objects used in the REST API that do not require constructor and can be
- *    used just as object literal in the operation:</p>
+ *    used just as object literal in the operation:<br/> 
+ *    (note the name of the type does not matter for object literals)</p>
  *    <table style = 'border:0px'><tr>
  *    <td style = 'border:0px;width:200px'>
- *    {@link Field}<br/>
- *    {@link TileInfo}<br/>
- *    {@link LOD}<br/>
- *    {@link ExportMapParameters}<br/>
- *    {@link MapImage}<br/>
- *    {@link IdentifyParameters}<br/>
- *    {@link IdentifyResults}<br/>
- *    {@link IdentifyResult}<br/>
+ *    {@link ArcGISField}<br/>
+ *    {@link ArcGISTileInfo}<br/>
+ *    {@link ArcGISLOD}<br/>
+ *    {@link ArcGISExportMapParameters}<br/>
+ *    {@link ArcGISMapImage}<br/>
+ *    {@link ArcGISIdentifyParameters}<br/>
+ *    {@link ArcGISIdentifyResults}<br/>
+ *    {@link ArcGISIdentifyResult}<br/>
  *     <br/></td>
  *     <td style = 'border:0px;width:200px'>
- *    {@link QueryParameters}<br/>
- *    {@link ResultSet}<br/>
- *    {@link Feature}<br/>
- *    {@link FindParameters}<br/>
- *    {@link FindResults}<br/>
- *    {@link FindResult}<br/>
+ *    {@link ArcGISQueryParameters}<br/>
+ *    {@link ArcGISResultSet}<br/>
+ *    {@link ArcGISFeature}<br/>
+ *    {@link ArcGISFindParameters}<br/>
+ *    {@link ArcGISFindResults}<br/>
+ *    {@link ArcGISFindResult}<br/>
  *     </td>
  *     <td style = 'border:0px;width:200px'>
- *    {@link GeocodeParameters}<br/>
- *    {@link GeocodeResults}<br/>
- *    {@link GeocodeResult}<br/>
- *    {@link ReverseGeocodeParameters}<br/>
- *    {@link ReverseGeocodeResult}<br/>
+ *    {@link ArcGISGeocodeParameters}<br/>
+ *    {@link ArcGISGeocodeResults}<br/>
+ *    {@link ArcGISGeocodeResult}<br/>
+ *    {@link ArcGISReverseGeocodeParameters}<br/>
+ *    {@link ArcGISReverseGeocodeResult}<br/>
  *    </td>
  *     <td style = 'border:0px;width:200px'>
- *    {@link Geometry}<br/>
- *    {@link Point}<br/>
- *    {@link Polyline}<br/>
- *    {@link Polygon}<br/>
- *    {@link Envelope}<br/>
- *    {@link Multipoint}<br/>
+ *    {@link ArcGISGeometry}<br/>
+ *    {@link ArcGISPoint}<br/>
+ *    {@link ArcGISPolyline}<br/>
+ *    {@link ArcGISPolygon}<br/>
+ *    {@link ArcGISEnvelope}<br/>
+ *    {@link ArcGISMultipoint}<br/>
  *     </td>
  *    </tr></table>
  */
 /*!
- * Google Maps Utility Lib to ESRI ArcGIS Server
+ * ArcGIS Server Link for Google Maps Javascript API
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,8 +117,53 @@
  */
 (function () {
 
-/**
- * @name Geometry
+  /*jslint browser:true */
+  /*global escape */
+  
+  /**
+   *  create a namespace by name such as a.b.c
+   * @param {String} ns
+   */
+  function namespace(ns) {
+    var i, c, n;
+    var names = ns.split('.');
+    n = window;
+    for (i = 0,c = names.length; i < c; i ++) {
+      n[names[i]] = n[names[i]] || {};
+      n = n[names[i]];
+    }
+    return n;
+  }
+  //http://code.google.com/p/gmaps-utility-library-dev/issues/detail?id=34
+  //http://groups.google.com/group/Google-Maps-API/browse_thread/thread/c6c5bd8f6441a39e/f24f549218a279f5?#f24f549218a279f5
+  // deal with the situation when user only loaded namespace.
+  var W = window;
+  var G = namespace('google.maps');
+  var GEvent, GLatLng, GMap2, GProjection, GTileLayer, GCopyrightCollection, 
+    GCopyright, GMapType, GMercatorProjection, G_MAP_OVERLAY_LAYER_PANE, 
+    GTileLayerOverlay, GInfoWindowTab, GLatLngBounds, GPolygon, GPolyline, 
+    GOverlay,  GMarker, GPoint;
+  GMap2 = W.GMap2 || G.Map2;
+  GEvent = W.GEvent || G.Event;
+  GProjection = W.GProjection || G.Projection;
+  GTileLayer = W.GTileLayer || G.TileLayer;
+  GCopyrightCollection = W.CopyrightCollection || G.CopyrightCollection;
+  GCopyright = W.GCopyright || G.Copyright; 
+  GMapType = W.GMapType || G.MapType;
+  GMercatorProjection = W.GMercatorProjection || G.MercatorProjection;
+  G_MAP_OVERLAY_LAYER_PANE = W.G_MAP_OVERLAY_LAYER_PANE || G.MAP_OVERLAY_LAYER_PANE; 
+  GTileLayerOverlay = W.GTileLayerOverlay || G.TileLayerOverlay; 
+  GInfoWindowTab = W.GInfoWindowTab || G.InfoWindowTab; 
+  GLatLngBounds = W.GLatLngBounds || G.LatLngBounds; 
+  GPolygon = W.GPolygon || G.Polygon; 
+  GPolyline = W.GPolyline || G.Polyline;
+  GOverlay = W.GOverlay || G.Overlay; 
+  GLatLng = W.GLatLng || G.LatLng;
+  GPoint = W.GPoint || G.Point;
+  GMarker = W.GMarker || G.Marker;
+  
+  /**
+ * @name ArcGISGeometry
  * @class This is the abstract class representing JSON geometry in the ArcGIS REST API. 
  * The following types are supported: points, polylines, polygons and envelopes.
  * for more information, see <a  href = 
@@ -120,7 +172,7 @@
  * @property {SpatialReference} [spatialReference]  <b> wkid info only</b>.
  */	
 /**
- * @name Point
+ * @name ArcGISPoint
  * @class A point contains x and y fields along with a spatialReference field.
  * <br/> There is no constructor for this class. Use javascript object literal.
  * Example:
@@ -134,7 +186,7 @@
  * @property {SpatialReference} [spatialReference]  <b> wkid info only</b>.
  */	
 /**
- * @name Polyline
+ * @name ArcGISPolyline
  * @class A polyline contains an array of paths and a spatialReference.
  * <br/> There is no constructor for this class. Use javascript object literal. Example:
  * <pre>
@@ -151,7 +203,7 @@
  * @property {SpatialReference} [spatialReference]  <b> wkid info only</b>.
  */	
  /**
- * @name Polygon
+ * @name ArcGISPolygon
  * @class A polygon contains an array of rings and a spatialReference.
  * <br/> There is no constructor for this class. Use javascript object literal. Example:
  * <pre>
@@ -168,7 +220,7 @@
  * @property {SpatialReference} [spatialReference]  <b> wkid info only</b>.
  */	
  /**
- * @name Multipoint
+ * @name ArcGISMultipoint
  * @class A multipoint contains an array of points and a spatialReference.
  * <br/> There is no constructor for this class. Use javascript object literal. Example:
  * <pre>
@@ -182,7 +234,7 @@
  * @property {SpatialReference} [spatialReference]  <b> wkid info only</b>.
  */	
  /**
- * @name Envelope
+ * @name ArcGISEnvelope
  * @class Instances of this class are used to represent an area with bounds.
  *   It is similar to <a href = 'http://code.google.com/apis/maps/documentation/reference.html#GLatLngBounds'>GLatLngBounds</a>
  *   but the coordinates are in map units. 
@@ -208,7 +260,7 @@
   
   // The JSDOC tool not work with enums yet?
   /*
-   * @name ESRIGeometryTypes
+   * @name ArcGISESRIGeometryTypes
    * @private
    * @class This is actually a list of constants that represent geometry types. They should be used
    * directly. e.g.:  <code> var param = {geometryType:ESRI_GEOMETRY_POINT}</code>
@@ -225,7 +277,7 @@
   var ESRI_GEOMETRY_MULTIPOINT  =  "esriGeometryMultipoint";
   var ESRI_GEOMETRY_ENVELOPE  =  "esriGeometryEnvelope";
  /*
-   * @name ESRISpatialRelTypes
+   * @name ArcGISESRISpatialRelTypes
    * @private
    * @class This is actually a list of constants that represent spatial relationship types. They should be used
    * directly. e.g.:  <code> var param = {spatialRel:ESRI_SPATIALREL_INTERSECTS}</code>
@@ -247,6 +299,8 @@
   var ESRI_SPATIALREL_OVERLAPS  =  "esriSpatialRelOverlaps";
   var ESRI_SPATIALREL_TOUCHES  =  "esriSpatialRelTouches";
   var ESRI_SPATIALREL_WITHIN  =  "esriSpatialRelWithin";
+ 
+ 
   /**
  * extract the substring from full string, between start string and end string
  * @param {Object} full
@@ -301,7 +355,7 @@
    * @param {Object} args
    */
   function triggerEvent(src, evtName, args) {
-    if (window.GEvent) {
+    if (GEvent) {
       GEvent.trigger.apply(this, arguments);
     }
   }
@@ -345,26 +399,21 @@
       arr.splice(i, 1);
     }
   }
+ 
+
   
-  function exportSymbol(o) {
-    for (var x in o) {
-      if (o.hasOwnProperty(x)) {
-        window[x] = o[x];
-        // additional name space symbol export 
-      }
-    }
-  }
+ 
   /**
-   * A list of utilities that performs the commonly used functions.
+   * A list of utilities ((<code>google.maputils.arcgis.Util</code>) that performs the commonly used functions.
    * @name ArcGISUtil
    * @namespace
    */
   var ArcGISUtil = {};
   var jsonpID_ = 0;
   //cross domain function list. this namespace is what gmap is using
-  window._xdc_ = window._xdc_ ||
-  {};
-  var xdc = window._xdc_;
+  
+  window.ags_jsonp = window.ags_jsonp || {};
+  var xdc = window.ags_jsonp;
   
   /**
    * Make Cross Domain Calls. This function returns the
@@ -381,14 +430,14 @@
    * @param {Function} callbackFn
    * @return {String} scriptID
    */
-  ArcGISUtil.getJSON = function(url, params, callbackName, callbackFn) {
+  ArcGISUtil.getJSON = function (url, params, callbackName, callbackFn) {
     var sid = 'ags_jsonp' + (jsonpID_++) + '_' + Math.floor(Math.random() * 1000000);
     var full = url + (url.indexOf('?') === -1 ? '?' : '&');
     if (params) {
       for (var x in params) {
         if (params.hasOwnProperty(x)) {
           //jslint complaint about escape cause NN does not support it.
-          full += (x + '=' + (window.escape?window.escape(params[x]):encodeURIComponent(params[x])) + '&');
+          full += (x + '=' + (escape?escape(params[x]):encodeURIComponent(params[x])) + '&');
         }
       }
     }
@@ -397,9 +446,9 @@
       throw new Error("document must have header tag");
     }
     var script = document.createElement("script");
-    script.src = full + callbackName + '=_xdc_.' + sid;
+    script.src = full + callbackName + '=ags_jsonp.' + sid;
     script.id = sid;
-    var jsonpcallback = function() {
+    var jsonpcallback = function () {
       delete xdc[sid];
       head.removeChild(script);
       script = null;
@@ -434,7 +483,7 @@
    * @param {String} opt_layerName
    * @return {Object}
    */
-  ArcGISUtil.getOptionValue = function(defaultValue, options, propName, opt_serviceName, opt_layerName) {
+  ArcGISUtil.getOptionValue = function (defaultValue, options, propName, opt_serviceName, opt_layerName) {
     var val = augmentObject(defaultValue, {});
     if (options) {
       val = augmentObject(options[propName], val, true);
@@ -457,7 +506,7 @@
    * @param {String} name attribue name
    * @return {Object}
    */
-  ArcGISUtil.getAttributeValue = function(attrs, name) {
+  ArcGISUtil.getAttributeValue = function (attrs, name) {
     if (typeof attrs[name] !== 'undefined') {
       return attrs[name];
     }
@@ -472,12 +521,12 @@
   };
   
   /**
-   * convert Geometry to JSON String, optionally include SpatialReference info.
+   * convert Geometry to JSON String, optionally include ArcGISSpatialReference info.
    * @param {Geometry} geoms
    * @param {Boolean} opt_includeSR
    * @return {String}
    */
-  ArcGISUtil.fromGeometryToJSON = function(geom, opt_includeSR) {
+  ArcGISUtil.fromGeometryToJSON = function (geom, opt_includeSR) {
     function fromPointsToJSON(pts) {
       var arr = [];
       for (var i = 0, c = pts.length; i < c; i++) {
@@ -515,35 +564,37 @@
   /**
    * Some operations such as identify and find are operated against multiple layers.
    * The results are in a flat list. This method will group the result by layer and
-   * return an object with key as layer name, value as a {@link ResultSet}.
+   * return an object with key as layer name, value as a {@link ArcGISResultSet}.
    * @param {IdentifyResults|FindResults} results
    * @return {Object}
    */
-  ArcGISUtil.groupResultsByLayer = function(json) {
+  ArcGISUtil.groupResultsByLayer = function (json) {
     var ret = {};
     var res, layerName;
     var results = json.results;
-    for (var i = 0, c = results.length; i < c; i++) {
-      res = results[i];
-      layerName = res.layerName;
-      if (!ret[layerName]) {
-        var fields = [];
-        for (var x in res.attributes) {
-          if (res.attributes.hasOwnProperty(x)) {
-            fields.push(x);
+    if (results) {
+      for (var i = 0, c = results.length; i < c; i++) {
+        res = results[i];
+        layerName = res.layerName;
+        if (!ret[layerName]) {
+          var fields = [];
+          for (var x in res.attributes) {
+            if (res.attributes.hasOwnProperty(x)) {
+              fields.push(x);
+            }
           }
+          var set = {
+            displayFieldName: res.displayFieldName,
+            spatialReference: res.geometry ? res.geometry.spatialReference : null,
+            geometryType: res.geometryType,
+            fieldAliases: fields,
+            features: []
+          };
+          ret[layerName] = set;
         }
-        var set = {
-          displayFieldName: res.displayFieldName,
-          spatialReference: res.geometry ? res.geometry.spatialReference : null,
-          geometryType: res.geometryType,
-          fieldAliases: fields,
-          features: []
-        };
-        ret[layerName] = set;
+        // more than we need but no need to remove them.
+        ret[layerName].features.push(res);
       }
-      // more than we need but no need to remove them.
-      ret[layerName].features.push(res);
     }
     return ret;
   };
@@ -551,22 +602,36 @@
    * @private for now
    * Get html for a resultset
    * @param {Object} res
+   * @param {Boolean} vertical
    */
-  ArcGISUtil.getResultSetHtml = function(res) {
-    var html = '<table class  =  "ags-resultset">';
-    html += '<tr>';
+  ArcGISUtil.getResultSetHtml = function (res, style) {
+    var html = '<table class="ags-resultset">';
     var i, j, c, d;
-    for (i = 0, c = res.fieldAliases.length; i < c; i++) {
-      html += '<th class  =  "ags-fieldname">' + res.fieldAliases[i] + '</th>';
-    }
-    html += '</tr>';
-    for (i = 0, c = res.features.length; i < c; i++) {
+    style = style || (res.features.length === 1? 'v' : 'h');
+    if (style === 'h') {
       html += '<tr>';
-      var atts = res.features[i].attributes;
-      for (j = 0, d = res.fieldAliases.length; j < d; j++) {
-        html += '<td class  =  "ags-fieldvalue">' + atts[res.fieldAliases[j]] + '</td>';
+      for (i = 0, c = res.fieldAliases.length; i < c; i++) {
+        html += '<th class="ags-fieldname">' + res.fieldAliases[i] + '</th>';
       }
       html += '</tr>';
+    }
+    for (i = 0, c = res.features.length; i < c; i++) {
+      var atts = res.features[i].attributes;
+      if (style === 'h') {
+        html += '<tr>';
+      } else if (i > 0) {
+        html += '<tr><td colspan="2"><hr/></td></tr>';
+      }
+      for (j = 0, d = res.fieldAliases.length; j < d; j++) {
+        if (style === 'h') {
+          html += '<td class="ags-fieldvalue">' + atts[res.fieldAliases[j]] + '</td>';
+        } else {
+          html += '<tr><td class="ags-fieldname">' + res.fieldAliases[j] + '</td><td class="ags-fieldvalue">' + atts[res.fieldAliases[j]] + '</td></tr>';
+        }
+      }
+      if (style === 'h') {
+        html += '</tr>';
+      }
     }
     html += '</table>';
     return html;
@@ -575,10 +640,9 @@
    * @name ArcGISConfig
    * @class This is an object literal that sets common configuration values used across the lib.
    * @property {Number} [maxPolyPoints  = 1000] max number of points allowed in polyline's path or polygon's ring. If exceed, no overlay will be created.(for now)
-   * @property {ArcGISStyleOptions} [style] The default style used for GOverlays.
+   * @property {StyleOptions} [style] The default style used for GOverlays.
    */
   var ArcGISConfig = {
-    // geometryServiceUrl:null, //'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer'
     maxPolyPoints: 1000,
     style: {
       icon: null,
@@ -593,38 +657,37 @@
     }
   };
   /**
-   * SpatialReferences has an internal collection of Spatial Refeneces supported in the application.
+   * ArcGISSpatialReferences has an internal collection of Spatial Refeneces supported in the application.
    * The key of the collection is the wkid, and value is an instance of
-   * {@link SpatialReference}.
+   * {@link ArcGISSpatialReference}.
    * The {@link ArcGISTileLayer}'s Spatial Refeneces <b>must be already added to collection
    * before it's constructor can be called</b>.
-   * The following SpatialReference are added by default:
+   * The following ArcGISSpatialReference are added by default:
    * <code>
-   * <br/> 4326: WGS84 Geographic Coordinate System;
+   * <br/> 4326: WGS84 ArcGISGeographic Coordinate System;
    * <br/> 102113: Web-Mercator used by Google Maps, Virtual Earth etc.
    * </code>
    * <br/> The application can add a supported spatial references using static method
-   * <code>SpatialReferences.addSpatialReference(wkid,sr);</code>
-   * @name SpatialReferences
-   * @namespace
+   * <code>ArcGISSpatialReferences.addSpatialReference(wkid,sr);</code>
+   * @name ArcGISSpatialReferences
+   * @name ArcGISspace
    */
-  var SpatialReferences = {};
+  var ArcGISSpatialReferences = {};
   
   /**
    * Create A Generic Spatial Reference Object
    * The <code>params </code> passed in constructor is a javascript object literal and depends on
    * the type of Coordinate System to construct.
-   * @name SpatialReference
-   * @class This is class for coordinate systems that converts value between latlng and
-   *    real-world coordinates. The following classes extend this class:
-   *    {@link Geographic}, {@link SphereMercator}, {@link LambertConformalConic}, and {@link TransverseMercator}.
+   * @name ArcGISSpatialReference
+   * @class This  class (<code>google.maputils.arcgis.SpatialReference</code>) is for coordinate systems that converts value 
+   * between geographic and real-world coordinates. The following classes extend this class:
+   *    {@link ArcGISGeographic}, {@link ArcGISSphereMercator}, {@link ArcGISLambertConformalConic}, and {@link ArcGISTransverseMercator}.
    * @constructor
    * @property {Number} [wkid] well-known coodinate system id (EPSG code)
    * @param {Object} params
    */
-  function SpatialReference(params) {
-    params  =  params ||
-    {};
+  function ArcGISSpatialReference(params) {
+    params  =  params || {};
     this.wkid  =  params.wkid;
   }
 
@@ -634,7 +697,7 @@
    * @param {Number[]} lnglat
    * @return {Number[]}
    */
-  SpatialReference.prototype.fromLatLngToCoords  =  function (lnglat) {
+  ArcGISSpatialReference.prototype.forward  =  function (lnglat) {
     return lnglat;
   };
   /**
@@ -643,31 +706,30 @@
    * @param {Number[]}  coords
    * @return {Number[]}
    */
-  SpatialReference.prototype.fromCoordsToLatLng  =  function (coords) {
+  ArcGISSpatialReference.prototype.reverse  =  function (coords) {
     return coords;
   };
   /**
    * Get the map the periodicity in x-direction, in map units NOT pixels
    * @return {Number} periodicity in x-direction
    */
-  SpatialReference.prototype.getWrapWidth  =  function () {
+  ArcGISSpatialReference.prototype.getCircumference  =  function () {
     return 360;
   };
 
 /**
  * Transform an extent to this Spatial Reference and return 
- * a new instance of {@link Envelope} if the spatial references are different.
+ * a new instance of {@link ArcGISEnvelope} if the spatial references are different.
  * @param {Envelope} extent
- * @param {SpatialReference} sr of the extent.
  * @return {Envelope}
  */
-  SpatialReference.prototype.transform = function (extent) {
+  ArcGISSpatialReference.prototype.transform = function (extent) {
     if (extent.spatialReference.wkid !== this.wkid) {
-      var sr = SpatialReferences.getSpatialReference(extent.spatialReference.wkid);
-      var sw = sr.fromCoordsToLatLng([extent.xmin, extent.ymin]);
-      var ne = sr.fromCoordsToLatLng([extent.ymin, extent.ymax]);
-      sw = this.fromLatLngToCoords(sw);
-      ne = this.fromLatLngToCoords(ne);
+      var sr = ArcGISSpatialReferences.getSpatialReference(extent.spatialReference.wkid);
+      var sw = sr.reverse([extent.xmin, extent.ymin]);
+      var ne = sr.reverse([extent.ymin, extent.ymax]);
+      sw = this.forward(sw);
+      ne = this.forward(ne);
       return {
         xmin: sw[0],
         ymin: sw[1],
@@ -683,21 +745,23 @@
   };
 
   /**
-   * Creates a Geographic Coordinate System. e.g.:<br/>
-   * <code>var g  = new Geographic({"wkid":4326});</code>
-   * @name Geographic
-   * @class This class will simply retuns same LatLng as Coordinates. 
-   *   The <code>param</code> should have wkid property. Geographic Coordinate systems (eg. WGS84(4326)) can 
+   * Creates a ArcGISGeographic Coordinate System. e.g.:<br/>
+   * <code>var g  = new ArcGISGeographic({"wkid":4326});<br/>
+   * var g2 = new google.maputils.arcgis.Geographic({"wkid":4326});
+   * </code>
+   * @name ArcGISGeographic
+   * @class This class (<code>google.maputils.arcgis.Geographic</code>) will simply retuns same LatLng as Coordinates. 
+   *   The <code>param</code> should have wkid property. Any Geographic Coordinate Systems (eg. WGS84(4326)) can 
    *   use this class As-Is. 
    *   <br/>Note:<b> This class does not support datum transformation</b>.
-   * @extends SpatialReference
+   * @extends ArcGISSpatialReference
    * @param {Object} params
    */
-  function Geographic(params) {
+  function ArcGISGeographic(params) {
     params  = params || {};
-    SpatialReference.call(this, params);
+    ArcGISSpatialReference.call(this, params);
   }
-  Geographic.prototype  = new SpatialReference();
+  ArcGISGeographic.prototype  = new ArcGISSpatialReference();
 
 
 /**
@@ -715,23 +779,22 @@
  * <br/>-false_northing: FN, false northing, the Northings value assigned to the natural origin
  * </code>
  * <br/> e.g. North Carolina State Plane NAD83 Feet: <br/>
- * <code> var ncsp82  = new LambertConformalConic({wkid:2264, semi_major: 6378137.0,inverse_flattening: 298.257222101,
+ * <code> var ncsp82  = new ArcGISLambertConformalConic({wkid:2264, semi_major: 6378137.0,inverse_flattening: 298.257222101,
  *   standard_parallel_1: 34.33333333333334, standard_parallel_2: 36.16666666666666,
  *   central_meridian: -79.0, latitude_of_origin: 33.75,'false_easting': 2000000.002616666,
  *   'false_northing': 0, unit: 0.3048006096012192 }); </code>
- * @name LambertConformalConic
- * @class This represents a Spatial Reference System based on <a target  = wiki href  = 'http://en.wikipedia.org/wiki/Lambert_conformal_conic_projection'>Lambert Conformal Conic Projection</a>. 
- * @extends SpatialReference
+ * @name ArcGISLambertConformalConic
+ * @class This class (<code>google.maputils.arcgis.LambertConformalConic</code>) represents a Spatial Reference System based on <a target  = wiki href  = 'http://en.wikipedia.org/wiki/Lambert_conformal_conic_projection'>Lambert Conformal Conic Projection</a>. 
+ * @extends ArcGISSpatialReference
  * @constructor
  * @param {Object} params
  */
-  function LambertConformalConic(params) {
+  function ArcGISLambertConformalConic(params) {
     //http://pubs.er.usgs.gov/djvu/PP/PP_1395.pdf
     // http://www.posc.org/Epicentre.2_2/DataModel/ExamplesofUsage/eu_cs34.html
     //for NCSP83: GLatLng(35.102363,-80.5666)<  === > GPoint(1531463.95, 495879.744);
-    params = params ||
-    {};
-    SpatialReference.call(this, params);
+    params = params || {};
+    ArcGISSpatialReference.call(this, params);
     var f_i = params.inverse_flattening;
     var phi1 = params.standard_parallel_1 * RAD_DEG;
     var phi2 = params.standard_parallel_2 * RAD_DEG;
@@ -755,13 +818,13 @@
     
   }
   
-  LambertConformalConic.prototype = new SpatialReference();
+  ArcGISLambertConformalConic.prototype = new ArcGISSpatialReference();
   /**
    * calc_m_
    * @param {Object} phi
    * @param {Object} es
    */
-  LambertConformalConic.prototype.calc_m_ = function(phi, es) {
+  ArcGISLambertConformalConic.prototype.calc_m_ = function (phi, es) {
     var sinphi = Math.sin(phi);
     return Math.cos(phi) / Math.sqrt(1 - es * sinphi * sinphi);
   };
@@ -770,7 +833,7 @@
    * @param {Object} phi
    * @param {Object} e
    */
-  LambertConformalConic.prototype.calc_t_ = function(phi, e) {
+  ArcGISLambertConformalConic.prototype.calc_t_ = function (phi, e) {
     var esinphi = e * Math.sin(phi);
     return Math.tan(Math.PI / 4 - phi / 2) / Math.pow((1 - esinphi) / (1 + esinphi), e / 2);
   };
@@ -781,7 +844,7 @@
    * @param {Object} t
    * @param {Object} n
    */
-  LambertConformalConic.prototype.calc_r_ = function(a, F, t, n) {
+  ArcGISLambertConformalConic.prototype.calc_r_ = function (a, F, t, n) {
     return a * F * Math.pow(t, n);
   };
   /**
@@ -790,7 +853,7 @@
    * @param {Object} e
    * @param {Object} phi
    */
-  LambertConformalConic.prototype.calc_phi_ = function(t_i, e, phi) {
+  ArcGISLambertConformalConic.prototype.calc_phi_ = function (t_i, e, phi) {
     var esinphi = e * Math.sin(phi);
     return Math.PI / 2 - 2 * Math.atan(t_i * Math.pow((1 - esinphi) / (1 + esinphi), e / 2));
   };
@@ -800,7 +863,7 @@
    * @param {Object} e
    * @param {Object} init
    */
-  LambertConformalConic.prototype.solve_phi_ = function(t_i, e, init) {
+  ArcGISLambertConformalConic.prototype.solve_phi_ = function (t_i, e, init) {
     // iteration
     var i = 0;
     var phi = init;
@@ -813,11 +876,11 @@
     return newphi;
   };
   /** 
-   * see {@link SpatialReference}
+   * see {@link ArcGISSpatialReference}
    * @param {Number[]} lnglat
    * @return {Number[]}
    */
-  LambertConformalConic.prototype.fromLatLngToCoords = function(lnglat) {
+  ArcGISLambertConformalConic.prototype.forward = function (lnglat) {
     var phi = lnglat[1] * RAD_DEG;// (Math.PI / 180);
     var lamda = lnglat[0] * RAD_DEG;
     var t = this.calc_t_(phi, this.e_);
@@ -828,11 +891,11 @@
     return [E, N];
   };
   /**
-   * see {@link SpatialReference}
+   * see {@link ArcGISSpatialReference}
    * @param {Number[]}  coords
    * @return {Number[]}
    */
-  LambertConformalConic.prototype.fromCoordsToLatLng = function(coords) {
+  ArcGISLambertConformalConic.prototype.reverse = function (coords) {
     var E = coords[0];
     var N = coords[1];
     var theta_i = Math.atan((E - this.FE_) / (this.rF_ - (N - this.FN_)));
@@ -844,10 +907,10 @@
     
   };
   /**
-   *  see {@link SpatialReference}
+   *  see {@link ArcGISSpatialReference}
    *  @return {Number}
    */
-  LambertConformalConic.prototype.getWrapWidth = function() {
+  ArcGISLambertConformalConic.prototype.getCircumference = function () {
     return Math.PI * 2 * this.a_;
   };
 		
@@ -867,20 +930,19 @@
  * <br/>-false_northing: FN, false northing, the Northings value assigned to the natural origin 
  * </code>
  * <br/>e.g. Georgia West State Plane NAD83 Feet:  
- * <br/><code> var gawsp83  = new TransverseMercator({wkid: 102667, semi_major:6378137.0,
+ * <br/><code> var gawsp83  = new ArcGISTransverseMercator({wkid: 102667, semi_major:6378137.0,
  *  inverse_flattening:298.257222101,central_meridian:-84.16666666666667, latitude_of_origin: 30.0,
  *  scale_factor:0.9999,'false_easting':2296583.333333333, 'false_northing':0, unit: 0.3048006096012192});
  *  </code>
  * @param {Object} params 
- * @name TransverseMercator
- * @class This class represents a Spatial Reference System based on 
+ * @name ArcGISTransverseMercator
+ * @class This class (<code>google.maputils.arcgis.TransverseMercator</code>) represents a Spatial Reference System based on 
  * <a target  = wiki href  = 'http://en.wikipedia.org/wiki/Transverse_Mercator_projection'>Transverse Mercator Projection</a>
- * @extends SpatialReference
+ * @extends ArcGISSpatialReference
  */
-  function TransverseMercator(params) {
-    params = params ||
-    {};
-    SpatialReference.call(this, params);
+  function ArcGISTransverseMercator(params) {
+    params = params || {};
+    ArcGISSpatialReference.call(this, params);
     //GLatLng(33.74561,-84.454308)<  === >  GPoint(2209149.07977075, 1362617.71496891);
     this.a_ = params.semi_major / params.unit;//this.
     var f_i = params.inverse_flattening;
@@ -902,7 +964,7 @@
     this.M0_ = this.calc_m_(phiF, this.a_, this.es_, this.ep4_, this.ep6_);
   }
   
-  TransverseMercator.prototype = new SpatialReference();
+  ArcGISTransverseMercator.prototype = new ArcGISSpatialReference();
   /**
    * calc_m_
    * @param {Object} phi
@@ -911,15 +973,15 @@
    * @param {Object} ep4
    * @param {Object} ep6
    */
-  TransverseMercator.prototype.calc_m_ = function(phi, a, es, ep4, ep6) {
+  ArcGISTransverseMercator.prototype.calc_m_ = function (phi, a, es, ep4, ep6) {
     return a * ((1 - es / 4 - 3 * ep4 / 64 - 5 * ep6 / 256) * phi - (3 * es / 8 + 3 * ep4 / 32 + 45 * ep6 / 1024) * Math.sin(2 * phi) + (15 * ep4 / 256 + 45 * ep6 / 1024) * Math.sin(4 * phi) - (35 * ep6 / 3072) * Math.sin(6 * phi));
   };
   /**
-   * see {@link SpatialReference}
+   * see {@link ArcGISSpatialReference}
    * @param {Number[]} lnglat
    * @return {Number[]}
    */
-  TransverseMercator.prototype.fromLatLngToCoords = function(lnglat) {
+  ArcGISTransverseMercator.prototype.forward = function (lnglat) {
     var phi = lnglat[1] * RAD_DEG;// (Math.PI / 180);
     var lamda = lnglat[0] * RAD_DEG;//(Math.PI / 180);
     var nu = this.a_ / Math.sqrt(1 - this.es_ * Math.pow(Math.sin(phi), 2));
@@ -932,11 +994,11 @@
     return [E, N];
   };
   /**
-   * see {@link SpatialReference}
+   * see {@link ArcGISSpatialReference}
    * @param {Number[]}  coords
    * @return {Number[]}
    */
-  TransverseMercator.prototype.fromCoordsToLatLng = function(coords) {
+  ArcGISTransverseMercator.prototype.reverse = function (coords) {
     var E = coords[0];
     var N = coords[1];
     var e1 = (1 - Math.sqrt(1 - this.es_)) / (1 + Math.sqrt(1 - this.es_));
@@ -953,10 +1015,10 @@
     return [lamda / RAD_DEG, phi / RAD_DEG];
   };
   /**
-   * see {@link SpatialReference}
+   * see {@link ArcGISSpatialReference}
    * @return {Number}
    */
-  TransverseMercator.prototype.getWrapWidth = function() {
+  ArcGISTransverseMercator.prototype.getCircumference = function () {
     return Math.PI * 2 * this.a_;
   };
 
@@ -969,30 +1031,30 @@
  * <br/>-central_meridian: lamdaF, longitude of the false origin  (with respect to the prime meridian)
  * </code>
  * <br/>e.g. The "Web Mercator" used in ArcGIS Server:<br/>
- * <code> var web_mercator  = new SphereMercator({wkid: 102113,  semi_major:6378137.0,  central_meridian:0, unit: 1 });
+ * <code> var web_mercator  = new ArcGISSphereMercator({wkid: 102113,  semi_major:6378137.0,  central_meridian:0, unit: 1 });
  * </code>
- * @name SphereMercator
- * @class This is the Projection Default Google Maps uses. It is a special form of Mercator.
+ * @name ArcGISSphereMercator
+ * @class This class (<code>google.maputils.arcgis.SphereMercator</code>) is the Projection Default Google Maps uses. It is a special form of Mercator.
  * @param {Object} params 
- * @extends SpatialReference
+ * @extends ArcGISSpatialReference
  */
-  function SphereMercator(params) {
+  function ArcGISSphereMercator(params) {
     /*  =========== parameters  =  ===================== */
     params = params ||
     {};
-    SpatialReference.call(this, params);
+    ArcGISSpatialReference.call(this, params);
     this.a_ = (params.semi_major || 6378137.0) / (params.unit || 1);
     this.lamdaF_ = (params.central_meridian || 0.0) * RAD_DEG;//(Math.PI / 180);
   }
   
-  SphereMercator.prototype = new SpatialReference();
+  ArcGISSphereMercator.prototype = new ArcGISSpatialReference();
   
   /**
-   * See {@link SpatialReference}
+   * See {@link ArcGISSpatialReference}
    * @param {Number[]} lnglat
    * @return {Number[]}
    */
-  SphereMercator.prototype.fromLatLngToCoords = function(lnglat) {
+  ArcGISSphereMercator.prototype.forward = function (lnglat) {
     var phi = lnglat[1] * RAD_DEG;//(Math.PI / 180);
     var lamda = lnglat[0] * RAD_DEG;
     var E = this.a_ * (lamda - this.lamdaF_);
@@ -1000,11 +1062,11 @@
     return [E, N];
   };
   /**
-   * See {@link SpatialReference}
+   * See {@link ArcGISSpatialReference}
    * @param {Number[]}  coords
    * @return {Number[]}
    */
-  SphereMercator.prototype.fromCoordsToLatLng = function(coords) {
+  ArcGISSphereMercator.prototype.reverse = function (coords) {
     var E = coords[0];
     var N = coords[1];
     var phi = Math.PI / 2 - 2 * Math.atan(Math.exp(-N / this.a_));
@@ -1012,30 +1074,29 @@
     return [lamda / RAD_DEG, phi / RAD_DEG];
   };
   /**
-   * See {@link SpatialReference}
+   * See {@link ArcGISSpatialReference}
    * @return {Number}
    */
-  SphereMercator.prototype.getWrapWidth = function() {
+  ArcGISSphereMercator.prototype.getCircumference = function () {
     return Math.PI * 2 * this.a_;
   };
   
   /**
    * Create a flat transform spatial reference. The <code>params</code> passed in constructor should have the following properties:
    * <li><code>wkid</code>: wkid
-   * <li><code>latlng</code>:  {@link Envelope} in latlng unit;
-   * <li><code>coords</code>: {@link Envelope} in coords unit
-   * @class a special type of coordinate reference assuming lat/lng will increase
+   * <li><code>latlng</code>:  {@link ArcGISEnvelope} in latlng unit;
+   * <li><code>coords</code>: {@link ArcGISEnvelope} in coords unit
+   * @class This class (<code>google.maputils.arcgis.FlatSpatialReference</code>) is a special type of coordinate reference assuming lat/lng will increase
    * evenly as if earth is flat. Approximate for small regions without implementing
    * a real projection.
-   * @name FlatSpatialReference
+   * @name ArcGISFlatSpatialReference
    * @param {Object} params
-   * @extends SpatialReference
+   * @extends ArcGISSpatialReference
    */
-  function FlatSpatialReference(params) {
+  function ArcGISFlatSpatialReference(params) {
     /*  =========== parameters  =  ===================== */
-    params = params ||
-    {};
-    SpatialReference.call(this, params);
+    params = params || {};
+    ArcGISSpatialReference.call(this, params);
     this.lng_ = params.latlng.xmin;
     this.lat_ = params.latlng.ymin;
     this.x_ = params.coords.xmin;
@@ -1044,44 +1105,44 @@
     this.yscale_ = (params.coords.ymax - params.coords.ymin) / (params.latlng.ymax - params.latlng.ymin);
   }
   
-  FlatSpatialReference.prototype = new SpatialReference();
+  ArcGISFlatSpatialReference.prototype = new ArcGISSpatialReference();
   
   /**
-   * See {@link SpatialReference}
+   * See {@link ArcGISSpatialReference}
    * @param {Number[]} lnglat
    * @return {Number[]}
    */
-  FlatSpatialReference.prototype.fromLatLngToCoords = function(lnglat) {
+  ArcGISFlatSpatialReference.prototype.forward = function (lnglat) {
     var E = this.x_ + (lnglat[0] - this.lng_) * this.xscale_;
     var N = this.y_ + (lnglat[1] - this.lat_) * this.yscale_;
     return [E, N];
   };
   /**
-   * See {@link SpatialReference}
+   * See {@link ArcGISSpatialReference}
    * @param {Number[]}  coords
    * @return {Number[]}
    */
-  FlatSpatialReference.prototype.fromCoordsToLatLng = function(coords) {
+  ArcGISFlatSpatialReference.prototype.reverse = function (coords) {
     var lng = this.lng_ + (coords[0] - this.x_) / this.xscale_;
     var lat = this.lat_ + (coords[1] - this.y_) / this.yscale_;
     return [lng, lat];
   };
   /**
-   * See {@link SpatialReference}
+   * See {@link ArcGISSpatialReference}
    * @return {Number}
    */
-  FlatSpatialReference.prototype.getWrapWidth = function() {
+  ArcGISFlatSpatialReference.prototype.getCircumference = function () {
     return this.xscale_ * 360;
   };
 
 
-  var WGS84 = new Geographic({
+  var WGS84 = new ArcGISGeographic({
     wkid: 4326
   });
-  var NAD83 = new Geographic({
+  var NAD83 = new ArcGISGeographic({
     wkid: 4269
   });
-  var WEB_MERCATOR = new SphereMercator({
+  var WEB_MERCATOR = new ArcGISSphereMercator({
     wkid: 102113,
     semi_major: 6378137.0,
     central_meridian: 0,
@@ -1089,20 +1150,20 @@
   });
   
   // declared early but assign here to avoid dependency error by jslint
-  SpatialReferences = {
+  ArcGISSpatialReferences = {
     '4326': WGS84,
     '4269': NAD83,
     '102113': WEB_MERCATOR
   };
   /**
    * Add A Spatial Reference to the collection of Spatial References.
-   * the {@link wktOrSR} parameter can be String format of "well-known text" of the
-   * Spatial Reference, or an instance of {@link SpatialReference}.
+   * the {@link ArcGISwktOrSR} parameter can be String format of "well-known text" of the
+   * Spatial Reference, or an instance of {@link ArcGISSpatialReference}.
    * <br/><li> If passes in String WKT format, to be consistent, it should use the same format as listed
    * in <a  href  = 'http://edndoc.esri.com/arcims/9.2/elements/pcs.htm'>
    * ESRI documentation</a>. For example, add NC State Plane NAD83 as String:
    * <br/><code>
-   * SpatialReferences.addSpatialReference('2264','PROJCS["NAD_1983_StatePlane_North_Carolina_FIPS_3200_Feet",
+   * ArcGISSpatialReferences.addSpatialReference('2264','PROJCS["NAD_1983_StatePlane_North_Carolina_FIPS_3200_Feet",
    * GEOGCS["GCS_North_American_1983",
    * DATUM["D_North_American_1983",
    * SPHEROID["GRS_1980",6378137.0,298.257222101]],
@@ -1117,12 +1178,12 @@
    * PARAMETER["Latitude_Of_Origin",33.75],
    * UNIT["Foot_US",0.3048006096012192]]');
    * <br/></code>
-   * Note: only <b>LambertConformalConic</b> and <b>TransverseMercator</b> Projection
+   * Note: only <b>Lambert Conformal Conic</b> and <b>Transverse Mercator</b> Projection
    * based Spatial References are supported if added via WKT String.
-   * <br/><li> If passes in an instance of {@link SpatialReference}, it can be one of the
-   * built in classes, or a class that extends SpatialReference. For example, add NC State Plane NAD83 as SR:
+   * <br/><li> If passes in an instance of {@link ArcGISSpatialReference}, it can be one of the
+   * built in classes, or a class that extends ArcGISSpatialReference. For example, add NC State Plane NAD83 as SR:
    * <br/><code>
-   * SpatialReferences.addSpatialReference('2264': new LambertConformalConic({
+   * ArcGISSpatialReferences.addSpatialReference('2264': new ArcGISLambertConformalConic({
    * wkid: 2264,
    * semi_major: 6378137.0,
    * inverse_flattening: 298.257222101,
@@ -1138,12 +1199,12 @@
    * @param {Number} wkid
    * @param {Object} wktOrSR
    */
-  SpatialReferences.addSpatialReference = function(wkid, wktOrSR) {
+  ArcGISSpatialReferences.addSpatialReference = function (wkid, wktOrSR) {
     var sr = this['' + wkid];
     if (sr) {
       return sr;
     }
-    if (wktOrSR instanceof SpatialReference) {
+    if (wktOrSR instanceof ArcGISSpatialReference) {
       this['' + wkid] = wktOrSR;
       return wktOrSR;
     }
@@ -1163,20 +1224,20 @@
       params.false_northing = parseFloat(extractString(wkt, "\"False_Northing\",", "]"));
     }
     switch (prj) {
-      case "":
-        sr = new SpatialReference(params);
-        break;
-      case "Lambert_Conformal_Conic":
-        params.standard_parallel_1 = parseFloat(extractString(wkt, "\"Standard_Parallel_1\",", "]"));
-        params.standard_parallel_2 = parseFloat(extractString(wkt, "\"Standard_Parallel_2\",", "]"));
-        sr = new LambertConformalConic(params);
-        break;
-      case "Transverse_Mercator":
-        params.scale_factor = parseFloat(extractString(wkt, "\"Scale_Factor\",", "]"));
-        sr = new TransverseMercator(params);
-        break;
-      // more implementations here.
-      default:
+    case "":
+      sr = new ArcGISSpatialReference(params);
+      break;
+    case "Lambert_Conformal_Conic":
+      params.standard_parallel_1 = parseFloat(extractString(wkt, "\"Standard_Parallel_1\",", "]"));
+      params.standard_parallel_2 = parseFloat(extractString(wkt, "\"Standard_Parallel_2\",", "]"));
+      sr = new ArcGISLambertConformalConic(params);
+      break;
+    case "Transverse_Mercator":
+      params.scale_factor = parseFloat(extractString(wkt, "\"Scale_Factor\",", "]"));
+      sr = new ArcGISTransverseMercator(params);
+      break;
+    // more implementations here.
+    default:
       //throw new Error(prj + "  not supported";
     }
     if (sr) {
@@ -1185,18 +1246,18 @@
     return sr;
   };
   /**
-   * Gets the {@link SpatialReference} from the internal colection by well-known id. Returns undefined if not added.
+   * Gets the {@link ArcGISSpatialReference} from the internal colection by well-known id. Returns undefined if not added.
    * @param {Number} wkid
-   * @return {SpatialReference}
+   * @return {ArcGISSpatialReference}
    */
-  SpatialReferences.getSpatialReference = function(wkid) {
+  ArcGISSpatialReferences.getSpatialReference = function (wkid) {
     return this['' + wkid];
   };	
   //end of projection related code//
 
   /**
-   * @name Field
-   * @class This class represents a field in a {@link MapLayer}. It is accessed from
+   * @name ArcGISField
+   * @class This class represents a field in a {@link ArcGISLayer}. It is accessed from
    * the <code> fields</code> property. There is no constructor for this class,
    *  use Object Literal.
    * @property {String} [name] field Name
@@ -1205,8 +1266,8 @@
    */
   /**
    * Create a ArcGIS map Layer using it's url ( 	http://[mapservice-url]/[layerId])
-   * @name MapLayer
-   * @class This class represents a Map layer inside an {@link MapService}. It carries
+   * @name ArcGISLayer
+   * @class This class (<code>google.maputils.arcgis.Layer</code>) represents a Map layer inside an {@link ArcGISMapService}. It carries
    *  information about a layer's name, id and other information such as scales etc.
    *  Due to the way REST API is implemented, each layers extra meta data must retrieved
    *  individually. However, most operations do not require those extra info and can be
@@ -1215,10 +1276,10 @@
    * @property {Number} [id] layer ID
    * @property {String} [name] layer Name
    * @property {Number} [parentLayerId] parent LayerId
-   * @property {MapLayer} [parentLayer] parent Layer {@link MapLayer}
+   * @property {Layer} [parentLayer] parent Layer {@link ArcGISLayer}
    * @property {Boolean} [defaultVisibility] defaultVisibility
    * @property {Number[]} [subLayerIds] sub LayerIds. null if no sub layers
-   * @property {MapLayer[]} [subLayers] sub Layers. {@link MapLayer}[].
+   * @property {Layer[]} [subLayers] sub Layers. {@link ArcGISLayer}[].
    * @property {Boolean} [visibility] Visibility of this layer
    * @property {String} [definition] Layer definition.
    * @property {String} [type] layer type(Feature Layer|), only available after load.
@@ -1228,9 +1289,9 @@
    * @property {Number} [maxScale] maxScale, only available after load.
    * @property {Envelope} [extent] extent, only available after load.
    * @property {String} [displayField] displayField, only available after load.
-   * @property {Field[]} [fields] fields, only available after load. See {@link Field}
+   * @property {Field[]} [fields] fields, only available after load. See {@link ArcGISField}
    */
-  function MapLayer(url) {
+  function ArcGISLayer(url) {
     this.url = url;
     this.loaded_ = false;
     this.correct_ = false;
@@ -1241,14 +1302,14 @@
    * If opt_callback function will be called after it is loaded
    * @param {Function} opt_callback
    */
-  MapLayer.prototype.loadInfo = function(opt_callback) {
+  ArcGISLayer.prototype.loadInfo = function (opt_callback) {
     var me = this;
     if (this.loaded_ && this.correct_) {
       return;
     }
     ArcGISUtil.getJSON(this.url, {
       f: 'json'
-    }, 'callback', function(json) {
+    }, 'callback', function (json) {
       if (json.error) {
         me.correct_ = false;
       } else {
@@ -1258,7 +1319,7 @@
       me.loaded_ = true;
       /**
        * This event is fired when the layer and it's extra info is loaded.
-       * @name MapLayer#load
+       * @name ArcGISLayer#load
        * @event
        */
       triggerEvent(me, "load");
@@ -1271,12 +1332,12 @@
    * If the extra layer info is loaded
    * @return {Boolean}
    */
-  MapLayer.prototype.hasLoaded = function() {
+  ArcGISLayer.prototype.hasLoaded = function () {
     return this.loaded_;
   };
   /**
-   * @name QueryParameters
-   * @class This class represent the parameters needed in an query operation for a {@link MapLayer}.
+   * @name ArcGISQueryParameters
+   * @class This class represent the parameters needed in an query operation for a {@link ArcGISLayer}.
    *   There is no constructor, use JavaScript object literal.
    * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/query.html'>Query Operation</a>.
    * @property {String} [f  = json] The response format. html | json | kmz .
@@ -1301,19 +1362,19 @@
    * @property {Number} [outSR] The well-known ID of the spatial reference of the out geometries
    */
   /**
-   * @name ResultSet
-   * @class This class represent the results of an query operation for a {@link MapLayer}.
+   * @name ArcGISResultSet
+   * @class This class represent the results of an query operation for a {@link ArcGISLayer}.
    *   There is no constructor, use JavaScript object literal.
    * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/query.html'>Query Operation</a>.
    * @property {String} [displayFieldName] display Field Name for layer
    * @property {String[]} [fieldAliases] Field Name's Aliases
    * @property {String} [geometryType] esriGeometryPoint | esriGeometryMultipoint | esriGeometryPolygon | esriGeometryPolyline
    * @property {Object} [spatialReference] spatial Reference <b>wkid info only</b>
-   * @property {Features[]} [features] result as array of {@link Feature}
+   * @property {Features[]} [features] result as array of {@link ArcGISFeature}
    */
   /**
-   * @name Feature
-   * @class This class represent one entry in the {@link ResultSet} of an query operation for a {@link MapLayer}.
+   * @name ArcGISFeature
+   * @class This class represent one entry in the {@link ArcGISResultSet} of an query operation for a {@link ArcGISLayer}.
    *   There is no constructor, use JavaScript object literal.
    * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/query.html'>Query Operation</a>.
    * @property {Geometry} [geometry] geometry
@@ -1321,12 +1382,12 @@
    */
   /**
    * The query operation is performed on a layer resource. The result of this operation is a resultset resource that will be
-   * passed in the callback function. param is an instance of {@link QueryParameters}
+   * passed in the callback function. param is an instance of {@link ArcGISQueryParameters}
    * <br/>For more info see <a href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/query.html'>Query Operation</a>.
    * @param {QueryParameters} params
    * @param {Function} callback
    */
-  MapLayer.prototype.query = function(qparams, callback) {
+  ArcGISLayer.prototype.query = function (qparams, callback) {
     if (!qparams) {
       return;
     } 
@@ -1346,37 +1407,37 @@
   };
 
   /**
-   * @name TileInfo
+   * @name ArcGISTileInfo
    * @class This class contains information about map tile infornation for a cached map service.
-   *    It is the type of {@link tileInfo} property of {@link ArcGISTileReference}
+   *    It is the type of {@link ArcGIStileInfo} property of {@link ArcGISArcGISTileReference}
    *    <br/>There is no constructor for this class.
    * @property {Number} [rows] tile row size,  e.g. 512, must be same as cols
    * @property {Number} [cols] tile cols size,  e.g. 512, must be same as rows
    * @property {Number} [dpi] dot per inch for map tiles.
    * @property {String} [format] PNG8 | PNG24 | PNG32 | GIF | JPEG
    * @property {Number} [compressionQuality] JPEG only.0-100.
-   * @property {Point} [origin] origin of tile system of type {@link Point}
-   * @property {SpatialReference} [spatialReference] spatial reference.  <b>wkid info only</b>.
-   * @property {LOD[]} [lods] Array of Level of Details. See {@link LOD}
+   * @property {Point} [origin] origin of tile system of type {@link ArcGISPoint}
+   * @property {ArcGISSpatialReference} [spatialReference] spatial reference.  <b>wkid info only</b>.
+   * @property {LOD[]} [lods] Array of Level of Details. See {@link ArcGISLOD}
    */
   /**
-   * @name LOD
+   * @name ArcGISLOD
    * @class This class contains information about one "Level Of Detail" for a cached map service.
-   *   It is the type of {@link lods} property of {@link TileInfo}
+   *   It is the type of {@link ArcGISlods} property of {@link ArcGISTileInfo}
    *   <br/>There is no constructor for this class. Use as object literal.
    * @property {Number} [level] zoom level.
    * @property {Number} [resolution] map unit per pixel
    * @property {Number} [scale] actual map scale. e.g a value of 5000 means 1:5000 scale.
    */
   /**
-   * Creates a MapService objects that can be used by UI components.
+   * Creates a ArcGISMapService objects that can be used by UI components.
    * <ul><li> <code> url</code> (required) is the URL of the map servive, e.g. <code>
    * http://server.arcgisonline.com/ArcGIS/rest/services/ESRI_StreetMap_World_2D/MapServer</code>.
    * <li> <code>opt_callback</code> optional callback function.
    * <ul/> Note the spatial reference of the map service must already exists
-   * in the {@link SpatialReferences} if actual coordinates transformation is needed.
-   * @name MapService
-   * @class This class is the core class for all map service operations.
+   * in the {@link ArcGISSpatialReferences} if actual coordinates transformation is needed.
+   * @name ArcGISMapService
+   * @class This class (<code>google.maputils.arcgis.MapService</code>) is the core class for all map service operations.
    * It represents an ArcGIS Server map service and serve as the underline resource
    * represented by {@link ArcGISTileLayer} and {@link ArcGISMapOverlay}.
    * It is constructed asynchronously so it should be used <b>after</b>
@@ -1391,15 +1452,15 @@
    * @property {String} [mapName] map frame Name inside the map document
    * @property {String} [description] description
    * @property {String} [copyrightText] copyrightText
-   * @property {MapLayer[]} [layers] Array of {@link MapLayer}s.
+   * @property {Layer[]} [layers] Array of {@link ArcGISLayer}s.
    * @property {Boolean} [singleFusedMapCache] if map cache is singleFused
-   * @property {TileInfo} [tileInfo] See {@link TileInfo}
-   * @property {Envelope} [initialExtent] initialExtent, see {@link Envelope}
-   * @property {Envelope} [fullExtent] fullExtent, see {@link Envelope}
+   * @property {TileInfo} [tileInfo] See {@link ArcGISTileInfo}
+   * @property {Envelope} [initialExtent] initialExtent, see {@link ArcGISEnvelope}
+   * @property {Envelope} [fullExtent] fullExtent, see {@link ArcGISEnvelope}
    * @property {String} [units] unit
    * @property {Object} [documentInfo] Object with the folloing properties: <code>Title, Author,Comments,Subject,Category,Keywords</code>
    */
-  function MapService(url, opt_callback) {
+  function ArcGISMapService(url, opt_callback) {
     this.url = url;
     var tks = url.split("/");
     this.name = tks[tks.length - 2].replace(/_/g, ' ');
@@ -1408,7 +1469,7 @@
     this.correct_ = false;
     ArcGISUtil.getJSON(url, {
       f: 'json'
-    }, 'callback', function(json) {
+    }, 'callback', function (json) {
       me.init_(json, opt_callback);
     });
   }
@@ -1419,7 +1480,7 @@
    * @private
    * @param {Object} json
    */
-  MapService.prototype.init_ = function(json, opt_callback) {
+  ArcGISMapService.prototype.init_ = function (json, opt_callback) {
     var me = this;
     function doneLoad(json) {
       me.loaded_ = true;
@@ -1442,7 +1503,7 @@
       
       /**
        * This event is fired when the service and it's service info is loaded.
-       * @name MapService#load
+       * @name ArcGISMapService#load
        * @event
        */
       triggerEvent(me, "load");
@@ -1472,7 +1533,7 @@
       var ids = [];
       for (var i = 0, c = json.layers.length; i < c; i++) {
         var info = json.layers[i];
-        var layer = new MapLayer(this.url + '/' + info.id);
+        var layer = new ArcGISLayer(this.url + '/' + info.id);
         augmentObject(info, layer);
         layer.visible = info.defaultVisibility;
         layers.push(layer);
@@ -1481,7 +1542,7 @@
       this.layers_ = layers;
       delete this.layers;
       
-      this.spatialReference_ = SpatialReferences.getSpatialReference('' + json.spatialReference.wkid);
+      this.spatialReference_ = ArcGISSpatialReferences.getSpatialReference('' + json.spatialReference.wkid);
       if (!this.spatialReference_) {
         this.exportMap({
           bbox: json.fullExtent,
@@ -1489,13 +1550,13 @@
           size: '1,1',
           imageSR: 4326,
           layers: 'hide:' + ids.join(',')
-        }, function(image) {
-          var sr = new FlatSpatialReference({
+        }, function (image) {
+          var sr = new ArcGISFlatSpatialReference({
             wkid: json.spatialReference.wkid,
             latlng: image.extent,
             coords: json.fullExtent
           });
-          SpatialReferences.addSpatialReference(json.spatialReference.wkid, sr);
+          ArcGISSpatialReferences.addSpatialReference(json.spatialReference.wkid, sr);
           me.spatialReference_ = sr;
           doneLoad(json);
         });
@@ -1508,7 +1569,7 @@
    * If this map service has finished loading from server.
    * @return {Boolean}
    */
-  MapService.prototype.hasLoaded = function() {
+  ArcGISMapService.prototype.hasLoaded = function () {
     return this.loaded_;
   };
   
@@ -1517,32 +1578,32 @@
    * If this map service has loaded from server correctly.
    * @return {Boolean}
    */
-  MapService.prototype.loadedCorrectly = function() {
+  ArcGISMapService.prototype.loadedCorrectly = function () {
     return this.loaded_ && this.correct_;
   };
   
   /**
    * Get the Spatial Reference of this map service that can convert between LatLng and Coordinates
-   * Note, if the actual spatial reference is not aleady added via {@link SpatialReferences}, it will return an object literal with <b>wkid info only</b>.
-   * @return {SpatialReference}
+   * Note, if the actual spatial reference is not aleady added via {@link ArcGISSpatialReferences}, it will return an object literal with <b>wkid info only</b>.
+   * @return {ArcGISSpatialReference}
    */
-  MapService.prototype.getSpatialReference = function() {
+  ArcGISMapService.prototype.getSpatialReference = function () {
     return this.spatialReference_;
   };
   /**
-   * Get the Array of {@link MapLayer}[] for this map service
-   * @return {MapLayer[]}
+   * Get the Array of {@link ArcGISLayer}[] for this map service
+   * @return {Layer[]}
    */
-  MapService.prototype.getLayers = function() {
+  ArcGISMapService.prototype.getLayers = function () {
     return this.layers_;
   };
   
   /**
-   * Get a map layer by it's name(String) or id (Number), return {@link MapLayer}.
+   * Get a map layer by it's name(String) or id (Number), return {@link ArcGISLayer}.
    * @param {String|Number} nameOrId
-   * @return {MapLayer}
+   * @return {Layer}
    */
-  MapService.prototype.getLayer = function(nameOrId) {
+  ArcGISMapService.prototype.getLayer = function (nameOrId) {
     var layers = this.layers_;
     if (layers) {
       for (var i = 0, c = layers.length; i < c; i++) {
@@ -1561,7 +1622,7 @@
    * @param {String|String[]} names
    * @return {Number|Number[]}
    */
-  MapService.prototype.getLayerIds = function(name) {
+  ArcGISMapService.prototype.getLayerIds = function (name) {
     var layer;
     if (isString(name)) {
       layer = this.getLayer(name);
@@ -1581,8 +1642,8 @@
 
 
 /**
- * @name ExportMapParameters
- * @class This class represent the parameters needed in an exportMap operation for a {@link MapService}.
+ * @name ArcGISExportMapParameters
+ * @class This class represent the parameters needed in an exportMap operation for a {@link ArcGISMapService}.
  *   There is no constructor, use JavaScript object literal.
  * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/export.html'>Export Operation</a>.
  * @property {String} [f  = html] The response format. html | json | image | kmz.
@@ -1602,11 +1663,11 @@
  */
 
 /**
- * @name MapImage
- * @class This is the result of {@link MapService}.exportMap operation.
+ * @name ArcGISMapImage
+ * @class This is the result of {@link ArcGISMapService}.exportMap operation.
  *   There is no constructor, use as JavaScript object literal.
  * @property {String} [href] URL of image
- * @property {Envelope} [extent] The {@link Envelope} (bounding box) of the exported image. 
+ * @property {Envelope} [extent] The {@link ArcGISEnvelope} (bounding box) of the exported image. 
  * @property {Number} [width] width of the exported image.
  * @property {Number} [height] height of the exported image.
  * @property {Number} [scale] scale of the exported image.
@@ -1615,14 +1676,14 @@
   /**
    * Export an image with given parameters.
    * For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/export.html'>Export Operation</a>.
-   * <br/> The <code>params</code> is an instance of {@link ExportMapParameters}.
+   * <br/> The <code>params</code> is an instance of {@link ArcGISExportMapParameters}.
    * The following properties will be set automatically if not specified:...
    * <br/> The <code>callback</code> is the callback function with argument of
-   * an instance of {@link MapImage}.
+   * an instance of {@link ArcGISMapImage}.
    * @param {ExportMapOptions} params
    * @param {Function} callback
    */
-  MapService.prototype.exportMap = function(eparams, callback) {
+  ArcGISMapService.prototype.exportMap = function (eparams, callback) {
     if (!eparams) {
       return;
     }
@@ -1640,7 +1701,7 @@
     var changed = false;
     var layer;
     // a special behavior of REST: if partial group then parent must be off
-    var i,c;
+    var i, c;
     for (i = 0, c = this.layers_.length; i < c; i++) {
       layer = this.layers_[i];
       if (layer.subLayers) {
@@ -1655,7 +1716,7 @@
     for (i = 0, c = this.layers_.length; i < c; i++) {
       layer = this.layers_[i];
       if (layer.visible !== layer.defaultVisibility) {
-         changed = true;
+        changed = true;
       }
       if (layer.visible === true) {
         vlayers.push(layer.id);
@@ -1682,8 +1743,8 @@
     }
   };
   /**
-   * @name IdentifyParameters
-   * @class This class represent the parameters needed in an identify operation for a {@link MapService}.
+   * @name ArcGISIdentifyParameters
+   * @class This class represent the parameters needed in an identify operation for a {@link ArcGISMapService}.
    *   There is no constructor, use JavaScript object literal.
    * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/identify.html'>Identify Operation</a>.
    * @property {String} [f  = json] The response format. html | json .
@@ -1701,16 +1762,16 @@
    * @property {Boolean} [returnGeometry  = true] If true, the resultset will include the geometries associated with each result.
    */
   /**
-   * @name IdentifyResults
+   * @name ArcGISIdentifyResults
    * @class This class represent the results of an identify operation for
-   * a {@link MapService}.
+   * a {@link ArcGISMapService}.
    *   There is no constructor, use JavaScript object literal.
    * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/identify.html'>Identify Operation</a>.
-   * @property {IdentifyResult[]} [results] The identify results as an array of {@link IdentifyResult}
+   * @property {IdentifyResult[]} [results] The identify results as an array of {@link ArcGISIdentifyResult}
    */
   /**
-   * @name IdentifyResult
-   * @class This class represent one entry in the results of an identify operation for a {@link MapService}.
+   * @name ArcGISIdentifyResult
+   * @class This class represent one entry in the results of an identify operation for a {@link ArcGISMapService}.
    *   There is no constructor, use JavaScript object literal.
    * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/identify.html'>Identify Operation</a>.
    * @property {Number} [layerId] layerId
@@ -1718,18 +1779,18 @@
    * @property {String} [value] value of the display field
    * @property {String} [displayFieldName] displayFieldName
    * @property {String} [geometryType] esriGeometryPoint | esriGeometryPolyline | esriGeometryPolygon | esriGeometryEnvelope
-   * @property {Geometry} [geometry] {@link Geometry}
+   * @property {Geometry} [geometry] {@link ArcGISGeometry}
    * @property {Object} [attributes] attributes as name-value JSON object.
    */
   /**
-   * Identify features on a particular Geographic location, using {@link IdenitfyParameters} and
-   * process {@link IdentifyResults} using the <code>callback</code> function.
+   * Identify features on a particular ArcGISGeographic location, using {@link ArcGISIdenitfyParameters} and
+   * process {@link ArcGISIdentifyResults} using the <code>callback</code> function.
    * For more info see <a
    * href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/identify.html'>Identify Operation</a>.
    * @param {IdentifyParameters} params
    * @param {Function} callback
    */
-  MapService.prototype.identify = function(iparams, callback) {
+  ArcGISMapService.prototype.identify = function (iparams, callback) {
     if (!iparams) {
       return;
     }
@@ -1752,8 +1813,8 @@
     ArcGISUtil.getJSON(this.url + '/identify', params, 'callback', callback);
   };
   /**
-   * @name FindParameters
-   * @class This class represent the parameters needed in an find operation for a {@link MapService}.
+   * @name ArcGISFindParameters
+   * @class This class represent the parameters needed in an find operation for a {@link ArcGISMapService}.
    *   There is no constructor, use JavaScript object literal.
    * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/find.html'>Find Operation</a>.
    * @property {String} [f  = json] The response format. html | json .
@@ -1771,15 +1832,15 @@
    * @property {Boolean} [returnGeometry  = true] If true, If true, the resultset will include the geometries associated with each result.
    */
   /**
-   * @name FindResults
-   * @class This class represent the results of a find operation for a {@link MapService}.
+   * @name ArcGISFindResults
+   * @class This class represent the results of a find operation for a {@link ArcGISMapService}.
    *   There is no constructor, use JavaScript object literal.
    * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/find.html'>Find Operation</a>.
-   * @property {FindResult[]} [results] The find results as an array of {@link FindResult}
+   * @property {FindResult[]} [results] The find results as an array of {@link ArcGISFindResult}
    */
   /**
-   * @name FindResult
-   * @class This class represent one entry in the results of a find operation for a {@link MapService}.
+   * @name ArcGISFindResult
+   * @class This class represent one entry in the results of a find operation for a {@link ArcGISMapService}.
    *   There is no constructor, use JavaScript object literal.
    * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/find.html'>Find Operation</a>.
    * @property {Number} [layerId] layerId
@@ -1788,18 +1849,18 @@
    * @property {String} [displayFieldName] displayFieldName
    * @property {String} [foundFieldName] foundFieldName
    * @property {String} [geometryType] esriGeometryPoint | esriGeometryPolyline | esriGeometryPolygon | esriGeometryEnvelope
-   * @property {Geometry} [geometry] {@link Geometry}
+   * @property {Geometry} [geometry] {@link ArcGISGeometry}
    * @property {Object} [attributes] attributes as name-value JSON object.
    */
   /**
-   * Find features using the {@link FindParameters} and process {@link FindResults}
+   * Find features using the {@link ArcGISFindParameters} and process {@link ArcGISFindResults}
    * using the <code>callback</code> function.
    * For more info see <a
    * href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/find.html'>Find Operation</a>.
    * @param {FindParameters} params
    * @param {Function} callback
    */
-  MapService.prototype.find = function(fparams, callback) {
+  ArcGISMapService.prototype.find = function (fparams, callback) {
     if (!fparams) {
       return;
     }
@@ -1817,25 +1878,25 @@
   };
   /**
    * <b>To be implemented </b>
-   * Generate {@link GenerateKMLParameters} and a link to the KML file
+   * Generate {@link ArcGISGenerateKMLParameters} and a link to the KML file
    * For more info see <a
    * href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/generatekml.html'>Generate KML Operation</a>.
    * @param {GenerateKMLParameters} params
    * @return {String} URL
    */
-  MapService.prototype.generateKML = function(params) {
+  ArcGISMapService.prototype.generateKML = function (params) {
     // TODO
   };
   /**
-   * Query a layer with given id or name using the {@link QueryParameters} and process {@link ResultSet}
+   * Query a layer with given id or name using the {@link ArcGISQueryParameters} and process {@link ArcGISResultSet}
    * using the <code>callback</code> function.
-   * See {@link MapLayer}.
+   * See {@link ArcGISLayer}.
    * For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/query.html'>Query Layer Operation</a>.
    * @param {Number|String} layerNameOrId
    * @param {QueryParameters} params
    * @param {Function} callback
    */
-  MapService.prototype.queryLayer = function(layerNameOrId, params, callback) {
+  ArcGISMapService.prototype.queryLayer = function (layerNameOrId, params, callback) {
     var layer = this.getLayer(layerNameOrId);
     if (layer) {
       layer.query(params, callback);
@@ -1845,25 +1906,25 @@
 
 
  /**
- * Creates an GeometryService class.
+ * Creates an ArcGISGeometryService class.
  * Params:<li><code>url</code>: URL of service, syntax:<code>	http://{catalog-url}/{serviceName}/GeometryServer</code>
- * @name GeometryService
- * @class This class represent an ArcGIS 
+ * @name ArcGISGeometryService
+ * @class This class (<code>google.maputils.arcgis.GeometryService</code>) represent an ArcGIS 
  * <a href="http://resources.esri.com/help/9.3/arcgisserver/apis/rest/geometryserver.html">Geometry</a>
  *  service.
  * @param {String} url
  */
-  function GeometryService(url) {
+  function ArcGISGeometryService(url) {
     this.url  = url;
   }
   /**
-   * @name ProjectParameters
+   * @name ArcGISProjectParameters
    * @class This class represent the parameters needed in an project operation
-   *  for a {@link GeometryService}.
+   *  for a {@link ArcGISGeometryService}.
    *   There is no constructor, use JavaScript object literal.
    * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/project.html'>Project Operation</a>.
    * @property {String} [f  = json] The response format. html | json .
-   * @property {Geometry[]} [geometries] Array of {@link Geometry} to project. In the case of points, the following syntax also works:
+   * @property {Geometry[]} [geometries] Array of {@link ArcGISGeometry} to project. In the case of points, the following syntax also works:
    *   <code>geometries  = x1, y1, x2, y2, ..., xn, yn</code>
    * @property {String} [geometryType] esriGeometryPoint | esriGeometryPolyline | esriGeometryPolygon | esriGeometryEnvelope
    * @property {Number} [inSR] The well-known ID of the spatial reference of the input geometries
@@ -1875,7 +1936,7 @@
    * @param {ProjectParameters} params
    * @param {Function} callback
    */
-  GeometryService.prototype.project = function(params, callback) {
+  ArcGISGeometryService.prototype.project = function (params, callback) {
     if (!params) {
       return;
     }
@@ -1903,28 +1964,28 @@
   };
 
   /**
- * Creates an GeocodeService class.
+ * Creates an ArcGISGeocodeService class.
  * Params:<li><code>url</code>: URL of service, syntax:<code>	http://{catalog-url}/{serviceName}/GeocodeServer</code>
- * @name GeocodeService
- * @class This class represent an ArcGIS <a href="http://resources.esri.com/help/9.3/arcgisserver/apis/rest/geocodeserver.html">GeocodeServer</a>
+ * @name ArcGISGeocodeService
+ * @class This class (<code>google.maputils.arcgis.GeocodeService</code>) represent an ArcGIS <a href="http://resources.esri.com/help/9.3/arcgisserver/apis/rest/geocodeserver.html">GeocodeServer</a>
  *  service.
  * @param {String} url
  * @property {String} [serviceDescription] serviceDescription
  * @property {Field[]} [addressFields] input fields. 
- *    Each entry is an object of type {@link Field}, plus <code>required(true|false)</code>
+ *    Each entry is an object of type {@link ArcGISField}, plus <code>required(true|false)</code>
  * @property {Field[]} [candidateFields] candidate Fields. 
- *    Each entry is an object of type {@link Field}
+ *    Each entry is an object of type {@link ArcGISField}
  * @property {Field[]} [intersectionCandidateFields] intersectionCandidateFields
- *    Each entry is an object of type {@link Field}
- * @property {SpatialReference} [spatialReference] spatialReference <b>wkid info only</b>
+ *    Each entry is an object of type {@link ArcGISField}
+ * @property {ArcGISSpatialReference} [spatialReference] spatialReference <b>wkid info only</b>
  * @property {Object} [locatorProperties] an object with key-value pair that is specific to Locator type.
  */
-  function GeocodeService(url) {
+  function ArcGISGeocodeService(url) {
     this.url = url;
     var me = this;
     ArcGISUtil.getJSON(url, {
       f: 'json'
-    }, 'callback', function(json) {
+    }, 'callback', function (json) {
       me.init_(json);
     });
   }
@@ -1933,28 +1994,28 @@
    * init
    * @param {Object} json
    */
-  GeocodeService.prototype.init_ = function(json) {
+  ArcGISGeocodeService.prototype.init_ = function (json) {
     augmentObject(json, this);
     /**
      * This event is fired when the service and it's service info is loaded.
-     * @name GeocodeService#load
+     * @name ArcGISGeocodeService#load
      * @event
      */
     triggerEvent(this, 'load');
   };
   /**
-   * If this GeocodeService meta data has loaded. useful to get the Spatial Reference information.
+   * If this ArcGISGeocodeService meta data has loaded. useful to get the Spatial Reference information.
    * @return {Boolean}
    */
-  GeocodeService.prototype.hasLoaded = function() {
+  ArcGISGeocodeService.prototype.hasLoaded = function () {
     return this.addressFields !== null;
   };
 
   
 /**
- * @name GeocodeParameters
+ * @name ArcGISGeocodeParameters
  * @class This class represent the parameters needed in a find address candidate operation
- *  on a {@link GeocodeService}.
+ *  on a {@link ArcGISGeocodeService}.
  *   There is no constructor, use JavaScript object literal.
  * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/candidates.html'>Find Adddress Candidates Operation</a>.
  * @property {String} [f  = json] The response format. html | json |kmz.
@@ -1963,18 +2024,18 @@
  *   This list can be a comma delimited String or an array of String.
  */
 /**
- * @name GeocodeResults
+ * @name ArcGISGeocodeResults
  * @class This class represent the results of an find address candidate operation for a 
- *  {@link GeocodeService}.
+ *  {@link ArcGISGeocodeService}.
  *   There is no constructor, use JavaScript object literal.
  * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/candidates.html'>Find Adddress Candidates Operation</a>.
  * @property {GeocodeResult[]} [candidates] The find address results as 
- * an array of {@link GeocodeResult}
+ * an array of {@link ArcGISGeocodeResult}
  */
 /**
- * @name GeocodeResult
+ * @name ArcGISGeocodeResult
  * @class This class represent one entry in the results of a find address operation for a
- *  {@link GeocodeService}.
+ *  {@link ArcGISGeocodeService}.
  *   There is no constructor, use JavaScript object literal.
  * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/candidates.html'>Find Adddress Candidates Operation</a>.
  * @property {String} [address] matched address
@@ -1988,12 +2049,12 @@
  *  resource. The result of this operation is a resource representing 
  *  the list of address candidates. This resource provides information 
  *  about candidates including the address, location, and score.
- *  param is an instance of {@link GeocodeParameters}. An instance of
- *  {@link GeocodeResults} will be passed into callback function.
+ *  param is an instance of {@link ArcGISGeocodeParameters}. An instance of
+ *  {@link ArcGISGeocodeResults} will be passed into callback function.
  * @param {GeocodeParameters} params
  * @param {Function} callback
  */
-  GeocodeService.prototype.findAddressCandidates = function(gparams, callback) {
+  ArcGISGeocodeService.prototype.findAddressCandidates = function (gparams, callback) {
     var params = augmentObject(gparams, {});
     params.f = params.f || 'json';
     if (params.inputs) {
@@ -2006,30 +2067,30 @@
     ArcGISUtil.getJSON(this.url + '/findAddressCandidates', params, 'callback', callback);
   };
   /**
-   * Alias of <code>GeocodeService.findAddressCandidates</code>;
+   * Alias of <code>ArcGISGeocodeService.findAddressCandidates</code>;
    * @param {GeocodeParameters} params
    * @param {Function} callback
    */
-  GeocodeService.prototype.geocode = function(params, callback) {
+  ArcGISGeocodeService.prototype.geocode = function (params, callback) {
     this.findAddressCandidates(params, callback);
   };
 
 /**
- * @name ReverseGeocodeParameters
+ * @name ArcGISReverseGeocodeParameters
  * @class This class represent the parameters needed in a reverseGeocode operation
- *  on a {@link GeocodeService}.
+ *  on a {@link ArcGISGeocodeService}.
  *   There is no constructor, use JavaScript object literal.
  * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/reverse.html'>Reverse Geocode Operation</a>.
  * @property {String} [f  = json] The response format. html | json |kmz.
- * @property {Geometry|String} [location] an object literal of type {@link Point}. You can also use x,y string.
+ * @property {Geometry|String} [location] an object literal of type {@link ArcGISPoint}. You can also use x,y string.
  * @property {Number} [distance] The distance in meters from the given location within which 
  *  a matching address should be searched.
  */
 
 /**
- * @name ReverseGeocodeResult
+ * @name ArcGISReverseGeocodeResult
  * @class This class represent one entry in the results of a find address operation for a
- *  {@link GeocodeService}.
+ *  {@link ArcGISGeocodeService}.
  *   There is no constructor, use JavaScript object literal.
  * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/reverse.html'>Reverse Geocode Operation</a>.
  * @property {Object} [address] matched address, object literal with name-value address parts. 
@@ -2039,12 +2100,12 @@
 /**
  * The reverseGeocode operation is The reverseGeocode operation is performed on a geocode service resource. 
  * The result of this operation is a reverse geocoded address resource.
- *  param is an instance of {@link ReverseGeocodeParameters}. An instance of
- *  {@link ReverseGeocodeResult} will be passed into callback function.
+ *  param is an instance of {@link ArcGISReverseGeocodeParameters}. An instance of
+ *  {@link ArcGISReverseGeocodeResult} will be passed into callback function.
  * @param {ReverseGeocodeParameters} params
  * @param {Function} callback
  */
-  GeocodeService.prototype.reverseGeocode = function(params, callback) {
+  ArcGISGeocodeService.prototype.reverseGeocode = function (params, callback) {
     params.f = params.f || 'json';
     if (!isString(params.location)) {
       params.location = ArcGISUtil.fromGeometryToJSON(params.location);
@@ -2052,55 +2113,38 @@
     ArcGISUtil.getJSON(this.url + '/reverseGeocode', params, 'callback', callback);
   };
  
-  exportSymbol({
-    'SpatialReference': SpatialReference,
-    'Geographic': Geographic,
-    'LambertConformalConic': LambertConformalConic,
-    'SphereMercator': SphereMercator,
-    'TransverseMercator': TransverseMercator,
-    'FlatSpatialReference': FlatSpatialReference,
-    'SpatialReferences': SpatialReferences,
-    'MapService': MapService,
-    'GeocodeService': GeocodeService,
-    'GeometryService': GeometryService,
-    'ArcGISUtil': ArcGISUtil,
-    'ArcGISConfig': ArcGISConfig
-  });
+  
 
-// end of non GMaps stuff
-
-  if (!window.GMap2) {
-    // jslint complaints if Functions are defined in blocks
-    return;
-  }
+// end of REST API stuff
+  
   /**
    * Creates an ArcGIS Map Tiling Reference System.
    * <ul>
-   * <li><code>tileInfo</code> tiling information. An instance of {@link TileInfo}
-   * <li><code>opt_fullExtent</code> full extent of the tiles. An instance of {@link Envelope}
+   * <li><code>tileInfo</code> tiling information. An instance of {@link ArcGISTileInfo}
+   * <li><code>opt_fullExtent</code> full extent of the tiles. An instance of {@link ArcGISEnvelope}
    * </ul>Applications normally do not create instances of this class directly.
    * If needed, it can be accessed by <code>GMap2.getCurrentMapType().getProjection()</code>
    * for customized <code>GMapType</code>s.
    * @name ArcGISProjection
-   * @class This is a class that implements a custom
+   * @class This class (<code>google.maputils.arcgis.Projection</code>) implements a custom
    * <a href  = 'http://code.google.com/apis/maps/documentation/reference.html#GProjection'>GProjection</a> 
    * from the core GMaps API.
-   *   It carries a real {@link SpatialReference} object to convert LatLng from/to
+   *   It carries a real {@link ArcGISSpatialReference} object to convert LatLng from/to
    *   map coordinates, and tiling scheme informations to convert
    *   map coordinates from/to pixel coordinates. <b>The tiles must be square, with same width and height</b>.
    * @param {TileInfo} tileInfo
    * @param {Envelope} fullExtent
    */
-  function ArcGISProjection( tileInfo, opt_fullExtent) {
+  function ArcGISProjection(tileInfo, opt_fullExtent) {
     if (!tileInfo) {
       throw new Error('map service is not tiled');
     }
     this.tileInfo_  =  tileInfo;
-    this.spatialReference_  =  SpatialReferences.getSpatialReference(tileInfo.spatialReference.wkid);
+    this.spatialReference_  =  ArcGISSpatialReferences.getSpatialReference(tileInfo.spatialReference.wkid);
     if (!this.spatialReference_) {
-      throw new Error ('unsupported Spatial Reference'); 
+      throw new Error('unsupported Spatial Reference'); 
     }
-    this.zoomOffset_  =  Math.floor(Math.log(this.spatialReference_.getWrapWidth() / this.tileInfo_.lods[0].resolution / 256) / Math.LN2 + 0.5);
+    this.zoomOffset_  =  Math.floor(Math.log(this.spatialReference_.getCircumference() / this.tileInfo_.lods[0].resolution / 256) / Math.LN2 + 0.5);
     this.fullExtent_  =  opt_fullExtent;
   }
   ArcGISProjection.prototype  =  new GProjection();
@@ -2115,18 +2159,19 @@
     if (gLatLng === null || isNaN(gLatLng.lat()) || isNaN(gLatLng.lng())) {
       return null;
     }
-    var coords  =  this.spatialReference_.fromLatLngToCoords([gLatLng.lng(),gLatLng.lat()]);
+    var coords  =  this.spatialReference_.forward([gLatLng.lng(), gLatLng.lat()]);
     var zoomIdx  =  zoom - this.zoomOffset_;
-    var res  = this.getResolution_(zoom);
+    var res  = this.getUnitsPerPixel(zoom);
     var px  =  Math.round((coords[0] - this.tileInfo_.origin.x) / res);
-    var py  =  Math.round((this.tileInfo_.origin.y - coords[1]) /res);
+    var py  =  Math.round((this.tileInfo_.origin.y - coords[1]) / res);
     return new GPoint(px, py);
   };
   /**
-   * Get resolution (1/scale) at given zoom level. 
+   * Get resolution (Units per Pixel) at given zoom level. 
    * @param {Number} zoom
+   * @return Number
    */
-  ArcGISProjection.prototype.getResolution_  = function (zoom){
+  ArcGISProjection.prototype.getUnitsPerPixel  = function (zoom) {
     var zoomIdx  =  zoom - this.zoomOffset_;
     var res  = Number.MAX_VALUE;
     if (this.tileInfo_.lods[zoomIdx]) {
@@ -2134,13 +2179,13 @@
     } else {
       //this is a special case when the maxZoom is set larger than what's actually defined in the tiling scheme.
       // the goal is to allow map continue to zoom to extremely detail level by using ArcGISMapOverlay.
-      var factor  = Math.pow(2,zoom-this.maxResolution());
-      res  = this.tileInfo_.lods[this.tileInfo_.lods.length-1].resolution/factor;
+      var factor  = Math.pow(2, zoom - this.maxResolution());
+      res  = this.tileInfo_.lods[this.tileInfo_.lods.length - 1].resolution / factor;
     }
     return res;
   };
   /**
-   * Get the tile size used by this ArcGISProjection. Shortcut to tileInfo.rows;
+   * Get the scale at given level;
    * @param {Number} zoom
    * @return {Number}
    */
@@ -2152,8 +2197,8 @@
     } else {
       //this is a special case when the maxZoom is set larger than what's actually defined in the tiling scheme.
       // the goal is to allow map continue to zoom to extremely detail level by using ArcGISMapOverlay.
-      var factor  = Math.pow(2,zoom-this.maxResolution());
-      res  = this.tileInfo_.lods[this.tileInfo_.lods.length-1].scale/factor;
+      var factor  = Math.pow(2, zoom - this.maxResolution());
+      res  = this.tileInfo_.lods[this.tileInfo_.lods.length - 1].scale / factor;
     }
     return res;
   };
@@ -2169,10 +2214,10 @@
       return null;
     }
     var zoomIdx  =  zoom - this.zoomOffset_;
-    var res  = this.getResolution_(zoom);
+    var res  = this.getUnitsPerPixel(zoom);
     var x  =  pixel.x * res + this.tileInfo_.origin.x;
     var y  =  this.tileInfo_.origin.y - pixel.y * res;
-    var ll  =  this.spatialReference_.fromCoordsToLatLng([x, y]);
+    var ll  =  this.spatialReference_.reverse([x, y]);
     return new GLatLng(ll[1], ll[0]);
   };
   /**
@@ -2192,8 +2237,9 @@
       var minY  =  this.tileInfo_.origin.y - (tile.y + 1) * tilesize * this.tileInfo_.lods[zoomIdx].resolution;
       var maxX  =  (tile.x + 1) * tilesize * this.tileInfo_.lods[zoomIdx].resolution + this.tileInfo_.origin.x;
       var maxY  =  this.tileInfo_.origin.y - tile.y * tilesize * this.tileInfo_.lods[zoomIdx].resolution;
-      return !(b.xmin > maxX || b.xmax < minX || b.ymax < minY || b.ymin > maxY);
-    }else {
+      var ret = !(b.xmin > maxX || b.xmax < minX || b.ymax < minY || b.ymin > maxY);
+      return ret;
+    } else {
       return false;
     }
   };
@@ -2205,14 +2251,14 @@
    */
   ArcGISProjection.prototype.getWrapWidth  =  function (zoom) {
     var zoomIdx  =  zoom - this.zoomOffset_;
-    if (this.tileInfo_.lods[zoomIdx]){
-      return this.spatialReference_.getWrapWidth() / this.tileInfo_.lods[zoomIdx].resolution;
-    }else{
+    if (this.tileInfo_.lods[zoomIdx]) {
+      return this.spatialReference_.getCircumference() / this.tileInfo_.lods[zoomIdx].resolution;
+    } else {
       return Number.MAX_VALUE;
     }
   };
   /**
-   * Get the tile size used by this ArcGISProjection. Shortcut to tileInfo.rows;
+   * Get the tile size used by this Projection. Shortcut to tileInfo.rows;
    * @return {Number}
    */
   ArcGISProjection.prototype.getTileSize  =  function () {
@@ -2223,20 +2269,20 @@
    * Get min zoom level of actual tiles
    * @return {Number}
    */
-  ArcGISProjection.prototype.minResolution  = function (){
+  ArcGISProjection.prototype.minResolution  = function () {
     return this.zoomOffset_;
   };
   /**
    * Get max zoom level of actual tiles
    * @return {Number}
    */
-  ArcGISProjection.prototype.maxResolution  = function (){
-    return this.zoomOffset_+this.tileInfo_.lods.length-1;
+  ArcGISProjection.prototype.maxResolution  = function () {
+    return this.zoomOffset_ + this.tileInfo_.lods.length - 1;
   };
   
   /**
-   * Get the underline {@link SpatialReference}
-   * @return {SpatialReference}
+   * Get the underline {@link ArcGISSpatialReference}
+   * @return {ArcGISSpatialReference}
    */
   ArcGISProjection.prototype.getSpatialReference  =  function () {
     return this.spatialReference_;
@@ -2244,7 +2290,7 @@
   
   /**
    * @name ArcGISTileLayerOptions
-   * @class Instances of this class are used in the {@link opt_layerOpts} argument
+   * @class Instances of this class are used in the {@link ArcGISopt_layerOpts} argument
    *   to the constructor of the {@link ArcGISTileLayer} class. In addition to
    *   the properties listed below, it can also have properties available in
    * <a href  = 'http://code.google.com/apis/maps/documentation/reference.html#GTileLayerOptions'>GTileLayerOptions</a>
@@ -2264,23 +2310,23 @@
    * @property {String} [name] optional. The name assigned to this layer 
    *    (it's underline service). This name can be used to identify this tile layer.
    * @property {ArcGISProjection} [projection] an instance of {@link ArcGISProjection}. If this option is 
-   * specified, you do not have to wait the 'load' event to use the TileLayer.
+   * specified, you do not have to wait the 'load' event to use the ArcGISTileLayer.
    */
   
   /** Creates a tile layer from a cached by ArcGIS map service. 
-   * <br/> <code> service</code> (required) is the url of the underline {@link MapService}, or the map service itself.
+   * <br/> <code> service</code> (required) is the url of the underline {@link ArcGISMapService}, or the map service itself.
    * <br/> <code>opt_layerOpts</code> (optional) is an instance of {@link ArcGISTileLayerOptions}.
    * @name ArcGISTileLayer
-   * @class This class extends
+   * @class This class (<code>google.maputils.arcgis.TileLayer</code>) extends
    * <a href  = 'http://code.google.com/apis/maps/documentation/reference.html#GTileLayer'>GTileLayer</a>
    *  from the core GMaps API and provides access to a cached ArcGIS Server map service.<br/> This class can be used in {@link ArcGISMapType} or
    * {@link ArcGISTileLayerOverlay}.
-   * @param {String|MapService} service
-   * @param {ArcGISTileLayerOptions} opt_layerOpts
+   * @param {String|ArcGISMapService} service
+   * @param {TileLayerOptions} opt_layerOpts
    */
   function ArcGISTileLayer(service, opt_layerOpts) {
     opt_layerOpts  =  opt_layerOpts || {};
-    this.mapService_  =  (service instanceof MapService)?service:new MapService(service);
+    this.mapService_  =  (service instanceof ArcGISMapService)?service:new ArcGISMapService(service);
     if (opt_layerOpts.name) {
       this.mapService_.name = opt_layerOpts.name;
     }
@@ -2290,10 +2336,10 @@
       var host  =  extractString(this.mapService_.url, '://', '/');
       var path  =  extractString(this.mapService_.url, pro + '://' + host, '');
       this.urlTemplate_  =  pro + '://' + opt_layerOpts.hosts + path;
-      this.numOfHosts_  =  parseInt(extractString(opt_layerOpts.hosts, '[', ']'),10);
+      this.numOfHosts_  =  parseInt(extractString(opt_layerOpts.hosts, '[', ']'), 10);
     }
     if (this.mapService_.hasLoaded()) {
-      this.init_( opt_layerOpts);
+      this.init_(opt_layerOpts);
     } else {
       var me  =  this;
       GEvent.addListener(this.mapService_, 'load', function () {
@@ -2315,7 +2361,7 @@
   
   /**
    * Initialize the tile layer from a loaded map service
-   * @param {MapService} mapService
+   * @param {ArcGISMapService} mapService
    * @param {Object} opt_layerOpts
    */
   ArcGISTileLayer.prototype.init_  =  function (opt_layerOpts) {
@@ -2323,7 +2369,7 @@
     var copy  =  opt_layerOpts.copyrights;
     if (!copy) {
       copy  =  new GCopyrightCollection('');
-      copy.addCopyright(new GCopyright(1, ArcGISUtil.fromExtentToGLatLngBounds(this.mapService_.fullExtent), this.projection_.zoomOffset_, this.mapService_.copyrightText));
+      copy.addCopyright(new GCopyright(1, ArcGISUtil.fromEnvelopeToLatLngBounds(this.mapService_.fullExtent), this.projection_.zoomOffset_, this.mapService_.copyrightText));
     }
     var minZoom  =  opt_layerOpts.minResolution || this.projection_.minResolution();
     var maxZoom  =  opt_layerOpts.maxResolution || this.projection_.maxResolution();
@@ -2340,26 +2386,26 @@
     GEvent.trigger(this, "load");
   };
   /**
-   * Gain access to the underline {@link MapService}
+   * Gain access to the underline {@link ArcGISMapService}
    * @return {MapSerive}
    */
   ArcGISTileLayer.prototype.getMapService  =  function () {
     return this.mapService_;
   };
   /**
-   * Get full bounds of the to the underline {@link MapService}
+   * Get full bounds of the to the underline {@link ArcGISMapService}
    * @return {GLatLngBounds}
    */
   ArcGISTileLayer.prototype.getFullBounds  =  function () {
-    this.fullBounds_  = this.fullBounds_||ArcGISUtil.fromExtentToGLatLngBounds(this.mapService_.fullExtent);
+    this.fullBounds_  = this.fullBounds_ || ArcGISUtil.fromEnvelopeToLatLngBounds(this.mapService_.fullExtent);
     return this.fullBounds_;
   };
   /**
-   * Get initial bounds of the to the underline {@link MapService}
+   * Get initial bounds of the to the underline {@link ArcGISMapService}
    * @return {GLatLngBounds}
    */
   ArcGISTileLayer.prototype.getInitialBounds  =  function () {
-    this.initialBounds_  = this.initialBounds_|| ArcGISUtil.fromExtentToGLatLngBounds(this.mapService_.initialExtent);
+    this.initialBounds_  = this.initialBounds_ || ArcGISUtil.fromEnvelopeToLatLngBounds(this.mapService_.initialExtent);
     return this.initialBounds_;
   };
   
@@ -2367,12 +2413,12 @@
    * Get the tile layer's name (underline maps service's name)
    * @return {String}
    */
-  ArcGISTileLayer.prototype.getName  =  function (){
+  ArcGISTileLayer.prototype.getName  =  function () {
     return this.mapService_.name;
   };
   /**
    * Returns the {@link ArcGISProjection}, a subclass of <code>GProjection</code>
-   *  used by this TileLayer.
+   *  used by this ArcGISTileLayer.
    * @return {ArcGISProjection} 
    */
   ArcGISTileLayer.prototype.getProjection  =  function () {
@@ -2389,13 +2435,13 @@
   ArcGISTileLayer.prototype.getTileUrl  =  function (tile, zoom) {
    // this.mapService_.hasLoaded() allow direct load of WebMercator
     var z  = zoom - (this.projection_?this.projection_.minResolution():this.minResolution());
-    if ( !isNaN(tile.x) && !isNaN(tile.y) && z >=  0) {
+    if (!isNaN(tile.x) && !isNaN(tile.y) && z >=  0) {
       var u  =  this.mapService_.url;
       if (this.urlTemplate_) {
         u  =  this.urlTemplate_.replace('[' + this.numOfHosts_ + ']', '' + ((tile.y + tile.x) % this.numOfHosts_));
       }
-      // use this.minResolution instead of offset for TileLayerOverlay add before loading.
-      return u + '/tile/' + z + '/' + tile.y + '/' + tile.x;//+ '.' + this.format_;
+      // use this.minResolution instead of offset for ArcGISTileLayerOverlay add before loading.
+      return u + '/tile/' + z + '/' + tile.y + '/' + tile.x;
     }
     return '';
   };
@@ -2410,7 +2456,7 @@
   
   /**
    * @name ArcGISMapTypeOptions
-   * @class Instance of this class are used in the {@link opt_typeOpts} argument
+   * @class Instance of this class are used in the {@link ArcGISopt_typeOpts} argument
    *  to the constructor of the {@link ArcGISMapType} class. In addition to the properties 
    *  listed below, it can also contain properties from 
    *  <a href  = http://code.google.com/apis/maps/documentation/reference.html#GMapTypeOptions>GMapTypeOptions</a>
@@ -2421,12 +2467,12 @@
    * specified, you do not have to wait the 'load' event to use the MapType.
    */
   /**
-   * Creates a ArcGISMapType, with the following parameters:
+   * Creates a MapType, with the following parameters:
    * <li><code>tileLayers</code>: a array of {@link ArcGISTileLayer}s, 
    *  or a single URL as shortcut.
    * <li><code>opt_typeOpts</code>: optional. An instance of {@link ArcGISMapTypeOptions}
    * @name ArcGISMapType
-   * @class This class extends GMaps core API's
+   * @class This class (<code>google.maputils.arcgis.MapType</code>) extends GMaps core API's
    * <a href  = http://code.google.com/apis/maps/documentation/reference.html#GMapType>GMapType</a>.
    * It holds a list of {@link ArcGISTileLayer}s.
    * <p> Because all tileLayers are loaded asynchronously, and currently the
@@ -2437,7 +2483,7 @@
    * </p>
    * <p> Note: all tiled layer in the same map type must use same spatial reference and tile scheme.</p>
    * @param {String|ArcGISTileLayer[]} tileLayers
-   * @param {ArcGISMapTypeOptions} opt_typeOpts
+   * @param {MapTypeOptions} opt_typeOpts
    */
   function ArcGISMapType(tileLayers, opt_typeOpts) {
     var me  =  this;
@@ -2454,9 +2500,9 @@
         layers[i]  = new ArcGISTileLayer(tileLayers[i]);
       }
     }*/
-    var layersLoaded  =  0,i;
+    var layersLoaded  =  0, i;
     //jslint complaints about making function in a loop so define here.
-    function handleLayerLoad(){
+    function handleLayerLoad() {
       layersLoaded++;
       if (layersLoaded === layers.length) {
         me.init_(layers, opt_typeOpts);
@@ -2465,7 +2511,7 @@
     for (i  =  0; i < layers.length; i++) {
       var mapService  =  layers[i].getMapService();
       if (mapService.hasLoaded()  ===  false) {
-        GEvent.addListener(mapService, 'load',handleLayerLoad) ;
+        GEvent.addListener(mapService, 'load', handleLayerLoad);
       } else {
         layersLoaded++;
       }
@@ -2474,20 +2520,20 @@
       this.init_(layers, opt_typeOpts);
     } else {
       var prj  = null;
-      if (opt_typeOpts.projection){
+      if (opt_typeOpts.projection) {
         prj  = opt_typeOpts.projection;
-        for (i  = 0; i< layers.length; i++){
+        for (i  = 0; i < layers.length; i++) {
           if (!layers[i].projection_) {
             layers[i].projection_ = prj;
           }
         }
-      }else {
+      } else {
         prj  = layers[0].projection_;
       }
       if (prj) {
         opt_typeOpts.tileSize = prj.getTileSize();
       }
-      GMapType.call(this, layers, prj||new GMercatorProjection(20), opt_typeOpts.name||layers[0].getMapService().name, opt_typeOpts);
+      GMapType.call(this, layers, prj || new GMercatorProjection(20), opt_typeOpts.name || layers[0].getMapService().name, opt_typeOpts);
     }
   }
   ArcGISMapType.prototype  =  new GMapType();
@@ -2501,7 +2547,7 @@
    */
   ArcGISMapType.prototype.init_  =  function (tileLayers, opt_typeOpts) {
     opt_typeOpts.tileSize  =  tileLayers[0].getProjection().getTileSize();
-    var name  = opt_typeOpts.name||tileLayers[0].getMapService().name;
+    var name  = opt_typeOpts.name || tileLayers[0].getMapService().name;
     GMapType.call(this, tileLayers, tileLayers[0].getProjection(), name, opt_typeOpts);
    /**
    * This event is fired when all layer's services are loaded. 
@@ -2514,10 +2560,10 @@
   
   /**
    * @name ArcGISMapOverlayOptions
-   * @class Instance of this class are used in the {@link opt_ovelayOpts} argument
+   * @class Instance of this class are used in the {@link ArcGISopt_ovelayOpts} argument
    *  to the constructor of the {@link ArcGISMapOverlay} class.
    * @property {Number} [opacity  = 1.0] Opacity of map image from 0.0 (invisible) to 1.0 (opaque)
-   * @property {ExportMapParameters} [exportParams] See {@link ExportMapParameters}
+   * @property {ExportMapParameters} [exportParams] See {@link ArcGISExportMapParameters}
    * @property {String} [name] name assigned to this {@link ArcGISMapOverlay}
    * @property {Number} [minResolution] min zoom level.
    * @property {Number} [maxResolution] max zoom level.
@@ -2525,23 +2571,23 @@
    */
   
   /**
-   * Creates an ArcGISMapOverlay using <code>url</code> of the map service and optional {@link ArcGISMapOverlayOptions}.
-   * <li/> <code> service</code> (required) is url of the underline {@link MapService} or the MapService itself.
+   * Creates an Map Overlay using <code>url</code> of the map service and optional {@link ArcGISMapOverlayOptions}.
+   * <li/> <code> service</code> (required) is url of the underline {@link ArcGISMapService} or the ArcGISMapService itself.
    * <li/> <code>opt_overlayOpts</code> (optional) is an instance of {@link ArcGISMapOverlayOptions}.
    * @name ArcGISMapOverlay
-   * @class This class extends GMaps core API's
+   * @class This class (<code>google.maputils.arcgis.MapOverlay</code>) extends GMaps core API's
    * <a href  = http://code.google.com/apis/maps/documentation/reference.html#GOverlay>GOverlay</a>
    * that draws map images from data source on the fly. It is also known as "<b>Dynamic Maps</b>".
    * It can be added to the map via <code>GMap2.addOverlay </code> method.
    * The similar class in the core GMap API is <a href  = http://code.google.com/apis/maps/documentation/reference.html#GGroundOverlay>GGroundOverlay</a>,
    * however, the instance of this class always cover the view port exactly, and will redraw itself as map moves.
    * @constructor
-   * @param {String|MapService} service
-   * @param {ArcGISMapOverlayOptions} opt_overlayOpts
+   * @param {String|ArcGISMapService} service
+   * @param {MapOverlayOptions} opt_overlayOpts
    */
   function ArcGISMapOverlay(service, opt_overlayOpts) {
     opt_overlayOpts  =  opt_overlayOpts || {};
-    this.mapService_  = (service instanceof MapService)?service:new MapService(service);
+    this.mapService_  = (service instanceof ArcGISMapService)?service:new ArcGISMapService(service);
     if (opt_overlayOpts.name) {
       this.mapService_.name = opt_overlayOpts.name;
     }
@@ -2563,12 +2609,12 @@
    * Intialize the map layer info.
    * It is called before GOverlay.initialize which setups the UI elements.
    * @private
-   * @param {MapService} mapService
-   * @param {ArcGISMapOverlayOptions} opt_overlayOpts
+   * @param {ArcGISMapService} mapService
+   * @param {MapOverlayOptions} opt_overlayOpts
    */
   ArcGISMapOverlay.prototype.init_  =  function (opt_overlayOpts) {
     this.opacity_  =  opt_overlayOpts.opacity || 1;
-    this.exportParams_  = opt_overlayOpts.exportParams||{};
+    this.exportParams_  = opt_overlayOpts.exportParams || {};
     
     // if the map imaging is been generated on server.
     this.drawing_  =  false;
@@ -2579,7 +2625,7 @@
     if (this.img_  === null) {
       this.refresh();
     }
-    if (this.map_ ){
+    if (this.map_) {
       this.setupMapType_();
     }
    /**
@@ -2598,7 +2644,7 @@
       if (indexOf(type.agsOvs_, this)  ===  -1) {
         type.agsOvs_.push(this);
       }
-    } else if (this.map_){
+    } else if (this.map_) {
       var types  =  this.map_.getMapTypes();
       for (var i  =  0; i < types.length; i++) {
         type  =  types[i];
@@ -2610,30 +2656,30 @@
     }
   };
   /**
-   * Gain access to the underline {@link MapService}
+   * Gain access to the underline {@link ArcGISMapService}
    * @return {MapSerive}
    */
   ArcGISMapOverlay.prototype.getMapService  =  function () {
     return this.mapService_;
   };
   /**
-   * Get full bounds of the to the underline {@link MapService}
+   * Get full bounds of the to the underline {@link ArcGISMapService}
    * @return {GLatLngBounds}
    */
   ArcGISMapOverlay.prototype.getFullBounds  =  function () {
-    this.fullBounds_  = this.fullBounds_||ArcGISUtil.fromExtentToGLatLngBounds(this.mapService_.fullExtent);
+    this.fullBounds_  = this.fullBounds_ || ArcGISUtil.fromEnvelopeToLatLngBounds(this.mapService_.fullExtent);
     return this.fullBounds_;
   };
   /**
-   * Get initial bounds of the to the underline {@link MapService}
+   * Get initial bounds of the to the underline {@link ArcGISMapService}
    * @return {GLatLngBounds}
    */
   ArcGISMapOverlay.prototype.getInitialBounds  =  function () {
-    this.initialBounds_  = this.initialBounds_|| ArcGISUtil.fromExtentToGLatLngBounds(this.mapService_.initialExtent);
+    this.initialBounds_  = this.initialBounds_ || ArcGISUtil.fromEnvelopeToLatLngBounds(this.mapService_.initialExtent);
     return this.initialBounds_;
   };
   /**
-   * Get name of the underline {@link MapService}
+   * Get name of the underline {@link ArcGISMapService}
    * @return {String}
    */
   ArcGISMapOverlay.prototype.getName  =  function () {
@@ -2643,7 +2689,7 @@
    * Sets Image Opacity. parameter <code>opacity</code> between 0-1.
    * @param {Number} opacity
    */
-  ArcGISMapOverlay.prototype.setOpacity = function(opacity) {
+  ArcGISMapOverlay.prototype.setOpacity = function (opacity) {
     var op = Math.min(Math.max(opacity, 0), 1);
     this.opacity_ = op;
     var img = this.img_;
@@ -2676,10 +2722,10 @@
   };
   /**
    * Export an image with given parameters.
-   * <br/> The <code>params</code> is an instance of {@link ImageParameters}.
+   * <br/> The <code>params</code> is an instance of {@link ArcGISImageParameters}.
    * The following properties will be set automatically if not specified:...
    * <br/> The <code>opt_callback</code> is the callback function with argument of
-   * an instance of {@link MapImage}. If not specified, this function returns an
+   * an instance of {@link ArcGISMapImage}. If not specified, this function returns an
    * image URL that can be used to assign to the src property of an image element,
    * if specified, it  returns an empty string.
    * @private need to move to map service
@@ -2711,7 +2757,7 @@
     var params  =  this.exportParams_;
     params.size  =  '' + this.map_.getSize().width + ',' + this.map_.getSize().height;
     //note: if GMapType's maxzoom is larger than any GTileLayer's maxZoom, GMap2.getBounds return 0,0,0,0
-    params.bbox  =  ArcGISUtil.fromGLatLngBoundsToExtent(bnds,sr);
+    params.bbox  =  ArcGISUtil.fromLatLngBoundsToEnvelope(bnds, sr);
     params.bboxSR  =  sr.wkid;
     params.imageSR  =  sr.wkid;
     this.drawing_  =  true;
@@ -2731,7 +2777,7 @@
       if (json.href) {
         var div  =  me.div_;
         var img  =  document.createElement('img');
-        var bnds  =  ArcGISUtil.fromExtentToGLatLngBounds(json.extent);
+        var bnds  =  ArcGISUtil.fromEnvelopeToLatLngBounds(json.extent);
         var wrapWidth  =  me.map_.getCurrentMapType().getProjection().getWrapWidth(me.map_.getZoom());
         var swpx  =  me.map_.fromLatLngToDivPixel(bnds.getSouthWest());
         var nepx  =  me.map_.fromLatLngToDivPixel(bnds.getNorthEast());
@@ -2751,11 +2797,11 @@
        * @event
        * @param {MapImage} mapImage
        */
-      GEvent.trigger(me, 'drawend',json);
+      GEvent.trigger(me, 'drawend', json);
     });
   };
   /**
-   * See {@link GOverlay.initialize}
+   * See {@link ArcGISGOverlay.initialize}
    * @private
    */
   ArcGISMapOverlay.prototype.initialize  =  function (map) {
@@ -2770,17 +2816,17 @@
     this.mapTypeChangeListener_  =  GEvent.bind(this.map_, "maptypechanged", this, this.refresh);
     this.mapTypeAddListener_  =  GEvent.bind(this.map_, "addmaptype", this, this.setupMapType_);
     this.map_.getArcGISOverlays().push(this);
-    if (this.hasLoaded()){
+    if (this.hasLoaded()) {
       this.setupMapType_();
     }
     this.show();
   };
   
   /**
-   * See {@link GOverlay.remove}
+   * See {@link ArcGISGOverlay.remove}
    * @private
    */
-  ArcGISMapOverlay.prototype.remove  =  function (){
+  ArcGISMapOverlay.prototype.remove  =  function () {
     GEvent.removeListener(this.moveEndListener_);
     GEvent.removeListener(this.mapTypeChangeListener_);
     this.div_.parentNode.removeChild(this.div_);
@@ -2796,18 +2842,18 @@
     
   };
   /**
-   * Get the copyright information for the underline {@link MapService}.
+   * Get the copyright information for the underline {@link ArcGISMapService}.
    * @param {GLatLngBounds} bounds
    * @param {Number} zoom
    * @return {String}
    */
-  ArcGISMapOverlay.prototype.getCopyright  = function (bounds, zoom){
-    if (!this.isHidden()&&this.getFullBounds().intersects(bounds)&& this.isInZoomRange_()){
+  ArcGISMapOverlay.prototype.getCopyright  = function (bounds, zoom) {
+    if (!this.isHidden() && this.getFullBounds().intersects(bounds) && this.isInZoomRange_()) {
       return this.mapService_.copyrightText;
     }
   };
   /**
-   * See {@link GOverlay.copy}
+   * See {@link ArcGISGOverlay.copy}
    * @private
    */
   ArcGISMapOverlay.prototype.copy  =  function () {
@@ -2826,10 +2872,10 @@
    */
   ArcGISMapOverlay.prototype.isInZoomRange_  =  function () {
     var z  = this.map_.getZoom();
-    if ((this.minZoom_ !== undefined && z< this.minZoom_)|| 
-     (this.maxZoom_ !== undefined && z > this.maxZoom_)){
+    if ((this.minZoom_ !== undefined && z < this.minZoom_) || 
+     (this.maxZoom_ !== undefined && z > this.maxZoom_)) {
       return false; 
-     } 
+    } 
     return true;
   };
   
@@ -2861,29 +2907,29 @@
   /**
    * Creates an ArcGISTileLayerOverlay. Params:
    * <li>tileLayer: {@link ArcGISTileLayer} or url to the service as shortcut.
-   * <li>opt_tileOverlayOpts: {@link GTileLayerOverlayOptions}
+   * <li>opt_tileOverlayOpts: {@link ArcGISGTileLayerOverlayOptions}
    * @name ArcGISTileLayerOverlay
    * @param {ArcGISTileLayer|String} tileLayer
    * @param {GTileLayerOverlayOptions} opt_tileOverlayOpts 
-   * @class This class extends
+   * @class This class (<code>google.maputils.arcgis.TileLayerOverlay</code>) extends
    * <a href  = 'http://code.google.com/apis/maps/documentation/reference.html#GTileLayerOverlay'>GTileLayerOverlay</a>
    *  from the core GMaps API. It tracks ArcGISTileLayerOverlay collections in 
    *  <code>GMap2</code> internally and make them available via <code>GMap2.getArcGISOverlays()</code>
    */
   function ArcGISTileLayerOverlay(tileLayer, opt_tileOverlayOpts) {
     var me  = this;
-    opt_tileOverlayOpts  = opt_tileOverlayOpts||{};
+    opt_tileOverlayOpts  = opt_tileOverlayOpts || {};
     var layer  = tileLayer;
-    if (isString(tileLayer)){
+    if (isString(tileLayer)) {
       layer  = new ArcGISTileLayer(tileLayer);
     }
     var service  = layer.getMapService();
-    if (service.hasLoaded()  === false){
-      GEvent.addListener(service,'load', function (){
-        me.init_(layer,opt_tileOverlayOpts);
+    if (service.hasLoaded()  === false) {
+      GEvent.addListener(service, 'load', function () {
+        me.init_(layer, opt_tileOverlayOpts);
       });
     } else {
-      this.init_(layer,opt_tileOverlayOpts);
+      this.init_(layer, opt_tileOverlayOpts);
     }
     // just to get constructor through
     GTileLayerOverlay.call(this, layer, opt_tileOverlayOpts);
@@ -2895,8 +2941,8 @@
   /**
    * 
    */
-  ArcGISTileLayerOverlay.prototype.init_  = function (tileLayer,opt_tileOverlayOpts){
-     GTileLayerOverlay.call(this, tileLayer, opt_tileOverlayOpts);
+  ArcGISTileLayerOverlay.prototype.init_  = function (tileLayer, opt_tileOverlayOpts) {
+    GTileLayerOverlay.call(this, tileLayer, opt_tileOverlayOpts);
   /**
    * This event is fired when the undeline tilelayer's services are loaded. 
    * @name ArcGISTileLayerOverlay#load
@@ -2905,7 +2951,7 @@
     GEvent.trigger(this, "load");
     // means the overlay is added before load.
     // see http://code.google.com/p/gmaps-api-issues/issues/detail?id  = 275
-    if (this.map_){
+    if (this.map_) {
       this.refresh();
     }
   };
@@ -2914,7 +2960,7 @@
    * @private should not be called by client directly
    * @param {Object} map
    */ 
-  ArcGISTileLayerOverlay.prototype.initialize  =  function (map){
+  ArcGISTileLayerOverlay.prototype.initialize  =  function (map) {
     this.map_  = map;
     map.getArcGISOverlays().push(this);
     GTileLayerOverlay.prototype.initialize.call(this, map);
@@ -2922,14 +2968,14 @@
     this.mapTypeChangeListener_  =  GEvent.bind(this.map_, "maptypechanged", this, this.onMapTypeChanged_);
   };
   
-  ArcGISTileLayerOverlay.prototype.onMapTypeChanged_  =  function (){
+  ArcGISTileLayerOverlay.prototype.onMapTypeChanged_  =  function () {
     var ovSR  = this.getTileLayer().getProjection().getSpatialReference().wkid;
     var typeSR  = this.map_.getCurrentMapType().getProjection().getSpatialReference().wkid;
-    if (ovSR !== typeSR){
+    if (ovSR !== typeSR) {
       this.mapTypeChangeHide_  = true;
       this.hide();
     } else {
-      if (this.mapTypeChangeHide_  === true){
+      if (this.mapTypeChangeHide_  === true) {
         this.show();
         this.mapTypeChangeHide_  = false;
       }
@@ -2942,15 +2988,15 @@
    * @private should not be called by client directly
    * @param {Object} map
    */
-  ArcGISTileLayerOverlay.prototype.remove  =  function (){
-    removeFromArray(this.map_.getArcGISOverlays(),this);
+  ArcGISTileLayerOverlay.prototype.remove  =  function () {
+    removeFromArray(this.map_.getArcGISOverlays(), this);
     GEvent.removeListener(this.mapTypeChangeListener_);
     GTileLayerOverlay.prototype.remove.call(this);
   };
   /**
    * Get the name the Overlay (same as map service name)
    */
-  ArcGISTileLayerOverlay.prototype.getName  = function (){
+  ArcGISTileLayerOverlay.prototype.getName  = function () {
     return this.getTileLayer().getName();
   };
   //start of add-on classes
@@ -2962,12 +3008,12 @@
    */
   /**
    * Get the Spatial Reference used by GMercatorProjection.It's wkid  = 102113,
-   * an instance of {@link SphereMercator}.
+   * an instance of {@link ArcGISSphereMercator}.
    * @addon
-   * @return {SpatialReference}
+   * @return {ArcGISSpatialReference}
    */
   GMercatorProjection.prototype.getSpatialReference  =  function () {
-    return SpatialReferences.getSpatialReference('102113');
+    return ArcGISSpatialReferences.getSpatialReference('102113');
   };
   /**
    * @name GMapType
@@ -2982,7 +3028,7 @@
    * @param {Number} zoom
    * @return {String[]}
    */
-  GMapType.prototype.getCopyrights  =  function (bounds, zoom){
+  GMapType.prototype.getCopyrights  =  function (bounds, zoom) {
     var cps  =  [], i, cp;
     var tiles  =  this.getTileLayers();
     for (i  =  0; i < tiles.length; i++) {
@@ -3013,26 +3059,26 @@
    */
   GMap2.prototype.setBounds  =  function (bnds) {
     var center  = bnds.getCenter();
-    var z  = this.getBoundsZoomLevel(bnds)+1;
+    var z  = this.getBoundsZoomLevel(bnds) + 1;
     this.setCenter(center, z);
   };
   
   
   /**
    * Shortcut method to get the current map type's spatial reference
-   * @return {SpatialReference}
+   * @return {ArcGISSpatialReference}
    */
-  GMap2.prototype.getSpatialReference  = function (){
+  GMap2.prototype.getSpatialReference  = function () {
     return this.getCurrentMapType().getProjection().getSpatialReference();
   };
 
  /**
- * Get an array of the {@link GOverlay}s. The entry in the array can be instance of
+ * Get an array of the {@link ArcGISGOverlay}s. The entry in the array can be instance of
  * {@link ArcGISMapOverlay} (dynamic maps) or {@link ArcGISTileLayerOverlay}.
  * @return {GOverlay[]}
  */
-  GMap2.prototype.getArcGISOverlays  =  function (){
-    this.agsOvs_ = this.agsOvs_||[];
+  GMap2.prototype.getArcGISOverlays  =  function () {
+    this.agsOvs_ = this.agsOvs_ || [];
     return  this.agsOvs_;
   };
   
@@ -3041,15 +3087,15 @@
    * Get the overlays added as the result of an operation.
    * @return {GOverlay[]}
    */ 
-  GMap2.prototype.getArcGISResults = function() {
-    this.agsResults_ = this.agsResults_||[];
+  GMap2.prototype.getArcGISResults = function () {
+    this.agsResults_ = this.agsResults_ || [];
     return this.agsResults_;
   };
   /**
   * @private for now. Should this be in Lib?
   * Clear the highlight results.
   */
-  GMap2.prototype.clearArcGISResults = function() {
+  GMap2.prototype.clearArcGISResults = function () {
     if (this.agsResults_) {
       for (var i = 0, c = this.agsResults_.length; i < c; i++) {
         GEvent.clearInstanceListeners(this.agsResults_[i]);
@@ -3063,26 +3109,26 @@
   * Convenient method to remove array of GOverlays
   * @param {GOverlay[]..} ovs
   */
-  GMap2.prototype.removeOverlays = function(ovs) {
+  GMap2.prototype.removeOverlays = function (ovs) {
     if (isArray(ovs)) {
       for (var i = 0, c = ovs.length; i < c; i++) {
         this.removeOverlays(ovs[i]);
       }
     } else if (ovs) {
-        this.removeOverlay(ovs);
+      this.removeOverlay(ovs);
     }
   };
   /**
   * Convenient method to add array of GOverlays
   * @param {GOverlay[]..} ovs
   */
-  GMap2.prototype.addOverlays = function(ovs) {
+  GMap2.prototype.addOverlays = function (ovs) {
     if (isArray(ovs)) {
       for (var i = 0, c = ovs.length; i < c; i++) {
         this.addOverlays(ovs[i]);
       }
-    } else if (ovs){
-        this.addOverlay(ovs);
+    } else if (ovs) {
+      this.addOverlay(ovs);
     }
   };
   /**
@@ -3099,19 +3145,19 @@
    */
   GMap2.prototype.addArcGISMap  =  function (url, opt_callback) {
     var me  =  this;
-    var service  =  new MapService(url,function () {
+    var service  =  new ArcGISMapService(url, function () {
       if (service.singleFusedMapCache) {
         var tile  =  new ArcGISTileLayer(service);
         var type  =  new ArcGISMapType([tile]);
         me.addMapType(type);
-        if (opt_callback){
-         opt_callback(type);
+        if (opt_callback) {
+          opt_callback(type);
         }
       } else {
         var ov  =  new ArcGISMapOverlay(service);
         me.addOverlay(ov);
-        if (opt_callback){
-         opt_callback(ov);
+        if (opt_callback) {
+          opt_callback(ov);
         }
       }
     });
@@ -3119,7 +3165,7 @@
   /**
    * @name ArcGISStyleOptions
    * @class Instance of this classes are used in the style property of 
-   *   {@link ArcGISClickOptions}, {@link ArcGISClickServiceOptions}. It specify how
+   *   {@link ArcGISArcGISClickOptions}, {@link ArcGISArcGISClickServiceOptions}. It specify how
    *   the geometry features returned by ArcGIS server should be rendered in the browser.
    *   It's properties have same meaning as <a href  = http://code.google.com/apis/maps/documentation/reference.html#GPolyStyleOptions>GPolyStyleOptions</a> 
    *   in the core GMaps API.
@@ -3138,9 +3184,9 @@
    /*
    * @private for now. Maybe better leave off API?
    * @name ArcGISClickOptions
-   * @class Instance of this class are used in the {@link opt_clickOpts} argument
-   *  to the {@link GMap2.enableArcGISClick} method. Some of the properties such as 
-   *   <code>tolerance, returnGeometry</code> are used in  {@link IdentifyParameters} in 
+   * @class Instance of this class are used in the {@link ArcGISopt_clickOpts} argument
+   *  to the {@link ArcGISGMap2.enableArcGISClick} method. Some of the properties such as 
+   *   <code>tolerance, returnGeometry</code> are used in  {@link ArcGISIdentifyParameters} in 
    *   request while other properties such as <code>styles</code> are used to control how results are processed. 
    *  @property {String[]} [excludes] Array of Map Service Names to exclude from click action.
    *   Some services do not support click action, or do you not need to click for information. 
@@ -3153,50 +3199,50 @@
    *   service that returns one or more features. Otherwise all visible map services will be queried.
    *   Results of each service will dislay as a tab in the info window. 
    * @property {Number} [tolerance] number of pixels as click tolenrance.
-   * @property {ArcGISStyleOptions} [style] an instance of {@link ArcGISStyleOptions}. Specify how
+   * @property {StyleOptions} [style] an instance of {@link ArcGISStyleOptions}. Specify how
    *   results should be drawn. This is used as default for all services. applicable only if 
    *   <code>returnGeometry  = true</code>
    * @property {Object} [serviceOptions] <b>The options for each individual map services</b>. 
    *   This options gives finer level of controls over the click action. This object is 
    *   an object with key as service name, value as an javascript object literal of 
-   *   type {@link ArcGISClickServiceOptions}.
+   *   type {@link ArcGISArcGISClickServiceOptions}.
    * @property {Function} [onServiceCompleteCallback] This property specifies a callback function 
    *   to be invoked when the map service finishes querying and the query completes.
-   *   It is passed the map service name (String) and {@link IdentifyResults}. 
+   *   It is passed the map service name (String) and {@link ArcGISIdentifyResults}. 
    *   This callback function is called after each service query completes, if specified, the default 
    *   result process function will NOT be called, so this function is basically a customize handler.
    */
   /*
    * @private for now. Maybe better leave off API?
    * @name ArcGISClickServiceOptions
-   * @class Instance of this class are used in the {@link serviceOptions} property of
-   *   the {@link ArcGISClickOptions} class. The primary goal of this class is to provide finer
+   * @class Instance of this class are used in the {@link ArcGISserviceOptions} property of
+   *   the {@link ArcGISArcGISClickOptions} class. The primary goal of this class is to provide finer
    *   control of click behavior at individual service level.       
    * @property {Boolean} [returnGeometry] whether to return geometry of the map feature clicked. If true, 
    *   the clicked feature will be highlighted as an overlay
    * @property {Number} [tolerance] number of pixels as click tolenrance.
    * @property {Object} [layerOptions] <b>The options for each individual map layer inside a map service</b>. 
    *   This options gives finer level of controls over the results. This is an object literal 
-   *   with key as layer name, and value as an instance of {@link ArcGISClickLayerOptions}
-   * @property {ArcGISStyleOptions} [style] an instance of {@link ArcGISStyleOptions}. Specify how
+   *   with key as layer name, and value as an instance of {@link ArcGISArcGISClickLayerOptions}
+   * @property {StyleOptions} [style] an instance of {@link ArcGISStyleOptions}. Specify how
    *   results should be drawn. This is used as default for all layers.
    */
   /*
    * @private for now. Maybe better leave off API?
    * @name ArcGISClickLayerOptions
-   * @class Instance of this class are used in the {@link layerOptions} property of
-   *   the {@link ArcGISClickServiceOptions} class. The primary goal of this class is to provide finer
+   * @class Instance of this class are used in the {@link ArcGISlayerOptions} property of
+   *   the {@link ArcGISArcGISClickServiceOptions} class. The primary goal of this class is to provide finer
    *   control of click behavior at individual layer level inside an map service.   
-   * @property {ArcGISStyleOptions} [styles] an instance of {@link ArcGISStyleOptions}. Specify how
+   * @property {StyleOptions} [styles] an instance of {@link ArcGISStyleOptions}. Specify how
    *   results should be drawn. Only the styles matching the feature class type will be used.
    */
   /**
    * Enable the Map Click operation for ArcGIS maps. The inforamtion about the
    * map feature will be displayed in a InfoWindow after a single click on the map.
-   * The optional parameter <code>opt_clickOpts</code> is an instance of {@link ArcGISClickOptions}
+   * The optional parameter <code>opt_clickOpts</code> is an instance of {@link ArcGISArcGISClickOptions}
    */
   GMap2.prototype.enableArcGISClick  =  function () {
-    this.agsClickListener_  = this.agsClickListener_ || GEvent.addListener(this, 'click', this.doArcGISIdentify_ );
+    this.agsClickListener_  = this.agsClickListener_ || GEvent.addListener(this, 'click', this.doArcGISIdentify_);
   };
   /**
    * If identify operation onclick map is enabled.
@@ -3220,7 +3266,7 @@
    * 
    */
   GMap2.prototype.setArcGISClickOptions  =  function (opts) {
-    this.agsClickOpts_  = opts||{};
+    this.agsClickOpts_  = opts || {};
   };
   /**
    * Get the spatial data at the clicked location.
@@ -3228,13 +3274,13 @@
    * @param {Object} latlng
    * @param {Object} overlaylatlng
    */
-  GMap2.prototype.doArcGISIdentify_  =  function (overlay, latlng, overlaylatlng){
+  GMap2.prototype.doArcGISIdentify_  =  function (overlay, latlng, overlaylatlng) {
     var me  =  this;
-    var opts  =  this.agsClickOpts_||{};
+    var opts  =  this.agsClickOpts_ || {};
     var services;
     var serviceIdx;
     var dpi  = 96;
-    function processIdentifyResults(service, json){
+    function processIdentifyResults(service, json) {
       var html  = '';
       if (json.results) {
         for (var i  =  0, c  =  json.results.length; i < c; i++) {
@@ -3254,14 +3300,14 @@
               html +=  '<tr class="ags-row-' + (odd ? 'odd' : 'even') + '">';
               html +=  '<td class="ags-fieldname">' + x + '</td>';
               var val  =  a[x];
-              val= (val===null||typeof val=== 'undefined') ?'':''+val;
-              html +=  '<td class="ags-fieldvalue">' + val + '</td></tr>';
+              val = (val === null || typeof val === 'undefined') ? '' : '' + val;
+              html += '<td class="ags-fieldvalue">' + val + '</td></tr>';
             }
           }
           html +=  '</table></td></tr></table></div>';
           if (r.geometry) {
-            var style  =  ArcGISUtil.getOptionValue(ArcGISConfig.defaultStyle,opts,'style',service.name,r.layerName);
-            var ovs  =  ArcGISUtil.fromFeatureToGOverlays(r, null,style);
+            var style  =  ArcGISUtil.getOptionValue(ArcGISConfig.defaultStyle, opts, 'style', service.name, r.layerName);
+            var ovs  =  ArcGISUtil.fromFeatureToOverlays(r, null, style);
             for (var j  =  0; j < ovs.length; j++) {
               ovs[j].html  =  html;
               me.agsResults_.push(ovs[j]);
@@ -3284,18 +3330,18 @@
         me.openInfoWindowTabsHtml(latlng, tabs);
       }
     }
-    function identifyService(service){
+    function identifyService(service) {
       var sid  =  me.agsSessionID_;
       var sr  =  service.getSpatialReference();
       var bnds  =  me.getBounds();
-      var ext  = ArcGISUtil.fromGLatLngBoundsToExtent(bnds,sr);
+      var ext  = ArcGISUtil.fromLatLngBoundsToEnvelope(bnds, sr);
       var size  =  me.getSize();
-      var pt  = ArcGISUtil.fromGLatLngToPoint(latlng,sr);
+      var pt  = ArcGISUtil.fromLatLngToPoint(latlng, sr);
       var idParams  =  {
         geometry: '' + pt.x + ',' + pt.y,
         geometryType: ESRI_GEOMETRY_POINT,
         sr: sr.wkid,
-        layers: opts.layers||'top',
+        layers: opts.layers || 'top',
         tolerance: opts.tolerance || 5,//pixel
         mapExtent: ext,
         imageDisplay: '' + size.width + ',' + size.height + ',' + dpi, 
@@ -3303,31 +3349,31 @@
       };
       var params  =  idParams;
       if (opts.serviceOptions && opts.serviceOptions[service.name]) {
-        params  =  augmentObject(opts.serviceOptions[service.name],idParams, true);
+        params  =  augmentObject(opts.serviceOptions[service.name], idParams, true);
       }
-      service.identify(params, function (json){
+      service.identify(params, function (json) {
         if (sid  ===  me.agsSessionID_) {
-             processIdentifyResults(service, json);
+          processIdentifyResults(service, json);
         } else {
           //ignore. This means user clicked again before previous result is returned.
         }
       });
     }
 
-    function getIdentifyServices(){
-      var svc  =  null, i,tile;
+    function getIdentifyServices() {
+      var svc  =  null, i, tile;
       var svcs  =  [];
       var agsOvs  =  me.getArcGISOverlays();
       for (i  =  0; i < agsOvs.length; i++) {
         if (!agsOvs[i].isHidden()) {
           if (agsOvs[i] instanceof ArcGISMapOverlay) {
-            if (agsOvs[i].getFullBounds().containsLatLng(latlng)){
+            if (agsOvs[i].getFullBounds().containsLatLng(latlng)) {
               svcs.push(agsOvs[i].getMapService());
             }
           } else if (agsOvs[i] instanceof ArcGISTileLayerOverlay) {
             tile  = agsOvs[i].getTileLayer();
             if (tile.getFullBounds().containsLatLng(latlng)) {
-               svcs.push(tile.getMapService());
+              svcs.push(tile.getMapService());
             }
           }
         }
@@ -3358,34 +3404,34 @@
         identifyService(services[i]);
       }
     } else if (overlaylatlng && overlay.html) {
-        this.openInfoWindowHtml(overlaylatlng, '<div class  = "ags-infowindow">' + overlay.html + '</div>');
+      this.openInfoWindowHtml(overlaylatlng, '<div class  = "ags-infowindow">' + overlay.html + '</div>');
     }
   };
 
   /**
-   * Helper method to convert an {@link Envelope} object to <code>GLatLngBounds</code> 
+   * Helper method to convert an {@link ArcGISEnvelope} object to <code>GLatLngBounds</code> 
    * @param {Envelope} extent
    * @return {GLatLngBounds} gLatLngBounds
    */
-  ArcGISUtil.fromExtentToGLatLngBounds  =  function (extent) {
-    var sr  =  SpatialReferences.getSpatialReference(extent.spatialReference.wkid);
-    sr  =  sr||WGS84;
-    var sw  =  sr.fromCoordsToLatLng([extent.xmin, extent.ymin]);
-    var ne  =  sr.fromCoordsToLatLng([extent.xmax,extent.ymax]);
+  ArcGISUtil.fromEnvelopeToLatLngBounds  =  function (extent) {
+    var sr  =  ArcGISSpatialReferences.getSpatialReference(extent.spatialReference.wkid);
+    sr  =  sr || WGS84;
+    var sw  =  sr.reverse([extent.xmin, extent.ymin]);
+    var ne  =  sr.reverse([extent.xmax, extent.ymax]);
     return new GLatLngBounds(new GLatLng(sw[1], sw[0]), new GLatLng(ne[1], ne[0]));
   };
   
   /**
-   * Helper method to convert <code>GLatLngBounds</code> to an {@link Envelope} object
+   * Helper method to convert <code>GLatLngBounds</code> to an {@link ArcGISEnvelope} object
    *  with the given
-   * {@link SpatialReference}
+   * {@link ArcGISSpatialReference}
    * @param {GLatLngBounds} gLatLngBounds
-   * @param {SpatialReference} spatialReference
+   * @param {ArcGISSpatialReference} spatialReference
    * @return {Envelope} extent
    */
-  ArcGISUtil.fromGLatLngBoundsToExtent  =  function ( gLatLngBounds,spatialReference) {
-    var sw  =  spatialReference.fromLatLngToCoords([gLatLngBounds.getSouthWest().lng(), gLatLngBounds.getSouthWest().lat()]);
-    var ne  =  spatialReference.fromLatLngToCoords([gLatLngBounds.getNorthEast().lng(), gLatLngBounds.getNorthEast().lat()]);
+  ArcGISUtil.fromLatLngBoundsToEnvelope  =  function (gLatLngBounds, spatialReference) {
+    var sw  =  spatialReference.forward([gLatLngBounds.getSouthWest().lng(), gLatLngBounds.getSouthWest().lat()]);
+    var ne  =  spatialReference.forward([gLatLngBounds.getNorthEast().lng(), gLatLngBounds.getNorthEast().lat()]);
     return {
       xmin: sw[0],
       ymin: sw[1],
@@ -3397,40 +3443,40 @@
     };
   };
    /**
-   * Helper method to convert an {@link Point} object to 
+   * Helper method to convert an {@link ArcGISPoint} object to 
    * <code>GLatLng</code> .
    * <code>opt_sr</code> is required if the point itself does not carry SR info, such as
    * the case of geocode or query result. 
    * @param {Point} point
-   * @param {SpatialReference} opt_sr
+   * @param {ArcGISSpatialReference} opt_sr
    * @return {GLatLng} 
    */
-  ArcGISUtil.fromPointToGLatLng  =  function (point, opt_sr) {
-    var srid  = point.spatialReference||opt_sr;
-    var sr  =  srid?SpatialReferences.getSpatialReference(srid.wkid):WGS84;
-    sr  = sr|| WGS84;
-    if (isNaN(point.x)||isNaN(point.y)){
+  ArcGISUtil.fromPointToLatLng  =  function (point, opt_sr) {
+    var srid  = point.spatialReference || opt_sr;
+    var sr  =  srid?ArcGISSpatialReferences.getSpatialReference(srid.wkid):WGS84;
+    sr  = sr || WGS84;
+    if (isNaN(point.x) || isNaN(point.y)) {
       return null;
     }
-    var p  =  sr.fromCoordsToLatLng([point.x, point.y]);
+    var p  =  sr.reverse([point.x, point.y]);
     return new GLatLng(p[1], p[0]);
   };
   
   /**
-   * Helper method to convert <code>GLatLngBounds</code> to a {@link Point} 
-   * object with the given {@link SpatialReference}. If SR not specified,
+   * Helper method to convert <code>GLatLngBounds</code> to a {@link ArcGISPoint} 
+   * object with the given {@link ArcGISSpatialReference}. If SR not specified,
    *  it will be converted to WGS84.
    * @param {GLatLng} gLatLng
-   * @param {SpatialReference} opt_sr
+   * @param {ArcGISSpatialReference} opt_sr
    * @return {Point} 
    */
-  ArcGISUtil.fromGLatLngToPoint  =  function (gLatLng, opt_sr) {
+  ArcGISUtil.fromLatLngToPoint  =  function (gLatLng, opt_sr) {
     var sr  = null;
-    if (opt_sr){
-      sr  = (opt_sr instanceof SpatialReference)?opt_sr:SpatialReferences.getSpatialReference(opt_sr.wkid);
+    if (opt_sr) {
+      sr  = (opt_sr instanceof ArcGISSpatialReference)?opt_sr:ArcGISSpatialReferences.getSpatialReference(opt_sr.wkid);
     } 
-    sr  = sr||WGS84;
-    var p  =  sr.fromLatLngToCoords([gLatLng.lng(), gLatLng.lat()]);
+    sr  = sr || WGS84;
+    var p  =  sr.forward([gLatLng.lng(), gLatLng.lat()]);
     return {
       x: p[0],
       y: p[1],
@@ -3440,33 +3486,52 @@
     };
   };
   /**
-   * Convert a {@link Feature} or {@link IdentifyResult} or {@link FindResult} to core GMaps API 
-   * overlays such as  {@link GMarker}, 
-   * {@link GPolyline}, or {@link GPolygon}s.
+   * Create a circle using a given center and radius, and number of points.
+   * All in map units.
+   * @param {Point} center
+   * @param {Number} radius
+   * @param {Number} num
+   */
+  ArcGISUtil.createCircle = function (center, radius, num) {
+    num = num || 72;
+    var pts = [], t, x, y;
+    for (var i = 0; i < num; i++) {
+      t = i * RAD_DEG * 360 / num;
+      x = center.x + radius * Math.cos(t);
+      y = center.y + radius * Math.sin(t);
+      pts.push([x, y]);
+    }
+    pts.push(pts[0]);
+    return {rings: [pts], spatialReference: center.spatialReference};
+  };
+  /**
+   * Convert a {@link ArcGISFeature} or {@link ArcGISIdentifyResult} or {@link ArcGISFindResult} to core GMaps API 
+   * overlays such as  {@link ArcGISGMarker}, 
+   * {@link ArcGISGPolyline}, or {@link ArcGISGPolygon}s.
    * Note ArcGIS Geometry may have multiple parts, but the coresponding GOverlay 
    * does not  support multi-parts, so the result is an array.
-   * <ul><li><code>feature</code>: an object returned by ArcGIS Server with at least <code>geometry</code> property of type {@link Geometry}. 
+   * <ul><li><code>feature</code>: an object returned by ArcGIS Server with at least <code>geometry</code> property of type {@link ArcGISGeometry}. 
    *  if it contains a name-value pair "attributes" property, it will be attached to the result overlays.
-   * <li><code>opt_sr</code>: optional {@link SpatialReference}. Can be object literal. 
+   * <li><code>opt_sr</code>: optional {@link ArcGISSpatialReference}. Can be object literal. 
    * <li><code>opt_agsStyle</code> {@link ArcGISStyleOptions}. default is {@link ArcGISConfig}.style.
    * @param {Feature} feature
-   * @param {SpatialReference} opt_sr
-   * @param {ArcGISStyleOptions} opt_agsStyle
+   * @param {ArcGISSpatialReference} opt_sr
+   * @param {StyleOptions} opt_agsStyle
    * @return {GOverlay[]} 
    */
-  ArcGISUtil.fromFeatureToGOverlays  =  function (feature, opt_sr, opt_agsStyle) {
+  ArcGISUtil.fromFeatureToOverlays  =  function (feature, opt_sr, opt_agsStyle) {
     var ovs  =  [];
     var sr  =  null;
     var ov;
     var geom  =  feature.geometry;
     if (opt_sr) {
-      if (opt_sr instanceof SpatialReference) {
+      if (opt_sr instanceof ArcGISSpatialReference) {
         sr  =  opt_sr;
       } else {
-        sr  =  SpatialReferences.getSpatialReference(opt_sr.wkid);
+        sr  =  ArcGISSpatialReferences.getSpatialReference(opt_sr.wkid);
       }
     } else {
-      sr  =  SpatialReferences.getSpatialReference(geom.spatialReference.wkid);
+      sr  =  ArcGISSpatialReferences.getSpatialReference(geom.spatialReference.wkid);
     }
     if (sr === null) {
       return ovs;
@@ -3476,7 +3541,7 @@
     
     if (geom.x) {
       //point
-      lnglat  =  sr.fromCoordsToLatLng([geom.x, geom.y]);
+      lnglat  =  sr.reverse([geom.x, geom.y]);
       ov  =  new GMarker(new GLatLng(lnglat[1], lnglat[0]), {
         icon: style.icon
       });
@@ -3492,7 +3557,7 @@
         part  =  parts[i];
         if (geom.points) {
           // multipoint
-          lnglat  =  sr.fromCoordsToLatLng(part);
+          lnglat  =  sr.reverse(part);
           ov  = new GMarker(new GLatLng(lnglat[1], lnglat[0]), {
             icon: style.icon
           });
@@ -3503,7 +3568,7 @@
           }
           glatlngs  =  [];
           for (j  =  0, jc  =  part.length; j < jc; j++) {
-            lnglat  =  sr.fromCoordsToLatLng(part[j]);
+            lnglat  =  sr.reverse(part[j]);
             glatlngs.push(new GLatLng(lnglat[1], lnglat[0]));
           }
           if (geom.paths) {
@@ -3518,18 +3583,37 @@
     }
     return ovs;
   };
- 
- 
- 
- exportSymbol( {
-    'ArcGISProjection': ArcGISProjection,
-    'ArcGISTileLayer': ArcGISTileLayer,
-    'ArcGISTileLayerOverlay': ArcGISTileLayerOverlay,
-    'ArcGISMapOverlay': ArcGISMapOverlay,
-    'ArcGISMapType': ArcGISMapType,
-    'ArcGISUtil': ArcGISUtil
+  
+  var arcgis = {
+    'SpatialReference': ArcGISSpatialReference,
+    'Geographic': ArcGISGeographic,
+    'LambertConformalConic': ArcGISLambertConformalConic,
+    'SphereMercator': ArcGISSphereMercator,
+    'TransverseMercator': ArcGISTransverseMercator,
+    'FlatSpatialReference': ArcGISFlatSpatialReference,
+    'SpatialReferences': ArcGISSpatialReferences,
+    'MapService': ArcGISMapService,
+    'Layer': ArcGISLayer,
+    'GeocodeService': ArcGISGeocodeService,
+    'GeometryService': ArcGISGeometryService,
+    'Util': ArcGISUtil,
+    'Config': ArcGISConfig,
+    'Projection': ArcGISProjection,
+    'TileLayer': ArcGISTileLayer,
+    'TileLayerOverlay': ArcGISTileLayerOverlay,
+    'MapOverlay': ArcGISMapOverlay,
+    'MapType': ArcGISMapType
+  };
+  var NS = namespace('google.maputils');
+  NS.arcgis = arcgis;
+  // if the user loaded global symbol, export all class with prefix ArcGIS to global.
+  if (window.GMap2) {
+    for (var x in arcgis) {
+      if (arcgis.hasOwnProperty(x)) {
+        window['ArcGIS' + x] = arcgis[x];
+      }
+    }
   }
- );
 })();
 
 

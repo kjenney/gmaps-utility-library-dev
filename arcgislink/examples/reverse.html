@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
         <title>Reverse Geocode</title>
-        <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q" type="text/javascript">
+        <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q" type="text/javascript">
         </script>
         <script type="text/javascript">
          document.write('<script type="text/javascript" src="../src/arcgislink'+(document.location.search.indexOf('packed')>-1?'_packed':'')+'.js"><'+'/script>');
@@ -15,7 +15,7 @@
           
           function init() {
             var url = 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Locators/ESRI_Geocode_USA/GeocodeServer';
-            geocoder = new GeocodeService(url);
+            geocoder = new ArcGISGeocodeService(url);
             map = new GMap2(document.getElementById("map"));
             var center = new GLatLng(34.0575170970001, -117.195681386);
             map.setCenter(center, 15);
@@ -41,7 +41,7 @@
           }
         function reverseGeocode(latlng){
             if (latlng){
-              var point = ArcGISUtil.fromGLatLngToPoint(latlng);
+              var point = ArcGISUtil.fromLatLngToPoint(latlng);
               var params = {
                 location: point,
                 distance: 100
@@ -55,7 +55,7 @@
                       html += x +': '+ attrs[x] + '<br/>';
                     }
                   }
-                  var loc=ArcGISUtil.fromPointToGLatLng(result.location);
+                  var loc=ArcGISUtil.fromPointToLatLng(result.location);
                   marker.setLatLng(loc);
                   marker.openInfoWindowHtml(html);
                 }else{

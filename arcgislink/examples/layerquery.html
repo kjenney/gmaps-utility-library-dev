@@ -3,7 +3,7 @@
     <head>
         <title>Query Layer</title>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-        <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q" type="text/javascript">
+        <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q" type="text/javascript">
         </script>
         <script type="text/javascript">
             document.write('<script type="text/javascript" src="../src/arcgislink' + (document.location.search.indexOf('packed') > -1 ? '_packed' : '') + '.js"><' + '/script>');
@@ -67,7 +67,7 @@
             }
             
             function createGPolys(feat, sr) {
-              var ovs = ArcGISUtil.fromFeatureToGOverlays(feat, sr, style);
+              var ovs = ArcGISUtil.fromFeatureToOverlays(feat, sr, style);
               var a = feat.attributes;
               var html = "<div id='iwdiv'><b>" + a['NAME'] + "</b><hr/>" +
               "<b>2000 Population: </b>" +

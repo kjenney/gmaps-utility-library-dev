@@ -3,8 +3,8 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <title>Concepts</title>
-    <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"/>
-    <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"/>
+    <link rel="stylesheet nofollow" type="text/css" href="http://code.google.com/css/codesite.css"/>
+    <link rel="stylesheet nofollow" type="text/css" href="../../util/docs/template/local_extensions.css"/>
     <script type="text/javascript" src="http://code.google.com/js/prettify.js"></script>
   </head>
   <body onload="prettyPrint()">
@@ -117,7 +117,7 @@ use those classes by calling the <code>ArcGISTileLayer.getMapService()</code>
     <a href='http://resources.esri.com/help/9.3/arcgisserver/apis/rest/mapserver.html'>Map Service</a>
     </td>
     <td>
-     <a href='reference.html#MapService'>MapService</a>  
+     <a href='reference.html#ArcGISMapService'>ArcGISMapService</a>  
     </td>
   </tr>
   <tr>
@@ -125,7 +125,7 @@ use those classes by calling the <code>ArcGISTileLayer.getMapService()</code>
     <a href='http://resources.esri.com/help/9.3/arcgisserver/apis/rest/layer.html'>Layer</a>
     </td>
     <td>
-     <a href='reference.html#MapLayer'>MapLayer</a>  
+     <a href='reference.html#ArcGISLayer'>ArcGISLayer</a>  
     </td>
   </tr>
   <tr>
@@ -133,7 +133,7 @@ use those classes by calling the <code>ArcGISTileLayer.getMapService()</code>
     <a href='http://resources.esri.com/help/9.3/arcgisserver/apis/rest/geocodeserver.html'>Geocode Service</a>
     </td>
     <td>
-     <a href='reference.html#GeocodeService'>GeocodeService</a>   
+     <a href='reference.html#ArcGISGeocodeService'>ArcGISGeocodeService</a>   
     </td>
   </tr>
   <tr>
@@ -149,7 +149,7 @@ use those classes by calling the <code>ArcGISTileLayer.getMapService()</code>
     <a href='http://resources.esri.com/help/9.3/arcgisserver/apis/rest/geometryserver.html'>Geometry Service</a>
     </td>
     <td>
-     <a href="reference.html#GeometryService">GeometryService</a>
+     <a href="reference.html#ArcGISGeometryService">ArcGISGeometryService</a>
     </td>
   </tr>
    <tr>
@@ -162,11 +162,12 @@ use those classes by calling the <code>ArcGISTileLayer.getMapService()</code>
   </tr>
 </table>
 </div>
-
+<!--
 <p>As a side note, the REST component can be used without loading the core GMaps API. See this 
  <a href="examples.html#Rest">simple example</a>. It is also possible to built another tile library 
  such as <a href='http://openlayers.org'>Open Layers</a> adaptor using these classes. 
 </p>
+-->
 <div>
 <h2><a name="Load"></a>The load Event</h2> 
 <p>ArcGIS services may be published with different spatial reference systems. 
@@ -199,15 +200,15 @@ an <a href="reference.html#ArcGISMapOverlay">ArcGISMapOverlay</a>  </li>
 <div>
 <h2><a name="SR"></a>Spatial Reference Support</h2> 
 <p>This libray provide additional spatial reference support by implementing interface
- <a href="reference.html#SpatialReference">SpatialReference</a>, which converts between 
+ <a href="reference.html#ArcGISSpatialReference">ArcGISSpatialReference</a>, which converts between 
  Lat/Lng and map coordinates, then using an intermediate class  
  <a href="reference.html#ArcGISProjection">ArcGISProjection</a> to bridge Google's 
  coordinate system to ArcGIS's system. This library includes a few built-in spatial references:
  WGS84 (4326) and WebMercator (102113). It also has two of the most widely used projections: <b> LambertConformalConic </b>
  and <b>Transverse Mercator</b>. Spatial references based on these two projection can be used by calling 
- <code>SpatialReferences.addSpatialReference(wkid, wkt)</code>. The developers can also implement
+ <code>ArcGISSpatialReferences.addSpatialReference(wkid, wkt)</code>. The developers can also implement
  additional projection class and plug it in. If the system failed to find a implemented spatial reference, it will use a special class
-  <a href="reference.html#FlatSpatialReference">FlatSpatialReference</a> for somewhat less accurate coordinates
+  <a href="reference.html#ArcGISFlatSpatialReference">ArcGISFlatSpatialReference</a> for somewhat less accurate coordinates
   transformation. Here is a summary of options:
   <ul>
     <li>If you use map service as <a href="reference.html#ArcGISMapOverlay">ArcGISMapOverlay</a>
@@ -239,7 +240,7 @@ an <a href="reference.html#ArcGISMapOverlay">ArcGISMapOverlay</a>  </li>
       value from  <a target=esri href='http://edndoc.esri.com/arcims/9.2/elements/pcs.htm'>
 ESRI documentation</a> and add it into the application, then use it after the "load" event.
      <pre>
-        SpatialReferences.addSpatialReference(2264, 'PROJCS["NAD_1983_StatePlane_North_Carolina_FIPS_3200_Feet",......');
+        ArcGISSpatialReferences.addSpatialReference(2264, 'PROJCS["NAD_1983_StatePlane_North_Carolina_FIPS_3200_Feet",......');
         var maptype=new ArcGISMapType(url);
         GEvent.addListener(maptype, 'load', function(){
           gmap.addMapType(maptype);
@@ -249,7 +250,7 @@ ESRI documentation</a> and add it into the application, then use it after the "l
      <li> If you use a tiled map service, but you just want to quickly use the service, and
      you do not need a precise Lat Lng to real coordinate transformation, you can simply use it after the "load" event. 
      The API will use 
-     <a href="reference.html#FlatSpatialReference">FlatSpatialReference</a>. 
+     <a href="reference.html#ArcGISFlatSpatialReference">ArcGISFlatSpatialReference</a>. 
      <pre>
         var maptype=new ArcGISMapType(url);
         GEvent.addListener(maptype, 'load', function(){
@@ -259,14 +260,14 @@ ESRI documentation</a> and add it into the application, then use it after the "l
      </li>
      <li> Finally, if you use a tiled map service, but it's spatial reference was not based on LCC or Transverse Mercator, and
      you DO need a precise Lat Lng to real coordinate transformation, you can implement your own  
-     <a href="reference.html#SpatialReference">SpatialReference</a> class, add it to application, 
+     <a href="reference.html#ArcGISSpatialReference">ArcGISSpatialReference</a> class, add it to application, 
      then use it after the "load" event.
      <pre>
         function MySpatialReference=function(params){...}
-        MySpatialReference.prototype.fromCoordsToLatLng=function(coordsArray){...return [lng,lat]};
-        MySpatialReference.prototype.fromLatLngToCoords=function(lnglatArray){...return [x,y]};
+        MySpatialReference.prototype.reverse=function(coordsArray){...return [lng,lat]};
+        MySpatialReference.prototype.forward=function(lnglatArray){...return [x,y]};
         MySpatialReference.prototype.getWrapWidth=function(){...};
-        SpatialReferences.addSpatialReference(myWkid,new MySpatialReference({...}));
+        ArcGISSpatialReferences.addSpatialReference(myWkid,new MySpatialReference({...}));
         var maptype=new ArcGISMapType(url);
         GEvent.addListener(maptype, 'load', function(){
           gmap.addMapType(maptype);
