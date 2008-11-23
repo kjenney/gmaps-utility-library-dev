@@ -1,27 +1,28 @@
 /**
-* @name ProgressbarControl
-* @version 1.0
-* @author Bjorn BRala
-* @copyright (c) 2008 SWIS BV - www.geostart.nl
-* @fileoverview Creates a progressbar control for usage in google maps. Use to show your users the progress of loading markers for example.<br>
-*/
+ * @name ProgressbarControl
+ * @version 1.0
+ * @author Bjorn BRala
+ * @copyright (c) 2008 SWIS BV - www.geostart.nl
+ * @fileoverview Creates a progress bar control for usage in google maps. 
+ *   It can be used to show the progress of loading markers, for example.
+ */
 
 /**
-* @name ProgressbarOptions
-* @class This class represents optional arguments to {@link ProgressbarControl}, 
-* @property {Number} [width=176] Specifies, in pixels, the width of the progress bar.
-* @property {String} [loadstring=Loading...] Specifies the string displayed when first starting the control. Before any update!
-*/
-
-
+ * @name ProgressbarOptions
+ * @class This class represents optional arguments to 
+ *   {@link ProgressbarControl}, 
+ * @property {Number} [width=176] Specifies, in pixels, the width of the bar.
+ * @property {String} [loadstring=Loading...] Specifies the string displayed 
+ *  when first starting the control, before any update.
+ */
 
 
 /**
-*    Custom progress control.
-*    Possibly extendable with other styles later on?
-*   @private
-*   @return GControl object
-**/    
+ * Custom progress bar control, for placement on map.
+ * 
+ * @private
+ * @return {GControl}
+ */    
 function ProgressbarMapControl(map, width) { 
   this.map_ = map; 
   this.width_ = width; 
@@ -29,78 +30,73 @@ function ProgressbarMapControl(map, width) {
 
 
 /**
-*   @private
-**/
+ * @private
+ */
 ProgressbarMapControl.prototype = new GControl(true, false);
-/**
-*   @private
-*	@desc Initilizes the GControl. Created the HTML and styles.
-*	@return Returns container div.
-**/
-ProgressbarMapControl.prototype.initialize = function () {
-  var container_ = document.createElement("div");
-  container_.innerHTML         = "<div style='position:absolute;width:100%;border:5px;text-align:center;vertical-align:bottom;' id='geo_progress_text'></div><div style='background-color:green;height:100%;' id='geo_progress'></div>";
-  container_.id                 = "geo_progress_container";
-  container_.style.display      = "none";
-  container_.style.width        = this.width_ + "px";
-  container_.style.fontSize     = "0.8em";
-  container_.style.height       = "1.3em";
-  container_.style.border       = "1px solid #555"; 
-  container_.style.backgroundColor = "white";
-  container_.style.textAlign    = "left";
-  this.map_.getContainer().appendChild(container_);            
 
+
+/**
+ * @private
+ * @desc Initializes the GControl. Creates the HTML and styles.
+ * @return {Element}
+ */
+ProgressbarMapControl.prototype.initialize = function () {
+  var container_ = document.createElement('div');
+  container_.innerHTML = '<div style="position:absolute;width:100%;border:5px;'
+    + 'text-align:center;vertical-align:bottom;" id="geo_progress_text"></div>'
+    + '<div style="background-color:green;height:100%;" id="geo_progress"></div>';
+  container_.id = "geo_progress_container";
+  container_.style.display = "none";
+  container_.style.width = this.width_ + "px";
+  container_.style.fontSize = "0.8em";
+  container_.style.height = "1.3em";
+  container_.style.border = "1px solid #555";
+  container_.style.backgroundColor = "white";
+  container_.style.textAlign = "left";
+  this.map_.getContainer().appendChild(container_);
   return container_;
 };
 
+
 /**
-*   @private 
-*   @desc Return the default position for the control
-*   @return GControlPosition
-**/
+ * @private 
+ * @desc Return the default position for the control
+ * @return {GControlPosition}
+ */
 ProgressbarMapControl.prototype.getDefaultPosition = function () {
   return new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(30, 56));
-};   
-
-
+};
 
 
 /**
-*	@contructor
-*	@param {GMap2}  Map object
-*	@param  {ProgressbarOptions} opt_opts
-*   Part of GeoStart (www.geostart.nl)
-*   Author: Bjorn Brala SWIS BV
-**/
+ * Creates a progress bar control on the given map, with the given options.
+ *
+ * @constructor
+ * @param {GMap2} Map object
+ * @param  {ProgressbarOptions} opt_opts
+ */
 function ProgressbarControl(map, opt_opts) {
-  /**
-  *   @desc  Init the progress bar, Create a Control on the map.
-  *    Loader:     geo_progress_container
-  *    Info:        geo_progress
-  *   @param {GMap2} GMap2 object
-  **/    
-  this.options_ = opt_opts == null ? {} : opt_opts;
+  this.options_ = opt_opts || {};
 
+  this.width_ = this.options_.width || 176;
+  this.loadstring_ = this.options_.loadstring || 'Loading...';
 
-  this.width_ = this.options_.width == null ? 176 : this.options_.width;
-  this.loadstring_ = this.options_.loadstring == null ? 'Loading...' : this.options_.loadstring;                             // String for when loading ( before counter )        
-
-  this.control_ = new ProgressbarMapControl(map, this.width_);          /* Control object reference */
-
-  this.map_ = map;                                                      /* GMap2 reference  */
-  this.map_.addControl(this.control_);                                  /* Load control into map  */
-  this.div_ = document.getElementById('geo_progress');                  /* progress DIV  */
-  this.text_ = document.getElementById('geo_progress_text');            /* progress text DIV  */
-  this.container_ = document.getElementById('geo_progress_container');  /* progress container  */
+  this.control_ = new ProgressbarMapControl(map, this.width_);
+  this.map_ = map;
+  this.map_.addControl(this.control_);
+  this.div_ = document.getElementById('geo_progress');
+  this.text_ = document.getElementById('geo_progress_text');
+  this.container_ = document.getElementById('geo_progress_container');
 
   this.operations_ = 0;
   this.current_ = 0;
 }
 
+
 /**
-*    @desc Start the progress bar. Argumnent is the amount of operations the full bar will represent.
-*    @param {int} operations Counter for the amount of operations that will be executed.
-**/
+ * @desc Start the progress bar. 
+ * @param {Number} operations Total amount of operations that will be executed.
+ */
 ProgressbarControl.prototype.start = function (operations) {
   this.div_.style.width = '0%'; 
   this.operations_ = operations || 0;
@@ -112,9 +108,9 @@ ProgressbarControl.prototype.start = function (operations) {
 
 
 /**
-*   @desc  Update the progress. Adds Step amount of operations to the bar.
-*   @param {int} step Add number of operations to progress.
-**/
+ * @desc  Update the progress with specified number of operations.
+ * @param {Number} step Number of operations to add to bar.
+ */
 ProgressbarControl.prototype.updateLoader = function (step) {
   this.current_ += step;
   if (this.current_ > 0) {
@@ -124,12 +120,13 @@ ProgressbarControl.prototype.updateLoader = function (step) {
     }
     this.div_.style.width = percentage_ + '%'; 
     this.text_.innerHTML = this.current_ + ' / ' + this.operations_;
-  } 
+  }
 };
 
+
 /**
-*    @desc Remove control. Well, hide it actually, since the call to create a new one when its needed again would create to much overhead.
-**/
+ * @desc Remove control.
+ */
 ProgressbarControl.prototype.remove = function () {
   this.container_.style.display = 'none';
 };

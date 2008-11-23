@@ -1,124 +1,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
-
-
 <head>
-<title>Google Maps JavaScript API Example - Snap to Polyline</title>
-    
-<script>
-    var scriptTag = '<' + 'script src="http://maps.google.com/maps?file=api&v=2.x&key=ABQIAAAAbRm2TpqQOvF3ceP4wzWXeBQGj0PqsCtxKvarsoS-iqLdqZSKfxQU7evjDDIaBB_enSeWW-bsfxdKuQ">'+'<'+'/script>';
-    document.write(scriptTag);
-</script>
-
+<title>Google Maps JavaScript API Example - ProgressBarControl</title>
+<script src="http://maps.google.com/maps?file=api&v=2.x&key=ABQIAAAAbRm2TpqQOvF3ceP4wzWXeBQGj0PqsCtxKvarsoS-iqLdqZSKfxQU7evjDDIaBB_enSeWW-bsfxdKuQ" type="text/javascript"></script>
 <script type="text/javascript">
-        document.write('<script type="text/javascript" src="../src/progressbarcontrol'+(document.location.search.indexOf('packed')>-1?'_packed':'')+'.js"><'+'/script>');
+  document.write('<script type="text/javascript" src="../src/progressbarcontrol'+(document.location.search.indexOf('packed')>-1?'_packed':'')+'.js"><'+'/script>');
 </script>
-
-
 <script type="text/javascript">
-
 var map;
-var oProgressBar;
+var progressBar;
 
 function load() {
-    doLoad();
+  map = new GMap2(document.getElementById("map"));
+  map.setCenter(new GLatLng(52, 4), 7);
+  map.addControl(new GLargeMapControl());
+  map.addControl(new GMapTypeControl());
+  progressBar = new ProgressbarControl(map, {width:150}); 
 }
-
-function doLoad() {
-    if (GBrowserIsCompatible()) {
-        map = new GMap2(document.getElementById("map"), {draggableCursor:"crosshair"});
-        map.setCenter(new GLatLng(parseFloat(52), parseFloat(4)), 7);
-        map.addControl(new GScaleControl());
-        map.addControl(new GLargeMapControl());
-        map.addControl(new GMapTypeControl());
-        
-        oProgressBar = new ProgressbarControl(map, {width:150});
-    } 
-}
-
-// marker array
-var aMarkers = [];
-var iMax = 200;
-var i = 0;    
-
-// Load 25 markers on map
-function loadMarkers(){
-    oProgressBar.start(iMax);
-    setTimeout('createMarker()', 10);
-}
-
-// create a marker
-function createMarker(){
-    i++;
-    oProgressBar.updateLoader(1);
-    // Add 10 markers to the map at random locations
-      var bounds = map.getBounds();
-      var southWest = bounds.getSouthWest();
-      var northEast = bounds.getNorthEast();
-      var lngSpan = northEast.lng() - southWest.lng();
-      var latSpan = northEast.lat() - southWest.lat();
-      var point = new GLatLng(southWest.lat() + latSpan * Math.random(), southWest.lng() + lngSpan * Math.random());
-      
-    var marker = new GMarker(point);
-    
-    aMarkers.push(marker);
-    
-    map.addOverlay(marker);
-    
-    if ( i < iMax ) {
-        setTimeout('createMarker()', 10);
-    } else {
-        oProgressBar.remove();
-        i = 0;
-    }
-        
-}
-
-
-
-function removeMarkers(){
-    oProgressBar.start(aMarkers.length);
-    setTimeout("removeMarker()", 10);
-    
-}
-
-
-function removeMarker(){
-    oProgressBar.updateLoader(1);
-    map.removeOverlay(aMarkers.pop());
-    if ( aMarkers.length > 0 ) {
-        setTimeout("removeMarker()", 10);
-    } else {
-        oProgressBar.remove();
-    }
-}
-
 </script>
-<style media="screen">
-
-
-</style>
 </head>
-
-
 <body onload="load()" onunload="GUnload()">
-    <table cellspacing="0" cellpadding="0" style="-moz-outline-width:8px; -moz-outline-radius:15px; -moz-outline-style:solid;-moz-outline-color:#838FBB;margin:20px;">
-        <tr>
-            <td class="menu" width="188" style="text-align:center;">
-                <br>
-                <button onclick="oProgressBar.start(500);">start</button>
-                <button onclick="oProgressBar.updateLoader(7);">updateLoader</button>
-                <button onclick="oProgressBar.remove();">remove</button>
-                <button onclick="loadMarkers();">loadMarkers()</button>
-                <button onclick="removeMarkers();">removeMarkers()</button>
-                
-            </td>
-            </tr><tr>
-            <td valign="top">
-                <div id="map" style="width: 700px; height: 500px"></div>            
-                <a title="bottom"></a>
-            </td>
-        </tr>
-    </table>
+ <button onclick="progressBar.start(500);">start</button>
+ <button onclick="progressBar.updateLoader(7);">updateLoader</button>
+ <button onclick="progressBar.remove();">remove</button>
+ <br/>
+ <div id="map" style="width: 700px; height: 500px"></div>
 </body>
 </html>

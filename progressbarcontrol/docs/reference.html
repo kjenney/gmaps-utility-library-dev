@@ -9,11 +9,30 @@
   <body>
     <h1>ProgressbarControl</h1>
     <p>
-Creates a progressbar control for usage in google maps. Use to show your users the progress of loading markers for example.<br></p>
+Creates a progress bar control for usage in google maps.   It can be used to show the progress of loading markers, for example.</p>
     <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
     
       <h2><a name="ProgressbarControl"></a>class ProgressbarControl</h2>
       <p></p>
+      
+        <h3>Constructor</h3>
+        <table summary="class ProgressbarControl - Constructor" width="90%">
+          
+          <tbody>
+            <tr>
+              <th>Constructor</th>
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>ProgressbarControl(<span class="type">Map:GMap2</span>, <span class="type">opt_opts:ProgressbarOptions</span>)</code></td>
+                
+                <td>Creates a progress bar control on the given map, with the given options.</td>
+              </tr>
+            
+          </tbody>
+        </table>
       
         <h3>Methods</h3>
         <table summary="class ProgressbarControl - Methods" width="90%">
@@ -36,27 +55,27 @@ Creates a progressbar control for usage in google maps. Use to show your users t
                     <td><code>None</code></td>
                   
                 
-                <td>Remove control. Well, hide it actually, since the call to create a new one when its needed again would create to much overhead.</td>
+                <td>Remove control.</td>
               </tr>
             
               <tr class="even">
-                <td><code>start(<span class="type">operations:int</span>)</code></td>
+                <td><code>start(<span class="type">operations:Number</span>)</code></td>
                 
                   
                     <td><code>None</code></td>
                   
                 
-                <td>Start the progress bar. Argumnent is the amount of operations the full bar will represent.</td>
+                <td>Start the progress bar.</td>
               </tr>
             
               <tr class="odd">
-                <td><code>updateLoader(<span class="type">step:int</span>)</code></td>
+                <td><code>updateLoader(<span class="type">step:Number</span>)</code></td>
                 
                   
                     <td><code>None</code></td>
                   
                 
-                <td>Update the progress. Adds Step amount of operations to the bar.</td>
+                <td>Update the progress with specified number of operations.</td>
               </tr>
             
           </tbody>
@@ -64,7 +83,7 @@ Creates a progressbar control for usage in google maps. Use to show your users t
       
     
       <h2><a name="ProgressbarOptions"></a>class ProgressbarOptions</h2>
-      <p>This class represents optional arguments to <code><a href="reference.html#_global_#ProgressbarControl">ProgressbarControl</a></code>,  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
+      <p>This class represents optional arguments to   <code><a href="reference.html#ProgressbarControl">ProgressbarControl</a></code>,  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
       
         <h3>Properties</h3>
         <table summary="class ProgressbarOptions - Properties" width="90%">
@@ -87,7 +106,7 @@ Creates a progressbar control for usage in google maps. Use to show your users t
                     <td><code>String</code></td>
                   
                 
-                <td>Specifies the string displayed when first starting the control. Before any update!  The default value is <code>Loading...</code>.</td>
+                <td>Specifies the string displayed  when first starting the control, before any update.  The default value is <code>Loading...</code>.</td>
               </tr>
             
               <tr class="even">
@@ -97,7 +116,7 @@ Creates a progressbar control for usage in google maps. Use to show your users t
                     <td><code>Number</code></td>
                   
                 
-                <td>Specifies, in pixels, the width of the progress bar.  The default value is <code>176</code>.</td>
+                <td>Specifies, in pixels, the width of the bar.  The default value is <code>176</code>.</td>
               </tr>
             
           </tbody>

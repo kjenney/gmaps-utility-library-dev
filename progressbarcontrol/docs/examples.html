@@ -9,7 +9,7 @@
   </head>
 
   <body onload="prettyPrint()">
-<h1>Progressbar Control Examples</h1>
+<h1>ProgressBarControl Examples</h1>
 
 <p>To use the progress bar, create a <code>ProgressbarControl</code> object by passing 
 the GMap2 object and (optional) options to the constructor.</p>
@@ -19,107 +19,62 @@ map.setCenter(new GLatLng(37, -122), 13);
 var progressbar = new ProgressbarControl(map);
 </pre>
 
-<p>You may also specify a number of options to customize. 
-These options are passed via a  <code>ProgressbarControlOptions</code> object which 
-is fully outlined in the <a href="reference.html#ProgressbarControlOptions">reference documentation</a>.</p>
-
 <p>
-The <code>ProgressbarControlOptions</code> object is an object literal, so you 
-simply declare the object without a constructor. In this example the 
-<code>width</code> of the progress bar is set to 150 pixels, the text that is 
-printed before <b>any</b> progress (<code>loadstring</code>) is made is set to 
+Additional options can be specified using <a
+href="reference.html#ProgressbarControlOptions"><code>ProgressbarControlOptions</code></a>.
+In the code below, the <code>width</code> of the progress bar is set to 150 pixels, and the text that is printed before progress begins (<code>loadstring</code>) is set to 
 "One moment please...".
 </p>
+
 <pre class="prettyprint">
-var map = new GMap2(document.getElementById("map"));
+var map = new GMap2(document.getElementById('map'));
 map.setCenter(new GLatLng(37, -122), 13);
-var progressbarOptions = { width: 150, loadstring: 'One moment please' };
+var progressbarOptions = {width: 150, loadstring: 'One moment please'};
 var progressbar = new ProgressbarControl(map, progressbarOptions);
 </pre>
 
-<h2>Progressbar Example</h2>
+<h2>Basic Example</h2>
 
-<p>The following example show how you can use the progressbar to show live progress:</p>
+<p>The following example lets you experiment with the functionality available in ProgressBarControl, providing buttons for starting, updating, and removing the control. The HTML for those buttons is shown below:</p>
 
-<p>Some notes, please remember that a browser will 
-NOT update the display if it doesn't get the time. The trick is to use 
-setTimeout to create a 1 millisecond delay. This will tell the browser to take the time 
-to draw the screen.</p>
-
-<h3> An example with the progress bar used for loading and removing markers:</h3>
 <pre class="prettyprint">
-function doLoad() {
-    if (GBrowserIsCompatible()) {
-        map = new GMap2(document.getElementById("map"), {draggableCursor:"crosshair"});
-        map.setCenter(new GLatLng(parseFloat(52), parseFloat(4)), 7);
-        map.addControl(new GScaleControl());
-        map.addControl(new GLargeMapControl());
-        map.addControl(new GMapTypeControl());
-        
-        oProgressBar = new ProgressbarControl(map, {width:150});
-    } 
-}
-
-// Create setting for the demo
-var aMarkers = [];
-var iMax = 200;
-var i = 0;    
-
-// Load 25 markers onto map
-function loadMarkers(){
-    oProgressBar.start(iMax);
-    setTimeout('createMarker()', 10);
-}
-
-// create a marker
-function createMarker(){
-    i++;
-    
-    oProgressBar.updateLoader(1);
-    
-    // Add 10 markers to the map at random locations
-    var bounds = map.getBounds();
-    var southWest = bounds.getSouthWest();
-    var northEast = bounds.getNorthEast();
-    var lngSpan = northEast.lng() - southWest.lng();
-    var latSpan = northEast.lat() - southWest.lat();
-    var point = new GLatLng(southWest.lat() + latSpan * Math.random(), southWest.lng() + lngSpan * Math.random());
-      
-    var marker = new GMarker(point);
-    
-    aMarkers.push(marker);
-    
-    map.addOverlay(marker);
-    
-    if ( i < iMax ) {
-        setTimeout('createMarker()', 10);
-    } else {
-        oProgressBar.remove();
-        i = 0;
-    }
-        
-}
-
-
-
-function removeMarkers(){
-    oProgressBar.start(aMarkers.length);
-    setTimeout("removeMarker()", 10);
-    
-}
-
-
-function removeMarker(){
-    oProgressBar.updateLoader(1);
-    map.removeOverlay(aMarkers.pop());
-    if ( aMarkers.length > 0 ) {
-        setTimeout("removeMarker()", 10);
-    } else {
-        oProgressBar.remove();
-    }
-}
+ &lt;button onclick="progressBar.start(500);"&gt;start&lt;/button&gt;
+ &lt;button onclick="progressBar.updateLoader(7);"&gt;updateLoader&lt;/button&gt;
+ &lt;button onclick="progressBar.remove();"&gt;remove&lt;/button&gt;
 </pre>
+
 <p><a href="../examples/howtouse.html">View example (howtouse.html)</a></p>
 
+<h2>Marker Loading Example</h2>
+
+<p>In the following example, we use the control to show the process of loading markers to the user. Since the browser will not update the screen unless it has time to do so, we use setTimeout with a 1 millisecond delay in between each update. The code below shows the creation of one marker at a random location in the map viewport, with an update to the loader and a setTimeout before the next marker is created:</p>
+
+<pre class="prettyprint">
+// create a marker
+function createMarker(){
+  num++;
+  progressBar.updateLoader(1);
+
+  var bounds = map.getBounds();
+  var southWest = bounds.getSouthWest();
+  var northEast = bounds.getNorthEast();
+  var lngSpan = northEast.lng() - southWest.lng();
+  var latSpan = northEast.lat() - southWest.lat();
+  var latlng = new GLatLng(southWest.lat() + latSpan * Math.random(), 
+      southWest.lng() + lngSpan * Math.random());
+  var marker = new GMarker(latlng);
+  markersArray.push(marker);
+  map.addOverlay(marker);
+
+  if (num &lt; maxNum) {
+    setTimeout('createMarker()', 10);
+  } else {
+    progressBar.remove();
+    num = 0;
+  }
+}
+</pre>
+<p><a href="../examples/markerloader.html">View example (markerloader.html)</a></p>
+<br/><br/>
 </body>
 </html>
