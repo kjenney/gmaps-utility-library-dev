@@ -19,19 +19,19 @@
  * @constructor
  * @desc Creates a new SnapToRoute that will snap the marker to the route.
  * @param {GMap2} map Map to assign listeners to.
- * @param {GMarker} startMarker Marker to move along the route.
+ * @param {GMarker} marker Marker to move along the route.
  * @param {GPolyline} polyline The line the marker should snap to.
  */
-function SnapToRoute(map, startMarker, polyline) {
-      
-  this.routePixels_    = [];
-  this.normalProj_     = G_NORMAL_MAP.getProjection();    
-  this.map_           = map;
-  this.marker_        = startMarker;
-  this.polyline_     = polyline;
+function SnapToRoute(map, marker, polyline) {
+  this.routePixels_ = [];
+  this.normalProj_ = G_NORMAL_MAP.getProjection();    
+  this.map_ = map;
+  this.marker_ = marker;
+  this.polyline_ = polyline;
 
   this.init_();
 }
+
 
 /**
  * Initialize the objects.
@@ -42,19 +42,21 @@ SnapToRoute.prototype.init_ = function () {
   this.loadMapListener_();    
 };
 
+
 /**
-*   Change the marker and/or polyline used by the class.
-*   @param {GMarker} marker Optional object to move along the route, 
-*       or null if you do not want to change the target.
-*   @param {GPolyline} polyline Optional GPolyline to snap to, 
-*       or null if you do not want to change the target.
-**/
+ * Change the marker and/or polyline used by the class.
+ * @param {GMarker} marker Optional marker to move along the route, 
+ *   or null if you do not want to change that target.
+ * @param {GPolyline} polyline Optional line to snap to, 
+ *   or null if you do not want to change that target.
+ */
 SnapToRoute.prototype.updateTargets = function (marker, polyline) {
-  this.marker_   = marker   || this.marker_;
+  this.marker_ = marker || this.marker_;
   this.polyline_ = polyline || this.polyline_;
   this.loadLineData_();
 };
-  
+
+
 /**
  * Set up map listeners to calculate and update the marker position.
  * @private
@@ -67,10 +69,10 @@ SnapToRoute.prototype.loadMapListener_ = function () {
     GEvent.callback(me, me.loadLineData_));
 };
 
-    
+
 /**
- * Load route pixels into array for calculations. This needs to be calculated 
- * whenever zoom changes 
+ * Load route pixels into array for calculations. 
+ * This needs to be calculated whenever zoom changes 
  * @private
  */
 SnapToRoute.prototype.loadLineData_ = function () {
@@ -90,7 +92,7 @@ SnapToRoute.prototype.loadLineData_ = function () {
  */
 SnapToRoute.prototype.updateMarkerLocation_ = function (mouseLatLng) {
   var markerLatLng = this.getClosestLatLng(mouseLatLng);
-  this.marker_.setPoint(markerLatLng);
+  this.marker_.setLatLng(markerLatLng);
 };
 
 
@@ -116,24 +118,24 @@ SnapToRoute.prototype.getDistAlongRoute = function (latlng) {
   if (typeof(opt_latlng) === 'undefined') {
     latlng = this.marker_.getLatLng();
   }
-  
+
   var r = this.distanceToLines_(latlng);
   return this.getDistToLine_(r.i, r.to);
 };
 
 
-
 /**
- * Gets test point xy and then calls fundamental algorithm.
+ * Gets test pixel and then calls fundamental algorithm.
  * @param {GLatLng} mouseLatLng
  * @private
  */
 SnapToRoute.prototype.distanceToLines_ = function (mouseLatLng) {
-  var zoom        = this.map_.getZoom();
-  var mousePx     = this.normalProj_.fromLatLngToPixel(mouseLatLng, zoom);
+  var zoom = this.map_.getZoom();
+  var mousePx = this.normalProj_.fromLatLngToPixel(mouseLatLng, zoom);
   var routePixels_ = this.routePixels_;
   return this.getClosestPointOnLines_(mousePx, routePixels_);
 };
+
 
 /**
  * Finds distance along route to point of nearest test point.
@@ -164,7 +166,7 @@ SnapToRoute.prototype.getDistToLine_ = function (line, to) {
  * @private
  */
 SnapToRoute.prototype.getClosestPointOnLines_ = function (pXy, aXys) {
-  var minDist;       
+  var minDist; 
   var to;
   var from;
   var x;
