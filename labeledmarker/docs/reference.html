@@ -2,25 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>LabeledMarker v1.1 Reference</title>
+    <title>LabeledMarker v1.3.1 Reference</title>
     <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
     <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
   </head>
   <body>
     <h1>LabeledMarker</h1>
     <p>
-This library extends the Maps API's standard <code>GMarker</code>
-    class with the ability to support markers with textual labels.  Please
-    see articles here:
-<ul>
- <li><a href="http://googlemapsbook.com/2007/01/22/extending-gmarker/">
-     http://googlemapsbook.com/2007/01/22/extending-gmarker/</a></li>
- <li><a href="http://googlemapsbook.com/2007/03/06/clickable-labeledmarker/">
-     http://googlemapsbook.com/2007/03/06/clickable-labeledmarker/</a></li>
-</ul></p>
+<p>This library extends the Maps API's standard GMarker class
+        with the ability to support markers with textual labels. Please
+        see articles here:</p>
+    <ul>
+      <li>http://googlemapsbook.com/2007/01/22/extending-gmarker/</li>
+      <li>http://googlemapsbook.com/2007/03/06/clickable-labeledmarker/</li>
+    </ul></p>
+    <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
     
       <h2><a name="LabeledMarker"></a>class LabeledMarker</h2>
-      <p>This class adds the ability to support markers with textual labels.  This class extends <code>GMarker</code>.</p>
+      <p></p>
       
         <h3>Constructor</h3>
         <table summary="class LabeledMarker - Constructor" width="90%">
@@ -33,12 +32,11 @@ This library extends the Maps API's standard <code>GMarker</code>
             </tr>
             
               <tr class="odd">
-                <td><code>LabeledMarker(<span class="type" title="type:  GLatLng">latlng</span>, <span class="type" title="type:  GMarkerOptions">opt_opts?</span>)</code></td>
+                <td><code>LabeledMarker(<span class="type">latlng:GLatLng</span>, <span class="type">opt_opts?:LabeledMarkerOptions</span>)</code></td>
                 
-                <td>Creates a marker at point with options specified in
-    <code><a href="reference.html#LabeledMarkerOptions">LabeledMarkerOptions</a></code> (extension of <code>GMarkerOptions</code>).  By
-    default markers are clickable & have the default icon
-    <code>G_DEFAULT_ICON</code>.</td>
+                <td>Creates a marker with options specified in <code><a href="reference.html#LabeledMarkerOptions">LabeledMarkerOptions</a></code>
+    (extension of <code>GMarkerOptions</code>). Creates a div for the
+    label and then calls the <code>GMarker</code> constructor.</td>
               </tr>
             
           </tbody>
@@ -59,6 +57,19 @@ This library extends the Maps API's standard <code>GMarker</code>
             </tr>
             
               <tr class="odd">
+                <td><code>copy()</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Return a copy of this overlay, for the parent <code>GMap2</code> to
+    duplicate itself in full. This is part of the <code>GOverlay</code>
+    interface and is used, for example, to copy everything in the main
+    view into a mini-map.</td>
+              </tr>
+            
+              <tr class="even">
                 <td><code>getLabelVisibility()</code></td>
                 
                   
@@ -68,6 +79,18 @@ This library extends the Maps API's standard <code>GMarker</code>
                 <td>Returns whether label visibility is set on.</td>
               </tr>
             
+              <tr class="odd">
+                <td><code>hide()</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Hides the marker and the label if they are currently visible. Note that
+    this function triggers the <code>GMarker.visibilitychanged</code>
+    event in case the marker is currently visible.</td>
+              </tr>
+            
               <tr class="even">
                 <td><code>hideLabel()</code></td>
                 
@@ -75,18 +98,85 @@ This library extends the Maps API's standard <code>GMarker</code>
                     <td><code>None</code></td>
                   
                 
-                <td>Hides the label of the marker.</td>
+                <td>Hides the label of the marker. Note that this does not persist after a
+    marker hide/show.</td>
               </tr>
             
               <tr class="odd">
-                <td><code>setLabelVisibility(<span class="type" title="type:  Boolean">visibility</span>)</code></td>
+                <td><code>initialize(<span class="type">map:GMap2</span>)</code></td>
                 
                   
                     <td><code>None</code></td>
                   
                 
-                <td>Sets the visibility of the label, which will be respected during show/hides.
-If marker is visible when set, it will show or hide label appropriately.</td>
+                <td>Is called by <code>GMap2</code>'s <code>addOverlay()</code> method. Adds
+    the text div to the relevant parent div.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>redraw(<span class="type">force:Boolean</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Calls the redraw() handler in <code>GMarker</code> and our
+    <code>redrawLabel_()</code> function.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>remove()</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Remove the text div from the map pane, destroy event passthrus, and calls
+    the default <code>remove()</code> handler in <code>GMarker</code>.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>setLabelText(<span class="type">text:String</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Sets label text/html for the marker.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>setLabelVisibility(<span class="type">visibility:Boolean</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Sets the visibility of the label, which will be respected during
+    show/hides. If marker is visible when set, it will show or hide label
+    appropriately.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>setLatLng(<span class="type">latlng:GLatLng</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Repositions label and marker.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>show()</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Shows the marker and shows the label if it wasn't hidden. Note that this
+    function triggers the <code>GMarker.visibilitychanged</code> event in
+    case the marker is currently hidden.</td>
               </tr>
             
               <tr class="even">
@@ -96,7 +186,8 @@ If marker is visible when set, it will show or hide label appropriately.</td>
                     <td><code>None</code></td>
                   
                 
-                <td>Shows the label of the marker.</td>
+                <td>Shows the label of the marker. Note that this does not persist after a
+    marker hide/show.</td>
               </tr>
             
           </tbody>
@@ -104,9 +195,10 @@ If marker is visible when set, it will show or hide label appropriately.</td>
       
     
       <h2><a name="LabeledMarkerOptions"></a>class LabeledMarkerOptions</h2>
-      <p>Instances of this class are used in the <code>opt_opts</code> argument to
-    the constructor of the <code><a href="reference.html#LabeledMarker">LabeledMarker</a></code> class.   At this time, the
-    draggable property is not supported.  This class extends <code>GMarkerOptions</code>.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
+      <p>This class extends <code>GMarkerOptions</code>. Instances of this
+    class are used in the <code>opt_opts</code> argument to the
+    constructor of the <code><a href="reference.html#LabeledMarker">LabeledMarker</a></code> class. At this time the
+    <code>draggable</code> property is not supported.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
       
         <h3>Properties</h3>
         <table summary="class LabeledMarkerOptions - Properties" width="90%">
@@ -129,8 +221,8 @@ If marker is visible when set, it will show or hide label appropriately.</td>
                     <td><code>String</code></td>
                   
                 
-                <td>Class to use for
-    the overlay div.  The default value is <code>"LabeledMarker_markerLabel"</code>.</td>
+                <td>Class to use for the overlay div
+    (default "LabeledMarker_markerLabel").</td>
               </tr>
             
               <tr class="even">
@@ -140,8 +232,9 @@ If marker is visible when set, it will show or hide label appropriately.</td>
                     <td><code>GSize</code></td>
                   
                 
-                <td>The x- and y-distance between the marker's
-    latlng and the upper-left corner of the text div.</td>
+                <td>Label offset, the x- and y-distance
+    between the marker's latlng and the upper-left corner of the text div
+    (default (0,0)).</td>
               </tr>
             
               <tr class="odd">
@@ -151,7 +244,8 @@ If marker is visible when set, it will show or hide label appropriately.</td>
                     <td><code>String</code></td>
                   
                 
-                <td>Text to place in the overlay div.</td>
+                <td>Label text/html to place in the overlay div
+    (defaults to empty string).</td>
               </tr>
             
           </tbody>
