@@ -1,10 +1,10 @@
 /**
  * @name LabeledMarker
- * @version 1.3.1
+ * @version 1.3
  * @author Mike Purvis (http://uwmike.com)
  * @copyright (c) 2007 Mike Purvis (http://uwmike.com)
  * @fileoverview
- *     <p>This library extends the Maps API's standard GMarker class
+ *     <p>This library extends the Google Maps API's standard GMarker class
  *         with the ability to support markers with textual labels. Please
  *         see articles here:</p>
  *     <ul>
@@ -28,23 +28,40 @@
  */
 
 /*
- * v1.3.1 Sergey Ushakov 30-Nov-2008
- * - new API method setLabelText() proposed by lemnar, see
- *   http://code.google.com/p/gmaps-utility-library-dev/issues/detail?id=19 ;
- * - change label visibility control from 'visibility'-based to
- *   'display'-based as per lemnar's proposal, see
- *   http://code.google.com/p/gmaps-utility-library-dev/issues/detail?id=35 ;
- * - minor changes to jsdoc comments;
+ * 04-Dec-2008
+ * - Sebastian (Nekromanter) - fix to mouse events handling in the label
+ *   area:
+ *   http://code.google.com/p/gmaps-utility-library-dev/issues/detail?id=73 ;
+ * - Sergey Ushakov - showLabel()/hideLabel() methods removed in favor of
+ *   setLabelVisibility():
+ *   http://groups.google.com/group/google-maps-utility-library/browse_thread/thread/2099a45b76dc6dbe/166219d409a6d0f2?hl=en#166219d409a6d0f2 ;
+ * - Sergey Ushakov - copy() is updated to accommodate new API features;
+ * - Sergey Ushakov - some more jsdoc clarifications;
  *
- * v1.3 Sergey Ushakov 23-Nov-2008
- * - allow setting visibility before .initialize()/.addOverlay();
- * - provide consistent label visibility control aligned with visibility of
- *   the marker itself;
- * - fix the issue that the marker is always added to a map in visible state
- *   regardless of any visibility settings applied before;
- * - fix to the event passing mechanism by Nianwei Liu
- *   ( http://groups.google.com/group/google-maps-utility-library/browse_thread/thread/2099a45b76dc6dbe?hl=en&q=#55d813379dde8c66 )
- *   and other minor syntax fixes to make jslint more happy :)
+ * 30-Nov-2008
+ * - Randy Becker (lemnar) - new API method setLabelText() :
+ *   http://code.google.com/p/gmaps-utility-library-dev/issues/detail?id=19 ;
+ * - Randy Becker (lemnar) - change label visibility control from
+ *   'visibility'-based to 'display'-based:
+ *   http://code.google.com/p/gmaps-utility-library-dev/issues/detail?id=35 ;
+ * - Sergey Ushakov - minor changes to jsdoc comments;
+ *
+ * 23-Nov-2008
+ * - Sergey Ushakov - allow setting visibility before
+ *   .initialize()/.addOverlay(); provide consistent label visibility control
+ *   aligned with visibility of the marker itself; fix the issue that the
+ *   marker is always added to a map in visible state regardless of any
+ *   visibility settings applied before:
+ *   http://groups.google.com/group/google-maps-utility-library/browse_thread/thread/2099a45b76dc6dbe/da6cec86f0aab106?hl=en#da6cec86f0aab106
+ * - Nianwei Liu - fix to the event passing mechanism:
+ *   http://groups.google.com/group/google-maps-utility-library/browse_thread/thread/2099a45b76dc6dbe?hl=en&q=#55d813379dde8c66
+ *
+ * 15-Sep-2008
+ * - Pamela Fox - jslint style fixes, repacking, and docs gen
+ *
+ * 02-Sep-2008
+ * - Pamela Fox - Fix for Issue 54 - was unnecessarily calling redrawLabel_
+ *   in setLatLng, its taken care of by the implicit call to redraw
  */
 
 
@@ -83,10 +100,10 @@ function LabeledMarker(latlng, opt_opts) {
 
   this.clickable_ = opt_opts.clickable || true;
   this.title_ = opt_opts.title || "";
-  this.labelVisibility_  = true;
-  // "ownVisibility_ is a workaround for the issue with GMarker that it
+  this.labelVisibility_ = true;
+  // ownVisibility_ is a workaround for the issue with GMarker that it
   // (unlike other GOverlay subclasses) is always visible after addOverlay(),
-  // regardless of any visibility settings applied before it; this attribute
+  // regardless of any visibility settings applied before it; this property
   // may eventually go away, when GMarker behavior allows...
   this.ownVisibility_ = true;
 
@@ -98,8 +115,8 @@ function LabeledMarker(latlng, opt_opts) {
   this.div_.title = this.title_;
 
   if (opt_opts.draggable) {
-  	// This version of LabeledMarker doesn't support dragging.
-  	opt_opts.draggable = false;
+    // This version of LabeledMarker doesn't support dragging.
+    opt_opts.draggable = false;
   }
 
   GMarker.apply(this, arguments);
@@ -112,8 +129,9 @@ function LabeledMarker(latlng, opt_opts) {
 LabeledMarker.prototype = new GMarker(new GLatLng(0, 0));
 
 /**
- * Is called by <code>GMap2</code>'s <code>addOverlay()</code> method. Adds
- *     the text div to the relevant parent div.
+ * A <code>GOverlay</code> method. Is called by <code>GMap2</code>'s
+ *     <code>addOverlay()</code> method. Adds the text div to the relevant
+ *     parent div.
  * @param {GMap2} map The map to add this <code>LabeledMarker</code> to.
  */
 LabeledMarker.prototype.initialize = function (map) {
@@ -130,20 +148,23 @@ LabeledMarker.prototype.initialize = function (map) {
 
   if (this.clickable_) {
     // Pass through events fired on the text div to the marker.
-    var eventPassthrus = ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseover', 'mouseout'];
+    var eventPassthrus = ['click', 'dblclick', 'mousedown', 'mouseup',
+                          'mouseover', 'mouseout'];
     for (var i = 0; i < eventPassthrus.length; i++) {
       var name = eventPassthrus[i];
-      GEvent.addDomListener(this.div_, name, GEvent.callback(GEvent, GEvent.trigger, this, name));
+      GEvent.addDomListener(this.div_, name,
+                            GEvent.callback(GEvent, GEvent.trigger,
+                                            this, name, this.getLatLng()));
     }
   }
 };
 
 
 /**
- * Calls the redraw() handler in <code>GMarker</code> and our
- *     <code>redrawLabel_()</code> function.
+ * A <code>GOverlay</code> method. Calls the redraw() handler in
+ *     <code>GMarker</code> and our <code>redrawLabel_()</code> function.
  * @param {Boolean} force Will be true when pixel coordinates need to be
- *   recomputed.
+ *     recomputed.
  */
 LabeledMarker.prototype.redraw = function (force) {
   GMarker.prototype.redraw.apply(this, arguments);
@@ -169,8 +190,9 @@ LabeledMarker.prototype.redrawLabel_ = function () {
 
 
 /**
- * Remove the text div from the map pane, destroy event passthrus, and calls
- *     the default <code>remove()</code> handler in <code>GMarker</code>.
+ * A <code>GOverlay</code> method. Remove the text div from the map pane,
+ *     destroy event passthrus, and calls the default <code>remove()</code>
+ *     handler in <code>GMarker</code>.
  */
 LabeledMarker.prototype.remove = function () {
   GEvent.clearInstanceListeners(this.div_);
@@ -186,20 +208,24 @@ LabeledMarker.prototype.remove = function () {
 
 
 /**
- * Return a copy of this overlay, for the parent <code>GMap2</code> to
- *     duplicate itself in full. This is part of the <code>GOverlay</code>
- *     interface and is used, for example, to copy everything in the main
- *     view into a mini-map.
+ * A <code>GOverlay</code> method. Return a copy of this overlay, for the
+ *     parent <code>GMap2</code> to duplicate itself in full. This is used,
+ *     for example, to copy everything in the main view into a mini-map.
  */
 LabeledMarker.prototype.copy = function () {
-  return new LabeledMarker(this.latlng_, this.opts_);
+  var newMarker = new LabeledMarker(this.latlng_, this.opts_);
+  // copy visibility properties as they are not controlled by opts_
+  newMarker.labelVisibility_ = this.labelVisibility_;
+  newMarker.ownVisibility_ = this.ownVisibility_;
+  return newMarker;
 };
 
 
 /**
- * Shows the marker and shows the label if it wasn't hidden. Note that this
- *     function triggers the <code>GMarker.visibilitychanged</code> event in
- *     case the marker is currently hidden.
+ * A <code>GMarker</code> method. Shows the marker and shows the label if it
+ *     wasn't hidden. Note that this function triggers the
+ *     <code>GMarker.visibilitychanged</code> event in case the marker is
+ *     currently hidden.
  */
 LabeledMarker.prototype.show = function () {
   GMarker.prototype.show.apply(this, arguments);
@@ -209,9 +235,10 @@ LabeledMarker.prototype.show = function () {
 
 
 /**
- * Hides the marker and the label if they are currently visible. Note that
- *     this function triggers the <code>GMarker.visibilitychanged</code>
- *     event in case the marker is currently visible.
+ * A <code>GMarker</code> method. Hides the marker and the label if they are
+ *     currently visible. Note that this function triggers the
+ *     <code>GMarker.visibilitychanged</code> event in case the marker is
+ *     currently visible.
  */
 LabeledMarker.prototype.hide = function () {
   GMarker.prototype.hide.apply(this, arguments);
@@ -221,14 +248,13 @@ LabeledMarker.prototype.hide = function () {
 
 
 /**
- * Repositions label and marker.
+ * A <code>GMarker</code> method. Repositions marker and label.
  *
  * @param {GLatLng} latlng New marker position
  */
 LabeledMarker.prototype.setLatLng = function (latlng) {
   this.latlng_ = latlng;
   GMarker.prototype.setLatLng.apply(this, arguments);
-  this.redrawLabel_();
 };
 
 
@@ -259,30 +285,10 @@ LabeledMarker.prototype.getLabelVisibility = function () {
  */
 LabeledMarker.prototype.applyLabelVisibility_ = function () {
   if ((!this.isHidden()) && this.labelVisibility_) {
-    this.showLabel();
+    this.div_.style.display = 'block';
   } else {
-    this.hideLabel();
+    this.div_.style.display = 'none';
   }
-};
-
-
-/**
- * Hides the label of the marker. Note that this does not persist after a
- *     marker hide/show.
- */
-LabeledMarker.prototype.hideLabel = function () {
-//  this.div_.style.visibility = 'hidden';
-  this.div_.style.display = 'none';
-};
-
-
-/**
- * Shows the label of the marker. Note that this does not persist after a
- *     marker hide/show.
- */
-LabeledMarker.prototype.showLabel = function () {
-//  this.div_.style.visibility = 'visible';
-  this.div_.style.display = 'block';
 };
 
 
@@ -291,6 +297,8 @@ LabeledMarker.prototype.showLabel = function () {
  * @param {String} text New text/html for the label
  */
 LabeledMarker.prototype.setLabelText = function (text) {
-	this.labelText_ = text;
-	this.div_.innerHTML = text;
+  this.labelText_ = text;
+  this.div_.innerHTML = text;
+  // save new label text in opts_, it may be required for copy()
+  this.opts_.labelText = text;
 };
