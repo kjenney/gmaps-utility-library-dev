@@ -326,7 +326,7 @@
    * @param {Object} o
    */
   function isArray(o) {
-    return o && o.length && o.splice;
+    return o && o.splice;
   }
   
   /**
@@ -1335,6 +1335,36 @@
   ArcGISLayer.prototype.hasLoaded = function () {
     return this.loaded_;
   };
+   
+  /**
+   * Returns all field names
+   * @return {String[]}
+   */
+  ArcGISLayer.prototype.getFieldNames = function () {
+    var ret = [];
+    if (this.hasLoaded()) {
+      for (var i = 0; i < this.fields.length; i++) {
+        ret.push(this.fields[i].name);
+      }
+    }
+    return ret;
+  };
+  /**
+   * Whether the layer is viewable at given scale
+   * @param {Number} scale
+   * @return {Boolean}
+   */
+  ArcGISLayer.prototype.isInScale = function (scale) {
+    // note if the layer's extra info is not loaded, it will return true
+    if (this.maxScale && this.maxScale > scale) {
+      return false;
+    }
+    if (this.minScale && this.minScale < scale) {
+      return false;
+    }
+    return true;
+  };
+ 
   /**
    * @name ArcGISQueryParameters
    * @class This class represent the parameters needed in an query operation for a {@link ArcGISLayer}.
@@ -3514,12 +3544,14 @@
    *  if it contains a name-value pair "attributes" property, it will be attached to the result overlays.
    * <li><code>opt_sr</code>: optional {@link ArcGISSpatialReference}. Can be object literal. 
    * <li><code>opt_agsStyle</code> {@link ArcGISStyleOptions}. default is {@link ArcGISConfig}.style.
+   * <li><code>opt_displayName</code> optional field name used for title of feature. 
    * @param {Feature} feature
    * @param {ArcGISSpatialReference} opt_sr
    * @param {StyleOptions} opt_agsStyle
+   * @param {String} opt_displayName
    * @return {GOverlay[]} 
    */
-  ArcGISUtil.fromFeatureToOverlays  =  function (feature, opt_sr, opt_agsStyle) {
+  ArcGISUtil.fromFeatureToOverlays  =  function (feature, opt_sr, opt_agsStyle, opt_displayName) {
     var ovs  =  [];
     var sr  =  null;
     var ov;
@@ -3537,15 +3569,27 @@
       return ovs;
     }
     var style  =  opt_agsStyle || ArcGISConfig.style;
-    var i, ic, j, jc, parts, part, lnglat, glatlngs;
-    
+    var x, i, ic, j, jc, parts, part, lnglat, glatlngs;
+    var title = '';
+    if (opt_displayName) {
+      title = feature.attributes[opt_displayName];
+    }
+    var html = '<table>';
+    for (x in feature.attributes) {
+      if (feature.attributes.hasOwnProperty(x)) {
+        html += '<tr><td class="ags-fieldname">' + x + '</td><td class="ags-fieldvalue">' + feature.attributes[x] + '</td></tr>';
+      } 
+    }
+    html += '</table>';
     if (geom.x) {
       //point
       lnglat  =  sr.reverse([geom.x, geom.y]);
       ov  =  new GMarker(new GLatLng(lnglat[1], lnglat[0]), {
-        icon: style.icon
+        icon: style.icon,
+        title: title
       });
       ov.attributes  =  feature.attributes;
+      ov.html = html;
       ovs.push(ov);
     } else {
       //mulpt, line and poly
@@ -3578,6 +3622,7 @@
           }
         }
         ov.attributes   =  feature.attributes;
+        ov.html = html;
         ovs.push(ov);
       }
     }

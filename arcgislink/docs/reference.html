@@ -1632,6 +1632,16 @@
             </tr>
             
               <tr class="odd">
+                <td><code>getFieldNames()</code></td>
+                
+                  
+                    <td><code>String[]</code></td>
+                  
+                
+                <td>Returns all field names</td>
+              </tr>
+            
+              <tr class="even">
                 <td><code>hasLoaded()</code></td>
                 
                   
@@ -1639,6 +1649,16 @@
                   
                 
                 <td>If the extra layer info is loaded</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>isInScale(<span class="type">scale:Number</span>)</code></td>
+                
+                  
+                    <td><code>Boolean</code></td>
+                  
+                
+                <td>Whether the layer is viewable at given scale</td>
               </tr>
             
               <tr class="even">
@@ -3972,13 +3992,13 @@ A list of utilities ((<code>google.maputils.arcgis.Util</code>) that performs th
               </tr>
             
               <tr class="odd">
-                <td><code>fromFeatureToOverlays(<span class="type">feature:Feature</span>, <span class="type">opt_sr:ArcGISSpatialReference</span>, <span class="type">opt_agsStyle:StyleOptions</span>)</code></td>
+                <td><code>fromFeatureToOverlays(<span class="type">feature:Feature</span>, <span class="type">opt_sr:ArcGISSpatialReference</span>, <span class="type">opt_agsStyle:StyleOptions</span>, <span class="type">opt_displayName:String</span>)</code></td>
                 
                   
                     <td><code>GOverlay[]</code></td>
                   
                 
-                <td>Convert a <code><a href="reference.html#ArcGISFeature">ArcGISFeature</a></code> or <code><a href="reference.html#ArcGISIdentifyResult">ArcGISIdentifyResult</a></code> or <code><a href="reference.html#ArcGISFindResult">ArcGISFindResult</a></code> to core GMaps API overlays such as  <code>ArcGISGMarker</code>, <code>ArcGISGPolyline</code>, or <code>ArcGISGPolygon</code>s.Note ArcGIS Geometry may have multiple parts, but the coresponding GOverlay does not  support multi-parts, so the result is an array.<ul><li><code>feature</code>: an object returned by ArcGIS Server with at least <code>geometry</code> property of type <code><a href="reference.html#ArcGISGeometry">ArcGISGeometry</a></code>.  if it contains a name-value pair "attributes" property, it will be attached to the result overlays.<li><code>opt_sr</code>: optional <code><a href="reference.html#ArcGISSpatialReference">ArcGISSpatialReference</a></code>. Can be object literal. <li><code>opt_agsStyle</code> <code><a href="reference.html#ArcGISStyleOptions">ArcGISStyleOptions</a></code>. default is <code><a href="reference.html#ArcGISConfig">ArcGISConfig</a></code>.style.</td>
+                <td>Convert a <code><a href="reference.html#ArcGISFeature">ArcGISFeature</a></code> or <code><a href="reference.html#ArcGISIdentifyResult">ArcGISIdentifyResult</a></code> or <code><a href="reference.html#ArcGISFindResult">ArcGISFindResult</a></code> to core GMaps API overlays such as  <code>ArcGISGMarker</code>, <code>ArcGISGPolyline</code>, or <code>ArcGISGPolygon</code>s.Note ArcGIS Geometry may have multiple parts, but the coresponding GOverlay does not  support multi-parts, so the result is an array.<ul><li><code>feature</code>: an object returned by ArcGIS Server with at least <code>geometry</code> property of type <code><a href="reference.html#ArcGISGeometry">ArcGISGeometry</a></code>.  if it contains a name-value pair "attributes" property, it will be attached to the result overlays.<li><code>opt_sr</code>: optional <code><a href="reference.html#ArcGISSpatialReference">ArcGISSpatialReference</a></code>. Can be object literal. <li><code>opt_agsStyle</code> <code><a href="reference.html#ArcGISStyleOptions">ArcGISStyleOptions</a></code>. default is <code><a href="reference.html#ArcGISConfig">ArcGISConfig</a></code>.style.<li><code>opt_displayName</code> optional field name used for title of feature.</td>
               </tr>
             
               <tr class="even">
