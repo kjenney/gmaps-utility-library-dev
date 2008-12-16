@@ -4,6 +4,9 @@
  * @author Masashi, Bjorn Brala
  * @fileoverview Creates a MapControl like used in maps.google.com (new december 2008) without the streetview control.
  */
+ 
+ 
+/*global GKeyboardHandler, GDraggableObject*/
 
 /**
  * @desc Custom Map control, for placement on map.
@@ -387,9 +390,8 @@ ExtLargeMapControl.prototype._eventSlideBar = function (e) {
 **/
 ExtLargeMapControl.prototype._getDomPosition = function (that) {
   var targetEle = that;
-  var pos = new function () { 
-    this.x = 0; this.y = 0; 
-  };
+  var pos = { x : 0, y : 0 };
+  
   while (targetEle) {
     pos.x += targetEle.offsetLeft; 
     pos.y += targetEle.offsetTop; 
