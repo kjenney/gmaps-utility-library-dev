@@ -1,0 +1,24 @@
+v 1.3 :
+- latlng_ property and setLatLng() method removed as unnecessary if using
+  getLatLng();
+- jsdoc comments updated and amended in order to prevent technical details
+  from penetration into API reference;
+- fix to mouse events handling in the label area:
+  http://code.google.com/p/gmaps-utility-library-dev/issues/detail?id=73 ;
+- showLabel()/hideLabel() methods removed in favor of setLabelVisibility():
+  http://groups.google.com/group/google-maps-utility-library/browse_thread/thread/2099a45b76dc6dbe/166219d409a6d0f2?hl=en#166219d409a6d0f2 ;
+- copy() is updated to accommodate new API features;
+- new API method setLabelText() :
+  http://code.google.com/p/gmaps-utility-library-dev/issues/detail?id=19 ;
+- label visibility control changed from 'visibility'-based to 'display'-based:
+  http://code.google.com/p/gmaps-utility-library-dev/issues/detail?id=35 ;
+- allow setting visibility before .initialize()/.addOverlay(); provide
+  consistent label visibility control aligned with visibility of the marker
+  itself; fix the issue that the marker is always added to a map in visible
+  state regardless of any visibility settings applied before:
+  http://groups.google.com/group/google-maps-utility-library/browse_thread/thread/2099a45b76dc6dbe/da6cec86f0aab106?hl=en#da6cec86f0aab106
+- fix to the event passing mechanism:
+  http://groups.google.com/group/google-maps-utility-library/browse_thread/thread/2099a45b76dc6dbe?hl=en&q=#55d813379dde8c66
+- code style fixed to accommodate jslint;
+- fix for issue 54 - was unnecessarily calling redrawLabel_ in setLatLng,
+  its taken care of by the implicit call to redraw
