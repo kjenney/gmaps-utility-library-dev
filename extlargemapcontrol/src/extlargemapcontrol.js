@@ -2,10 +2,13 @@
  * @name ExtLargeMapControl
  * @version 1.0
  * @author Masashi, Bjorn Brala
- * @fileoverview Creates a control with buttons to pan in four directions, and zoom in and zoom out, and a zoom slider. The UI is based on the LargeMapControl from Google Maps (circa December 2008).
+ * @fileoverview Creates a control with buttons to pan in four directions,
+ * and zoom in and zoom out, and a zoom slider. The UI is based on the 
+ * LargeMapControl from Google Maps (circa December 2008), but it does not
+ * have any integration with Street View.
  */
- 
- 
+
+
 /*global GKeyboardHandler, GDraggableObject*/
 
 /**
@@ -20,39 +23,43 @@ function ExtLargeMapControl() {
 
 
 /**
-* @private
-**/
+ * @private
+ */
 ExtLargeMapControl.prototype = new GControl();
 
+
 /**
-* @private
-* @type GMap2
-**/
+ * @private
+ * @type GMap2
+ */
 ExtLargeMapControl.prototype._map = null;
 
+
 /**
-* @private
-* @type Element
-**/
+ * @private
+ * @type Element
+ */
 ExtLargeMapControl.prototype._container = null;
 
-/**
-* @private
-* @type Element
-**/
-ExtLargeMapControl.prototype._slider = null;
 
 /**
-* @private
-* @type GKeyboardHandler 
-**/
+ * @private
+ * @type Element
+ */
+ExtLargeMapControl.prototype._slider = null;
+
+
+/**
+ * @private
+ * @type GKeyboardHandler 
+ */
 ExtLargeMapControl.prototype._keyboardhandler = null;
 
 
 /**
-* @desc Initilialize the map control
-* @private
-**/
+ * @desc Initialize the map control
+ * @private
+ */
 ExtLargeMapControl.prototype.initialize = function (map) {
   ExtLargeMapControl.prototype._map = map;
 
@@ -65,45 +72,34 @@ ExtLargeMapControl.prototype.initialize = function (map) {
   this._is_gecko = (agt.indexOf('gecko') !== -1);
   this._is_opera = (agt.indexOf("opera") !== -1);
 
-  
-
-
   //common image
   var commonImg = new Image();
   commonImg.src = this.imgSrc;
-
 
   // calculation of controller size
   var currentMapType = map.getCurrentMapType();
   var minZoom = parseInt(currentMapType.getMinimumResolution(), 10);
   var maxZoom = 0;
-  var maptypes = map.getMapTypes();
-  
+  var maptypes = map.getMapTypes();  
   for (var i = 0; i < maptypes.length; i++) {
     if (maptypes[i].getMaximumResolution() > maxZoom) {
       maxZoom = maptypes[i].getMaximumResolution();
     }
   }
-
   ExtLargeMapControl.prototype._maxZoom = parseInt(maxZoom, 10);
   ExtLargeMapControl.prototype._step = this.sliderStep;
   var ctrlHeight = (86 + 5) + (maxZoom - minZoom + 1) * this.sliderStep + 5;
 
-
   // create container
-
   var container = document.createElement("div");
-  
   container.style.width = "59px";
   container.style.height = (ctrlHeight + this.sliderStep + 2) + "px";
   container.style.overflow = "hidden";
   container.style.padding = "0";
   container.style.MozUserSelect = "none";
   container.style.textAlign = "left";
-
   _handleList.container = container;
   ExtLargeMapControl.prototype._container = container;
-
 
   //image load
   var imgContainer = document.createElement("div");
@@ -137,14 +133,12 @@ ExtLargeMapControl.prototype.initialize = function (map) {
   topBtn.title = "up";
   container.appendChild(topBtn); 
 
-
   //left arrow button
   var leftBtn = topBtn.cloneNode(true);
   leftBtn.style.left = "0px";
   leftBtn.style.top = "20px";
   leftBtn.title = "left";
   container.appendChild(leftBtn); 
-
 
   //right arrow button
   var rightBtn = topBtn.cloneNode(true);
@@ -167,13 +161,11 @@ ExtLargeMapControl.prototype.initialize = function (map) {
   homeBtn.title = "home position";
   container.appendChild(homeBtn); 
 
-
   _handleList.topBtn = topBtn;
   _handleList.leftBtn = leftBtn;
   _handleList.rightBtn = rightBtn;
   _handleList.bottomBtn = bottomBtn;
   _handleList.homeBtn = homeBtn;
-
 
   // zoom slider Button
   var zoomSlideBarContainer = document.createElement("div");
@@ -270,7 +262,6 @@ ExtLargeMapControl.prototype.initialize = function (map) {
   container.appendChild(zoomOutBtn); 
   _handleList.zoomOutBtn = zoomOutBtn;
 
-
   //zoomIn button
   var zoomInBtn = document.createElement("div");
   zoomInBtn.style.position = "absolute";
@@ -284,24 +275,32 @@ ExtLargeMapControl.prototype.initialize = function (map) {
   container.appendChild(zoomInBtn); 
   _handleList.zoomInBtn = zoomInBtn;
 
-
-
   // events
-  GEvent.addDomListener(_handleList.topBtn, "click", GEvent.callback(this, this._eventTop));
-  GEvent.addDomListener(_handleList.leftBtn, "click", GEvent.callback(this, this._eventLeft));
-  GEvent.addDomListener(_handleList.rightBtn, "click", GEvent.callback(this, this._eventRight));
-  GEvent.addDomListener(_handleList.bottomBtn, "click", GEvent.callback(this, this._eventBottom));
-  GEvent.addDomListener(_handleList.homeBtn, "click", GEvent.callback(this, this._eventHome));
-  GEvent.addDomListener(_handleList.zoomOutBtn, "click", GEvent.callback(this, this._eventZoomOut));
-  GEvent.addDomListener(_handleList.zoomInBtn, "click", GEvent.callback(this, this._eventZoomIn));
-  GEvent.addDomListener(_handleList.slideBar, "click", GEvent.callback(this, this._eventSlideBar));
-  GEvent.addListener(map, "zoomend", GEvent.callback(this, this._eventZoomEnd));
+  GEvent.addDomListener(_handleList.topBtn, "click", 
+      GEvent.callback(this, this._eventTop));
+  GEvent.addDomListener(_handleList.leftBtn, "click", 
+      GEvent.callback(this, this._eventLeft));
+  GEvent.addDomListener(_handleList.rightBtn, "click", 
+      GEvent.callback(this, this._eventRight));
+  GEvent.addDomListener(_handleList.bottomBtn, "click", 
+      GEvent.callback(this, this._eventBottom));
+  GEvent.addDomListener(_handleList.homeBtn, "click", 
+      GEvent.callback(this, this._eventHome));
+  GEvent.addDomListener(_handleList.zoomOutBtn, "click", 
+      GEvent.callback(this, this._eventZoomOut));
+  GEvent.addDomListener(_handleList.zoomInBtn, "click", 
+      GEvent.callback(this, this._eventZoomIn));
+  GEvent.addDomListener(_handleList.slideBar, "click", 
+      GEvent.callback(this, this._eventSlideBar));
+  GEvent.addListener(map, "zoomend", 
+      GEvent.callback(this, this._eventZoomEnd));
 
   var drgOpt = {
     container : _handleList.slideBar
   };
   var drgCtrl = new GDraggableObject(_handleList.slideBarContainer, drgOpt);
-  GEvent.addDomListener(drgCtrl, "dragend", GEvent.callback(this, this._eventSlideDragEnd));
+  GEvent.addDomListener(drgCtrl, "dragend", 
+      GEvent.callback(this, this._eventSlideDragEnd));
   ExtLargeMapControl.prototype._slider =  drgCtrl;
 
   //set current slider position
@@ -314,72 +313,71 @@ ExtLargeMapControl.prototype.initialize = function (map) {
 
 
 /**
-* @private
-**/
+ * @private
+ */
 ExtLargeMapControl.prototype._eventTop = function () {
   ExtLargeMapControl.prototype._map.panDirection(0, 1);
 };
 
+
 /**
-* @private
-**/
+ * @private
+ */
 ExtLargeMapControl.prototype._eventLeft = function () {
   ExtLargeMapControl.prototype._map.panDirection(1, 0);
 };
 
 /**
-* @private
-**/
+ * @private
+ */
 ExtLargeMapControl.prototype._eventRight = function () {
   ExtLargeMapControl.prototype._map.panDirection(-1, 0);
 };
 
 /**
-* @private
-**/
+ * @private
+ */
 ExtLargeMapControl.prototype._eventBottom = function () {
   ExtLargeMapControl.prototype._map.panDirection(0, -1);
 };
 
 /**
-* @private
-**/
+ * @private
+ */
 ExtLargeMapControl.prototype._eventZoomOut = function () {
   ExtLargeMapControl.prototype._map.zoomOut();
 };
 
 /**
-* @private
-**/
+ * @private
+ */
 ExtLargeMapControl.prototype._eventZoomIn = function () {
   ExtLargeMapControl.prototype._map.zoomIn();
 };
 
 
 /**
-* @private
-**/
+ * @private
+ */
 ExtLargeMapControl.prototype._eventSlideBar = function (e) {
   var map = this._map;
-  //calculate of zoomlevel
+  //calculate zoomlevel
   var mouseY = e.clientY;
   var slideStep = this._step;
   var maxZoom = this._maxZoom;
   var container = this._container;
 
-  
   //set new zoomLevel
   var ctrlPos = this._getDomPosition(container);
   mouseY -= (ctrlPos.y + 91);
   var zoomLevel = Math.floor(maxZoom - (mouseY / slideStep));
   zoomLevel = zoomLevel < 0 ? 0 : zoomLevel;
-  map.setZoom(zoomLevel);
-  
+  map.setZoom(zoomLevel);  
 };
 
 /**
-* @private
-**/
+  * @private
+ */
 ExtLargeMapControl.prototype._getDomPosition = function (that) {
   var targetEle = that;
   var pos = { x : 0, y : 0 };
@@ -390,23 +388,28 @@ ExtLargeMapControl.prototype._getDomPosition = function (that) {
     targetEle = targetEle.offsetParent;
 
     if (targetEle && this._is_ie) {
-      pos.x += (parseInt(ExtLargeMapControl.getElementStyle(targetEle, "borderLeftWidth", "border-left-width"), 10) || 0);
-      pos.y += (parseInt(ExtLargeMapControl.getElementStyle(targetEle, "borderTopWidth", "border-top-width"), 10) || 0);
+      pos.x += (parseInt(ExtLargeMapControl.getElementStyle(targetEle, 
+          "borderLeftWidth", "border-left-width"), 10) || 0);
+      pos.y += (parseInt(ExtLargeMapControl.getElementStyle(targetEle, 
+          "borderTopWidth", "border-top-width"), 10) || 0);
     }
   }
 
   if (this._is_gecko) {
     var bd = document.getElementsByTagName("BODY")[0];
-    pos.x += 2 * (parseInt(ExtLargeMapControl.getElementStyle(bd, "borderLeftWidth", "border-left-width"), 10) || 0);
-    pos.y += 2 * (parseInt(ExtLargeMapControl.getElementStyle(bd, "borderTopWidth", "border-top-width"), 10) || 0);
+    pos.x += 2 * (parseInt(ExtLargeMapControl.getElementStyle(bd, 
+        "borderLeftWidth", "border-left-width"), 10) || 0);
+    pos.y += 2 * (parseInt(ExtLargeMapControl.getElementStyle(bd, 
+        "borderTopWidth", "border-top-width"), 10) || 0);
   }
   return pos;
 };
 
+
 /**
-* @private
-**/
-ExtLargeMapControl.getElementStyle = function (targetElm, IEStyleProp, CSSStyleProp) {
+ * @private
+ */
+ExtLargeMapControl.getElementStyle = function(targetElm, IEStyleProp, CSSStyleProp) {
   var elem = targetElm;
   if (elem.currentStyle) {
     return elem.currentStyle[IEStyleProp];
@@ -416,11 +419,12 @@ ExtLargeMapControl.getElementStyle = function (targetElm, IEStyleProp, CSSStyleP
   }
 };
 
+
 /**
-* @private
-**/
+ * @private
+ */
 ExtLargeMapControl.prototype._eventSlideDragEnd = function (e) {
-  //calculate of zoomlevel
+  //calculate zoomlevel
   var maxZoom = this._maxZoom;
   var mouseY = this._slider.top;
   var step = this._step;
@@ -431,42 +435,46 @@ ExtLargeMapControl.prototype._eventSlideDragEnd = function (e) {
   this._map.setZoom(zoomLevel);
 };
 
+
 /**
-* @private
-**/
+ * @private
+ */
 ExtLargeMapControl.prototype._eventHome = function () {
   this._map.returnToSavedPosition();
 };
 
+
 /**
-* @private
-**/
+ * @private
+ */
 ExtLargeMapControl.prototype._eventZoomEnd = function (oldZoom, newZoom) {
   var maxZoom = this._maxZoom;
   var step = this._step;
   this._slider.moveTo(new GPoint(0, (maxZoom - newZoom) * step));
 };
 
+
 /**
-* @private
-* @ignore
-**/
+ * @private
+ * @ignore
+ */
 ExtLargeMapControl.prototype.getDefaultPosition = function () {
   return new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(10, 10));
 };
 
+
 /**
-* @private
-* @ignore
-**/
+ * @private
+ * @ignore
+ */
 ExtLargeMapControl.prototype.selectable = function () {
   return false;
 };
 
 /**
-* @private
-* @ignore
-**/
+ * @private
+ * @ignore
+ */
 ExtLargeMapControl.prototype.printable = function () {
   return true;
 };
