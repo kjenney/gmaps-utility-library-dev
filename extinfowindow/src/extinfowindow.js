@@ -165,7 +165,10 @@ ExtInfoWindow.prototype.initialize = function(map) {
     thisMaxHeight = this.maxHeight_;
     thisContainer = this.container_;
     thisMaxContent = this.maxContent_;
-    
+    if(this.marker_) {
+      GEvent.trigger(this.marker_, 'extinfowindowbeforeclose'); 
+    }
+
     thisMinWidth = this.container_.style.width;
     thisMinHeight = this.container_.style.height;
     //add event handler for maximize and minimize icons
@@ -174,6 +177,10 @@ ExtInfoWindow.prototype.initialize = function(map) {
         var infoWindow = thisMap.getExtInfoWindow();
         infoWindow.container_.style.width = thisMaxWidth + 'px';
         infoWindow.ajaxRequest_(thisMaxContent);
+
+    if(this.marker_) {
+      GEvent.trigger(this.marker_, 'extinfowindowclose');
+    }
         infoWindow.isMaximized_ = true;
         infoWindow.redraw(true);
       
