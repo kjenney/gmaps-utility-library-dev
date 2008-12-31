@@ -3,6 +3,10 @@ var ExtStreetviewControl = function(opt_opts){
     this.maximizeImgSrc_ = "http://maps.google.com/mapfiles/cb/resize_toggles.png";
     this.iconSrc_ = "http://maps.google.com/mapfiles/cb/pegman.png";
     
+    if(ExtStreetviewControl.prototype.isNull(opt_opts)){
+        opt_opts = {}
+    };
+    
     this.latlng_ = opt_opts.latlng || null;
     this.ctrlSize_ = opt_opts.size || new GSize(295,210);
     this.pov_ = opt_opts.pov || {yaw:0, pitch:0, panoId:null};
