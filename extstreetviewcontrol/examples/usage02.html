@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Google Maps JavaScript API Example: ExtStreetviewControl</title>
+    <script src="http://maps.google.com/maps?file=api&v=2&key=ABQIAAAA98lY54ryNP9it66EDNJo7xTGK3r1MPnJ5e6s0Bz065WpOCHpoRQPU_yRUcFTKJyFF1fLqgYcXItTsw" type="text/javascript"></script>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q" type="text/javascript"></script>
+    <script type="text/javascript">
+    document.write('<script type="text/javascript" src="../src/extstreetviewcontrol'+(document.location.search.indexOf('packed')>-1?'_packed':'')+'.js"><'+'/script>');
+  </script>
+    <script type="text/javascript">
+
+    var extStreetviewControl = null;
+    var svTable = [];
+    svTable["Arc de triomphe de l'Etoile"] = {lat: 48.874165, lng:2.294003, pov:{yaw:118.55260681118132,pitch:-10}};
+    svTable["Parvis Notre Dame"] = {lat:48.853563, lng:2.348562, pov:{yaw:495.7697545746159, pitch:-10}};
+    function initialize() {
+      if (GBrowserIsCompatible()) {
+        var map = new GMap2(document.getElementById("map_canvas"));
+        map.setCenter(new GLatLng(48.859862, 2.292024), 17);
+        map.addControl(new GLargeMapControl());
+        map.addControl(new GMapTypeControl());
+        map.addOverlay(new GStreetviewOverlay());
+        var opts_ = {
+                        pov : {yaw:500, pitch:-10, panoId:null}
+                    };
+        extStreetviewControl = new ExtStreetviewControl(opts_);
+        map.addControl(extStreetviewControl);
+      }
+    }
+    
+    function changeLocationAndPOV(locationName){
+        var pos = new GLatLng(svTable[locationName].lat, svTable[locationName].lng);
+        extStreetviewControl.setLocationAndPOV(pos, svTable[locationName].pov);
+    }
+    </script>
+  </head>
+  <body onload="initialize()" onunload="GUnload()">
+    <div id="map_canvas" style="width: 500px; height: 500px"></div>
+    <input type="button" onclick="changeLocationAndPOV(this.value);" value="Arc de triomphe de l'Etoile"><br>
+    <input type="button" onclick="changeLocationAndPOV(this.value);" value="Parvis Notre Dame">
+  </body>
+</html>
+
