@@ -28,6 +28,8 @@
         var pegmanMarker = new MultiIconMarker(mapCenterPos, {icon: pegmanIcon, draggable:true});
         map.addOverlay(pegmanMarker);
         
+        pegmanMarker.openInfoWindow("Please drag me!");
+        
         //drag to left
         var icon = new GIcon(pegmanIcon);
         icon.image = "http://maps.google.com/mapfiles/cb/pegman.png";
@@ -41,6 +43,7 @@
         pegmanMarker.addIcon(icon, "dragRight","dragend");
         
         GEvent.addListener(pegmanMarker, "dragstart", function(){
+            pegmanMarker.closeInfoWindow();
             pegmanMarker.lng_ = pegmanMarker.getLatLng().lng();
         });
         GEvent.addListener(pegmanMarker, "drag", function(){

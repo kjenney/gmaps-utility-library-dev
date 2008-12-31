@@ -29,6 +29,7 @@ MultiIconMarker.prototype.initialize = function(map){
   GMarker.prototype.initialize.apply(this, arguments);
   MultiIconMarker.prototype.map_ = map;
   MultiIconMarker.prototype.icon_ = this.icon_;
+  MultiIconMarker.prototype.opt_opts_ = this.opt_opts_;
   
   var param = new Object();
   param.left = 0;
@@ -127,7 +128,6 @@ MultiIconMarker.prototype.setIcon = function(icon){
 };
 
 /**
- * @private
  * @desc     redraw marker
  */
 MultiIconMarker.prototype.redraw = function(force){
@@ -143,6 +143,13 @@ MultiIconMarker.prototype.redraw = function(force){
   };
 };
 
+
+/**
+ * @desc     copy marker
+ */
+MultiIconMarker.prototype.copy = function(){
+  return new MultiIconMarker(this.getLatLng(), MultiIconMarker.prototype.opt_opts_);
+};
 
 
 /**
