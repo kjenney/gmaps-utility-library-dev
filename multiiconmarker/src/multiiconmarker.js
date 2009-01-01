@@ -6,6 +6,10 @@ var MultiIconMarker = function(latlng, opt_opts_){
     opt_opts_ = G_DEFAULT_ICON;
   };
   
+  this.iconListEvent1_ = new Array();
+  this.restoreListEvent2_ = new Array();
+  this.saveIcon_ = null;
+
   this.icon_ = new GIcon(opt_opts_.icon);
   opt_opts_.icon.image = null;
   opt_opts_.icon.sprite = null;
@@ -17,9 +21,6 @@ MultiIconMarker.prototype = new GMarker(new GLatLng(0,0));
 /**
  * @private
  */
-MultiIconMarker.prototype.iconListEvent1_ = new Array();
-MultiIconMarker.prototype.restoreListEvent2_ = new Array();
-MultiIconMarker.prototype.saveIcon_ = null;
 
 /**
  * @private
@@ -27,9 +28,7 @@ MultiIconMarker.prototype.saveIcon_ = null;
  */
 MultiIconMarker.prototype.initialize = function(map){
   GMarker.prototype.initialize.apply(this, arguments);
-  MultiIconMarker.prototype.map_ = map;
-  MultiIconMarker.prototype.icon_ = this.icon_;
-  MultiIconMarker.prototype.opt_opts_ = this.opt_opts_;
+  this.map_ = map;
   
   var param = new Object();
   param.left = 0;
@@ -46,9 +45,9 @@ MultiIconMarker.prototype.initialize = function(map){
       param.top = this.icon_.sprite.top;
     };
   };
-  MultiIconMarker.prototype.container_ = this.makeImgDiv_(this.icon_.image, param);
+  this.container_ = this.makeImgDiv_(this.icon_.image, param);
   
-  map.getPane(G_MAP_MARKER_PANE).appendChild(MultiIconMarker.prototype.container_);
+  map.getPane(G_MAP_MARKER_PANE).appendChild(this.container_);
 };
 
 /**
@@ -61,9 +60,9 @@ MultiIconMarker.prototype.initialize = function(map){
  */
 MultiIconMarker.prototype.addIcon = function(icon, eventName1, eventName2){
   if(this.isNull(eventName1) || this.isNull(icon)){return;};
-  MultiIconMarker.prototype.iconListEvent1_[eventName1] = icon;
+  this.iconListEvent1_[eventName1] = icon;
   if(!this.isNull(eventName2)){
-      MultiIconMarker.prototype.restoreListEvent2_[eventName1]=eventName2;
+      this.restoreListEvent2_[eventName1]=eventName2;
       GEvent.bindDom(this, eventName2, this, this.restoreIcon_);
   };
   GEvent.bindDom(this, eventName1, this, function(){this.eventProcess_(eventName1);});
@@ -75,17 +74,17 @@ MultiIconMarker.prototype.addIcon = function(icon, eventName1, eventName2){
  */
 MultiIconMarker.prototype.eventProcess_ = function(eventName){
   
-  if(!MultiIconMarker.prototype.isNull(MultiIconMarker.prototype.iconListEvent1_[eventName])){
+  if(!this.isNull(this.iconListEvent1_[eventName])){
     
-    if(!MultiIconMarker.prototype.isNull(MultiIconMarker.prototype.restoreListEvent2_[eventName])){
-      if(MultiIconMarker.prototype.isNull(MultiIconMarker.prototype.saveIcon_)){
-        MultiIconMarker.prototype.saveIcon_ = MultiIconMarker.prototype.icon_;
+    if(!this.isNull(this.restoreListEvent2_[eventName])){
+      if(this.isNull(this.saveIcon_)){
+        this.saveIcon_ = this.icon_;
       };
     };
     
-    MultiIconMarker.prototype.icon_=MultiIconMarker.prototype.iconListEvent1_[eventName];
+    this.icon_=this.iconListEvent1_[eventName];
     
-    MultiIconMarker.prototype.setIcon(MultiIconMarker.prototype.icon_);
+    this.setIcon(this.icon_);
   };
 };
 
@@ -94,8 +93,8 @@ MultiIconMarker.prototype.eventProcess_ = function(eventName){
  * @desc     restore icon
  */
 MultiIconMarker.prototype.restoreIcon_ = function(){
-  MultiIconMarker.prototype.icon_ = new GIcon(MultiIconMarker.prototype.saveIcon_);
-  MultiIconMarker.prototype.setIcon(MultiIconMarker.prototype.icon_);
+  this.icon_ = new GIcon(this.saveIcon_);
+  this.setIcon(this.icon_);
 };
 
 
@@ -114,17 +113,17 @@ MultiIconMarker.prototype.setIcon = function(icon){
   param.width = icon.iconSize.width;
   param.height = icon.iconSize.height;
   param.image = icon.image;
-  if(!MultiIconMarker.prototype.isNull(icon.sprite)){
-    if(!MultiIconMarker.prototype.isNull(icon.sprite.left)){
+  if(!this.isNull(icon.sprite)){
+    if(!this.isNull(icon.sprite.left)){
       param.left = icon.sprite.left;
     };
   };
-  if(!MultiIconMarker.prototype.isNull(icon.sprite)){
-    if(!MultiIconMarker.prototype.isNull(icon.sprite.top)){
+  if(!this.isNull(icon.sprite)){
+    if(!this.isNull(icon.sprite.top)){
       param.top = icon.sprite.top;
     };
   };
-  MultiIconMarker.prototype.changeImage_(MultiIconMarker.prototype.container_, param);
+  this.changeImage_(this.container_, param);
 };
 
 /**
@@ -134,12 +133,12 @@ MultiIconMarker.prototype.redraw = function(force){
   GMarker.prototype.redraw.apply(this, arguments);
   
   this.latlng_ = this.getLatLng();
-  MultiIconMarker.prototype.container_.style.zIndex = GOverlay.getZIndex(this.latlng_.lat()+1);
-  var pxPos = MultiIconMarker.prototype.map_.fromLatLngToDivPixel(this.latlng_);
+  this.container_.style.zIndex = GOverlay.getZIndex(this.latlng_.lat()+1);
+  var pxPos = this.map_.fromLatLngToDivPixel(this.latlng_);
   
-  with(MultiIconMarker.prototype.container_.style){
-    left =(pxPos.x - MultiIconMarker.prototype.icon_.iconAnchor.x)+"px";
-    top = ( pxPos.y - MultiIconMarker.prototype.icon_.iconAnchor.y) +"px";
+  with(this.container_.style){
+    left =(pxPos.x - this.icon_.iconAnchor.x)+"px";
+    top = ( pxPos.y - this.icon_.iconAnchor.y) +"px";
   };
 };
 
@@ -148,7 +147,7 @@ MultiIconMarker.prototype.redraw = function(force){
  * @desc     copy marker
  */
 MultiIconMarker.prototype.copy = function(){
-  return new MultiIconMarker(this.getLatLng(), MultiIconMarker.prototype.opt_opts_);
+  return new MultiIconMarker(this.getLatLng(), this.opt_opts_);
 };
 
 
@@ -170,7 +169,7 @@ MultiIconMarker.prototype.remove = function(){
  * @return current GIcon
  */
 MultiIconMarker.prototype.getIcon = function(){
-  return MultiIconMarker.prototype.icon_;
+  return this.icon_;
 };
 
 
@@ -180,7 +179,7 @@ MultiIconMarker.prototype.getIcon = function(){
  */
 MultiIconMarker.prototype.makeImgDiv_=function(imgSrc, params){
    
-  var isIE_ = MultiIconMarker.prototype.isIE_();
+  var isIE_ = this.isIE_();
   var imgDiv = document.createElement("div");
   with(imgDiv.style){
     position = "absolute";
@@ -220,7 +219,7 @@ MultiIconMarker.prototype.changeImage_=function(div_, param){
   with(div_.firstChild.style){
     left = param.left+"px";
     top = -param.top+"px";
-    if(MultiIconMarker.prototype.isIE_()){
+    if(this.isIE_()){
       width = param.width+"px";
       height = param.height+"px";
       filter="progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+param.image+"')";

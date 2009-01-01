@@ -14,8 +14,23 @@
       if (GBrowserIsCompatible()) {
         var mapCenterPos = new GLatLng(37.4419, -122.1419);
         var map = new GMap2(document.getElementById("map_canvas"));
-        map.setCenter(mapCenterPos, 17);
+        map.setCenter(mapCenterPos, 14);
         
+        // Add 10 markers to the map at random locations
+        var bounds = map.getBounds();
+        var southWest = bounds.getSouthWest();
+        var northEast = bounds.getNorthEast();
+        var lngSpan = northEast.lng() - southWest.lng();
+        var latSpan = northEast.lat() - southWest.lat();
+        for (var i = 0; i < 10; i++) {
+          var point = new GLatLng(southWest.lat() + latSpan * Math.random(),
+                                  southWest.lng() + lngSpan * Math.random());
+          map.addOverlay(new createPegman(point));
+        }
+        
+      }
+    }
+    function createPegman(latlng){
         //default icon
         var pegmanIcon = new GIcon();
         pegmanIcon.image = "http://maps.google.com/mapfiles/cb/pegman.png";
@@ -25,11 +40,8 @@
         pegmanIcon.sprite = { top : 0, left : 0};
         
         //create MultiImageMarker
-        var pegmanMarker = new MultiIconMarker(mapCenterPos, {icon: pegmanIcon, draggable:true});
-        map.addOverlay(pegmanMarker);
-        
-        pegmanMarker.openInfoWindow("Please drag me!");
-        
+        var pegmanMarker = new MultiIconMarker(latlng, {icon: pegmanIcon, draggable:true});
+                
         //drag to left
         var icon = new GIcon(pegmanIcon);
         icon.image = "http://maps.google.com/mapfiles/cb/pegman.png";
@@ -61,7 +73,7 @@
           
           GEvent.trigger(pegmanMarker, eventName);
         });
-      }
+        return pegmanMarker;
     }
 
     </script>
