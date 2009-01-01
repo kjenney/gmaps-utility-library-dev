@@ -5,7 +5,6 @@
  * @fileoverview Creates a control with Street View.
  */
 
-
 /**
  * @desc Creates an ExtStreetviewControl. 
  *
@@ -29,7 +28,7 @@ var ExtStreetviewControl = function(opt_opts){
  * @desc http://msdn.microsoft.com/en-us/library/ms537628(VS.85).aspx
  *
  */    
-document.write("<!-- saved from url=(0014)about:internet -->");
+document.write("<!-- saved from url=(0013)about:internet -->");
 document.write("<!-- saved from url=(0022)http://maps.google.com -->");
 
 /**
@@ -69,6 +68,7 @@ ExtStreetviewControl.prototype.initialize = function(map) {
     overflow="hidden";
     width=ExtStreetviewControl.prototype.ctrlSize_.width+"px";
     height=ExtStreetviewControl.prototype.ctrlSize_.height+"px";
+    zIndex=0;
   };
   
   //make visibleContainer
@@ -95,14 +95,16 @@ ExtStreetviewControl.prototype.initialize = function(map) {
     width=(ExtStreetviewControl.prototype.ctrlSize_.width-5)+"px";
     height=(ExtStreetviewControl.prototype.ctrlSize_.height-5)+"px";
     backgroundColor="#000000";
+    zIndex=0;
   };
   
   //minmize button
   ExtStreetviewControl.prototype.minmizeBtn_ = ExtStreetviewControl.prototype.makeImgDiv_(this.minimizeImgSrc_, {"left":0, "top":-428, "width":15, "height":15});
   ExtStreetviewControl.prototype.container_.appendChild(ExtStreetviewControl.prototype.minmizeBtn_);
   with(ExtStreetviewControl.prototype.minmizeBtn_.style){
-     right="0px";
-     bottom="0px";
+    right="0px";
+    bottom="0px";
+    zIndex=2;
   };
   
   //maximize button
@@ -111,6 +113,7 @@ ExtStreetviewControl.prototype.initialize = function(map) {
   with(ExtStreetviewControl.prototype.maximizeBtn_.style){
     left="-1px";
     top="-1px";
+    zIndex=2;
   };
   
   //pegman marker
@@ -298,6 +301,7 @@ ExtStreetviewControl.prototype.toggleMaximize_ = function() {
     param.maxWidth = ExtStreetviewControl.prototype.ctrlSize_.width ;
     param.maxHeight = ExtStreetviewControl.prototype.ctrlSize_.height;
     ExtStreetviewControl.prototype.minmizeBtn_.style.visibility="visible";
+    //ExtStreetviewControl.prototype.minmizeBtnBase_.style.visibility="visible";
   }else{
     ExtStreetviewControl.prototype.maximize_ = true;
     param.aniPosDirection = -1;
@@ -307,6 +311,7 @@ ExtStreetviewControl.prototype.toggleMaximize_ = function() {
     ExtStreetviewControl.prototype.container_.style.height=(mapSize.height)+"px";
     
     ExtStreetviewControl.prototype.minmizeBtn_.style.visibility="hidden";
+   // ExtStreetviewControl.prototype.minmizeBtnBase_.style.visibility="hidden";
   };
   if(ExtStreetviewControl.prototype.isIE_() && ExtStreetviewControl.prototype.latlng_){
     if(document.location.protocol.toLowerCase()=="file:"){
@@ -478,7 +483,7 @@ ExtStreetviewControl.prototype.setLocationAndPOV = function(latlng, pov) {
   if(!this.isNull(pov)){
     ExtStreetviewControl.prototype.pov_ = pov;
   };
-
+  ExtStreetviewControl.prototype.marker_.setLatLng(latlng);
   ExtStreetviewControl.prototype.stClient_.getNearestPanorama(latlng, ExtStreetviewControl.prototype.stClientEnum_ );
 };
 
@@ -526,9 +531,6 @@ ExtStreetviewControl.prototype.stInitialized_ = function(location, force) {
     || ExtStreetviewControl.prototype.isNull(ExtStreetviewControl.prototype.pov_.yaw)){
     ExtStreetviewControl.prototype.pov_ = location.pov;
   };
-  if(force==true){
-    ExtStreetviewControl.prototype.stObj_.setLocationAndPOV(location.latlng, ExtStreetviewControl.prototype.pov_);
-  };
   
   ExtStreetviewControl.prototype.latlng_ = location.latlng;
   ExtStreetviewControl.prototype.marker_.setLatLng(location.latlng);
@@ -536,10 +538,38 @@ ExtStreetviewControl.prototype.stInitialized_ = function(location, force) {
     ExtStreetviewControl.prototype.map_.panTo(location.latlng);
   };
 
+  
   ExtStreetviewControl.prototype.stViewCnt_++;
   if(ExtStreetviewControl.prototype.stViewCnt_>10){
-    ExtStreetviewControl.prototype.createStreetviewPanorama();
+    ExtStreetviewControl.prototype.map_.panTo(location.latlng);
+    
+    setTimeout(function(){ExtStreetviewControl.prototype.createStreetviewPanorama();},10);
+    return;
   };
+
+  if(force==true){
+    ExtStreetviewControl.prototype.stObj_.setLocationAndPOV(location.latlng, ExtStreetviewControl.prototype.pov_);
+
+    if(ExtStreetviewControl.prototype.stViewCnt_==1){
+      setTimeout(function(){
+        var flashViewer = ExtStreetviewControl.prototype.flashContainer_.firstChild;
+        if(!ExtStreetviewControl.prototype.isNull(flashViewer)){
+          flashViewer.setAttribute("wmode", "opaque");
+          flashViewer.wmode="opaque";
+          flashViewer.SetVariable("wmode", "opaque");
+          
+          if(flashViewer.tagName.toLowerCase()=="object"){
+            var paramEle = document.createElement("param");
+            paramEle.setAttribute("name", "wmode");
+            paramEle.name="wmode";
+            paramEle.value="opaque";
+            flashViewer.appendChild(paramEle);
+          };
+        };
+      },1000);
+    };
+  };
+  
 };
 
 /**
@@ -595,11 +625,13 @@ ExtStreetviewControl.prototype.isNull = function(value) {
  * @desc      detect IE
  * @param     none
  * @return    true  :  blowser is Interner Explorer
- *            false :  value is Interner Explorer
+ *            false :  blowser is not Interner Explorer
  */
 ExtStreetviewControl.prototype.isIE_ = function() {
   return (navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) ? true : false;
 };
+
+
 
 /**
  * @private
@@ -611,18 +643,38 @@ ExtStreetviewControl.prototype.isIE_ = function() {
 ExtStreetviewControl.prototype.createStreetviewPanorama = function() {
   var flag=false;
   if(!ExtStreetviewControl.prototype.isNull(ExtStreetviewControl.prototype.stObj_)){
+    GEvent.clearInstanceListeners(ExtStreetviewControl.prototype.stObj_);
     ExtStreetviewControl.prototype.stObj_.remove();
     flag=true;
+    ExtStreetviewControl.prototype.flashContainer_.style.visibility="hidden";
   };
   
   var stObj = new GStreetviewPanorama(ExtStreetviewControl.prototype.flashContainer_);
-  GEvent.addListener(stObj, "initialized", ExtStreetviewControl.prototype.stInitialized_);
   ExtStreetviewControl.prototype.stViewCnt_ = 0;
   ExtStreetviewControl.prototype.stObj_ = stObj;
   if(flag){
     stObj.setLocationAndPOV(ExtStreetviewControl.prototype.latlng_, ExtStreetviewControl.prototype.pov_);
+    
+      setTimeout(function(){
+        var flashViewer = ExtStreetviewControl.prototype.flashContainer_.firstChild;
+        if(!ExtStreetviewControl.prototype.isNull(flashViewer)){
+          flashViewer.setAttribute("wmode", "opaque");
+          flashViewer.wmode="opaque";
+          flashViewer.SetVariable("wmode", "opaque");
+          
+          if(flashViewer.tagName.toLowerCase()=="object"){
+            var paramEle = document.createElement("param");
+            paramEle.setAttribute("name", "wmode");
+            paramEle.name="wmode";
+            paramEle.value="opaque";
+            flashViewer.appendChild(paramEle);
+          };
+        };
+        ExtStreetviewControl.prototype.flashContainer_.style.visibility="visible";
+      },1000);
   };
   
+  GEvent.addListener(stObj, "initialized", ExtStreetviewControl.prototype.stInitialized_);
   GEvent.addDomListener(stObj, "yawchanged", ExtStreetviewControl.prototype.yawChanged_);
   GEvent.addDomListener(stObj, "pitchchanged", ExtStreetviewControl.prototype.pitChchanged_);
 };
