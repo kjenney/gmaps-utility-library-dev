@@ -25,9 +25,10 @@
         for (var i = 0; i < 10; i++) {
           var point = new GLatLng(southWest.lat() + latSpan * Math.random(),
                                   southWest.lng() + lngSpan * Math.random());
-          map.addOverlay(new createPegman(point));
+          var pegman = new createPegman(point);
+          map.addOverlay(pegman);
         }
-        
+        pegman.openInfoWindow("Please, drag me!");
       }
     }
     function createPegman(latlng){
