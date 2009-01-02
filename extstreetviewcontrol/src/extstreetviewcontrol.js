@@ -551,25 +551,36 @@ ExtStreetviewControl.prototype.stInitialized_ = function(location, force) {
     ExtStreetviewControl.prototype.stObj_.setLocationAndPOV(location.latlng, ExtStreetviewControl.prototype.pov_);
 
     if(ExtStreetviewControl.prototype.stViewCnt_==1){
-      setTimeout(function(){
-        var flashViewer = ExtStreetviewControl.prototype.flashContainer_.firstChild;
-        if(!ExtStreetviewControl.prototype.isNull(flashViewer)){
-          flashViewer.setAttribute("wmode", "opaque");
-          flashViewer.wmode="opaque";
-          flashViewer.SetVariable("wmode", "opaque");
-          
-          if(flashViewer.tagName.toLowerCase()=="object"){
-            var paramEle = document.createElement("param");
-            paramEle.setAttribute("name", "wmode");
-            paramEle.name="wmode";
-            paramEle.value="opaque";
-            flashViewer.appendChild(paramEle);
-          };
-        };
-      },1000);
+      ExtStreetviewControl.prototype.setAttributeToStFlashViewer_("wmode","opaque");
     };
   };
   
+};
+
+/**
+ * @private
+ * @desc      set attribute to flash player for streetview
+ */
+ExtStreetviewControl.prototype.setAttributeToStFlashViewer_ = function(attrName, attrValue) {
+  if(ExtStreetviewControl.prototype.isNull( ExtStreetviewControl.prototype.flashContainer_)){return null;};
+  
+  var flashViewer = ExtStreetviewControl.prototype.flashContainer_.firstChild;
+  if(ExtStreetviewControl.prototype.isNull(flashViewer)){
+    setTimeout(function(){ExtStreetviewControl.prototype.setAttributeToStFlashViewer_(attrName, attrValue);}, 100);
+  }else{
+    ExtStreetviewControl.prototype.flashContainer_.style.visibility="hidden";
+    flashViewer.setAttribute(attrName, attrValue);
+    flashViewer.SetVariable(attrName, attrValue);
+    
+    if(flashViewer.tagName.toLowerCase()=="object"){
+      var paramEle = document.createElement("param");
+      paramEle.setAttribute("name", attrName);
+      paramEle.name=attrName;
+      paramEle.value=attrValue;
+      flashViewer.appendChild(paramEle);
+    };
+    ExtStreetviewControl.prototype.flashContainer_.style.visibility="visible";
+  };
 };
 
 /**
@@ -646,7 +657,6 @@ ExtStreetviewControl.prototype.createStreetviewPanorama = function() {
     GEvent.clearInstanceListeners(ExtStreetviewControl.prototype.stObj_);
     ExtStreetviewControl.prototype.stObj_.remove();
     flag=true;
-    ExtStreetviewControl.prototype.flashContainer_.style.visibility="hidden";
   };
   
   var stObj = new GStreetviewPanorama(ExtStreetviewControl.prototype.flashContainer_);
@@ -654,24 +664,7 @@ ExtStreetviewControl.prototype.createStreetviewPanorama = function() {
   ExtStreetviewControl.prototype.stObj_ = stObj;
   if(flag){
     stObj.setLocationAndPOV(ExtStreetviewControl.prototype.latlng_, ExtStreetviewControl.prototype.pov_);
-    
-      setTimeout(function(){
-        var flashViewer = ExtStreetviewControl.prototype.flashContainer_.firstChild;
-        if(!ExtStreetviewControl.prototype.isNull(flashViewer)){
-          flashViewer.setAttribute("wmode", "opaque");
-          flashViewer.wmode="opaque";
-          flashViewer.SetVariable("wmode", "opaque");
-          
-          if(flashViewer.tagName.toLowerCase()=="object"){
-            var paramEle = document.createElement("param");
-            paramEle.setAttribute("name", "wmode");
-            paramEle.name="wmode";
-            paramEle.value="opaque";
-            flashViewer.appendChild(paramEle);
-          };
-        };
-        ExtStreetviewControl.prototype.flashContainer_.style.visibility="visible";
-      },1000);
+    ExtStreetviewControl.prototype.setAttributeToStFlashViewer_("wmode","opaque");
   };
   
   GEvent.addListener(stObj, "initialized", ExtStreetviewControl.prototype.stInitialized_);
