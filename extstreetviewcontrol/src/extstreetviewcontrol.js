@@ -52,65 +52,64 @@ ExtStreetviewControl.prototype.initialize = function(map) {
   
   //initialize
   this.latlng_ = this.latlng_ || map.getCenter();
-  ExtStreetviewControl.prototype.latlng_ = this.latlng_;
-  ExtStreetviewControl.prototype.map_ = map;
-  ExtStreetviewControl.prototype.bounds_ = map.getBounds();
-  ExtStreetviewControl.prototype.minimize_ = false;
-  ExtStreetviewControl.prototype.maximize_ = false;
-  ExtStreetviewControl.prototype.ctrlSize_ = this.ctrlSize_;
-  ExtStreetviewControl.prototype.stViewCnt_ = 0;
+  this.map_ = map;
+  this.bounds_ = map.getBounds();
+  this.minimize_ = false;
+  this.maximize_ = false;
+  this.ctrlSize_ = this.ctrlSize_;
+  this.stViewCnt_ = 0;
   
   //make container
-  ExtStreetviewControl.prototype.container_ = document.createElement("div");
-  map.getContainer().appendChild(ExtStreetviewControl.prototype.container_);
+  this.container_ = document.createElement("div");
+  map.getContainer().appendChild(this.container_);
   
-  with(ExtStreetviewControl.prototype.container_.style){
+  with(this.container_.style){
     overflow="hidden";
-    width=ExtStreetviewControl.prototype.ctrlSize_.width+"px";
-    height=ExtStreetviewControl.prototype.ctrlSize_.height+"px";
+    width=this.ctrlSize_.width+"px";
+    height=this.ctrlSize_.height+"px";
     zIndex=0;
   };
   
   //make visibleContainer
-  ExtStreetviewControl.prototype.visibleContainer_ = document.createElement("div");
-  ExtStreetviewControl.prototype.container_.appendChild(ExtStreetviewControl.prototype.visibleContainer_);
-  with(ExtStreetviewControl.prototype.visibleContainer_.style){
+  this.visibleContainer_ = document.createElement("div");
+  this.container_.appendChild(this.visibleContainer_);
+  with(this.visibleContainer_.style){
     borderStyle="solid none none solid";
     borderColor="#979797";
     borderWidth="1px 0 0 1px";
-    width=ExtStreetviewControl.prototype.ctrlSize_.width+"px";
-    height=ExtStreetviewControl.prototype.ctrlSize_.height+"px";
+    width=this.ctrlSize_.width+"px";
+    height=this.ctrlSize_.height+"px";
     overflow="hidden";
     backgroundColor="#e8ecf8";
     position="absolute";
   };
   
   //streetview panorama container
-  ExtStreetviewControl.prototype.flashContainer_ = document.createElement("div");
-  ExtStreetviewControl.prototype.visibleContainer_.appendChild(ExtStreetviewControl.prototype.flashContainer_);
-  with(ExtStreetviewControl.prototype.flashContainer_.style){
+  this.flashContainer_ = document.createElement("div");
+  this.visibleContainer_.appendChild(this.flashContainer_);
+  with(this.flashContainer_.style){
     position = "absolute";
     left="5px";
     top="5px";
-    width=(ExtStreetviewControl.prototype.ctrlSize_.width-5)+"px";
-    height=(ExtStreetviewControl.prototype.ctrlSize_.height-5)+"px";
+    width=(this.ctrlSize_.width-5)+"px";
+    height=(this.ctrlSize_.height-5)+"px";
     backgroundColor="#000000";
     zIndex=0;
   };
   
   //minmize button
-  ExtStreetviewControl.prototype.minmizeBtn_ = ExtStreetviewControl.prototype.makeImgDiv_(this.minimizeImgSrc_, {"left":0, "top":-428, "width":15, "height":15});
-  ExtStreetviewControl.prototype.container_.appendChild(ExtStreetviewControl.prototype.minmizeBtn_);
-  with(ExtStreetviewControl.prototype.minmizeBtn_.style){
+  this.minmizeBtn_ = this.makeImgDiv_(this.minimizeImgSrc_, {"left":0, "top":-428, "width":15, "height":15});
+  this.container_.appendChild(this.minmizeBtn_);
+  with(this.minmizeBtn_.style){
     right="0px";
     bottom="0px";
     zIndex=2;
   };
   
   //maximize button
-  ExtStreetviewControl.prototype.maximizeBtn_ = ExtStreetviewControl.prototype.makeImgDiv_(this.maximizeImgSrc_, {"left":0, "top":0, "width":17, "height":17});
-  ExtStreetviewControl.prototype.visibleContainer_.appendChild(ExtStreetviewControl.prototype.maximizeBtn_);
-  with(ExtStreetviewControl.prototype.maximizeBtn_.style){
+  this.maximizeBtn_ = this.makeImgDiv_(this.maximizeImgSrc_, {"left":0, "top":0, "width":17, "height":17});
+  this.visibleContainer_.appendChild(this.maximizeBtn_);
+  with(this.maximizeBtn_.style){
     left="-1px";
     top="-1px";
     zIndex=2;
@@ -156,31 +155,62 @@ ExtStreetviewControl.prototype.initialize = function(map) {
   pegmanMarker.prototype.getIconContainer_ = function(){
     return this.iconContainer_;
   };
-  ExtStreetviewControl.prototype.marker_ = new pegmanMarker(this.latlng_ ,{draggable: true, icon:pegmanIcon});
+  this.marker_ = new pegmanMarker(this.latlng_ ,{draggable: true, icon:pegmanIcon});
   
-  ExtStreetviewControl.prototype.marker_.isFirst_ = true;
-  GEvent.addListener(ExtStreetviewControl.prototype.marker_, "dragstart", this.markerDragStart_);
-  GEvent.addListener(ExtStreetviewControl.prototype.marker_, "drag", this.markerDrag_);
-  GEvent.addListener(ExtStreetviewControl.prototype.marker_, "dragend", this.markerDragEnd_);
-  map.addOverlay( ExtStreetviewControl.prototype.marker_);
+  this.marker_.isFirst_ = true;
+  GEvent.bind(this.marker_, "dragstart", this, this.markerDragStart_);
+  GEvent.bind(this.marker_, "drag", this, this.markerDrag_);
+  GEvent.bind(this.marker_, "dragend", this, this.markerDragEnd_);
+  map.addOverlay(this.marker_);
   
   //streetview panorama
-  ExtStreetviewControl.prototype.stObj_ = null;
-  ExtStreetviewControl.prototype.stClient_ = new GStreetviewClient();
-  ExtStreetviewControl.prototype.createStreetviewPanorama();
+  this.stObj_ = null;
+  this.stClient_ = new GStreetviewClient();
+  this.createStreetviewPanorama();
+  
+  
+  //GOverviewMapControl
+  var myGOverviewMapControl = function(){
+    GOverviewMapControl.apply(this, arguments);
+  };
+  
+  myGOverviewMapControl.prototype = new GOverviewMapControl();
+  
+  myGOverviewMapControl.prototype.initialize=function(map){
+    this.ctrlDiv_ = GOverviewMapControl.prototype.initialize.apply(this, arguments);
+    if(this.ctrlDiv_.childNodes.length){
+      this.ctrlDiv_.lastChild.style.display="none";
+    };
+    return this.ctrlDiv_;
+  };
+  
+  myGOverviewMapControl.prototype.hide=function(){
+    GOverviewMapControl.prototype.hide.apply(this, arguments);
+    this.ctrlDiv_.style.visibility="hidden";
+  };
+  
+  myGOverviewMapControl.prototype.show=function(){
+    GOverviewMapControl.prototype.show.apply(this, arguments);
+    this.ctrlDiv_.style.visibility="visible";
+  };
+  
+  this.overviewMapControl_ = new myGOverviewMapControl();
+  map.addControl(this.overviewMapControl_);
+  this.overviewMapControl_.hide();
+  //GLog.write(this.overviewMapControl_.getOverviewMap());
   
   //events
-  GEvent.addDomListener(ExtStreetviewControl.prototype.minmizeBtn_, "click", this.toggleMinimize_);
-  GEvent.addDomListener(ExtStreetviewControl.prototype.maximizeBtn_, "click", this.toggleMaximize_);
-  GEvent.addDomListener(window, "resize", this.windowResize_);
-  GEvent.addListener(map, "moveend", this.mapMove_);
-  ExtStreetviewControl.prototype.removeControlOrg_ = GMap2.prototype.removeControl;
-  GMap2.prototype.removeControl = ExtStreetviewControl.prototype.removeControl_;
+  GEvent.bindDom(this.minmizeBtn_, "click", this, this.toggleMinimize_);
+  GEvent.bindDom(this.maximizeBtn_, "click", this, this.toggleMaximize_);
+  GEvent.bindDom(window, "resize",this,  this.windowResize_);
+  GEvent.bind(map, "moveend", this, this.mapMove_);
+  this.removeControlOrg_ = GMap2.prototype.removeControl;
+  GMap2.prototype.removeControl = this.removeControl_;
   
   this.setLocationAndPOV(this.latlng_,this.pov_);
   
-  ExtStreetviewControl.prototype.iconSrc_ = this.iconSrc_;
-  return ExtStreetviewControl.prototype.container_;
+  this.iconSrc_ = this.iconSrc_;
+  return this.container_;
 };
 
 /**
@@ -188,7 +218,7 @@ ExtStreetviewControl.prototype.initialize = function(map) {
  * @desc pegman-marker drag start
  */
 ExtStreetviewControl.prototype.markerDragStart_ = function() {
-  ExtStreetviewControl.prototype.lng_ = ExtStreetviewControl.prototype.latlng_.lng();
+  this.lng_ = this.latlng_.lng();
 };
 
 /**
@@ -196,9 +226,9 @@ ExtStreetviewControl.prototype.markerDragStart_ = function() {
  * @desc pegman-marker dragging
  */
 ExtStreetviewControl.prototype.markerDrag_ = function() {
-  var beforeLng = ExtStreetviewControl.prototype.lng_;
-  var currentLng = ExtStreetviewControl.prototype.marker_.getLatLng().lng();
-  ExtStreetviewControl.prototype.lng_ = currentLng;
+  var beforeLng = this.lng_;
+  var currentLng = this.marker_.getLatLng().lng();
+  this.lng_ = currentLng;
   
   var dragDirection = beforeLng-currentLng;
   var imgTop;
@@ -208,9 +238,9 @@ ExtStreetviewControl.prototype.markerDrag_ = function() {
   }else{
     imgTop = 18;
   };
-  imgTop = -imgTop * ExtStreetviewControl.prototype.marker_.getIcon().iconSize.height;
+  imgTop = -imgTop * this.marker_.getIcon().iconSize.height;
   
-  ExtStreetviewControl.prototype.marker_.getIconContainer_().firstChild.style.top=imgTop+"px";
+  this.marker_.getIconContainer_().firstChild.style.top=imgTop+"px";
 };
 
 /**
@@ -218,9 +248,9 @@ ExtStreetviewControl.prototype.markerDrag_ = function() {
  * @desc pegman-marker drag end
  */
 ExtStreetviewControl.prototype.markerDragEnd_ = function() {
-  var latlng = ExtStreetviewControl.prototype.marker_.getLatLng();
-  ExtStreetviewControl.prototype.map_.panTo(latlng);
-  ExtStreetviewControl.prototype.setLocationAndPOV(latlng);
+  var latlng = this.marker_.getLatLng();
+  this.map_.panTo(latlng);
+  this.setLocationAndPOV(latlng);
 };
 
 
@@ -229,11 +259,11 @@ ExtStreetviewControl.prototype.markerDragEnd_ = function() {
  * @desc yawchanged on streetview
  */
 ExtStreetviewControl.prototype.yawChanged_ = function(yaw) {
-  ExtStreetviewControl.prototype.pov_.yaw = yaw;
+  this.pov_.yaw = yaw;
 
-  var imgTop = -Math.floor(yaw/(360/16))*ExtStreetviewControl.prototype.marker_.getIcon().iconSize.height;
+  var imgTop = -Math.floor(yaw/(360/16))* this.marker_.getIcon().iconSize.height;
   
-  ExtStreetviewControl.prototype.marker_.getIconContainer_().firstChild.style.top=imgTop+"px";
+  this.marker_.getIconContainer_().firstChild.style.top=imgTop+"px";
 };
 
 /**
@@ -241,7 +271,7 @@ ExtStreetviewControl.prototype.yawChanged_ = function(yaw) {
  * @desc pitchchanged on streetview
  */
 ExtStreetviewControl.prototype.pitChchanged_ = function(pitch) {
-  ExtStreetviewControl.prototype.pov_.pitch = pitch;
+  this.pov_.pitch = pitch;
 };
 
 /**
@@ -249,27 +279,27 @@ ExtStreetviewControl.prototype.pitChchanged_ = function(pitch) {
  * @desc window resize
  */
 ExtStreetviewControl.prototype.windowResize_ = function() {
-  if(ExtStreetviewControl.prototype.maximize_){
-    var mapSize = ExtStreetviewControl.prototype.map_.getSize();
+  if(this.maximize_){
+    var mapSize = this.map_.getSize();
     mapSize.height=Math.floor(mapSize.height);
-    with(ExtStreetviewControl.prototype.container_.style){
+    with(this.container_.style){
       left = null;
       top = null;
       width=mapSize.width+"px";
       height=mapSize.height+"px";
     };
     
-    with(ExtStreetviewControl.prototype.visibleContainer_.style){
+    with(this.visibleContainer_.style){
       width=mapSize.width+"px";
       height=mapSize.height+"px";
     };
 
-    with(ExtStreetviewControl.prototype.flashContainer_.style){
+    with(this.flashContainer_.style){
       width=(mapSize.width-5)+"px";
       height=(mapSize.height-5)+"px";
     };
     
-    ExtStreetviewControl.prototype.stObj_.checkResize();
+    this.stObj_.checkResize();
   };
 };
 
@@ -279,47 +309,49 @@ ExtStreetviewControl.prototype.windowResize_ = function() {
  * @desc click maximize button
  */
 ExtStreetviewControl.prototype.toggleMaximize_ = function() {
-  var mapSize = ExtStreetviewControl.prototype.map_.getSize();
+  var mapSize = this.map_.getSize();
   var param = new Object();
-  param.x = ExtStreetviewControl.prototype.container_.offsetLeft;
-  param.y = ExtStreetviewControl.prototype.container_.offsetTop;
-  param.width = ExtStreetviewControl.prototype.container_.offsetWidth;
-  param.height = ExtStreetviewControl.prototype.container_.offsetHeight;
+  param.x = this.container_.offsetLeft;
+  param.y = this.container_.offsetTop;
+  param.width = this.container_.offsetWidth;
+  param.height = this.container_.offsetHeight;
   param.maxWidth = mapSize.width ;
   param.maxHeight = mapSize.height;
-  param.xStep = (param.maxWidth - ExtStreetviewControl.prototype.ctrlSize_.width )  / 10;
-  param.yStep = (param.maxHeight - ExtStreetviewControl.prototype.ctrlSize_.height) / 10;
+  param.xStep = (param.maxWidth - this.ctrlSize_.width )  / 10;
+  param.yStep = (param.maxHeight - this.ctrlSize_.height) / 10;
   
   param.cnt = 0;
-  if(ExtStreetviewControl.prototype.maximize_){
-    ExtStreetviewControl.prototype.maximize_ = false;
+  if(this.maximize_){
+    this.maximize_ = false;
     param.aniPosDirection = 1;
     param.aniSizeDirection = -1;
     param.maximizeImgY = 0;
-    ExtStreetviewControl.prototype.container_.style.width=ExtStreetviewControl.prototype.ctrlSize_.width+"px";
-    ExtStreetviewControl.prototype.container_.style.height=ExtStreetviewControl.prototype.ctrlSize_.height+"px";
-    param.maxWidth = ExtStreetviewControl.prototype.ctrlSize_.width ;
-    param.maxHeight = ExtStreetviewControl.prototype.ctrlSize_.height;
-    ExtStreetviewControl.prototype.minmizeBtn_.style.visibility="visible";
-    //ExtStreetviewControl.prototype.minmizeBtnBase_.style.visibility="visible";
+    this.container_.style.width=this.ctrlSize_.width+"px";
+    this.container_.style.height=this.ctrlSize_.height+"px";
+    param.maxWidth = this.ctrlSize_.width ;
+    param.maxHeight = this.ctrlSize_.height;
+    this.minmizeBtn_.style.visibility="visible";
+    this.overviewMapControl_.hide();
   }else{
-    ExtStreetviewControl.prototype.maximize_ = true;
+    this.maximize_ = true;
     param.aniPosDirection = -1;
     param.aniSizeDirection = 1;
     param.maximizeImgY = -17;
-    ExtStreetviewControl.prototype.container_.style.width=mapSize.width+"px";
-    ExtStreetviewControl.prototype.container_.style.height=(mapSize.height)+"px";
+    this.container_.style.width=mapSize.width+"px";
+    this.container_.style.height=(mapSize.height)+"px";
     
-    ExtStreetviewControl.prototype.minmizeBtn_.style.visibility="hidden";
-   // ExtStreetviewControl.prototype.minmizeBtnBase_.style.visibility="hidden";
+    this.minmizeBtn_.style.visibility="hidden";
+    
+    this.overviewMapControl_.show();
   };
-  if(ExtStreetviewControl.prototype.isIE_() && ExtStreetviewControl.prototype.latlng_){
+  if(ExtStreetviewControl.prototype.isIE_() && this.latlng_){
     if(document.location.protocol.toLowerCase()=="file:"){
-      ExtStreetviewControl.prototype.stObj_.hide();
+      this.stObj_.hide();
     };
   };
-  ExtStreetviewControl.prototype.flashContainer_.style.visibility="hidden";
+  this.flashContainer_.style.visibility="hidden";
 
+  var this_ = this;
   function max_resizeAnimation(param){
     param.x = param.x + param.aniPosDirection * param.xStep;
     param.x = param.x < 0  ? 0 : param.x;
@@ -328,18 +360,18 @@ ExtStreetviewControl.prototype.toggleMaximize_ = function() {
     param.width = param.width + param.aniSizeDirection * param.xStep;
     param.height = param.height + param.aniSizeDirection * param.yStep;
     
-    with(ExtStreetviewControl.prototype.container_.style){
+    with(this_.container_.style){
       left = param.x+"px";
       top = param.y+"px";
       width=param.width+"px";
       height=param.height+"px";
     };
-    with(ExtStreetviewControl.prototype.visibleContainer_.style){
+    with(this_.visibleContainer_.style){
       width=param.width+"px";
       height=param.height+"px";
     };
 
-    with(ExtStreetviewControl.prototype.flashContainer_.style){
+    with(this_.flashContainer_.style){
       width=(param.width-5)+"px";
       height=(param.height-5)+"px";
     };
@@ -350,20 +382,20 @@ ExtStreetviewControl.prototype.toggleMaximize_ = function() {
       var arg = arguments;
       setTimeout(function(){arg.callee.apply(null, arg);}, 10);
     }else{
-      with(ExtStreetviewControl.prototype.container_.style){
+      with(this_.container_.style){
         width=(param.maxWidth)+"px";
         height=(param.maxHeight)+"px";
         left = null;
         top = null;
       };
-      ExtStreetviewControl.prototype.maximizeBtn_.firstChild.style.top=param.maximizeImgY;
-      if(ExtStreetviewControl.prototype.isIE_() && ExtStreetviewControl.prototype.latlng_){
+      this_.maximizeBtn_.firstChild.style.top=param.maximizeImgY;
+      if(ExtStreetviewControl.prototype.isIE_() && this_.latlng_){
         if(document.location.protocol.toLowerCase()=="file:"){
-          ExtStreetviewControl.prototype.stObj_.show();
+          this_.stObj_.show();
         };
       };
-      ExtStreetviewControl.prototype.flashContainer_.style.visibility="visible";
-      ExtStreetviewControl.prototype.stObj_.checkResize();
+      this_.flashContainer_.style.visibility="visible";
+      this_.stObj_.checkResize();
     };
   };
   max_resizeAnimation(param);
@@ -375,25 +407,25 @@ ExtStreetviewControl.prototype.toggleMaximize_ = function() {
  */
 ExtStreetviewControl.prototype.toggleMinimize_ = function() {
   var param = new Object();
-  with(ExtStreetviewControl.prototype.container_){
+  with(this.container_){
     param.x = offsetLeft;
     param.y = offsetTop;
     param.width = offsetWidth;
     param.height = offsetHeight;
   };
-  param.xStep = ( ExtStreetviewControl.prototype.ctrlSize_.width -15)  / 10;
-  param.yStep = ( ExtStreetviewControl.prototype.ctrlSize_.height -15) / 10;
+  param.xStep = ( this.ctrlSize_.width -15)  / 10;
+  param.yStep = ( this.ctrlSize_.height -15) / 10;
   param.cnt = 0;
-  if(ExtStreetviewControl.prototype.minimize_){
-    ExtStreetviewControl.prototype.minimize_ = false;
+  if(this.minimize_){
+    this.minimize_ = false;
     param.aniPosDirection = -1;
     param.aniSizeDirection = 1;
     param.minimizeImgY = -428;
     
-    param.maxWidth=ExtStreetviewControl.prototype.ctrlSize_.width;
-    param.maxHeight=ExtStreetviewControl.prototype.ctrlSize_.height;
+    param.maxWidth=this.ctrlSize_.width;
+    param.maxHeight=this.ctrlSize_.height;
   }else{
-    ExtStreetviewControl.prototype.minimize_ = true;
+    this.minimize_ = true;
     param.aniPosDirection = 1;
     param.aniSizeDirection = -1;
     param.minimizeImgY = -443;
@@ -401,7 +433,8 @@ ExtStreetviewControl.prototype.toggleMinimize_ = function() {
     param.maxHeight = 15;
   };
   
-  ExtStreetviewControl.prototype.flashContainer_.style.visibility="hidden";
+  this.flashContainer_.style.visibility="hidden";
+  var this_ = this;
   
   function min_resizeAnimation(param){
     param.x = param.x + param.aniPosDirection * param.xStep;
@@ -411,7 +444,7 @@ ExtStreetviewControl.prototype.toggleMinimize_ = function() {
     param.width = param.width + param.aniSizeDirection * param.xStep;
     param.height = param.height + param.aniSizeDirection * param.yStep;
     
-    with(ExtStreetviewControl.prototype.container_.style){
+    with(this_.container_.style){
       left = param.x+"px";
       top = param.y+"px";
       width=param.width+"px";
@@ -422,8 +455,8 @@ ExtStreetviewControl.prototype.toggleMinimize_ = function() {
       var arg = arguments;
       setTimeout(function(){arg.callee.apply(null, arg);}, 10);
     }else{
-      ExtStreetviewControl.prototype.minmizeBtn_.firstChild.style.top=param.minimizeImgY;
-      with(ExtStreetviewControl.prototype.container_.style){
+      this_.minmizeBtn_.firstChild.style.top=param.minimizeImgY;
+      with(this_.container_.style){
         width=(param.maxWidth)+"px";
         height=(param.maxHeight)+"px";
         left = null;
@@ -431,8 +464,8 @@ ExtStreetviewControl.prototype.toggleMinimize_ = function() {
         right="0px";
         bottom="0px";
       };
-      if(!ExtStreetviewControl.prototype.minimize_){
-        ExtStreetviewControl.prototype.flashContainer_.style.visibility="visible";
+      if(!this_.minimize_){
+        this_.flashContainer_.style.visibility="visible";
       };
     };
   };
@@ -445,7 +478,7 @@ ExtStreetviewControl.prototype.toggleMinimize_ = function() {
  * @desc map move
  */
 ExtStreetviewControl.prototype.mapMove_ = function() {
-  ExtStreetviewControl.prototype.bounds_ = ExtStreetviewControl.prototype.map_.getBounds();
+  this.bounds_ = this.map_.getBounds();
 };
 
 /**
@@ -455,7 +488,7 @@ ExtStreetviewControl.prototype.mapMove_ = function() {
  * @return GLatlng
  */
 ExtStreetviewControl.prototype.getLatLng = function(){
-  return ExtStreetviewControl.prototype.latlng_;
+  return this.latlng_;
 };
 
 /**
@@ -465,8 +498,8 @@ ExtStreetviewControl.prototype.getLatLng = function(){
  * @return GPOV
  */
 ExtStreetviewControl.prototype.getPov = function(){
-  if(!this.isNull(pov)){
-    return ExtStreetviewControl.prototype.pov_;
+  if(!ExtStreetviewControl.prototype.isNull(pov)){
+    return this.pov_;
   }else{
     return null;
   };
@@ -480,11 +513,12 @@ ExtStreetviewControl.prototype.getPov = function(){
  * @return none
  */
 ExtStreetviewControl.prototype.setLocationAndPOV = function(latlng, pov) {
-  if(!this.isNull(pov)){
-    ExtStreetviewControl.prototype.pov_ = pov;
+  if(!ExtStreetviewControl.prototype.isNull(pov)){
+    this.pov_ = pov;
   };
-  ExtStreetviewControl.prototype.marker_.setLatLng(latlng);
-  ExtStreetviewControl.prototype.stClient_.getNearestPanorama(latlng, ExtStreetviewControl.prototype.stClientEnum_ );
+  this.marker_.setLatLng(latlng);
+  var this_=this;
+  this.stClient_.getNearestPanorama(latlng, function(){this_.stClientEnum_(this_, arguments[0]);} );
 };
 
 
@@ -516,10 +550,10 @@ ExtStreetviewControl.prototype.printable = function(){
  * @private
  */
 ExtStreetviewControl.prototype.removeControl_ = function(control){
-  if(control.toString()==ExtStreetviewControl.prototype.toString()){
-    ExtStreetviewControl.prototype.stObj_.remove();
+  if(control.toString()==this.toString()){
+    this.stObj_.remove();
   };
-  ExtStreetviewControl.prototype.removeControlOrg_.apply(this, arguments);
+  this.removeControlOrg_.apply(this, arguments);
 };
 
 /**
@@ -527,31 +561,33 @@ ExtStreetviewControl.prototype.removeControl_ = function(control){
  * @desc      changed the position on streetview
  */
 ExtStreetviewControl.prototype.stInitialized_ = function(location, force) {
+  if(ExtStreetviewControl.prototype.isNull(location.pov)){return;};
+  
   if(!ExtStreetviewControl.prototype.isNull(location.pov.yaw)
-    || ExtStreetviewControl.prototype.isNull(ExtStreetviewControl.prototype.pov_.yaw)){
-    ExtStreetviewControl.prototype.pov_ = location.pov;
+    || ExtStreetviewControl.prototype.isNull(this.pov_.yaw)){
+    this.pov_ = location.pov;
   };
   
-  ExtStreetviewControl.prototype.latlng_ = location.latlng;
-  ExtStreetviewControl.prototype.marker_.setLatLng(location.latlng);
-  if(!ExtStreetviewControl.prototype.bounds_.containsLatLng(location.latlng)){
-    ExtStreetviewControl.prototype.map_.panTo(location.latlng);
+  this.latlng_ = location.latlng;
+  this.marker_.setLatLng(location.latlng);
+  if(!this.bounds_.containsLatLng(location.latlng)){
+    this.map_.panTo(location.latlng);
   };
 
   
-  ExtStreetviewControl.prototype.stViewCnt_++;
-  if(ExtStreetviewControl.prototype.stViewCnt_>10){
-    ExtStreetviewControl.prototype.map_.panTo(location.latlng);
-    
-    setTimeout(function(){ExtStreetviewControl.prototype.createStreetviewPanorama();},10);
+  this.stViewCnt_++;
+  if(this.stViewCnt_>10){
+    this.map_.panTo(location.latlng);
+    var this_ = this;
+    setTimeout(function(){this_.createStreetviewPanorama();},10);
     return;
   };
 
   if(force==true){
-    ExtStreetviewControl.prototype.stObj_.setLocationAndPOV(location.latlng, ExtStreetviewControl.prototype.pov_);
+    this.stObj_.setLocationAndPOV(location.latlng, this.pov_);
 
-    if(ExtStreetviewControl.prototype.stViewCnt_==1){
-      ExtStreetviewControl.prototype.setAttributeToStFlashViewer_("wmode","opaque");
+    if(this.stViewCnt_==1){
+      this.setAttributeToStFlashViewer_("wmode","opaque");
     };
   };
   
@@ -562,15 +598,16 @@ ExtStreetviewControl.prototype.stInitialized_ = function(location, force) {
  * @desc      set attribute to flash player for streetview
  */
 ExtStreetviewControl.prototype.setAttributeToStFlashViewer_ = function(attrName, attrValue) {
-  if(ExtStreetviewControl.prototype.isNull( ExtStreetviewControl.prototype.flashContainer_)){return null;};
+  if(ExtStreetviewControl.prototype.isNull( this.flashContainer_)){return null;};
   
-  var flashViewer = ExtStreetviewControl.prototype.flashContainer_.firstChild;
+  var flashViewer = this.flashContainer_.firstChild;
+  var this_ = this;
   if(ExtStreetviewControl.prototype.isNull(flashViewer)){
-    setTimeout(function(){ExtStreetviewControl.prototype.setAttributeToStFlashViewer_(attrName, attrValue);}, 100);
+    setTimeout(function(){this_.setAttributeToStFlashViewer_(attrName, attrValue);}, 100);
   }else{
-    ExtStreetviewControl.prototype.flashContainer_.style.visibility="hidden";
+    this.flashContainer_.style.visibility="hidden";
     flashViewer.setAttribute(attrName, attrValue);
-    flashViewer.SetVariable(attrName, attrValue);
+    //flashViewer.SetVariable(attrName, attrValue);
     
     if(flashViewer.tagName.toLowerCase()=="object"){
       var paramEle = document.createElement("param");
@@ -579,7 +616,7 @@ ExtStreetviewControl.prototype.setAttributeToStFlashViewer_ = function(attrName,
       paramEle.value=attrValue;
       flashViewer.appendChild(paramEle);
     };
-    ExtStreetviewControl.prototype.flashContainer_.style.visibility="visible";
+    this.flashContainer_.style.visibility="visible";
   };
 };
 
@@ -587,20 +624,20 @@ ExtStreetviewControl.prototype.setAttributeToStFlashViewer_ = function(attrName,
  * @private
  * @desc      callback for GStreetviewClient
  */
-ExtStreetviewControl.prototype.stClientEnum_ = function(gstreetviewdata){
+ExtStreetviewControl.prototype.stClientEnum_ = function(this_, gstreetviewdata){
   if(gstreetviewdata.code!=200){
-    ExtStreetviewControl.prototype.marker_.getIconContainer_().firstChild.style.top="0px";
+    this_.marker_.getIconContainer_().firstChild.style.top="0px";
     return;
   };
   
-  ExtStreetviewControl.prototype.stInitialized_(gstreetviewdata.location,true);
+  this_.stInitialized_(gstreetviewdata.location,true);
   
-  if(ExtStreetviewControl.prototype.isIE_() && !ExtStreetviewControl.prototype.marker_.isFirst_){
+  if(ExtStreetviewControl.prototype.isIE_() && !this_.marker_.isFirst_){
     if(document.location.protocol.toLowerCase()=="file:"){
-      ExtStreetviewControl.prototype.stObj_.show();
+      this_.stObj_.show();
     };
   };
-  ExtStreetviewControl.prototype.marker_.isFirst_=false;
+  this_.marker_.isFirst_=false;
 
 };
 
@@ -611,8 +648,8 @@ ExtStreetviewControl.prototype.stClientEnum_ = function(gstreetviewdata){
  * @return    none
  */
 ExtStreetviewControl.prototype.minimize = function() {
-  ExtStreetviewControl.prototype.maximize_ = false;
-  ExtStreetviewControl.prototype.toggleMaximize_();
+  this.maximize_ = false;
+  this.toggleMaximize_();
 };
 
 /**
@@ -653,23 +690,23 @@ ExtStreetviewControl.prototype.isIE_ = function() {
  */
 ExtStreetviewControl.prototype.createStreetviewPanorama = function() {
   var flag=false;
-  if(!ExtStreetviewControl.prototype.isNull(ExtStreetviewControl.prototype.stObj_)){
-    GEvent.clearInstanceListeners(ExtStreetviewControl.prototype.stObj_);
-    ExtStreetviewControl.prototype.stObj_.remove();
+  if(!ExtStreetviewControl.prototype.isNull(this.stObj_)){
+    GEvent.clearInstanceListeners(this.stObj_);
+    this.stObj_.remove();
     flag=true;
   };
   
-  var stObj = new GStreetviewPanorama(ExtStreetviewControl.prototype.flashContainer_);
-  ExtStreetviewControl.prototype.stViewCnt_ = 0;
-  ExtStreetviewControl.prototype.stObj_ = stObj;
+  var stObj = new GStreetviewPanorama(this.flashContainer_);
+  this.stViewCnt_ = 0;
+  this.stObj_ = stObj;
   if(flag){
-    stObj.setLocationAndPOV(ExtStreetviewControl.prototype.latlng_, ExtStreetviewControl.prototype.pov_);
-    ExtStreetviewControl.prototype.setAttributeToStFlashViewer_("wmode","opaque");
+    stObj.setLocationAndPOV(this.latlng_, this.pov_);
+    this.setAttributeToStFlashViewer_("wmode","opaque");
   };
   
-  GEvent.addListener(stObj, "initialized", ExtStreetviewControl.prototype.stInitialized_);
-  GEvent.addDomListener(stObj, "yawchanged", ExtStreetviewControl.prototype.yawChanged_);
-  GEvent.addDomListener(stObj, "pitchchanged", ExtStreetviewControl.prototype.pitChchanged_);
+  GEvent.bind(stObj, "initialized",this, this.stInitialized_);
+  GEvent.bindDom(stObj, "yawchanged", this, this.yawChanged_);
+  GEvent.bindDom(stObj, "pitchchanged",this,  this.pitChchanged_);
 };
 
 /**
