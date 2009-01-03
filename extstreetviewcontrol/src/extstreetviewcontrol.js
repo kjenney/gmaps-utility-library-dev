@@ -194,9 +194,9 @@ ExtStreetviewControl.prototype.initialize = function(map) {
     this.ctrlDiv_.style.visibility="visible";
   };
   
-  this.overviewMapControl_ = new myGOverviewMapControl();
-  map.addControl(this.overviewMapControl_);
-  this.overviewMapControl_.hide();
+  //this.overviewMapControl_ = new myGOverviewMapControl();
+  //map.addControl(this.overviewMapControl_);
+  //this.overviewMapControl_.hide();
   //GLog.write(this.overviewMapControl_.getOverviewMap());
   
   //events
@@ -331,7 +331,7 @@ ExtStreetviewControl.prototype.toggleMaximize_ = function() {
     param.maxWidth = this.ctrlSize_.width ;
     param.maxHeight = this.ctrlSize_.height;
     this.minmizeBtn_.style.visibility="visible";
-    this.overviewMapControl_.hide();
+    //this.overviewMapControl_.hide();
   }else{
     this.maximize_ = true;
     param.aniPosDirection = -1;
@@ -342,7 +342,7 @@ ExtStreetviewControl.prototype.toggleMaximize_ = function() {
     
     this.minmizeBtn_.style.visibility="hidden";
     
-    this.overviewMapControl_.show();
+    //this.overviewMapControl_.show();
   };
   if(ExtStreetviewControl.prototype.isIE_() && this.latlng_){
     if(document.location.protocol.toLowerCase()=="file:"){
