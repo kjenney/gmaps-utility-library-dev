@@ -216,7 +216,7 @@ PopupMarker.prototype.redraw = function(force){
   if(force){
     this.setTitle(this.title_);
     this.latlng_=this.getLatLng();
-    this.container_.style.zIndex = GOverlay.getZIndex(this.latlng_.lat());
+    this.container_.style.zIndex = GOverlay.getZIndex(this.latlng_.lat()+1);
   };
 };
 
@@ -227,6 +227,17 @@ PopupMarker.prototype.redraw = function(force){
 PopupMarker.prototype.copy = function() {
   this.opts_.title = this.title_;
   return new PopupMarker(this.latlng_, this.opts_);
+};
+
+/**
+ * @name hide
+ * @desc hidden marker and popup
+ * @param none
+ * @return none
+ */
+PopupMarker.prototype.hide = function(){
+  GMarker.prototype.hide.apply(this, arguments);
+  this.container_.style.visibility="hidden";
 };
 
 /**
