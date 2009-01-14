@@ -18,7 +18,22 @@
  */    
 function ExtLargeMapControl() {
   this.sliderStep = 9;
-  this.imgSrc = "http://maps.google.com/intl/en_ALL/mapfiles/mapcontrols3d.png";
+  this.imgSrc = "http://maps.google.com/mapfiles/mapcontrols3d.png";
+  
+  this.divTbl=new Object();
+  this.divTbl["container"]={ "left": 0, "top":0, "width":59};
+  this.divTbl["topArrowBtn"]={ "left": 20, "top":0, "width":18, "height":18};
+  this.divTbl["leftArrowBtn"]={ "left": 0, "top":20};
+  this.divTbl["rightArrowBtn"]={ "left": 40, "top":20};
+  this.divTbl["bottomArrowBtn"]={ "left": 20, "top":40};
+  this.divTbl["centerBtn"]={ "left": 20, "top":20};
+  this.divTbl["zoomSlideBarContainer"]={ "left": 19, "top":86, "width":22};
+  this.divTbl["zoomSliderContainer"]={ "left": 0, "top":0, "width":22, "height":14};
+  this.divTbl["zoomSliderContainerImg"]={ "left": 0, "top":-384, "width":22, "height":14};
+  this.divTbl["zoomOutBtnContainer"]={ "left": 0, "top":0, "width":59, "height":23};
+  this.divTbl["zoomOutBtnContainerImg"]={ "left": 0, "top":-360, "width":59, "height":23};
+
+
 }
 
 
@@ -29,39 +44,11 @@ ExtLargeMapControl.prototype = new GControl();
 
 
 /**
- * @private
- * @type GMap2
- */
-ExtLargeMapControl.prototype._map = null;
-
-
-/**
- * @private
- * @type Element
- */
-ExtLargeMapControl.prototype._container = null;
-
-
-/**
- * @private
- * @type Element
- */
-ExtLargeMapControl.prototype._slider = null;
-
-
-/**
- * @private
- * @type GKeyboardHandler 
- */
-ExtLargeMapControl.prototype._keyboardhandler = null;
-
-
-/**
  * @desc Initialize the map control
  * @private
  */
 ExtLargeMapControl.prototype.initialize = function (map) {
-  ExtLargeMapControl.prototype._map = map;
+  this._map = map;
 
   var _handleList = {};
   
@@ -86,78 +73,52 @@ ExtLargeMapControl.prototype.initialize = function (map) {
       maxZoom = maptypes[i].getMaximumResolution();
     }
   }
-  ExtLargeMapControl.prototype._maxZoom = parseInt(maxZoom, 10);
-  ExtLargeMapControl.prototype._step = this.sliderStep;
+  this._maxZoom = parseInt(maxZoom, 10);
+  this._step = this.sliderStep;
   var ctrlHeight = (86 + 5) + (maxZoom - minZoom + 1) * this.sliderStep + 5;
 
   // create container
-  var container = document.createElement("div");
-  container.style.width = "59px";
+  var container = this.makeImgDiv_(this.imgSrc, this.divTbl["container"]);
   container.style.height = (ctrlHeight + this.sliderStep + 2) + "px";
-  container.style.overflow = "hidden";
-  container.style.padding = "0";
-  container.style.MozUserSelect = "none";
-  container.style.textAlign = "left";
   _handleList.container = container;
-  ExtLargeMapControl.prototype._container = container;
+  this._container = container;
+  
 
-  //image load
-  var imgContainer = document.createElement("div");
-  imgContainer.style.width = "59px";
-  imgContainer.style.height = "62px";
-  imgContainer.style.overflow = "hidden";
-  if (this._is_ie) {
-    imgContainer.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.imgSrc + "')";
-  }
-  container.appendChild(imgContainer); 
-
-  if (!this._is_ie) {
-    var baseImg = commonImg.cloneNode(false);
-    baseImg.style.position = "absolute";
-    baseImg.style.left = "0px";
-    baseImg.style.top = "0px";
-    baseImg.style.width = "59px";
-    baseImg.style.height = "458px";
-    imgContainer.appendChild(baseImg);
-  }
 
   //top arrow button
-  var topBtn = document.createElement("div");
-  topBtn.style.position = "absolute";
+  var topBtn = this.makeImgDiv_(this.imgSrc, this.divTbl["topArrowBtn"]);
+  topBtn.style.cursor = "pointer";
   topBtn.style.left = "20px";
   topBtn.style.top = "0px";
-  topBtn.style.width = "18px";
-  topBtn.style.height = "18px";
-  topBtn.style.cursor = "pointer";
-  topBtn.style.overflow = "hidden";
   topBtn.title = "up";
   container.appendChild(topBtn); 
 
+
   //left arrow button
   var leftBtn = topBtn.cloneNode(true);
-  leftBtn.style.left = "0px";
-  leftBtn.style.top = "20px";
+  leftBtn.style.left = this.divTbl["leftArrowBtn"].left+"px";
+  leftBtn.style.top = this.divTbl["leftArrowBtn"].top+"px";
   leftBtn.title = "left";
   container.appendChild(leftBtn); 
 
   //right arrow button
   var rightBtn = topBtn.cloneNode(true);
-  rightBtn.style.left = "40px";
-  rightBtn.style.top = "20px";
+  rightBtn.style.left = this.divTbl["rightArrowBtn"].left+"px";
+  rightBtn.style.top = this.divTbl["rightArrowBtn"].top+"px";
   rightBtn.title = "right";
   container.appendChild(rightBtn); 
 
   //bottom arrow button
   var bottomBtn = topBtn.cloneNode(true);
-  bottomBtn.style.left = "20px";
-  bottomBtn.style.top = "40px";
+  bottomBtn.style.left = this.divTbl["bottomArrowBtn"].left+"px";
+  bottomBtn.style.top = this.divTbl["bottomArrowBtn"].top+"px";
   bottomBtn.title = "bottom";
   container.appendChild(bottomBtn); 
 
   //center button
   var homeBtn = topBtn.cloneNode(true);
-  homeBtn.style.left = "20px";
-  homeBtn.style.top = "20px";
+  homeBtn.style.left = this.divTbl["centerBtn"].left+"px";
+  homeBtn.style.top = this.divTbl["centerBtn"].top+"px";
   homeBtn.title = "home position";
   container.appendChild(homeBtn); 
 
@@ -167,87 +128,45 @@ ExtLargeMapControl.prototype.initialize = function (map) {
   _handleList.bottomBtn = bottomBtn;
   _handleList.homeBtn = homeBtn;
 
-  // zoom slider Button
+
+  // zoom slider container
   var zoomSlideBarContainer = document.createElement("div");
   zoomSlideBarContainer.style.position  = "absolute";
-  zoomSlideBarContainer.style.left = "19px";
-  zoomSlideBarContainer.style.top = "86px";
-  zoomSlideBarContainer.style.width = "22px";
+  zoomSlideBarContainer.style.left = this.divTbl["zoomSlideBarContainer"].left+"px";
+  zoomSlideBarContainer.style.top = this.divTbl["zoomSlideBarContainer"].top+"px";
+  zoomSlideBarContainer.style.width = this.divTbl["zoomSlideBarContainer"].width+"px";
   zoomSlideBarContainer.style.height = ((maxZoom - minZoom + 1) * this.sliderStep) + "px";
   zoomSlideBarContainer.style.overflow = "hidden";
   zoomSlideBarContainer.style.cursor = "pointer";
   container.appendChild(zoomSlideBarContainer); 
   _handleList.slideBar = zoomSlideBarContainer;
 
+  // zoom slider Button
   var zoomLevel = map.getZoom();
-  //zoomOut Btn load
-  var zoomSliderContainer = document.createElement("div");
-  zoomSliderContainer.style.position  = "absolute";
-  zoomSliderContainer.style.left = 0;
-  zoomSliderContainer.style.top = ((maxZoom - zoomLevel) * this.sliderStep + 1) + "px";
-  zoomSliderContainer.style.width = "22px";
-  zoomSliderContainer.style.height = "14px";
-  zoomSliderContainer.style.overflow = "hidden";
-  zoomSliderContainer.style.cursor = "url(http://maps.google.com/intl/en_ALL/mapfiles/openhand.cur), default";
+  var zoomSliderContainer = this.makeImgDiv_(this.imgSrc, this.divTbl["zoomSliderContainerImg"]);
+  with(zoomSliderContainer.style){
+      top=((maxZoom - zoomLevel) * this.sliderStep + 1) + "px";
+      left=this.divTbl["zoomSliderContainer"].left+"px";
+      width=this.divTbl["zoomSliderContainer"].width+"px";
+      height=this.divTbl["zoomSliderContainer"].height+"px";
+  };
+  zoomSlideBarContainer.cursor = "url(http://maps.google.com/mapfiles/openhand.cur), default";
   zoomSlideBarContainer.appendChild(zoomSliderContainer); 
   _handleList.slideBarContainer = zoomSliderContainer;
 
-  if (this._is_ie) {
-    var zoomSliderBtnImg = document.createElement("div");
-    zoomSliderBtnImg.style.position = "relative";
-    zoomSliderBtnImg.style.left = 0;
-    zoomSliderBtnImg.style.top = "-384px";
-    zoomSliderBtnImg.style.width = "22px";
-    zoomSliderBtnImg.style.height = "14px";
-    zoomSliderBtnImg.style.overflow = "hidden";
-    zoomSliderBtnImg.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src = '" + this.imgSrc + "')";
-    zoomSliderContainer.appendChild(zoomSliderBtnImg);
-    _handleList.zoomSlider = zoomSliderBtnImg;
-  } else {
-    var slideImg = commonImg.cloneNode(false);
-    slideImg.style.position = "absolute";
-    slideImg.style.left = "0px";
-    slideImg.style.top = "-384px";
-    slideImg.style.MozUserSelect = "none";
-    slideImg.style.border = "0px none";
-    slideImg.style.margin = "0px";
-    slideImg.style.padding = "0px";
-    slideImg.style.width = "59px";
-    slideImg.style.height = "458px";
-    zoomSliderContainer.appendChild(slideImg);
-    _handleList.zoomSlider = slideImg;
-  }
 
-  //zoomOut Btn load
-  var zoomOutBtnContainer = document.createElement("div");
-  zoomOutBtnContainer.style.position = "absolute";
-  zoomOutBtnContainer.style.left = 0;
-  zoomOutBtnContainer.style.top = (86 + (maxZoom - minZoom + 1) * this.sliderStep) + "px";
-  zoomOutBtnContainer.style.width = "59px";
-  zoomOutBtnContainer.style.height = "23px";
-  zoomOutBtnContainer.style.overflow = "hidden";
+  //zoomOut Btn container
+  var zoomOutBtnContainer = this.makeImgDiv_(this.imgSrc, this.divTbl["zoomOutBtnContainerImg"]);
+  with(zoomOutBtnContainer.style){
+      top=(86 + (maxZoom - minZoom + 1) * this.sliderStep) + "px";
+      left=this.divTbl["zoomOutBtnContainer"].left+"px";
+      width=this.divTbl["zoomOutBtnContainer"].width+"px";
+      height=this.divTbl["zoomOutBtnContainer"].height+"px";
+  };
+  zoomOutBtnContainer.cursor = "url(http://maps.google.com/mapfiles/openhand.cur), default";
   container.appendChild(zoomOutBtnContainer); 
+  _handleList.zoomOutBtnContainer = zoomOutBtnContainer;
 
-
-  if (this._is_ie) {
-    var zoomOutBtnImg = document.createElement("div");
-    zoomOutBtnImg.style.position = "relative";
-    zoomOutBtnImg.style.left = 0;
-    zoomOutBtnImg.style.top = "-360px";
-    zoomOutBtnImg.style.width = "59px";
-    zoomOutBtnImg.style.height = "23px";
-    zoomOutBtnImg.style.overflow = "hidden";
-    zoomOutBtnImg.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.imgSrc + "')";
-    zoomOutBtnContainer.appendChild(zoomOutBtnImg);
-  } else {
-    var btnImg = commonImg.cloneNode(false);
-    btnImg.style.position = "absolute";
-    btnImg.style.left = "0px";
-    btnImg.style.top = "-360px";
-    btnImg.style.width = "59px";
-    btnImg.style.height = "458px";
-    zoomOutBtnContainer.appendChild(btnImg);
-  }
 
   //zoomOut button
   var zoomOutBtn = document.createElement("div");
@@ -276,32 +195,22 @@ ExtLargeMapControl.prototype.initialize = function (map) {
   _handleList.zoomInBtn = zoomInBtn;
 
   // events
-  GEvent.addDomListener(_handleList.topBtn, "click", 
-      GEvent.callback(this, this._eventTop));
-  GEvent.addDomListener(_handleList.leftBtn, "click", 
-      GEvent.callback(this, this._eventLeft));
-  GEvent.addDomListener(_handleList.rightBtn, "click", 
-      GEvent.callback(this, this._eventRight));
-  GEvent.addDomListener(_handleList.bottomBtn, "click", 
-      GEvent.callback(this, this._eventBottom));
-  GEvent.addDomListener(_handleList.homeBtn, "click", 
-      GEvent.callback(this, this._eventHome));
-  GEvent.addDomListener(_handleList.zoomOutBtn, "click", 
-      GEvent.callback(this, this._eventZoomOut));
-  GEvent.addDomListener(_handleList.zoomInBtn, "click", 
-      GEvent.callback(this, this._eventZoomIn));
-  GEvent.addDomListener(_handleList.slideBar, "click", 
-      GEvent.callback(this, this._eventSlideBar));
-  GEvent.addListener(map, "zoomend", 
-      GEvent.callback(this, this._eventZoomEnd));
+  GEvent.bindDom(_handleList.topBtn,"click",this,this._eventTop);
+  GEvent.bindDom(_handleList.leftBtn,"click",this,this._eventLeft);
+  GEvent.bindDom(_handleList.rightBtn,"click",this,this._eventRight);
+  GEvent.bindDom(_handleList.bottomBtn,"click",this,this._eventBottom);
+  GEvent.bindDom(_handleList.homeBtn,"click",this,this._eventHome);
+  GEvent.bindDom(_handleList.zoomOutBtn,"click",this,this._eventZoomOut);
+  GEvent.bindDom(_handleList.zoomInBtn,"click",this,this._eventZoomIn);
+  GEvent.bindDom(_handleList.slideBar,"click",this,this._eventSlideBar);
+  GEvent.bind(map,"zoomend",this,this._eventZoomEnd);
 
   var drgOpt = {
     container : _handleList.slideBar
   };
   var drgCtrl = new GDraggableObject(_handleList.slideBarContainer, drgOpt);
-  GEvent.addDomListener(drgCtrl, "dragend", 
-      GEvent.callback(this, this._eventSlideDragEnd));
-  ExtLargeMapControl.prototype._slider =  drgCtrl;
+  GEvent.bindDom(drgCtrl, "dragend", this, this._eventSlideDragEnd);
+  this._slider =  drgCtrl;
 
   //set current slider position
   this._eventZoomEnd(map.getZoom(), map.getZoom());
@@ -316,7 +225,7 @@ ExtLargeMapControl.prototype.initialize = function (map) {
  * @private
  */
 ExtLargeMapControl.prototype._eventTop = function () {
-  ExtLargeMapControl.prototype._map.panDirection(0, 1);
+  this._map.panDirection(0, 1);
 };
 
 
@@ -324,35 +233,35 @@ ExtLargeMapControl.prototype._eventTop = function () {
  * @private
  */
 ExtLargeMapControl.prototype._eventLeft = function () {
-  ExtLargeMapControl.prototype._map.panDirection(1, 0);
+  this._map.panDirection(1, 0);
 };
 
 /**
  * @private
  */
 ExtLargeMapControl.prototype._eventRight = function () {
-  ExtLargeMapControl.prototype._map.panDirection(-1, 0);
+  this._map.panDirection(-1, 0);
 };
 
 /**
  * @private
  */
 ExtLargeMapControl.prototype._eventBottom = function () {
-  ExtLargeMapControl.prototype._map.panDirection(0, -1);
+  this._map.panDirection(0, -1);
 };
 
 /**
  * @private
  */
 ExtLargeMapControl.prototype._eventZoomOut = function () {
-  ExtLargeMapControl.prototype._map.zoomOut();
+  this._map.zoomOut();
 };
 
 /**
  * @private
  */
 ExtLargeMapControl.prototype._eventZoomIn = function () {
-  ExtLargeMapControl.prototype._map.zoomIn();
+  this._map.zoomIn();
 };
 
 
@@ -453,6 +362,14 @@ ExtLargeMapControl.prototype._eventZoomEnd = function (oldZoom, newZoom) {
   this._slider.moveTo(new GPoint(0, (maxZoom - newZoom) * step));
 };
 
+/**
+ * @private
+ * @ignore
+ */
+ExtLargeMapControl.prototype.copy = function () {
+  return new ExtLargeMapControl(this.latlng_, this.opt_opts_);
+};
+
 
 /**
  * @private
@@ -478,3 +395,54 @@ ExtLargeMapControl.prototype.selectable = function () {
 ExtLargeMapControl.prototype.printable = function () {
   return true;
 };
+
+/**
+ * @private
+ * @desc      detect null,null string and undefined
+ * @param     value
+ * @return    true  :  value is nothing
+ *            false :  value is not nothing
+ */
+ExtLargeMapControl.prototype.isNull = function(value) {
+  if(!value && value!=0 ||
+     value==undefined ||
+     value=="" ||
+     value==null ||
+     typeof value=="undefined"){return true;};
+  return false;
+};
+
+/**
+ * @private
+ * @desc      create div element with PNG image
+ */
+ExtLargeMapControl.prototype.makeImgDiv_=function(imgSrc, params){
+  var imgDiv = document.createElement("div");
+  with(imgDiv.style){
+    position = "absolute";
+    overflow="hidden";
+    if(params.width){width = params.width+"px";};
+    if(params.height){height = params.height+"px";};
+  };
+  
+  var img = null;
+  if(!this._is_ie){
+    img = new Image();
+    img.src = imgSrc;
+  }else{
+    img = document.createElement("div");
+    with(img.style){
+      if(params.width){width = params.width+"px";};
+      if(params.height){height = params.height+"px";};
+    };
+  };
+  with(img.style){
+    position="relative";
+    left = params.left+"px";
+    top =  params.top+"px";
+    filter="progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+imgSrc+"')";
+  };
+  imgDiv.appendChild(img);
+  return imgDiv;
+};
+
