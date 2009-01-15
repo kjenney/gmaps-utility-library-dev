@@ -226,8 +226,7 @@ ExtLargeMapControl.prototype.initialize = function (map) {
 **/
 ExtLargeMapControl.prototype._updateZoomSliderRange = function () {
   
-  console.log(this);
-
+  
   var minZoom = parseInt(this._map.getCurrentMapType().getMinimumResolution(), 10);
   var maxZoom = parseInt(this._map.getCurrentMapType().getMaximumResolution(), 10);
   var ctrlHeight = (86 + 5) + (maxZoom - minZoom + 1) * this.sliderStep + 5;
