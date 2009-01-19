@@ -104,6 +104,8 @@ SnapShotControl.prototype.initialize = function (map) {
   // events
   GEvent.bindDom(container, "click", this, this._click);
   GEvent.bind(map, "addoverlay", this, this._addOverlay);
+  GEvent.bind(map, "clearoverlays", this, this._clearOverlays);
+  GEvent.bind(map, "removeoverlay", this, this._removeOverlay);
 
   map.getContainer().appendChild(container);
   
@@ -115,7 +117,7 @@ SnapShotControl.prototype.initialize = function (map) {
  */
 SnapShotControl.prototype._addOverlay = function (overlay) {
   switch(this.detectOverlay(overlay)){
-    case "GPolyline":
+    case "GPolygon":
       var polygonInfo = new Object();
       polygonInfo.handle = overlay;
       polygonInfo.color = this.colorNameToRgb(overlay.color).replace("#","0x");
@@ -130,6 +132,22 @@ SnapShotControl.prototype._addOverlay = function (overlay) {
       };
       this.polylines_.push(polygonInfo);
       break;
+
+    case "GPolyline":
+      var polylineInfo = new Object();
+      polylineInfo.handle = overlay;
+      polylineInfo.color = this.colorNameToRgb(overlay.color).replace("#","0x");
+      polylineInfo.weight = overlay.weight;
+      polylineInfo.opacity = Math.floor(overlay.opacity*255).toString(16);
+      polylineInfo.vertexCount = overlay.getVertexCount();
+      polylineInfo.vertexList = new Array();
+      polylineInfo.drawFlagList = new Array();
+      for(var i=0;i<polylineInfo.vertexCount;i++){
+        var pos = new GLatLng(this.floor6decimal(overlay.getVertex(i).lat()), this.floor6decimal(overlay.getVertex(i).lng()));
+        polylineInfo.vertexList.push(pos);
+      };
+      this.polylines_.push(polylineInfo);
+      break;
       
     case "GMarker":
       var markerInfo = new Object();
@@ -139,6 +157,54 @@ SnapShotControl.prototype._addOverlay = function (overlay) {
       break;
   };
 };
+
+/**
+ * @private
+ */
+SnapShotControl.prototype._clearOverlays = function (overlay) {
+  this.polylines_.length=0;
+  this.markers_.length=0;
+};
+
+/**
+ * @private
+ */
+SnapShotControl.prototype._removeOverlay = function (overlay) {
+  var shiftFlag=false;
+  switch(this.detectOverlay(overlay)){
+    case "GPolygon":
+    case "GPolyline":
+      var polygonInfo = new Object();
+      polygonInfo.handle = overlay;
+      for(var i=0;i<this.polylines_.length;i++){
+        if(shiftFlag==true){
+          this.polylines_[i-1]=this.polylines_[i];
+        };
+        if(this.polylines_[i].handle==overlay){
+          shiftFlag=true;
+        };
+      };
+      this.polylines_.length-=1;
+      break;
+      
+    case "GMarker":
+      var markerInfo = new Object();
+      markerInfo.handle = overlay;
+      
+      for(var i=0;i<this.markers_.length;i++){
+        if(shiftFlag==true){
+          this.markers_[i-1]=this.markers_[i];
+        };
+        if(this.markers_[i].handle==overlay){
+          shiftFlag=true;
+        };
+      };
+      this.markers_.length-=1;
+      
+      break;
+  };
+};
+
 
 /**
  * @private
@@ -154,7 +220,7 @@ SnapShotControl.prototype.detectOverlay = function (overlay) {
   
   var matchingTest=function(checkClass){
     for(var key2 in checkClass.prototype){
-      if(this_.isNull(overlayProperties[key2]) && key2!="prototype"){
+      if(this_.isNull(overlayProperties[key2]) && key2!="prototype" && key2!="__super"){
         return false;
       };
     };
@@ -162,8 +228,8 @@ SnapShotControl.prototype.detectOverlay = function (overlay) {
   };
   
   if(matchingTest(GPolyline)){return "GPolyline";};
+  if(matchingTest(GPolygon)){return "GPolygon";};
   if(matchingTest(GMarker)){return "GMarker";};
-  
   return undefined;
 };
 
@@ -223,7 +289,9 @@ SnapShotControl.prototype._click = function () {
   var lineBound ;
   for(var i=0;i<this.polylines_.length;i++){
     var polyline = this.polylines_[i];
+    
     if(polyline.handle.isHidden()==false){
+      
       var vertexLatLng;
       var pathStr="";
       var addedList = new Array(polyline.vertexCount);
