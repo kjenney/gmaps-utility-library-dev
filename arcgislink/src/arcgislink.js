@@ -1,3 +1,16 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /**
  * @name ArcGISServer Link for Google Maps Javascript API
  * @version 1.0
@@ -100,21 +113,6 @@
  *     </td>
  *    </tr></table>
  */
-/*!
- * ArcGIS Server Link for Google Maps Javascript API
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 (function () {
 
   /*jslint browser:true */
@@ -124,7 +122,7 @@
    *  create a namespace by name such as a.b.c
    * @param {String} ns
    */
-  function namespace(ns) {
+  var namespace = function (ns) {
     var i, c, n;
     var names = ns.split('.');
     n = window;
@@ -133,7 +131,7 @@
       n = n[names[i]];
     }
     return n;
-  }
+  };
   //http://code.google.com/p/gmaps-utility-library-dev/issues/detail?id=34
   //http://groups.google.com/group/Google-Maps-API/browse_thread/thread/c6c5bd8f6441a39e/f24f549218a279f5?#f24f549218a279f5
   // deal with the situation when user only loaded namespace.
@@ -307,27 +305,27 @@
  * @param {Object} start
  * @param {Object} end
  */
-  function extractString(full, start, end) {
+  var extractString = function (full, start, end) {
     var i = (start === '') ? 0 : full.indexOf(start);
     var e = end === '' ? full.length : full.indexOf(end, i + start.length);
     return full.substring(i + start.length, e);
-  }
+  };
   
   /**
    * If the object is String
    * @param {Object} o
    */
-  function isString(o) {
+  var isString = function (o) {
     return typeof o === 'string';
-  }
+  };
   
   /**
    * if the object is array
    * @param {Object} o
    */
-  function isArray(o) {
+  var isArray = function (o) {
     return o && o.splice;
-  }
+  };
   
   /**
    * Add the property of the src object to destination object if not already exists.
@@ -336,7 +334,7 @@
    * @param {Boolean} force
    * @return {Object}
    */
-  function augmentObject(src, dest, force) {
+  var augmentObject = function (src, dest, force) {
     if (src && dest) {
       var p;
       for (p in src) {
@@ -346,7 +344,7 @@
       }
     }
     return dest;
-  }
+  };
   
   /*
    * Wrapper around GEvent.trigger
@@ -354,11 +352,11 @@
    * @param {Object} evtName
    * @param {Object} args
    */
-  function triggerEvent(src, evtName, args) {
+  var triggerEvent = function (src, evtName, args) {
     if (GEvent) {
       GEvent.trigger.apply(this, arguments);
     }
-  }
+  };
   
   /**
    * Find out the index of obj in array
@@ -366,7 +364,7 @@
    * @param {Object} obj
    * @param {Boolean} ignoreCase
    */
-  function indexOf(arr, obj, ignoreCase) {
+  var indexOf = function (arr, obj, ignoreCase) {
     if (arr && obj) {
       if (arr.indexOf && !ignoreCase) {
         return arr.indexOf(obj);
@@ -379,26 +377,26 @@
       }
     }
     return -1;
-  }
+  };
   
-  function mergeArray(arr, sub) {
+  var mergeArray = function (arr, sub) {
     for (var i = 0, c = sub.length; i < c; i++) {
       arr.push(sub[i]);
     }
     return arr;
-  }
+  };
   
   /**
    * Remove element from array
    * @param {Array} arr
    * @param {Object} elm
    */
-  function removeFromArray(arr, elm) {
+  var removeFromArray = function (arr, elm) {
     var i = indexOf(arr, elm);
     if (i !== -1) {
       arr.splice(i, 1);
     }
-  }
+  };
  
 
   
@@ -577,17 +575,18 @@
         res = results[i];
         layerName = res.layerName;
         if (!ret[layerName]) {
-          var fields = [];
+          var fieldAliases = {};//[];
           for (var x in res.attributes) {
             if (res.attributes.hasOwnProperty(x)) {
-              fields.push(x);
+             // fields.push(x);
+              fieldAliases[x] = x;
             }
           }
           var set = {
             displayFieldName: res.displayFieldName,
             spatialReference: res.geometry ? res.geometry.spatialReference : null,
             geometryType: res.geometryType,
-            fieldAliases: fields,
+            fieldAliases: fieldAliases,
             features: []
           };
           ret[layerName] = set;
@@ -608,10 +607,16 @@
     var html = '<table class="ags-resultset">';
     var i, j, c, d;
     style = style || (res.features.length === 1? 'v' : 'h');
+    var fields = [];
+    for (var x in res.fieldAliases) {
+      if (res.fieldAliases.hasOwnProperty(x)) {
+        fields.push(x);
+      }
+    }
     if (style === 'h') {
       html += '<tr>';
-      for (i = 0, c = res.fieldAliases.length; i < c; i++) {
-        html += '<th class="ags-fieldname">' + res.fieldAliases[i] + '</th>';
+      for (i = 0, c = fields.length; i < c; i++) {
+        html += '<th class="ags-fieldname">' + res.fieldAliases[fields[i]] + '</th>';
       }
       html += '</tr>';
     }
@@ -622,11 +627,11 @@
       } else if (i > 0) {
         html += '<tr><td colspan="2"><hr/></td></tr>';
       }
-      for (j = 0, d = res.fieldAliases.length; j < d; j++) {
+      for (j = 0, d = fields.length; j < d; j++) {
         if (style === 'h') {
-          html += '<td class="ags-fieldvalue">' + atts[res.fieldAliases[j]] + '</td>';
+          html += '<td class="ags-fieldvalue">' + atts[fields[j]] + '</td>';
         } else {
-          html += '<tr><td class="ags-fieldname">' + res.fieldAliases[j] + '</td><td class="ags-fieldvalue">' + atts[res.fieldAliases[j]] + '</td></tr>';
+          html += '<tr><td class="ags-fieldname">' + res.fieldAliases[fields[j]] + '</td><td class="ags-fieldvalue">' + atts[fields[j]] + '</td></tr>';
         }
       }
       if (style === 'h') {
@@ -1397,7 +1402,7 @@
    *   There is no constructor, use JavaScript object literal.
    * <br/>For more info see <a  href  = 'http://resources.esri.com/help/9.3/arcgisserver/apis/rest/query.html'>Query Operation</a>.
    * @property {String} [displayFieldName] display Field Name for layer
-   * @property {String[]} [fieldAliases] Field Name's Aliases
+   * @property {Object} [fieldAliases] Field Name's Aliases. key is field name, value is alias.
    * @property {String} [geometryType] esriGeometryPoint | esriGeometryMultipoint | esriGeometryPolygon | esriGeometryPolyline
    * @property {Object} [spatialReference] spatial Reference <b>wkid info only</b>
    * @property {Features[]} [features] result as array of {@link ArcGISFeature}
