@@ -291,7 +291,6 @@ SnapShotControl.prototype._click = function () {
     var polyline = this.polylines_[i];
     
     if(polyline.handle.isHidden()==false){
-      
       var vertexLatLng;
       var pathStr="";
       var addedList = new Array(polyline.vertexCount);
@@ -341,61 +340,62 @@ SnapShotControl.prototype._click = function () {
         url+=path;
       };
     };
+  };
+  
+  //markers
+  var markerStr="";
+  var markerLatLng;
+  var markerSize;
+  var markerAlphaNumeric;
+  var markerColor;
+  var optStr="";
+
+  for(var i=0;i<this.markers_.length;i++){
+    markerLatLng = this.markers_[i].handle.getLatLng();
+    if(!this.markers_[i].handle.isHidden() && bounds.containsLatLng(markerLatLng)){
     
-    //markers
-    var markerStr="";
-    var markerLatLng;
-    var markerSize;
-    var markerAlphaNumeric;
-    var markerColor;
-    var optStr="";
-    for(var i=0;i<this.markers_.length;i++){
-      markerLatLng = this.markers_[i].handle.getLatLng();
-      if(!this.markers_[i].handle.isHidden() && bounds.containsLatLng(markerLatLng)){
+      markerStr+=(markerStr!="" ? "|":"")+this.floor6decimal(markerLatLng.lat())+","+this.floor6decimal(markerLatLng.lng());
       
-        markerStr+=(markerStr!="" ? "|":"")+this.floor6decimal(markerLatLng.lat())+","+this.floor6decimal(markerLatLng.lng());
-        
-        optStr="";
-        //{size}
-        markerSize=this.markers_[i].handle.size;
-        if(!this.isNull(markerSize)){
-          markerSize=markerSize.toLowerCase();
-          if(markerSize=="normal" || markerSize=="tiny" || markerSize=="mid" || markerSize=="small"){
-            optStr+=markerSize;
-          };
-        };
-        
-        //{color}
-        markerColor=this.markers_[i].handle.color;
-        if(!this.isNull(markerColor)){
-          markerColor= markerColor.toLowerCase();
-          if(markerColor=="black" || markerColor=="brown" || markerColor=="purple" || markerColor=="green"
-            || markerColor=="yellow" || markerColor=="blue" || markerColor=="gray" || markerColor=="orange"
-            || markerColor=="red" || markerColor=="white"){
-            optStr+=markerColor;
-          };
-        }else if(!this.isNull(markerSize)){
-          optStr+="red";
-        };
-        
-        //{alphanumeric-character}
-        markerAlphaNumeric=this.markers_[i].handle.charactor;
-        if(!this.isNull(markerAlphaNumeric) && markerSize!="small" && markerSize!="tiny" ){
-          if(markerAlphaNumeric.match(/^[a-zA-Z0-9]/)){
-            if(optStr==""){
-              optStr="red";
-            };
-            optStr+=markerAlphaNumeric.substr(0,1);
-          };
-        };
-        
-        if(optStr!=""){
-          markerStr+="," + optStr;
+      optStr="";
+      //{size}
+      markerSize=this.markers_[i].handle.size;
+      if(!this.isNull(markerSize)){
+        markerSize=markerSize.toLowerCase();
+        if(markerSize=="normal" || markerSize=="tiny" || markerSize=="mid" || markerSize=="small"){
+          optStr+=markerSize;
         };
       };
+      
+      //{color}
+      markerColor=this.markers_[i].handle.color;
+      if(!this.isNull(markerColor)){
+        markerColor= markerColor.toLowerCase();
+        if(markerColor=="black" || markerColor=="brown" || markerColor=="purple" || markerColor=="green"
+          || markerColor=="yellow" || markerColor=="blue" || markerColor=="gray" || markerColor=="orange"
+          || markerColor=="red" || markerColor=="white"){
+          optStr+=markerColor;
+        };
+      }else if(!this.isNull(markerSize)){
+        optStr+="red";
+      };
+      
+      //{alphanumeric-character}
+      markerAlphaNumeric=this.markers_[i].handle.charactor;
+      if(!this.isNull(markerAlphaNumeric) && markerSize!="small" && markerSize!="tiny" ){
+        if(markerAlphaNumeric.match(/^[a-zA-Z0-9]/)){
+          if(optStr==""){
+            optStr="red";
+          };
+          optStr+=markerAlphaNumeric.substr(0,1);
+        };
+      };
+      
+      if(optStr!=""){
+        markerStr+="," + optStr;
+      };
     };
-    url+="&markers="+markerStr;
   };
+  url+="&markers="+markerStr;
 
   this.snapContainerImg.src=url;
   this.imgUrl_ = url;
