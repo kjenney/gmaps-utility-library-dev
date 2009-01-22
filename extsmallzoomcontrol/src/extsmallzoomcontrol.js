@@ -12,14 +12,14 @@
 function ExtSmallZoomControl(opt_opts_) {
   this.sliderStep = 9;
   this.imgSrc = "http://maps.google.com/mapfiles/szc3d.png";
-  if(this.isNull(opt_opts_)){opt_opts_=new Object();};
+  opt_opts_ = opt_opts_ || {};
   this.zoomInBtnTitle = opt_opts_.zoomUpBtnTitle || "zoom in";
   this.zoomOutBtnTitle = opt_opts_.zoomDownBtnTitle || "zoom out";
   
   this.opt_opts_ = opt_opts_;
   
   this.divTbl = {};
-  this.divTbl.container = { "left" : 0, "top" : 0, "width" : 19, "height":42};
+  this.divTbl.container = { "left" : 0, "top" : 0, "width" : 19, "height" : 42};
   this.divTbl.zoomInBtn = { "left" : 0, "top" : 0, "width" : 19, "height" : 21};
   this.divTbl.zoomOutBtnImg = { "left" : 0, "top" : -21, "width" : 19, "height" : 21};
   this.divTbl.zoomOutBtn = { "left" : 0, "top" : 21, "width" : 19, "height" : 21};
@@ -52,14 +52,12 @@ ExtSmallZoomControl.prototype.initialize = function (map) {
 
   // create container
   var container = document.createElement("div");
-  with(container.style){
-    left=this.divTbl.container.left+"px";
-    top=this.divTbl.container.top+"px";
-    width=this.divTbl.container.width+"px";
-    height=this.divTbl.container.height+"px";
-    position="absolute";
-    overflow="hidden";
-  };
+  container.style.left = this.divTbl.container.left + "px";
+  container.style.top = this.divTbl.container.top + "px";
+  container.style.width = this.divTbl.container.width + "px";
+  container.style.height = this.divTbl.container.height + "px";
+  container.style.position = "absolute";
+  container.style.overflow = "hidden";
   this._container = container;
   
   //zoom up button
@@ -70,15 +68,13 @@ ExtSmallZoomControl.prototype.initialize = function (map) {
 
   //zoom down button
   var zoomOutBtn = this.makeImgDiv_(this.imgSrc, this.divTbl.zoomOutBtnImg);
-  with(zoomOutBtn.style){
-    cursor="pointer";
-    overflow="hidden";
-    position="absolute";
-    left=this.divTbl.zoomOutBtn.left+"px";
-    top=this.divTbl.zoomOutBtn.top+"px";
-    width=this.divTbl.zoomOutBtn.width+"px";
-    height=this.divTbl.zoomOutBtn.height+"px";
-  };
+  zoomOutBtn.style.cursor = "pointer";
+  zoomOutBtn.style.overflow = "hidden";
+  zoomOutBtn.style.position = "absolute";
+  zoomOutBtn.style.left = this.divTbl.zoomOutBtn.left + "px";
+  zoomOutBtn.style.top = this.divTbl.zoomOutBtn.top + "px";
+  zoomOutBtn.style.width = this.divTbl.zoomOutBtn.width + "px";
+  zoomOutBtn.style.height = this.divTbl.zoomOutBtn.height + "px";
   zoomOutBtn.title = this.zoomOutBtnTitle;
   container.appendChild(zoomOutBtn); 
 
