@@ -337,17 +337,22 @@ PopupMarker.prototype.redrawNormalPopup_ = function (title) {
 PopupMarker.prototype.redrawChartImg_ = function (title) {
   title = title.replace(/^chst\=/i, "");
   var dummyImg = new Image();
-  dummyImg.src = "http://www.google.com/chart?chst=" + title;
+  dummyImg.src = "http://chart.apis.google.com/chart?chst=" + title;
   
   var this_  = this;
   var is_ie_  = this.isIE_();
+  var limitCnt = 100;
   var redraw = function () {
+    limitCnt--;
+    if (limitCnt === 0) {
+      return;
+    }
     if (dummyImg.complete === true) {
       this_.size_ = {"width" : dummyImg.width, "height" : dummyImg.height };
       if (is_ie_ === true) {
         this_.chartImg_.firstChild.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://www.google.com/chart?chst=" + title + "')";
       } else {
-        this_.chartImg_.firstChild.src = "http://www.google.com/chart?chst=" + title;
+        this_.chartImg_.firstChild.src = "http://chart.apis.google.com/chart?chst=" + title;
       }
       this_.chartImg_.firstChild.style.width = this_.size_.width + "px";
       this_.chartImg_.firstChild.style.height = this_.size_.height + "px";
