@@ -360,7 +360,8 @@ PopupMarker.prototype.redrawChartImg_ = function (title) {
       var pxPos = this_.map_.fromLatLngToDivPixel(this_.latlng_);
       this_.container_.style.left =  pxPos.x + "px";
       this_.container_.style.top = (pxPos.y - this_.size_.height) + "px";
-      
+      this_.container_.style.width = this_.size_.width + "px";
+      this_.container_.style.height = this_.size_.height + "px";
     } else {
       var own = arguments.callee;
       setTimeout(own, 10);
