@@ -28,13 +28,94 @@ Creates a popup with marker.</p>
               <tr class="odd">
                 <td><code>PopupMarker()</code></td>
                 
-                <td>Creates an PopupMarker. No configuration options are available.</td>
+                <td>Creates a PopupMarker at the latlng with options specified in PopupMarkerOptions and GMarkerOptions. By default markers are clickable & have the default icon G_DEFAULT_ICON.</td>
               </tr>
             
           </tbody>
         </table>
       
+        <h3>Methods</h3>
+        <table summary="class PopupMarker - Methods" width="90%">
+          
+          <tbody>
+            <tr>
+              <th>Method</th>
+              
+              <th>Return<br>Value</th>
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>setTitle</code></td>
+                
+                <td><code>None</code></td>
+                
+                <td>Set marker's title.Able to HTML text.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>getTitle</code></td>
+                
+                <td><code>Strings</code></td>
+                
+                <td>Return marker's strings.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>showPopup</code></td>
+                
+                <td><code>None</code></td>
+                
+                <td>Show popup.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>hidePopup</code></td>
+                
+                <td><code>None</code></td>
+                
+                <td>Hide popup.</td>
+              </tr>
+            
+          </tbody>
+        </table>
     
+      <h2><a name="PopupMarkerOptions"></a>class PopupMarkerOptions</h2>
+      <p></p>
+      
+        <h3>Properties</h3>
+        <table summary="class PopupMarkerOptions - Properties" width="90%">
+          
+          <tbody>
+            <tr>
+              <th>Property</th>
+              
+              <th>Type</th>
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>style</code></td>
+                
+                <td><code>String</code></td>
+                
+                <td>The "normal" is default popup.<br>The "chart" is the Charts API.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>title</code></td>
+                
+                <td><code>Strings</code></td>
+                
+                <td>This string will appear as popup on the marker.</td>
+              </tr>
+            
+            
+          </tbody>
+        </table>
+
     <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
     <script type="text/javascript">
       _uacct = "UA-964209-4";
