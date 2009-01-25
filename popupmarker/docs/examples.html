@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>PopupMarker Documentation: Examples</title>
+<link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
+    <link rel="stylesheet" type="text/css" href="http://gmaps-utility-library.googlecode.com/svn/trunk/util/docs/template/local_extensions.css"></link>
+    <script type="text/javascript" src="http://code.google.com/js/prettify.js"></script>
+  </head>
+
+  <body onload="prettyPrint()">
+<h1>PopupMarker Example</h1>
+
+<p>To use the progress bar, create a <code>PopupMarker</code> object and add this marker to the map with GMap2.addOverlay(PopupMarker).</p>
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map_canvas"));
+map.setCenter(new GLatLng(48.859862, 2.292024), 17);
+var markerOpt = {title:"PopupMarker example01"};
+var marker = new PopupMarker(new GLatLng(48.859862, 2.292024),markerOpt);
+map.addOverlay(marker);
+marker.showPopup();</pre>
+
+<h2>Basic Example</h2>
+
+<p>The following example shows the ExtLargeMapControl in a simple example.</p>
+
+<p><a href="../examples/usage01.html">View example (usage01.html)</a></p>
+<p><a href="../examples/usage02.html">View example (usage02.html)</a></p>
+<p><a href="../examples/usage03.html">View example (usage03.html)</a></p>
+
+</body>
+</html>
