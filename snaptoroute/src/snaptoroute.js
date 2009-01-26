@@ -12,7 +12,7 @@
  *   and by Bill Chadwick to factor the basic algorithm out of the class and add distance along line
  *   to nearest point calculation.
  *   -->
- */
+ **/
 
 
 /**
@@ -58,14 +58,36 @@ SnapToRoute.prototype.updateTargets = function (marker, polyline) {
 
 
 /**
+ * Stop snapping the marker to the route.
+ */
+SnapToRoute.prototype.stop = function () {
+  GEvent.removeListener(this.mousemoveListener);
+  GEvent.removeListener(this.zoomendListener);
+};
+
+/**
+ * Restart snapping the marker to the route.
+ */
+SnapToRoute.prototype.start = function () {
+  var me = this;
+  this.mousemoveListener = GEvent.addListener(me.map_, 'mousemove', 
+    GEvent.callback(me, me.updateMarkerLocation_));
+  this.zoomendListener = GEvent.addListener(me.map_, 'zoomend', 
+    GEvent.callback(me, me.loadLineData_));
+};
+
+
+
+
+/**
  * Set up map listeners to calculate and update the marker position.
  * @private
  */
 SnapToRoute.prototype.loadMapListener_ = function () {
   var me = this;
-  GEvent.addListener(me.map_, 'mousemove', 
+  this.mousemoveListener = GEvent.addListener(me.map_, 'mousemove', 
     GEvent.callback(me, me.updateMarkerLocation_));
-  GEvent.addListener(me.map_, 'zoomend', 
+  this.zoomendListener = GEvent.addListener(me.map_, 'zoomend', 
     GEvent.callback(me, me.loadLineData_));
 };
 

@@ -54,10 +54,12 @@ var distanceInMetersFromCenter = snapToRoute.getDistAlongRoute(latlng);
 
 
 <a name="advanced"></a>
-<h2>Advanced: Printing Distance Along a Route</h2>
+<h2>Advanced: Printing Distance Along a Route and Starting / Stopping the class</h2>
 
 <p>In this example, we let the user click the map to create a path, and then display
 the distance along the route for the marker in a status div.
+</p>
+<p>You can also use the right mousebutton to click on the map to stop and restart the snapping.
 </p>
 <p>The code below is called after a map click event. It either creates a new <code>SnapToRoute</code> object if none exists, or it just updates the existing object with the changed line.</p>
 <pre class="prettyprint">

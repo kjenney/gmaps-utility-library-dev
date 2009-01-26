@@ -17,6 +17,8 @@ var normalProj = G_NORMAL_MAP.getProjection();
 var threshold = 15; //pixels for proximity
 var snapToRoute;
 
+var listeningMap = true;
+
 function load() {
   map = new GMap2(document.getElementById("map"), {draggableCursor:"crosshair"});
   map.setCenter(centerPoint, 7);
@@ -24,10 +26,26 @@ function load() {
   map.addControl(new GMapTypeControl());
   GEvent.addListener(map, 'click', mapClick);
   GEvent.addListener(map, 'mousemove', mouseMove);
+  
+  GEvent.addListener(map, 'singlerightclick', startStopSnap)
+    
 }
 
 
+function startStopSnap(){
+    if ( listeningMap ){
+        snapToRoute.stop();
+        listeningMap = false;
+    } else {
+        snapToRoute.start();
+        listeningMap = true;
+    }
+}
+
 function mapClick(overlay, latlng) {
+    if (routeVertices.length > 3){
+        snapToRoute.stop();
+    }
   if (!overlay) {
     addRouteVertex(latlng);
   }
@@ -85,7 +103,7 @@ function resetRoute() {
 </head>
 <body onload="load()" onunload="GUnload()">
 <div id="msg" style="width: 680px; font: bold 12px verdana;padding:3px;margin:10px;">
-Click the map two or more times to create polylines. The marker wil snap to the polyline at all times.
+Click the map two or more times to create polylines. The marker wil snap to the polyline at all times. Use your right mouse button to start/stop the snapping to the line.
 </div>
 <table cellspacing="0" cellpadding="0" style="-moz-outline-width:8px; -moz-outline-radius:15px; -moz-outline-style:solid;-moz-outline-color:#838FBB;margin:20px;">
  <tr>
