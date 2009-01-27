@@ -62,7 +62,6 @@ SnapToRoute.prototype.updateTargets = function (marker, polyline) {
  */
 SnapToRoute.prototype.stop = function () {
   GEvent.removeListener(this.mousemoveListener);
-  GEvent.removeListener(this.zoomendListener);
 };
 
 /**
@@ -72,8 +71,6 @@ SnapToRoute.prototype.start = function () {
   var me = this;
   this.mousemoveListener = GEvent.addListener(me.map_, 'mousemove', 
     GEvent.callback(me, me.updateMarkerLocation_));
-  this.zoomendListener = GEvent.addListener(me.map_, 'zoomend', 
-    GEvent.callback(me, me.loadLineData_));
 };
 
 
