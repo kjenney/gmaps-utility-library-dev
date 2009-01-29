@@ -13,11 +13,32 @@
     function initialize() {
       if (GBrowserIsCompatible()) {
         var map = new GMap2(document.getElementById("map_canvas"));
-        map.setCenter(new GLatLng(48.859862, 2.292024), 17);
-        var markerOpt = {"style":"chart", "title":"d_bubble_icon_texts_big&chld=petrol|bb|FFFF88|000000|LoCost+Fuel|$3.05/gal+unleaded|$2.10/gal+diesel"};
-        var marker = new PopupMarker(new GLatLng(48.859862, 2.292024),markerOpt);
+        map.setCenter(new GLatLng(48.859862, 2.292024), 15);
+        
+        var chartAPI_Opt = {
+                              chst       : "d_bubble_icon_texts_big",
+                              icon       : "petrol",
+                              shapeStyle : "bb",
+                              textColor  : "000000",
+                              bgColor    : "FFFF88"
+                           }; 
+        var markerOpt = {"style":"chart", chart : chartAPI_Opt,  "title":"LoCost+Fuel|$3.05/gal+unleaded|$2.10/gal+diesel"};
+        var marker = new PopupMarker(new GLatLng(48.859862, 2.282024),markerOpt);
         map.addOverlay(marker);
         marker.showPopup();
+        
+        
+        var markerOpt2 = {"style":"chart"};
+        var marker2 = new PopupMarker(new GLatLng(48.859862, 2.292024),markerOpt2);
+        marker2.setChartStyle("d_bubble_icon_text_big");
+        marker2.setChartIcon("snack");
+        marker2.setChartTextColor("000000");
+        marker2.setChartBgColor("FFBB00");
+        marker2.setShapeStyle("bb");
+        marker2.setTitle("$2.99+!");
+        map.addOverlay(marker2);
+        marker2.showPopup();
+
       }
     }
 

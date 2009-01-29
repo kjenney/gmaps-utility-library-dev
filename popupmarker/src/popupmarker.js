@@ -20,6 +20,7 @@ function PopupMarker(latlng, opt_opts_) {
   this.opts_ = opt_opts_;
   
   this.popupStyle_ = opt_opts_.style || "normal";
+  this.chart_ = opt_opts_.chart || {};
   
   var agt    = navigator.userAgent.toLowerCase();
   var is_ie_ = ((agt.indexOf("msie") !== -1) && (agt.indexOf("opera") === -1));
@@ -239,6 +240,13 @@ PopupMarker.prototype.showPopup = function (title) {
   if (!this.isNull(title)) {
     this.setTitle(title);
   }
+  
+  if (this.popupStyle_ === "chart") {
+    this.redrawChartImg_(this.title_);
+  } else {
+    this.redrawNormalPopup_(this.title_);
+  }
+  
   var info = this.map_.getInfoWindow();
   if (!info.isHidden() || this.isNull(this.title_)) {
     return;
@@ -281,12 +289,6 @@ PopupMarker.prototype.remove = function () {
  */
 PopupMarker.prototype.setTitle = function (title) {
   this.title_ = title;
-  
-  if (this.popupStyle_ === "chart") {
-    this.redrawChartImg_(title);
-  } else {
-    this.redrawNormalPopup_(title);
-  }
 };
 
 /**
@@ -331,13 +333,87 @@ PopupMarker.prototype.redrawNormalPopup_ = function (title) {
 };
 
 /**
+ * @name setChartStyle
+ * @param iconName : bubble's icon name
+ *                   (d_bubble_icon_text_small / d_bubble_icon_text_big / d_bubble_icon_texts_big / d_bubble_texts_big)
+ * @return none
+ */
+PopupMarker.prototype.setChartStyle = function (styleName) {
+  this.chart_.chst = styleName;
+};
+
+/**
+ * @name setChartIcon
+ * @param iconName : bubble's icon name
+ *                   (e.g. WC / airport / bar / wheelchair / beer / bike ...)
+ * @return none
+ */
+PopupMarker.prototype.setChartIcon = function (iconName) {
+  this.chart_.icon = iconName;
+};
+
+/**
+ * @name setChartTextColor
+ * @param iconName : bubble's text color(e.g. FF0000)
+ * @return none
+ */
+PopupMarker.prototype.setChartTextColor = function (textColor) {
+  this.chart_.textColor = textColor;
+};
+
+/**
+ * @name setChartBgColor
+ * @param colorValue : bubble's fill color(e.g. FF0000)
+ * @return none
+ */
+PopupMarker.prototype.setChartBgColor = function (bgColor) {
+  this.chart_.bgColor = bgColor;
+};
+
+/**
+ * @name setShapeStyle
+ * @desc reserved function
+ * @param colorValue : style name
+ *                     (this may, in the future, allow you to use different shapes for the bubble. For now, "bb" is the only valid option.)
+ * @return none
+ */
+PopupMarker.prototype.setShapeStyle = function (style) {
+  this.chart_.shapeStyle = "bb";
+};
+
+/**
  * @private
  * @ignore
  */
 PopupMarker.prototype.redrawChartImg_ = function (title) {
-  title = title.replace(/^chst\=/i, "");
+
+  if (!this.isNull(this.chart_.shapeStyle)) {
+    this.chart_.shapeStyle = "bb";
+  }
+  
+  var params = "chst=" + this.chart_.chst;
+  switch (this.chart_.chst) {
+  case "d_bubble_icon_text_small":
+  case "d_bubble_icon_text_big":
+    params = params + "&chld=" + this.chart_.icon + "|" + this.chart_.shapeStyle + "|" + title + "|" + this.chart_.bgColor + "|" + this.chart_.textColor;
+    break;
+    
+  case "d_bubble_icon_texts_big":
+    title = title.replace(/[\r]/, "");
+    title = title.replace(/[\n]/, "|");
+    params = params + "&chld=" + this.chart_.icon + "|" + this.chart_.shapeStyle + "|" + this.chart_.bgColor + "|" + this.chart_.textColor + "|" + title;
+    break;
+    
+  case "d_bubble_texts_big":
+    title = title.replace(/[\r]/, "");
+    title = title.replace(/[\n]/, "|");
+    params = params + "&chld=" + this.chart_.shapeStyle + "|" + this.chart_.bgColor + "|" + this.chart_.textColor + "|" + title;
+    break;
+    
+  }
+  
   var dummyImg = new Image();
-  dummyImg.src = "http://chart.apis.google.com/chart?chst=" + title;
+  dummyImg.src = "http://chart.apis.google.com/chart?" + params;
   
   var this_  = this;
   var is_ie_  = this.isIE_();
@@ -350,9 +426,9 @@ PopupMarker.prototype.redrawChartImg_ = function (title) {
     if (dummyImg.complete === true) {
       this_.size_ = {"width" : dummyImg.width, "height" : dummyImg.height };
       if (is_ie_ === true) {
-        this_.chartImg_.firstChild.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://www.google.com/chart?chst=" + title + "')";
+        this_.chartImg_.firstChild.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://www.google.com/chart?" + params + "')";
       } else {
-        this_.chartImg_.firstChild.src = "http://chart.apis.google.com/chart?chst=" + title;
+        this_.chartImg_.firstChild.src = "http://chart.apis.google.com/chart?" + params;
       }
       this_.chartImg_.firstChild.style.width = this_.size_.width + "px";
       this_.chartImg_.firstChild.style.height = this_.size_.height + "px";
