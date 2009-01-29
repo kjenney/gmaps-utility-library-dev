@@ -285,16 +285,29 @@ SnapShotControl.prototype.getImage = function () {
   //size
   var mapSize = this.map_.getSize();
   if (!this.isNull(this.size_)) {
+    if (this.size_.width > 512) {
+      this.size_.width = 512;
+    }
+    if (this.size_.height > 512) {
+      this.size_.height = 512;
+    }
+    
     url += "&size=" + this.size_.width + "x" + this.size_.height;
     this.snapContainerImg.width = this.size_.width;
     this.snapContainerImg.height = this.size_.height;
   } else {
+    if (mapSize.width > 512) {
+      mapSize.width = 512;
+    }
+    if (mapSize.height > 512) {
+      mapSize.height = 512;
+    }
+    
     url += "&size=" + mapSize.width + "x" + mapSize.height;
     this.snapContainerImg.width = mapSize.width;
     this.snapContainerImg.height = mapSize.height;
   }
   
-
   
   //zoom level
   url += "&zoom=" + this.map_.getZoom();
@@ -312,6 +325,11 @@ SnapShotControl.prototype.getImage = function () {
     case G_PHYSICAL_MAP:
       maptype = "terrain";
       break;
+    default:
+      maptype = "roadmap";
+      if (this.snapContainerImg.width < 300 || this.snapContainerImg.height < 300) {
+        maptype = "mobile";
+      }
     }
   } else {
     maptype = this.maptype_;
