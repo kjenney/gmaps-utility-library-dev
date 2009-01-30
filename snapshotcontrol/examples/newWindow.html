@@ -14,20 +14,20 @@
     }
     </style>
     <script type="text/javascript">
-
+    
+    var snapShotControl=null;
+    var subWindow=null;
     function initialize() {
       if (GBrowserIsCompatible()) {
         var map = new GMap2(document.getElementById("map_canvas"));
-        map.setCenter(new GLatLng(35.676148, 139.74479), 1);
+        map.setCenter(new GLatLng(35.676148, 139.74479), 3);
         
         /*
         *  add control
         */
-        var snapShotControl = new SnapShotControl(document.getElementById("snapshot_canvas"));
+        var snapShotControlOptions = {size : new GSize(200,300), hidden : true, maptype : "terrain" };
+        snapShotControl = new SnapShotControl(undefined, snapShotControlOptions);
         map.addControl(snapShotControl);
-        GEvent.addListener(snapShotControl, "click", function(){
-          GLog.write(snapShotControl.getImageUrl());
-        });
         
         /*
         *  add maptype
@@ -72,27 +72,56 @@
     function createMarker(latlng){
       var marker = new GMarker(latlng);
       return marker;
-    };
+    }
+    
+    function takeSnapNewWindow(){
+      var sizeArray = document.getElementById("mapSize").value.split("x");
+      var imgSize = new GSize(sizeArray[0], sizeArray[1]);
+      snapShotControl.setMapSize(imgSize);
+      
+      var mapType = document.getElementById("mapType").value;
+      snapShotControl.setMapType(mapType);
+      
+      if (subWindow) {
+        subWindow.close();
+      }
+      
+      subWindow = window.open("./_subnewWindow.html", "subWindow", "width=500,height=500,scrollbars=1,resizable=1");
+      var staticMapImgElement = subWindow.document.getElementById("staticMapImg");
+      
+      var url = snapShotControl.getImage();
+      staticMapImgElement.src = url;
+      
+      subWindow.document.getElementById("staticMapImgUrl").innerHTML = url;
+    }
 
     </script>
   </head>
   <body onload="initialize()" onunload="GUnload()">
-    <table>
-    <tr>
-    <td>ajax</td>
-    <td>
-    static maps</div>
-    </td>
-    </tr>
-    <tr>
-    <td>
-    <div id="map_canvas" style="width: 350px; height: 350px"></div>
-    </td>
-    <td>
-    <div id="snapshot_canvas"></div>
-    
-    </td>
-    </tr>
-    </table>
+    <div id="map_canvas" style="width: 400px; height: 400px"></div>
+    <br>
+    <h3>Parameters:</h3>
+    Size:<select id="mapSize">
+      <option value="200x200">200 x 200</option>
+      <option value="200x300">200 x 300</option>
+      <option value="200x400">200 x 400</option>
+      <option value="300x200">300 x 200</option>
+      <option value="300x300">300 x 300</option>
+      <option value="300x400">300 x 400</option>
+      <option value="400x200">400 x 200</option>
+      <option value="400x300">400 x 300</option>
+      <option value="400x400">400 x 400</option>
+    </select>
+    <br>
+    MapType:<select id="mapType">
+      <option value="roadmap">roadmap</option>
+      <option value="mobile">mobile</option>
+      <option value="satellite">satellite</option>
+      <option value="hybrid">hybrid</option>
+      <option value="terrain">terrain</option>
+      <option value="">auto detect</option>
+    </select>
+    <br> 
+    <input type="button" onclick="javascript:takeSnapNewWindow();" value="Make Static Map(open new window)">
   </body>
 </html>

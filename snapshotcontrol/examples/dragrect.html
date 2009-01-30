@@ -30,6 +30,7 @@
         var marker = new GMarker(new GLatLng(35.676148,139.74479),{draggable: true});
         GEvent.addListener(marker, "dragstart", function() {
             p1=marker.getPoint();
+            marker.closeInfoWindow();
         });
 
         GEvent.addListener(marker, "drag", function() {

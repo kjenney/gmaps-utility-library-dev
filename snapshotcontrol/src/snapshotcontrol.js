@@ -17,7 +17,9 @@ function SnapShotControl(container, opts) {
   
   this.snapContainerImg = new Image();
   this.snapContainerImg.src = this.transImgSrc;
-  container.appendChild(this.snapContainerImg);
+  if (!this.isNull(container)) {
+    container.appendChild(this.snapContainerImg);
+  }
   
   opts = opts || {};
   this.buttonLabel_ = opts.buttonLabel || "shot!";
@@ -57,7 +59,6 @@ SnapShotControl.prototype = new GControl();
  * @private
  */
 SnapShotControl.prototype.initialize = function (map) {
-
   this.map_ = map;
   this.polylines_ = [];
   this.markers_ = [];
@@ -67,7 +68,6 @@ SnapShotControl.prototype.initialize = function (map) {
   this._is_ie    = ((agt.indexOf("msie") !== -1) && (agt.indexOf("opera") === -1));
   this._is_gecko = (agt.indexOf('gecko') !== -1);
   this._is_opera = (agt.indexOf("opera") !== -1);
-
   
   //calculating of the button label
   var text = document.createElement("span");
@@ -126,7 +126,7 @@ SnapShotControl.prototype._addOverlay = function (overlay) {
   switch (this.detectOverlay(overlay)) {
   case "GPolygon":
     polygonInfo.handle = overlay;
-    polygonInfo.color = this.colorNameToRgb(overlay.color).replace("#", "0x");
+    polygonInfo.color = overlay.color.replace("#", "0x");
     polygonInfo.weight = overlay.weight;
     polygonInfo.opacity = Math.floor(overlay.opacity * 255).toString(16);
     polygonInfo.vertexCount = overlay.getVertexCount();
@@ -141,7 +141,7 @@ SnapShotControl.prototype._addOverlay = function (overlay) {
 
   case "GPolyline":
     polylineInfo.handle = overlay;
-    polylineInfo.color = this.colorNameToRgb(overlay.color).replace("#", "0x");
+    polylineInfo.color = overlay.color.replace("#", "0x");
     polylineInfo.weight = overlay.weight;
     polylineInfo.opacity = Math.floor(overlay.opacity * 255).toString(16);
     polylineInfo.vertexCount = overlay.getVertexCount();
@@ -277,7 +277,6 @@ SnapShotControl.prototype.detectOverlay = function (overlay) {
 SnapShotControl.prototype.getImage = function () {
   var url = "http://maps.google.com/staticmap?key=" + this.apiKey_;
   
-  
   //center position
   var mapCenterPos = this.map_.getCenter();
   url += "&center=" + this.floor6decimal(mapCenterPos.lat()) + "," + this.floor6decimal(mapCenterPos.lng());
@@ -285,22 +284,22 @@ SnapShotControl.prototype.getImage = function () {
   //size
   var mapSize = this.map_.getSize();
   if (!this.isNull(this.size_)) {
-    if (this.size_.width > 512) {
-      this.size_.width = 512;
+    if (this.size_.width > 640) {
+      this.size_.width = 640;
     }
-    if (this.size_.height > 512) {
-      this.size_.height = 512;
+    if (this.size_.height > 640) {
+      this.size_.height = 640;
     }
     
     url += "&size=" + this.size_.width + "x" + this.size_.height;
     this.snapContainerImg.width = this.size_.width;
     this.snapContainerImg.height = this.size_.height;
   } else {
-    if (mapSize.width > 512) {
-      mapSize.width = 512;
+    if (mapSize.width > 640) {
+      mapSize.width = 640;
     }
-    if (mapSize.height > 512) {
-      mapSize.height = 512;
+    if (mapSize.height > 640) {
+      mapSize.height = 640;
     }
     
     url += "&size=" + mapSize.width + "x" + mapSize.height;
@@ -627,157 +626,3 @@ SnapShotControl.prototype.createDiv_ = function (params) {
   return bgDiv;
 };
 
-/**
- * @private
- */
-SnapShotControl.prototype.colorNameToRgb = function (colorName) {
-  var colorNameTable = [];
-  
-  colorNameTable.black                = "0x000000";
-  colorNameTable.navy                 = "0x000080";
-  colorNameTable.darkblue             = "0x00008B";
-  colorNameTable.mediumblue           = "0x0000CD";
-  colorNameTable.blue                 = "0x0000FF";
-  colorNameTable.darkgreen            = "0x006400";
-  colorNameTable.green                = "0x008000";
-  colorNameTable.teal                 = "0x008080";
-  colorNameTable.darkcyan             = "0x008B8B";
-  colorNameTable.deepskyblue          = "0x00BFFF";
-  colorNameTable.darkturquoise        = "0x00CED1";
-  colorNameTable.mediumspringgreen    = "0x00FA9A";
-  colorNameTable.lime                 = "0x00FF00";
-  colorNameTable.springgreen          = "0x00FF7F";
-  colorNameTable.aqua                 = "0x00FFFF";
-  colorNameTable.cyan                 = "0x00FFFF";
-  colorNameTable.midnightblue         = "0x191970";
-  colorNameTable.dodgerblue           = "0x1E90FF";
-  colorNameTable.lightseagreen        = "0x20B2AA";
-  colorNameTable.forestgreen          = "0x228B22";
-  colorNameTable.seagreen             = "0x2E8B57";
-  colorNameTable.darkslategray        = "0x2F4F4F";
-  colorNameTable.limegreen            = "0x32CD32";
-  colorNameTable.mediumseagreen       = "0x3CB371";
-  colorNameTable.turquoise            = "0x40E0D0";
-  colorNameTable.royalblue            = "0x4169E1";
-  colorNameTable.steelblue            = "0x4682B4";
-  colorNameTable.darkslateblue        = "0x483D8B";
-  colorNameTable.mediumturquoise      = "0x48D1CC";
-  colorNameTable.indigo               = "0x4B0082";
-  colorNameTable.darkolivegreen       = "0x556B2F";
-  colorNameTable.cadetblue            = "0x5F9EA0";
-  colorNameTable.cornflowerblue       = "0x6495ED";
-  colorNameTable.mediumaquamarine     = "0x66CDAA";
-  colorNameTable.olivedrab            = "0x688E23";
-  colorNameTable.dimgray              = "0x696969";
-  colorNameTable.slateblue            = "0x6A5ACD";
-  colorNameTable.slategray            = "0x708090";
-  colorNameTable.lightslategray       = "0x778899";
-  colorNameTable.mediumslateblue      = "0x7B68EE";
-  colorNameTable.lawngreen            = "0x7CFC00";
-  colorNameTable.chartreuse           = "0x7FFF00";
-  colorNameTable.aquamarine           = "0x7FFFD4";
-  colorNameTable.maroon               = "0x800000";
-  colorNameTable.purple               = "0x800080";
-  colorNameTable.olive                = "0x808000";
-  colorNameTable.gray                 = "0x808080";
-  colorNameTable.skyblue              = "0x87CEEB";
-  colorNameTable.lightskyblue         = "0x87CEFA";
-  colorNameTable.blueviolet           = "0x8A2BE2";
-  colorNameTable.darkred              = "0x8B0000";
-  colorNameTable.darkmagenta          = "0x8B008B";
-  colorNameTable.saddlebrown          = "0x8B4513";
-  colorNameTable.darkseagreen         = "0x8FBC8F";
-  colorNameTable.lightgreen           = "0x90EE90";
-  colorNameTable.mediumpurple         = "0x9370D8";
-  colorNameTable.darkviolet           = "0x9400D3";
-  colorNameTable.palegreen            = "0x98FB98";
-  colorNameTable.darkorchid           = "0x9932CC";
-  colorNameTable.yellowgreen          = "0x9ACD32";
-  colorNameTable.sienna               = "0xA0522D";
-  colorNameTable.brown                = "0xA52A2A";
-  colorNameTable.darkgray             = "0xA9A9A9";
-  colorNameTable.lightblue            = "0xADD8E6";
-  colorNameTable.greenyellow          = "0xADFF2F";
-  colorNameTable.paleturquoise        = "0xAFEEEE";
-  colorNameTable.lightsteelblue       = "0xB0C4DE";
-  colorNameTable.powderblue           = "0xB0E0E6";
-  colorNameTable.firebrick            = "0xB22222";
-  colorNameTable.darkgoldenrod        = "0xB8860B";
-  colorNameTable.mediumorchid         = "0xBA55D3";
-  colorNameTable.rosybrown            = "0xBC8F8F";
-  colorNameTable.darkkhaki            = "0xBDB76B";
-  colorNameTable.silver               = "0xC0C0C0";
-  colorNameTable.mediumvioletred      = "0xC71585";
-  colorNameTable.indianred            = "0xCD5C5C";
-  colorNameTable.peru                 = "0xCD853F";
-  colorNameTable.chocolate            = "0xD2691E";
-  colorNameTable.tan                  = "0xD2B48C";
-  colorNameTable.lightgray            = "0xD3D3D3";
-  colorNameTable.palevioletred        = "0xD87093";
-  colorNameTable.thistle              = "0xD8BFD8";
-  colorNameTable.orchid               = "0xDA70D6";
-  colorNameTable.goldenrod            = "0xDAA520";
-  colorNameTable.crimson              = "0xDC143C";
-  colorNameTable.gainsboro            = "0xDCDCDC";
-  colorNameTable.plum                 = "0xDDA0DD";
-  colorNameTable.burlywood            = "0xDEB887";
-  colorNameTable.lightcyan            = "0xE0FFFF";
-  colorNameTable.lavender             = "0xE6E6FA";
-  colorNameTable.darksalmon           = "0xE9967A";
-  colorNameTable.violet               = "0xEE82EE";
-  colorNameTable.palegoldenrod        = "0xEEE8AA";
-  colorNameTable.lightcoral           = "0xF08080";
-  colorNameTable.khaki                = "0xF0E68C";
-  colorNameTable.aliceblue            = "0xF0F8FF";
-  colorNameTable.honeydew             = "0xF0FFF0";
-  colorNameTable.azure                = "0xF0FFFF";
-  colorNameTable.sandybrown           = "0xF4A460";
-  colorNameTable.wheat                = "0xF5DEB3";
-  colorNameTable.beige                = "0xF5F5DC";
-  colorNameTable.whitesmoke           = "0xF5F5F5";
-  colorNameTable.mintcream            = "0xF5FFFA";
-  colorNameTable.ghostwhite           = "0xF8F8FF";
-  colorNameTable.salmon               = "0xFA8072";
-  colorNameTable.antiquewhite         = "0xFAEBD7";
-  colorNameTable.linen                = "0xFAF0E6";
-  colorNameTable.lightgoldenrodyellow = "0xFAFAD2";
-  colorNameTable.oldlace              = "0xFDF5E6";
-  colorNameTable.red                  = "0xFF0000";
-  colorNameTable.fuchsia              = "0xFF00FF";
-  colorNameTable.magenta              = "0xFF00FF";
-  colorNameTable.deeppink             = "0xFF1493";
-  colorNameTable.orangered            = "0xFF4500";
-  colorNameTable.tomato               = "0xFF6347";
-  colorNameTable.hotpink              = "0xFF69B4";
-  colorNameTable.coral                = "0xFF7F50";
-  colorNameTable.darkorange           = "0xFF8C00";
-  colorNameTable.lightsalmon          = "0xFFA07A";
-  colorNameTable.orange               = "0xFFA500";
-  colorNameTable.lightpink            = "0xFFB6C1";
-  colorNameTable.pink                 = "0xFFC0CB";
-  colorNameTable.gold                 = "0xFFD700";
-  colorNameTable.peachpuff            = "0xFFDAB9";
-  colorNameTable.navajowhite          = "0xFFDEAD";
-  colorNameTable.moccasin             = "0xFFE4B5";
-  colorNameTable.bisque               = "0xFFE4C4";
-  colorNameTable.mistyrose            = "0xFFE4E1";
-  colorNameTable.blanchedalmond       = "0xFFEBCD";
-  colorNameTable.papayawhip           = "0xFFEFD5";
-  colorNameTable.lavenderblush        = "0xFFF0F5";
-  colorNameTable.seashell             = "0xFFF5EE";
-  colorNameTable.cornsilk             = "0xFFF8DC";
-  colorNameTable.lemonchiffon         = "0xFFFACD";
-  colorNameTable.floralwhite          = "0xFFFAF0";
-  colorNameTable.snow                 = "0xFFFAFA";
-  colorNameTable.yellow               = "0xFFFF00";
-  colorNameTable.lightyellow          = "0xFFFFE0";
-  colorNameTable.ivory                = "0xFFFFF0";
-  colorNameTable.white                = "0xFFFFFF";
-  
-  var colorNameLow = colorName.toLowerCase();
-  if (!this.isNull(colorNameTable[colorNameLow])) {
-    return colorNameTable[colorNameLow];
-  } else {
-    return colorName;
-  }
-};

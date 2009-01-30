@@ -45,7 +45,7 @@
         points.push(new GLatLng(25.48295117535531, 118.30078125));
         points.push(new GLatLng(-32.39851580247401, 135.17578125));
         points.push(new GLatLng(37.43997405227057, -121.9921875));
-        var line = new GPolyline(points, "red", 10);
+        var line = new GPolyline(points, "#FF0000", 10);
         map.addOverlay(line);
         
         
@@ -98,7 +98,7 @@
       
       <tr>
         <td valign="top">
-          <div id="map_canvas" style="width: 350px; height: 350px"></div>
+          <div id="map_canvas" style="width: 400px; height: 400px"></div>
         </td>
         <td valign="top">
           <div id="snapshot_canvas"></div>
@@ -129,6 +129,6 @@
       <option value="">auto detect</option>
     </select>
     <br> 
-    <input type="button" onclick="javascript:takeSnap();" value="to mobile">
+    <input type="button" onclick="javascript:takeSnap();" value="Make Static Map">
   </body>
 </html>
