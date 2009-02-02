@@ -86,13 +86,7 @@
         subWindow.close();
       }
       
-      subWindow = window.open("./_subnewWindow.html", "subWindow", "width=500,height=500,scrollbars=1,resizable=1");
-      var staticMapImgElement = subWindow.document.getElementById("staticMapImg");
-      
-      var url = snapShotControl.getImage();
-      staticMapImgElement.src = url;
-      
-      subWindow.document.getElementById("staticMapImgUrl").innerHTML = url;
+      window.open("./_subnewWindow.html", "subWindow", "width=600,height=600,scrollbars=1,resizable=1");
     }
 
     </script>

@@ -3,10 +3,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
   <head>
     <title>Google Maps JavaScript API Example: Simple Map</title>
+    <script type="text/javascript">
+    <!--
+      var parentWnd = window.opener;
+      function initialize() {
+        var imgUrl = parentWnd.snapShotControl.getImage();
+        
+        var imgEle = document.getElementById("staticMapImg");
+        var urlDiv = document.getElementById("staticMapImgURL");
+        imgEle.src = imgUrl;
+        document.form.staticMapImgURL.value = imgUrl;
+      }
+      window.onload = initialize;
+    //-->
+    </script>
   </head>
   <body>
   <h3>Static Map</h3>
-    <img id="staticMapImg">
-    <div id="staticMapImgUrl"></div>
+    <img id="staticMapImg"><br>
+    <form name="form">
+    <textarea id="staticMapImgURL" name="staticMapImgURL" rows="5" cols="60"></textarea>
+    </form>
   </body>
 </html>
