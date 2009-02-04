@@ -16,9 +16,10 @@
  *
  * @constructor
  */    
-function ExtLargeMapControl() {
+function ExtLargeMapControl(opt_opts_) {
   this.sliderStep = 9;
   this.imgSrc = "http://maps.google.com/mapfiles/mapcontrols3d.png";
+  this.imgSmallSrc = "http://maps.google.com/mapfiles/szc3d.png";
   
   this.divTbl = {};
   this.divTbl.container = { "left" : 0, "top" : 0, "width" : 59};
@@ -33,6 +34,21 @@ function ExtLargeMapControl() {
   this.divTbl.zoomOutBtnContainer = { "left" : 0, "top" : 0, "width" : 59, "height" : 23};
   this.divTbl.zoomOutBtnContainerImg = { "left" : 0, "top" : -360, "width" : 59, "height" : 23};
 
+  opt_opts_ = opt_opts_ || {};
+  this.zoomInBtnTitle = opt_opts_.zoomInBtnTitle || "zoom in";
+  this.zoomOutBtnTitle = opt_opts_.zoomOutBtnTitle || "zoom out";
+  this.moveNorthBtnTitle = opt_opts_.moveNorthBtnTitle || "north";
+  this.moveSouthBtnTitle = opt_opts_.moveSouthBtnTitle || "south";
+  this.moveEastBtnTitle = opt_opts_.moveEastBtnTitle || "east";
+  this.moveWestBtnTitle = opt_opts_.moveWestBtnTitle || "west";
+  this.homeBtnTitle = opt_opts_.homeBtnTitle || "home position";
+  this.opt_opts_ = opt_opts_;
+  
+  this.divSmallTbl = {};
+  this.divSmallTbl.container = { "left" : 0, "top" : 0, "width" : 19, "height" : 42};
+  this.divSmallTbl.zoomInBtn = { "left" : 0, "top" : 0, "width" : 19, "height" : 21};
+  this.divSmallTbl.zoomOutBtnImg = { "left" : 0, "top" : -21, "width" : 19, "height" : 21};
+  this.divSmallTbl.zoomOutBtn = { "left" : 0, "top" : 21, "width" : 19, "height" : 21};
 
 }
 
@@ -66,151 +82,186 @@ ExtLargeMapControl.prototype.initialize = function (map) {
   var commonImg = new Image();
   commonImg.src = this.imgSrc;
 
-  // calculation of controller size
-  var currentMapType = map.getCurrentMapType();
-  var minZoom = parseInt(currentMapType.getMinimumResolution(), 10);
-  var maxZoom = parseInt(map.getCurrentMapType().getMaximumResolution(), 10);
-  this._maxZoom = maxZoom;
-  this._step = this.sliderStep;
-  var ctrlHeight = (86 + 5) + (maxZoom - minZoom + 1) * this.sliderStep + 5;
-
-  // create container
-  var container = this.makeImgDiv_(this.imgSrc, this.divTbl.container);
-  container.style.height = (ctrlHeight + this.sliderStep + 2) + "px";
-  _handleList.container = container;
-  this._container = container;
+  var container;
   
+  if (this.opt_opts_.type === "small") {
+    // create container
+    container = document.createElement("div");
+    container.style.left = this.divSmallTbl.container.left + "px";
+    container.style.top = this.divSmallTbl.container.top + "px";
+    container.style.width = this.divSmallTbl.container.width + "px";
+    container.style.height = this.divSmallTbl.container.height + "px";
+    container.style.position = "absolute";
+    container.style.overflow = "hidden";
+    this._container = container;
+    
+    //zoom up button
+    var zoomInBtn = this.makeImgDiv_(this.imgSmallSrc, this.divSmallTbl.zoomInBtn);
+    zoomInBtn.style.cursor = "pointer";
+    zoomInBtn.title = this.zoomInBtnTitle;
+    container.appendChild(zoomInBtn); 
+
+    //zoom down button
+    var zoomOutBtn = this.makeImgDiv_(this.imgSmallSrc, this.divSmallTbl.zoomOutBtnImg);
+    zoomOutBtn.style.cursor = "pointer";
+    zoomOutBtn.style.overflow = "hidden";
+    zoomOutBtn.style.position = "absolute";
+    zoomOutBtn.style.left = this.divSmallTbl.zoomOutBtn.left + "px";
+    zoomOutBtn.style.top = this.divSmallTbl.zoomOutBtn.top + "px";
+    zoomOutBtn.style.width = this.divSmallTbl.zoomOutBtn.width + "px";
+    zoomOutBtn.style.height = this.divSmallTbl.zoomOutBtn.height + "px";
+    zoomOutBtn.title = this.zoomOutBtnTitle;
+    container.appendChild(zoomOutBtn); 
+
+    // events
+    GEvent.bindDom(zoomOutBtn, "click", this, this._eventZoomOut);
+    GEvent.bindDom(zoomInBtn, "click", this, this._eventZoomIn);
+    
+    
+  } else {
+    // calculation of controller size
+    var currentMapType = map.getCurrentMapType();
+    var minZoom = parseInt(currentMapType.getMinimumResolution(), 10);
+    var maxZoom = parseInt(map.getCurrentMapType().getMaximumResolution(), 10);
+    this._maxZoom = maxZoom;
+    this._step = this.sliderStep;
+    var ctrlHeight = (86 + 5) + (maxZoom - minZoom + 1) * this.sliderStep + 5;
+
+    // create container
+    container = this.makeImgDiv_(this.imgSrc, this.divTbl.container);
+    container.style.height = (ctrlHeight + this.sliderStep + 2) + "px";
+    _handleList.container = container;
+    this._container = container;
+
+    //top arrow button
+    var topBtn = this.makeImgDiv_(this.imgSrc, this.divTbl.topArrowBtn);
+    topBtn.style.cursor = "pointer";
+    topBtn.style.left = "20px";
+    topBtn.style.top = "0px";
+    topBtn.title = this.moveNorthBtnTitle;
+    container.appendChild(topBtn); 
+
+    //left arrow button
+    var leftBtn = topBtn.cloneNode(true);
+    leftBtn.style.left = this.divTbl.leftArrowBtn.left + "px";
+    leftBtn.style.top = this.divTbl.leftArrowBtn.top + "px";
+    leftBtn.title = this.moveWestBtnTitle;
+    container.appendChild(leftBtn); 
+
+    //right arrow button
+    var rightBtn = topBtn.cloneNode(true);
+    rightBtn.style.left = this.divTbl.rightArrowBtn.left + "px";
+    rightBtn.style.top = this.divTbl.rightArrowBtn.top + "px";
+    rightBtn.title = this.moveEastBtnTitle;
+    container.appendChild(rightBtn); 
+
+    //bottom arrow button
+    var bottomBtn = topBtn.cloneNode(true);
+    bottomBtn.style.left = this.divTbl.bottomArrowBtn.left + "px";
+    bottomBtn.style.top = this.divTbl.bottomArrowBtn.top + "px";
+    bottomBtn.title = this.moveSouthBtnTitle;
+    container.appendChild(bottomBtn); 
+
+    //center button
+    var homeBtn = topBtn.cloneNode(true);
+    homeBtn.style.left = this.divTbl.centerBtn.left + "px";
+    homeBtn.style.top = this.divTbl.centerBtn.top + "px";
+    homeBtn.title = this.homeBtnTitle;
+    container.appendChild(homeBtn); 
+
+    _handleList.topBtn = topBtn;
+    _handleList.leftBtn = leftBtn;
+    _handleList.rightBtn = rightBtn;
+    _handleList.bottomBtn = bottomBtn;
+    _handleList.homeBtn = homeBtn;
 
 
-  //top arrow button
-  var topBtn = this.makeImgDiv_(this.imgSrc, this.divTbl.topArrowBtn);
-  topBtn.style.cursor = "pointer";
-  topBtn.style.left = "20px";
-  topBtn.style.top = "0px";
-  topBtn.title = "up";
-  container.appendChild(topBtn); 
+    // zoom slider container
+    var zoomSlideBarContainer = document.createElement("div");
+    zoomSlideBarContainer.style.position  = "absolute";
+    zoomSlideBarContainer.style.left = this.divTbl.zoomSlideBarContainer.left + "px";
+    zoomSlideBarContainer.style.top = this.divTbl.zoomSlideBarContainer.top + "px";
+    zoomSlideBarContainer.style.width = this.divTbl.zoomSlideBarContainer.width + "px";
+    zoomSlideBarContainer.style.height = ((maxZoom - minZoom + 1) * this.sliderStep) + "px";
+    zoomSlideBarContainer.style.overflow = "hidden";
+    zoomSlideBarContainer.style.cursor = "pointer";
+    container.appendChild(zoomSlideBarContainer); 
+    _handleList.slideBar = zoomSlideBarContainer;
 
+    // zoom slider Button
+    var zoomLevel = map.getZoom();
+    var zoomSliderContainer = this.makeImgDiv_(this.imgSrc, this.divTbl.zoomSliderContainerImg);
+    
+    zoomSliderContainer.style.top = ((maxZoom - zoomLevel) * this.sliderStep + 1) + "px";
+    zoomSliderContainer.style.left = this.divTbl.zoomSliderContainer.left + "px";
+    zoomSliderContainer.style.width = this.divTbl.zoomSliderContainer.width + "px";
+    zoomSliderContainer.style.height = this.divTbl.zoomSliderContainer.height + "px";
 
-  //left arrow button
-  var leftBtn = topBtn.cloneNode(true);
-  leftBtn.style.left = this.divTbl.leftArrowBtn.left + "px";
-  leftBtn.style.top = this.divTbl.leftArrowBtn.top + "px";
-  leftBtn.title = "left";
-  container.appendChild(leftBtn); 
-
-  //right arrow button
-  var rightBtn = topBtn.cloneNode(true);
-  rightBtn.style.left = this.divTbl.rightArrowBtn.left + "px";
-  rightBtn.style.top = this.divTbl.rightArrowBtn.top + "px";
-  rightBtn.title = "right";
-  container.appendChild(rightBtn); 
-
-  //bottom arrow button
-  var bottomBtn = topBtn.cloneNode(true);
-  bottomBtn.style.left = this.divTbl.bottomArrowBtn.left + "px";
-  bottomBtn.style.top = this.divTbl.bottomArrowBtn.top + "px";
-  bottomBtn.title = "bottom";
-  container.appendChild(bottomBtn); 
-
-  //center button
-  var homeBtn = topBtn.cloneNode(true);
-  homeBtn.style.left = this.divTbl.centerBtn.left + "px";
-  homeBtn.style.top = this.divTbl.centerBtn.top + "px";
-  homeBtn.title = "home position";
-  container.appendChild(homeBtn); 
-
-  _handleList.topBtn = topBtn;
-  _handleList.leftBtn = leftBtn;
-  _handleList.rightBtn = rightBtn;
-  _handleList.bottomBtn = bottomBtn;
-  _handleList.homeBtn = homeBtn;
-
-
-  // zoom slider container
-  var zoomSlideBarContainer = document.createElement("div");
-  zoomSlideBarContainer.style.position  = "absolute";
-  zoomSlideBarContainer.style.left = this.divTbl.zoomSlideBarContainer.left + "px";
-  zoomSlideBarContainer.style.top = this.divTbl.zoomSlideBarContainer.top + "px";
-  zoomSlideBarContainer.style.width = this.divTbl.zoomSlideBarContainer.width + "px";
-  zoomSlideBarContainer.style.height = ((maxZoom - minZoom + 1) * this.sliderStep) + "px";
-  zoomSlideBarContainer.style.overflow = "hidden";
-  zoomSlideBarContainer.style.cursor = "pointer";
-  container.appendChild(zoomSlideBarContainer); 
-  _handleList.slideBar = zoomSlideBarContainer;
-
-  // zoom slider Button
-  var zoomLevel = map.getZoom();
-  var zoomSliderContainer = this.makeImgDiv_(this.imgSrc, this.divTbl.zoomSliderContainerImg);
-  
-  zoomSliderContainer.style.top = ((maxZoom - zoomLevel) * this.sliderStep + 1) + "px";
-  zoomSliderContainer.style.left = this.divTbl.zoomSliderContainer.left + "px";
-  zoomSliderContainer.style.width = this.divTbl.zoomSliderContainer.width + "px";
-  zoomSliderContainer.style.height = this.divTbl.zoomSliderContainer.height + "px";
-
-  zoomSlideBarContainer.cursor = "url(http://maps.google.com/mapfiles/openhand.cur), default";
-  zoomSlideBarContainer.appendChild(zoomSliderContainer); 
-  _handleList.slideBarContainer = zoomSliderContainer;
+    zoomSlideBarContainer.cursor = "url(http://maps.google.com/mapfiles/openhand.cur), default";
+    zoomSlideBarContainer.appendChild(zoomSliderContainer); 
+    _handleList.slideBarContainer = zoomSliderContainer;
 
 
 
-  //zoomOut Btn container
-  var zoomOutBtnContainer = this.makeImgDiv_(this.imgSrc, this.divTbl.zoomOutBtnContainerImg);
-  zoomOutBtnContainer.style.top = (86 + (maxZoom - minZoom + 1) * this.sliderStep) + "px";
-  zoomOutBtnContainer.style.left = this.divTbl.zoomOutBtnContainer.left + "px";
-  zoomOutBtnContainer.style.width = this.divTbl.zoomOutBtnContainer.width + "px";
-  zoomOutBtnContainer.style.height = this.divTbl.zoomOutBtnContainer.height + "px";
+    //zoomOut Btn container
+    var zoomOutBtnContainer = this.makeImgDiv_(this.imgSrc, this.divTbl.zoomOutBtnContainerImg);
+    zoomOutBtnContainer.style.top = (86 + (maxZoom - minZoom + 1) * this.sliderStep) + "px";
+    zoomOutBtnContainer.style.left = this.divTbl.zoomOutBtnContainer.left + "px";
+    zoomOutBtnContainer.style.width = this.divTbl.zoomOutBtnContainer.width + "px";
+    zoomOutBtnContainer.style.height = this.divTbl.zoomOutBtnContainer.height + "px";
 
-  zoomOutBtnContainer.cursor = "url(http://maps.google.com/mapfiles/openhand.cur), default";
-  container.appendChild(zoomOutBtnContainer); 
-  _handleList.zoomOutBtnContainer = zoomOutBtnContainer;
+    zoomOutBtnContainer.cursor = "url(http://maps.google.com/mapfiles/openhand.cur), default";
+    container.appendChild(zoomOutBtnContainer); 
+    _handleList.zoomOutBtnContainer = zoomOutBtnContainer;
 
 
-  //zoomOut button
-  var zoomOutBtn = document.createElement("div");
-  zoomOutBtn.style.position = "absolute";
-  zoomOutBtn.style.left = "20px";
-  zoomOutBtn.style.top = (91 + (maxZoom - minZoom + 1) * this.sliderStep) + "px";
-  zoomOutBtn.style.width = "18px";
-  zoomOutBtn.style.height = "23px";
-  zoomOutBtn.style.cursor = "pointer";
-  zoomOutBtn.style.overflow = "hidden";
-  zoomOutBtn.title = "zoom out";
-  container.appendChild(zoomOutBtn); 
-  _handleList.zoomOutBtn = zoomOutBtn;
+    //zoomOut button
+    var zoomOutBtn = document.createElement("div");
+    zoomOutBtn.style.position = "absolute";
+    zoomOutBtn.style.left = "20px";
+    zoomOutBtn.style.top = (91 + (maxZoom - minZoom + 1) * this.sliderStep) + "px";
+    zoomOutBtn.style.width = "18px";
+    zoomOutBtn.style.height = "23px";
+    zoomOutBtn.style.cursor = "pointer";
+    zoomOutBtn.style.overflow = "hidden";
+    zoomOutBtn.title = this.zoomOutBtnTitle;
+    container.appendChild(zoomOutBtn); 
+    _handleList.zoomOutBtn = zoomOutBtn;
 
-  //zoomIn button
-  var zoomInBtn = document.createElement("div");
-  zoomInBtn.style.position = "absolute";
-  zoomInBtn.style.left = "20px";
-  zoomInBtn.style.top = "65px";
-  zoomInBtn.style.width = "18px";
-  zoomInBtn.style.height = "23px";
-  zoomInBtn.style.cursor = "pointer";
-  zoomInBtn.style.overflow = "hidden";
-  zoomInBtn.title = "zoom in";
-  container.appendChild(zoomInBtn); 
-  _handleList.zoomInBtn = zoomInBtn;
+    //zoomIn button
+    var zoomInBtn = document.createElement("div");
+    zoomInBtn.style.position = "absolute";
+    zoomInBtn.style.left = "20px";
+    zoomInBtn.style.top = "65px";
+    zoomInBtn.style.width = "18px";
+    zoomInBtn.style.height = "23px";
+    zoomInBtn.style.cursor = "pointer";
+    zoomInBtn.style.overflow = "hidden";
+    zoomInBtn.title = this.zoomInBtnTitle;
+    container.appendChild(zoomInBtn); 
+    _handleList.zoomInBtn = zoomInBtn;
 
-  // events
-  GEvent.bindDom(_handleList.topBtn, "click", this, this._eventTop);
-  GEvent.bindDom(_handleList.leftBtn, "click", this, this._eventLeft);
-  GEvent.bindDom(_handleList.rightBtn, "click", this, this._eventRight);
-  GEvent.bindDom(_handleList.bottomBtn, "click", this, this._eventBottom);
-  GEvent.bindDom(_handleList.homeBtn, "click", this, this._eventHome);
-  GEvent.bindDom(_handleList.zoomOutBtn, "click", this, this._eventZoomOut);
-  GEvent.bindDom(_handleList.zoomInBtn, "click", this, this._eventZoomIn);
-  GEvent.bindDom(_handleList.slideBar, "click", this, this._eventSlideBar);
-  GEvent.bind(map, "zoomend", this, this._eventZoomEnd);
+    // events
+    GEvent.bindDom(_handleList.topBtn, "click", this, this._eventTop);
+    GEvent.bindDom(_handleList.leftBtn, "click", this, this._eventLeft);
+    GEvent.bindDom(_handleList.rightBtn, "click", this, this._eventRight);
+    GEvent.bindDom(_handleList.bottomBtn, "click", this, this._eventBottom);
+    GEvent.bindDom(_handleList.homeBtn, "click", this, this._eventHome);
+    GEvent.bindDom(_handleList.zoomOutBtn, "click", this, this._eventZoomOut);
+    GEvent.bindDom(_handleList.zoomInBtn, "click", this, this._eventZoomIn);
+    GEvent.bindDom(_handleList.slideBar, "click", this, this._eventSlideBar);
+    GEvent.bind(map, "zoomend", this, this._eventZoomEnd);
 
-  var drgOpt = {
-    container : _handleList.slideBar
-  };
-  var drgCtrl = new GDraggableObject(_handleList.slideBarContainer, drgOpt);
-  GEvent.bindDom(drgCtrl, "dragend", this, this._eventSlideDragEnd);
-  this._slider =  drgCtrl;
+    var drgOpt = {
+      container : _handleList.slideBar
+    };
+    var drgCtrl = new GDraggableObject(_handleList.slideBarContainer, drgOpt);
+    GEvent.bindDom(drgCtrl, "dragend", this, this._eventSlideDragEnd);
+    this._slider =  drgCtrl;
 
-  //set current slider position
-  this._eventZoomEnd(map.getZoom(), map.getZoom());
+    //set current slider position
+    this._eventZoomEnd(map.getZoom(), map.getZoom());
+  }
 
   // Save DOM element reference in the object.
   this._handleList = _handleList;
@@ -224,22 +275,31 @@ ExtLargeMapControl.prototype.initialize = function (map) {
  * Update Zoomslider to ajust to Max and Min resolution on the current maptype
  * @private
 **/
-ExtLargeMapControl.prototype._updateZoomSliderRange = function () {
+ExtLargeMapControl.prototype._updateZoomSliderRange = function (setMaxZoom) {
   
   
   var minZoom = parseInt(this._map.getCurrentMapType().getMinimumResolution(), 10);
   var maxZoom = parseInt(this._map.getCurrentMapType().getMaximumResolution(), 10);
+  if (this.isNull(setMaxZoom) === false) {
+    maxZoom = setMaxZoom;
+  } else {
+    this._maxZoom = maxZoom;
+  }
   var ctrlHeight = (86 + 5) + (maxZoom - minZoom + 1) * this.sliderStep + 5;
-  this._maxZoom = maxZoom;
+  
+  if (this.isNull(this._handleList) === true) {
+    return;
+  }
 
   // Update DOM elements to ajust to current Resolution range.
   this._handleList.container.style.height = (ctrlHeight + this.sliderStep + 2) + "px";
   this._handleList.slideBar.style.height = ((maxZoom - minZoom + 1) * this.sliderStep) + "px";
-  this._handleList.slideBarContainer.style.top = ((maxZoom - this._map.getZoom()) * this.sliderStep + 1) + "px";
   this._handleList.zoomOutBtnContainer.style.top = (86 + (maxZoom - minZoom + 1) * this.sliderStep) + "px";
   this._handleList.zoomOutBtn.style.top = (91 + (maxZoom - minZoom + 1) * this.sliderStep) + "px";
+  this._handleList.slideBarContainer.style.top = ((maxZoom - this._map.getZoom()) * this.sliderStep + 1) + "px";
 
 };
+
 
 /**
  * @private
@@ -378,6 +438,12 @@ ExtLargeMapControl.prototype._eventHome = function () {
  */
 ExtLargeMapControl.prototype._eventZoomEnd = function (oldZoom, newZoom) {
   var maxZoom = this._maxZoom;
+  if (newZoom < maxZoom) {
+    this._updateZoomSliderRange();
+  } else {
+    this._updateZoomSliderRange(newZoom);
+    maxZoom = newZoom;
+  }
   var step = this._step;
   this._slider.moveTo(new GPoint(0, (maxZoom - newZoom) * step));
 };
