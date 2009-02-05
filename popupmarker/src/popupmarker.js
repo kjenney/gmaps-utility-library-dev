@@ -54,9 +54,6 @@ PopupMarker.prototype.initialize = function (map) {
   GMarker.prototype.initialize.apply(this, arguments);
   this.map_ = map;
   
-  this.popupImg_ = new Image();
-  this.popupImg_.src = "http://maps.google.com/mapfiles/transit/markers/1280.png";
-  
   
   //==========================//
   //      make container      //
@@ -192,6 +189,10 @@ PopupMarker.prototype.makeNormalPopup = function () {
 
 PopupMarker.prototype.makeChartPopup = function () {
   this.chartImg_ = this.makeImgDiv_("http://www.google.com/mapfiles/transparent.png", {"left" : 0, "top" : 0, "width" : 0, "height" : 0 });
+  this.chartImg_.firstChild.style.MozUserSelect = "none";
+  this.chartImg_.firstChild.style.KhtmlUserSelect = "none";
+  this.chartImg_.firstChild.style.WebkitUserSelect = "none";
+  this.chartImg_.firstChild.style.userSelect = "none";
   this.container_.appendChild(this.chartImg_);
 };
 
@@ -204,9 +205,9 @@ PopupMarker.prototype.redraw = function (force) {
   GMarker.prototype.redraw.apply(this, arguments);
   
   if (force) {
-    this.setTitle(this.title_);
+    this.showPopup();
     this.latlng_ = this.getLatLng();
-    this.container_.style.zIndex = GOverlay.getZIndex(this.latlng_.lat() + 1);
+    this.container_.style.zIndex = GOverlay.getZIndex(this.latlng_.lat());
   }
 };
 
@@ -339,7 +340,7 @@ PopupMarker.prototype.redrawNormalPopup_ = function (title) {
  * @return none
  */
 PopupMarker.prototype.setChartStyle = function (styleName) {
-  this.chart_.chst = styleName;
+  this.chart_.chartStyle = styleName;
 };
 
 /**
@@ -391,8 +392,10 @@ PopupMarker.prototype.redrawChartImg_ = function (title) {
     this.chart_.shapeStyle = "bb";
   }
   
-  var params = "chst=" + this.chart_.chst;
-  switch (this.chart_.chst) {
+  title = title.replace(/\s/, "+");
+  
+  var params = "chst=" + this.chart_.chartStyle;
+  switch (this.chart_.chartStyle) {
   case "d_bubble_icon_text_small":
   case "d_bubble_icon_text_big":
     params = params + "&chld=" + this.chart_.icon + "|" + this.chart_.shapeStyle + "|" + title + "|" + this.chart_.bgColor + "|" + this.chart_.textColor;

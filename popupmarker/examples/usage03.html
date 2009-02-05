@@ -16,13 +16,18 @@
         map.setCenter(new GLatLng(48.859862, 2.292024), 15);
         
         var chartAPI_Opt = {
-                              chst       : "d_bubble_icon_texts_big",
+                              chartStyle : "d_bubble_icon_texts_big",
                               icon       : "petrol",
                               shapeStyle : "bb",
                               textColor  : "000000",
                               bgColor    : "FFFF88"
                            }; 
-        var markerOpt = {"style":"chart", chart : chartAPI_Opt,  "title":"LoCost+Fuel|$3.05/gal+unleaded|$2.10/gal+diesel"};
+        var markerOpt = {
+                           draggable  :  true,
+                           style      : "chart",
+                           chart      : chartAPI_Opt,
+                           title      : "LoCost+Fuel|$3.05/gal+unleaded|$2.10/gal+diesel"
+                        };
         var marker = new PopupMarker(new GLatLng(48.859862, 2.282024),markerOpt);
         map.addOverlay(marker);
         marker.showPopup();
