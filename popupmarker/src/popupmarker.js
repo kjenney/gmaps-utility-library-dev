@@ -53,7 +53,7 @@ PopupMarker.prototype = new GMarker(new GLatLng(0, 0));
 PopupMarker.prototype.initialize = function (map) {
   GMarker.prototype.initialize.apply(this, arguments);
   this.map_ = map;
-  
+
   //==========================//
   //      make container      //
   //==========================//
@@ -413,12 +413,12 @@ PopupMarker.prototype.redrawChartImg_ = function (title) {
   
   if (this.beforeParams === params) {
     //re-calcurate popup's position
+    var imgHeight = parseInt(this.chartImg_.firstChild.offsetHeight);  //for IE
     this.container_.style.left =  pxPos.x + "px";
-    this.container_.style.top = (pxPos.y - this.size_.height) + "px";
+    this.container_.style.top = (pxPos.y - imgHeight) + "px";
     
     return;
   }
-  
   var dummyImg = new Image();
   dummyImg.src = "http://chart.apis.google.com/chart?" + params;
   
