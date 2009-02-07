@@ -54,7 +54,6 @@ PopupMarker.prototype.initialize = function (map) {
   GMarker.prototype.initialize.apply(this, arguments);
   this.map_ = map;
   
-  
   //==========================//
   //      make container      //
   //==========================//
@@ -237,10 +236,7 @@ PopupMarker.prototype.hide = function () {
  * @param title : popup's title[opt]
  * @return none
  */
-PopupMarker.prototype.showPopup = function (title) {
-  if (!this.isNull(title)) {
-    this.setTitle(title);
-  }
+PopupMarker.prototype.showPopup = function () {
   
   if (this.popupStyle_ === "chart") {
     this.redrawChartImg_(this.title_);
@@ -392,8 +388,6 @@ PopupMarker.prototype.redrawChartImg_ = function (title) {
     this.chart_.shapeStyle = "bb";
   }
   
-  title = title.replace(/\s/, "+");
-  
   var params = "chst=" + this.chart_.chartStyle;
   switch (this.chart_.chartStyle) {
   case "d_bubble_icon_text_small":
@@ -415,6 +409,16 @@ PopupMarker.prototype.redrawChartImg_ = function (title) {
     
   }
   
+  var pxPos = this.map_.fromLatLngToDivPixel(this.latlng_);
+  
+  if (this.beforeParams === params) {
+    //re-calcurate popup's position
+    this.container_.style.left =  pxPos.x + "px";
+    this.container_.style.top = (pxPos.y - this.size_.height) + "px";
+    
+    return;
+  }
+  
   var dummyImg = new Image();
   dummyImg.src = "http://chart.apis.google.com/chart?" + params;
   
@@ -431,12 +435,12 @@ PopupMarker.prototype.redrawChartImg_ = function (title) {
       if (is_ie_ === true) {
         this_.chartImg_.firstChild.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://www.google.com/chart?" + params + "')";
       } else {
-        this_.chartImg_.firstChild.src = "http://chart.apis.google.com/chart?" + params;
+        this_.chartImg_.removeChild(this_.chartImg_.firstChild);
+        this_.chartImg_.appendChild(dummyImg);
       }
       this_.chartImg_.firstChild.style.width = this_.size_.width + "px";
       this_.chartImg_.firstChild.style.height = this_.size_.height + "px";
       
-      var pxPos = this_.map_.fromLatLngToDivPixel(this_.latlng_);
       this_.container_.style.left =  pxPos.x + "px";
       this_.container_.style.top = (pxPos.y - this_.size_.height) + "px";
       this_.container_.style.width = this_.size_.width + "px";
@@ -446,6 +450,8 @@ PopupMarker.prototype.redrawChartImg_ = function (title) {
       setTimeout(own, 10);
     }
   };
+  
+  this.beforeParams = params;
   
   redraw();
 };

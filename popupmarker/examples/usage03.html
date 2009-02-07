@@ -40,9 +40,17 @@
         marker2.setChartTextColor("000000");
         marker2.setChartBgColor("FFBB00");
         marker2.setShapeStyle("bb");
-        marker2.setTitle("$2.99+!");
+        marker2.setTitle("Click me!");
         map.addOverlay(marker2);
         marker2.showPopup();
+
+        GEvent.addListener(marker2, "click", function(){
+          marker2.setChartIcon("ski");
+          marker2.setTitle("change!");
+          marker2.setChartTextColor("FFBB00");
+          marker2.setChartBgColor("000000");
+          marker2.showPopup();
+        });
 
       }
     }
