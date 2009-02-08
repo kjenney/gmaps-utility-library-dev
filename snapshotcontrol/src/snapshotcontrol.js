@@ -3,15 +3,35 @@
  * @version 1.0
  */
 
-/*global GPolygon, GPolyline, GMarker, G_PHYSICAL_MAP, G_HYBRID_MAP, G_SATELLITE_MAP, GLatLngBounds  */
+/*global GPolygon, GPolyline, GMarker, G_PHYSICAL_MAP, G_HYBRID_MAP, G_SATELLITE_MAP, GLatLngBounds, _mHL  */
 
 
 /**
  * @constructor
  */    
-function SnapShotControl(container, opts) {
+function SnapShotControl() {
   this.cameraImgSrc = "http://www.google.com/mapfiles/cb/camera.png";
   this.transImgSrc = "http://www.google.com/mapfiles/transparent.png";
+  
+  var container = undefined;
+  var opts_ = {};
+  var s = 1, idx = 1;
+  var obj, key;
+  //detect constructor params
+  if (arguments.length > 0) {
+    if (!this.isNull(arguments[0].style)) {
+      container = arguments[0];
+      
+      if (arguments.length === 2) {
+        obj = arguments[1];
+        for (key in obj) {
+          opts_[key] = obj[key];
+        }
+      }
+      
+    }
+    
+  }
   
   this.snapContainer = container;
   
@@ -19,13 +39,18 @@ function SnapShotControl(container, opts) {
   this.snapContainerImg.src = this.transImgSrc;
   if (!this.isNull(container)) {
     container.appendChild(this.snapContainerImg);
+  } else {
+    opts_.hidden = true;
   }
   
-  opts = opts || {};
-  this.buttonLabel_ = opts.buttonLabel || "shot!";
-  this.maptype_ = opts.maptype || "";
-  this.size_ = opts.size || "";
-  this.isHidden_ = opts.hidden || false;
+  this.buttonLabel_ = opts_.buttonLabel || "shot!";
+  this.maptype_ = opts_.maptype || "";
+  this.size_ = opts_.size || "";
+  this.isHidden_ = opts_.hidden || false;
+  this.hl_ = opts_.hl || _mHL;
+  this.hl_ = this.hl_ || "";
+  this.frame_ = opts_.frame || false;
+  this.imgFormat_ = opts_.format || "gif";
   
   this.divTbl = {};
   this.divTbl.container = { "left" : 0, "top" : 0, "width" : 60, "height" : 26, "bgcolor" : "white"};
@@ -35,7 +60,7 @@ function SnapShotControl(container, opts) {
   
   //find api key
   var scripts = document.getElementsByTagName("script");
-  var key = "";
+  key = "";
   for (var i = 0;i < scripts.length; i++) {
     var scriptNode = scripts[i];
     if (scriptNode.src.match(/^http:\/\/maps\.google\..*?&(?:amp;)?key=([^\&]+)/gi)) {
@@ -243,7 +268,8 @@ SnapShotControl.prototype.isHidden = function () {
  */
 SnapShotControl.prototype.detectOverlay = function (overlay) {
   var overlayProperties = [];
-  for (var key in overlay) {
+  var key;
+  for (key in overlay) {
     overlayProperties[key] = 1;
   }
   
@@ -337,6 +363,26 @@ SnapShotControl.prototype.getImage = function () {
     url += "&maptype=" + maptype;
   }
   
+  if (this.hl_ !== "" && String(this.hl_).toLowerCase() !== "en") {
+    url += "&hl=" + this.hl_.toLowerCase();
+  }
+  if (String(this.frame_).toLowerCase() === "true") {
+    url += "&frame=true";
+  }
+  
+  if (!this.isNull(this.imgFormat_)) {
+    var imgFormat = this.imgFormat_.toLowerCase();
+    
+    if (imgFormat === "jpg" || imgFormat === "jpeg") {
+      url += "&format=jpg";
+    } else if (imgFormat === "png") {
+      url += "&format=png32";
+    } else if (imgFormat === "jpg-baseline" || imgFormat === "png8" || imgFormat === "png32") {
+      url += "&format=" + imgFormat;
+    }
+    
+  }
+
   //polylines
   var bounds = this.map_.getBounds();
   var is_draw_ = false;
@@ -418,7 +464,7 @@ SnapShotControl.prototype.getImage = function () {
       
       optStr = "";
       //{size}
-      markerSize = this.markers_[i].handle.size;
+      markerSize = this.markers_[i].handle.ssSize;
       if (!this.isNull(markerSize)) {
         markerSize = markerSize.toLowerCase();
         if (markerSize === "normal" || markerSize === "tiny" || markerSize === "mid" || markerSize === "small") {
@@ -427,7 +473,7 @@ SnapShotControl.prototype.getImage = function () {
       }
       
       //{color}
-      markerColor = this.markers_[i].handle.color;
+      markerColor = this.markers_[i].handle.ssColor;
       if (!this.isNull(markerColor)) {
         markerColor = markerColor.toLowerCase();
         
@@ -441,7 +487,7 @@ SnapShotControl.prototype.getImage = function () {
       }
       
       //{alphanumeric-character}
-      markerAlphaNumeric = this.markers_[i].handle.charactor;
+      markerAlphaNumeric = this.markers_[i].handle.ssCharacter;
       if (!this.isNull(markerAlphaNumeric) && markerSize !== "small" && markerSize !== "tiny") {
         if (markerAlphaNumeric.match(/^[a-zA-Z0-9]/)) {
           if (optStr === "") {
@@ -463,6 +509,49 @@ SnapShotControl.prototype.getImage = function () {
   
   return url;
 };
+
+/**
+ * @name setLanguage
+ */
+SnapShotControl.prototype.setLanguage = function (lang) {
+  this.hl_ = lang;
+};
+
+/**
+ * @name getLanguage
+ */
+SnapShotControl.prototype.getLanguage = function () {
+  return this.hl_;
+};
+/**
+ * @name setFormat
+ */
+SnapShotControl.prototype.setFormat = function (format) {
+  this.imgFormat_ = format;
+};
+
+/**
+ * @name getFormat
+ */
+SnapShotControl.prototype.getFormat = function () {
+  return this.imgFormat_;
+};
+
+/**
+ * @name setFrame
+ * @param frame : true or false
+ */
+SnapShotControl.prototype.setFrame = function (frame) {
+  this.frame_ = frame;
+};
+
+/**
+ * @name getFrame
+ */
+SnapShotControl.prototype.getFrame = function () {
+  return this.frame_;
+};
+
 
 /**
  * @name setMapSize

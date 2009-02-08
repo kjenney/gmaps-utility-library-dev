@@ -54,16 +54,6 @@
         */
         for(var i=0;i<points.length;i++){
           var marker = createMarker(points[i]);
-          if(i==0){
-            marker.color="blue";
-            marker.charactor="s";
-          }else if(i==points.length-1){
-            marker.color="orange";
-            marker.charactor="g";
-          }else{
-            marker.size="mid";
-            marker.charactor="n";
-          }
           map.addOverlay(marker);
         }
       }

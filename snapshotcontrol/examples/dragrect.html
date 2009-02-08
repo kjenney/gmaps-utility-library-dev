@@ -25,7 +25,7 @@
         map = new GMap2(document.getElementById("map_canvas"));
         map.setCenter(new GLatLng(35.677335,139.744613), 2);
         
-        map.addControl(new SnapShotControl(document.getElementById("snapshot_canvas")));
+        map.addControl(new SnapShotControl(document.getElementById("snapshot_canvas"), {maptype : "terrain"}));
         
         var marker = new GMarker(new GLatLng(35.676148,139.74479),{draggable: true});
         GEvent.addListener(marker, "dragstart", function() {

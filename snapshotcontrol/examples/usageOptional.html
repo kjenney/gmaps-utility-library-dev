@@ -20,12 +20,12 @@
     function initialize() {
       if (GBrowserIsCompatible()) {
         var map = new GMap2(document.getElementById("map_canvas"));
-        map.setCenter(new GLatLng(35.676148, 139.74479), 3);
+        map.setCenter(new GLatLng(35.676148, 139.74479), 1);
         
         /*
         *  add control
         */
-        var snapShotControlOptions = {size : new GSize(200,300), hidden : true, maptype : "terrain" };
+        var snapShotControlOptions = {hidden : true };
         snapShotControl = new SnapShotControl(document.getElementById("snapshot_canvas"), snapShotControlOptions);
         map.addControl(snapShotControl);
         
@@ -55,14 +55,14 @@
         for(var i=0;i<points.length;i++){
           var marker = createMarker(points[i]);
           if(i==0){
-            marker.color="blue";
-            marker.charactor="s";
+            marker.ssColor="blue";
+            marker.ssCharacter="s";
           }else if(i==points.length-1){
-            marker.color="orange";
-            marker.charactor="g";
+            marker.ssColor="orange";
+            marker.ssCharacter="g";
           }else{
-            marker.size="mid";
-            marker.charactor="n";
+            marker.ssSize="mid";
+            marker.ssCharacter="n";
           }
           map.addOverlay(marker);
         }
@@ -81,6 +81,12 @@
       
       var mapType = document.getElementById("mapType").value;
       snapShotControl.setMapType(mapType);
+
+      var frame = document.getElementById("frame").value;
+      snapShotControl.setFrame(frame);
+
+      var format = document.getElementById("imgFormat").value;
+      snapShotControl.setFormat(format);
 
       var url = snapShotControl.getImage();
       
@@ -120,13 +126,26 @@
       <option value="400x400">400 x 400</option>
     </select>
     <br>
-    MapType:<select id="mapType">
+    Map type:<select id="mapType">
+      <option value="">auto detect</option>
       <option value="roadmap">roadmap</option>
       <option value="mobile">mobile</option>
       <option value="satellite">satellite</option>
       <option value="hybrid">hybrid</option>
       <option value="terrain">terrain</option>
-      <option value="">auto detect</option>
+    </select>
+    <br> 
+    Image format:<select id="imgFormat">
+      <option value="gif">gif</option>
+      <option value="jpg">jpeg</option>
+      <option value="jpg-baseline">jpg-baseline</option>
+      <option value="png8">png8</option>
+      <option value="png32">png32</option>
+    </select>
+    <br> 
+    Show frame:<select id="frame">
+      <option value="true">true</option>
+      <option value="false">false</option>
     </select>
     <br> 
     <input type="button" onclick="javascript:takeSnap();" value="Make Static Map">

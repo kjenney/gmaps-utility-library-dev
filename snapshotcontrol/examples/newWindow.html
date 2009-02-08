@@ -20,13 +20,14 @@
     function initialize() {
       if (GBrowserIsCompatible()) {
         var map = new GMap2(document.getElementById("map_canvas"));
-        map.setCenter(new GLatLng(35.676148, 139.74479), 3);
+        map.setCenter(new GLatLng(35.676148, 139.74479), 1);
         
         /*
         *  add control
+        *
+        *  note: The control is hidden when not set div-container to constructor.
         */
-        var snapShotControlOptions = {size : new GSize(200,300), hidden : true, maptype : "terrain" };
-        snapShotControl = new SnapShotControl(undefined, snapShotControlOptions);
+        snapShotControl = new SnapShotControl();
         map.addControl(snapShotControl);
         
         /*
@@ -54,16 +55,6 @@
         */
         for(var i=0;i<points.length;i++){
           var marker = createMarker(points[i]);
-          if(i==0){
-            marker.color="blue";
-            marker.charactor="s";
-          }else if(i==points.length-1){
-            marker.color="orange";
-            marker.charactor="g";
-          }else{
-            marker.size="mid";
-            marker.charactor="n";
-          }
           map.addOverlay(marker);
         }
       }
@@ -108,12 +99,12 @@
     </select>
     <br>
     MapType:<select id="mapType">
+      <option value="">auto detect</option>
       <option value="roadmap">roadmap</option>
       <option value="mobile">mobile</option>
       <option value="satellite">satellite</option>
       <option value="hybrid">hybrid</option>
       <option value="terrain">terrain</option>
-      <option value="">auto detect</option>
     </select>
     <br> 
     <input type="button" onclick="javascript:takeSnapNewWindow();" value="Make Static Map(open new window)">
