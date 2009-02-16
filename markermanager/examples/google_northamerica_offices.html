@@ -96,6 +96,18 @@
               });
               return marker;
             }
+
+            function showMarkers() {
+              mgr.show();
+              mgr.refresh();
+              updateStatus(mgr.getMarkerCount(map.getZoom()));
+            }
+            
+            function hideMarkers() {
+              mgr.hide();
+              mgr.refresh();
+              updateStatus(mgr.getMarkerCount(map.getZoom()));
+            }
             
             function deleteMarker() {
               var markerNum = parseInt(document.getElementById("markerNum").value);
@@ -120,7 +132,11 @@
         </script>
     </head>
     <body onload="load()" onunload="GUnload()">
-        <input type="button" onclick="deleteMarker()" value="delete marker #:" />&nbsp;<input type="text" id="markerNum" value="0" size="3"/>|<input type="button" onclick="clearMarkers()" value="clear all markers" />|<input type="button" onclick="reloadMarkers()" value="reload all markers" />
+        <input type="button" onclick="deleteMarker()" value="delete marker #:" />&nbsp;<input type="text" id="markerNum" value="0" size="3"/>|
+        <input type="button" onclick="clearMarkers()" value="clear all markers" />|
+        <input type="button" onclick="reloadMarkers()" value="reload all markers" />|
+        <input type="button" onclick="showMarkers()" value="show all markers" />|
+        <input type="button" onclick="hideMarkers()" value="hide all markers" />
         <br/>
         <div id="map" style="width: 600px; height: 400px;">
         </div>
