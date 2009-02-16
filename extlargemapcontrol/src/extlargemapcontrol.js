@@ -13,7 +13,7 @@
 
 /**
  * @name ExtLargeMapControlOptions
- * @class This class represents optional arguments to {@ExtLargeMapControl}.
+ * @class This class represents optional arguments to the control.
  * @property {String} [zoomInBtnTitle="zoom in"] Specifies tooltip for 
  * zoom in button.
  * @property {String} [zoomOutBtnTitle="zoom out"] Specifies tooltip for 
@@ -26,10 +26,10 @@
  * pan east button.
  * @property {String} [moveWestBtnTitle="west"] Specifies tooltip for 
  * pan west button.
- * @property {String} [returnBtnTitle="home position'] Specifies tooltip for 
+ * @property {String} [returnBtnTitle="home position"] Specifies tooltip for 
  * center button that returns user to original location.
- * @property {String} [type="large"] Specifies whether large or 
- * small slider should be used.
+ * @property {String} [type] If set to "small", the control will consist of
+ * only the zoom in/zoom out buttons.
  */
 
 /**

@@ -36,7 +36,7 @@ Creates a control with buttons to pan in four directions,and zoom in and zoom o
       
     
       <h2><a name="ExtLargeMapControlOptions"></a>class ExtLargeMapControlOptions</h2>
-      <p>This class represents optional arguments to {@ExtLargeMapControl}.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
+      <p>This class represents optional arguments to the control.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
       
         <h3>Properties</h3>
         <table summary="class ExtLargeMapControlOptions - Properties" width="90%">
@@ -53,16 +53,6 @@ Creates a control with buttons to pan in four directions,and zoom in and zoom o
             </tr>
             
               <tr class="odd">
-                <td><code>homeBtnTitle</code></td>
-                
-                  
-                    <td><code>String</code></td>
-                  
-                
-                <td>Specifies tooltip for center button that returns user to original location.  The default value is <code>"home position'</code>.</td>
-              </tr>
-            
-              <tr class="even">
                 <td><code>moveEastBtnTitle</code></td>
                 
                   
@@ -72,7 +62,7 @@ Creates a control with buttons to pan in four directions,and zoom in and zoom o
                 <td>Specifies tooltip for pan east button.  The default value is <code>"east"</code>.</td>
               </tr>
             
-              <tr class="odd">
+              <tr class="even">
                 <td><code>moveNorthBtnTitle</code></td>
                 
                   
@@ -82,7 +72,7 @@ Creates a control with buttons to pan in four directions,and zoom in and zoom o
                 <td>Specifies tooltip for pan north button.  The default value is <code>"north"</code>.</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>moveSouthBtnTitle</code></td>
                 
                   
@@ -92,7 +82,7 @@ Creates a control with buttons to pan in four directions,and zoom in and zoom o
                 <td>Specifies tooltip for pan south button.  The default value is <code>"south"</code>.</td>
               </tr>
             
-              <tr class="odd">
+              <tr class="even">
                 <td><code>moveWestBtnTitle</code></td>
                 
                   
@@ -102,6 +92,16 @@ Creates a control with buttons to pan in four directions,and zoom in and zoom o
                 <td>Specifies tooltip for pan west button.  The default value is <code>"west"</code>.</td>
               </tr>
             
+              <tr class="odd">
+                <td><code>returnBtnTitle</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>Specifies tooltip for center button that returns user to original location.  The default value is <code>"home position"</code>.</td>
+              </tr>
+            
               <tr class="even">
                 <td><code>type</code></td>
                 
@@ -109,7 +109,7 @@ Creates a control with buttons to pan in four directions,and zoom in and zoom o
                     <td><code>String</code></td>
                   
                 
-                <td>Specifies whether large or small slider should be used.  The default value is <code>"large"</code>.</td>
+                <td>If set to "small", the control will consist ofonly the zoom in/zoom out buttons.</td>
               </tr>
             
               <tr class="odd">
