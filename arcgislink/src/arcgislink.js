@@ -3202,7 +3202,8 @@
    */
   GMap2.prototype.addArcGISMap  =  function (url, opt_callback) {
     var me  =  this;
-    var service  =  new ArcGISMapService(url, function () {
+    var service  =  new ArcGISMapService(url);
+    GEvent.addListener(service, 'load', function () {
       if (service.singleFusedMapCache) {
         var tile  =  new ArcGISTileLayer(service);
         var type  =  new ArcGISMapType([tile]);
