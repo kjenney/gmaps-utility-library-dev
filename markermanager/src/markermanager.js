@@ -88,6 +88,7 @@ function MarkerManager(map, opt_opts) {
   me.maxZoom_  = opt_opts.maxZoom || mapMaxZoom;
 
   me.trackMarkers_ = opt_opts.trackMarkers;
+  me.show_ = opt_opts.show || true;
 
   var padding;
   if (typeof opt_opts.borderPadding === "number") {
@@ -116,8 +117,10 @@ function MarkerManager(map, opt_opts) {
     me.shownMarkers_--;
   };
   me.addOverlay_ = function (marker) {
-    map.addOverlay(marker);
-    me.shownMarkers_++;
+    if (me.show_) {
+	  map.addOverlay(marker);
+      me.shownMarkers_++;
+    }
   };
 
   me.resetManager_();
@@ -560,6 +563,57 @@ MarkerManager.prototype.objectSetTimeout_ = function (object, command, milliseco
 
 
 /**
+ * Is this layer visible?
+ *
+ * Returns visibility setting
+ *
+ * @return {Boolean} Visible
+ */
+MarkerManager.prototype.visible = function () {
+  return this.show_ ? true : false;
+};
+
+
+/**
+ * Is this layer hidden?
+ *
+ * Returns inverted visibility setting
+ *
+ * @return {Boolean} Hidden
+ */
+MarkerManager.prototype.hidden = function () {
+  return !this.show_;
+};
+
+
+/**
+ * Shows the layer
+ * Shows the layer. Call refresh() to update the map.
+ */
+MarkerManager.prototype.show = function () {
+  this.show_ = true;
+};
+
+
+/**
+ * Hides the layer
+ * Hides the layer. Call refresh() to update the map.
+ */
+MarkerManager.prototype.hide = function () {
+  this.show_ = false;
+};
+
+
+/**
+ * Toggles the layer
+ * Toggles visibility of the layer on/off. Call refresh() to update the map.
+ */
+MarkerManager.prototype.toggle = function () {
+  this.show_ = !this.show_;
+};
+
+
+/**
  * Refresh forces the marker-manager into a good state.
  * <ol>
  *   <li>If never before initialized, shows all the markers.</li>
@@ -571,7 +625,10 @@ MarkerManager.prototype.refresh = function () {
   if (me.shownMarkers_ > 0) {
     me.processAll_(me.shownBounds_, me.removeOverlay_);
   }
-  me.processAll_(me.shownBounds_, me.addOverlay_);
+  // An extra check on me.show_ to increase performance (no need to processAll_)
+  if (me.show_) {
+    me.processAll_(me.shownBounds_, me.addOverlay_);
+  }
   me.notifyListeners_();
 };
 
@@ -592,13 +649,17 @@ MarkerManager.prototype.updateMarkers_ = function () {
 
   if (newBounds.z !== me.shownBounds_.z) {
     me.processAll_(me.shownBounds_, me.removeOverlay_);
-    me.processAll_(newBounds, me.addOverlay_);
+    if (me.show_) { // performance
+      me.processAll_(newBounds, me.addOverlay_);
+    }
   } else {
     // Remove markers:
     me.rectangleDiff_(me.shownBounds_, newBounds, me.removeCellMarkers_);
 
     // Add markers:
-    me.rectangleDiff_(newBounds, me.shownBounds_, me.addCellMarkers_);
+    if (me.show_) { // performance
+      me.rectangleDiff_(newBounds, me.shownBounds_, me.addCellMarkers_);
+    }
   }
   me.shownBounds_ = newBounds;
 
