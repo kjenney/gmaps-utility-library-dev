@@ -2209,7 +2209,7 @@
    * @return {GPoint} pixel
    */
   ArcGISProjection.prototype.fromLatLngToPixel  =  function (gLatLng, zoom) {
-    if (gLatLng === null || isNaN(gLatLng.lat()) || isNaN(gLatLng.lng())) {
+    if (!gLatLng || isNaN(gLatLng.lat()) || isNaN(gLatLng.lng())) {
       return null;
     }
     var coords  =  this.spatialReference_.forward([gLatLng.lng(), gLatLng.lat()]);
