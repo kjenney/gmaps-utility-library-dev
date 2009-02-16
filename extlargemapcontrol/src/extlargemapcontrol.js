@@ -12,11 +12,32 @@
 /*global GKeyboardHandler, GDraggableObject*/
 
 /**
- * @desc Creates an ExtLargeMapControl. No configuration options are available.
- *
+ * @name ExtLargeMapControlOptions
+ * @class This class represents optional arguments to {@ExtLargeMapControl}.
+ * @property {String} [zoomInBtnTitle="zoom in"] Specifies tooltip for 
+ * zoom in button.
+ * @property {String} [zoomOutBtnTitle="zoom out"] Specifies tooltip for 
+ * zoom out button button.
+ * @property {String} [moveNorthBtnTitle="north"] Specifies tooltip for 
+ * pan north button.
+ * @property {String} [moveSouthBtnTitle="south"] Specifies tooltip for 
+ * pan south button.
+ * @property {String} [moveEastBtnTitle="east"] Specifies tooltip for 
+ * pan east button.
+ * @property {String} [moveWestBtnTitle="west"] Specifies tooltip for 
+ * pan west button.
+ * @property {String} [returnBtnTitle="home position'] Specifies tooltip for 
+ * center button that returns user to original location.
+ * @property {String} [type="large"] Specifies whether large or 
+ * small slider should be used.
+ */
+
+/**
+ * @desc Creates an ExtLargeMapControl, with optional configuration settings.
+ * @param {ExtLargeMapControlOptions} opts
  * @constructor
  */    
-function ExtLargeMapControl(opt_opts_) {
+function ExtLargeMapControl(opts) {
   this.sliderStep = 9;
   this.imgSrc = "http://maps.google.com/mapfiles/mapcontrols3d.png";
   this.imgSmallSrc = "http://maps.google.com/mapfiles/szc3d.png";
@@ -34,15 +55,15 @@ function ExtLargeMapControl(opt_opts_) {
   this.divTbl.zoomOutBtnContainer = { "left" : 0, "top" : 0, "width" : 59, "height" : 23};
   this.divTbl.zoomOutBtnContainerImg = { "left" : 0, "top" : -360, "width" : 59, "height" : 23};
 
-  opt_opts_ = opt_opts_ || {};
-  this.zoomInBtnTitle = opt_opts_.zoomInBtnTitle || "zoom in";
-  this.zoomOutBtnTitle = opt_opts_.zoomOutBtnTitle || "zoom out";
-  this.moveNorthBtnTitle = opt_opts_.moveNorthBtnTitle || "north";
-  this.moveSouthBtnTitle = opt_opts_.moveSouthBtnTitle || "south";
-  this.moveEastBtnTitle = opt_opts_.moveEastBtnTitle || "east";
-  this.moveWestBtnTitle = opt_opts_.moveWestBtnTitle || "west";
-  this.homeBtnTitle = opt_opts_.homeBtnTitle || "home position";
-  this.opt_opts_ = opt_opts_;
+  opts = opts || {};
+  this.zoomInBtnTitle = opts.zoomInBtnTitle || "zoom in";
+  this.zoomOutBtnTitle = opts.zoomOutBtnTitle || "zoom out";
+  this.moveNorthBtnTitle = opts.moveNorthBtnTitle || "north";
+  this.moveSouthBtnTitle = opts.moveSouthBtnTitle || "south";
+  this.moveEastBtnTitle = opts.moveEastBtnTitle || "east";
+  this.moveWestBtnTitle = opts.moveWestBtnTitle || "west";
+  this.homeBtnTitle = opts.homeBtnTitle || "home position";
+  this.opts = opts;
   
   this.divSmallTbl = {};
   this.divSmallTbl.container = { "left" : 0, "top" : 0, "width" : 19, "height" : 42};
@@ -83,8 +104,9 @@ ExtLargeMapControl.prototype.initialize = function (map) {
   commonImg.src = this.imgSrc;
 
   var container;
-  
-  if (this.opt_opts_.type === "small") {
+  var zoomOutBtn;
+  var zoomInBtn; 
+  if (this.opts.type === "small") {
     // create container
     container = document.createElement("div");
     container.style.left = this.divSmallTbl.container.left + "px";
@@ -96,13 +118,13 @@ ExtLargeMapControl.prototype.initialize = function (map) {
     this._container = container;
     
     //zoom up button
-    var zoomInBtn = this.makeImgDiv_(this.imgSmallSrc, this.divSmallTbl.zoomInBtn);
+    zoomInBtn = this.makeImgDiv_(this.imgSmallSrc, this.divSmallTbl.zoomInBtn);
     zoomInBtn.style.cursor = "pointer";
     zoomInBtn.title = this.zoomInBtnTitle;
     container.appendChild(zoomInBtn); 
 
     //zoom down button
-    var zoomOutBtn = this.makeImgDiv_(this.imgSmallSrc, this.divSmallTbl.zoomOutBtnImg);
+    zoomOutBtn = this.makeImgDiv_(this.imgSmallSrc, this.divSmallTbl.zoomOutBtnImg);
     zoomOutBtn.style.cursor = "pointer";
     zoomOutBtn.style.overflow = "hidden";
     zoomOutBtn.style.position = "absolute";
@@ -116,8 +138,6 @@ ExtLargeMapControl.prototype.initialize = function (map) {
     // events
     GEvent.bindDom(zoomOutBtn, "click", this, this._eventZoomOut);
     GEvent.bindDom(zoomInBtn, "click", this, this._eventZoomIn);
-    
-    
   } else {
     // calculation of controller size
     var currentMapType = map.getCurrentMapType();
@@ -216,7 +236,7 @@ ExtLargeMapControl.prototype.initialize = function (map) {
 
 
     //zoomOut button
-    var zoomOutBtn = document.createElement("div");
+    zoomOutBtn = document.createElement("div");
     zoomOutBtn.style.position = "absolute";
     zoomOutBtn.style.left = "20px";
     zoomOutBtn.style.top = (91 + (maxZoom - minZoom + 1) * this.sliderStep) + "px";
@@ -229,7 +249,7 @@ ExtLargeMapControl.prototype.initialize = function (map) {
     _handleList.zoomOutBtn = zoomOutBtn;
 
     //zoomIn button
-    var zoomInBtn = document.createElement("div");
+    zoomInBtn = document.createElement("div");
     zoomInBtn.style.position = "absolute";
     zoomInBtn.style.left = "20px";
     zoomInBtn.style.top = "65px";
@@ -453,7 +473,7 @@ ExtLargeMapControl.prototype._eventZoomEnd = function (oldZoom, newZoom) {
  * @ignore
  */
 ExtLargeMapControl.prototype.copy = function () {
-  return new ExtLargeMapControl(this.latlng_, this.opt_opts_);
+  return new ExtLargeMapControl(this.latlng_, this.opts);
 };
 
 
