@@ -11,22 +11,22 @@
   <body onload="prettyPrint()">
 <h1>PopupMarker Example</h1>
 
-<p>To use the progress bar, create a <code>PopupMarker</code> object and add this marker to the map with GMap2.addOverlay(PopupMarker).</p>
+<p>To create a popup marker, create a new PopupMarker, and specify the relevant options. 
+The most important options are style and text. Then you can assign it event listeners and add it to the map just as you would with a GMarker object.</p>
 <pre class="prettyprint">
 var map = new GMap2(document.getElementById("map_canvas"));
-map.setCenter(new GLatLng(48.859862, 2.292024), 17);
-var markerOpt = {title:"PopupMarker example01"};
-var marker = new PopupMarker(new GLatLng(48.859862, 2.292024),markerOpt);
+map.setCenter(new GLatLng(35.681382, 139.766084), 1);
+
+var opts = { text : "Hello! I'm a PopupMarker."};
+
+var marker = new PopupMarker(new GLatLng(35.681382, 139.766084), opts);
 map.addOverlay(marker);
-marker.showPopup();</pre>
+</pre>
+<p>
+<a href="../examples/simple.html">View example (simple.html).</a>
+</p>
 
-<h2>Basic Example</h2>
 
-<p>The following example shows the ExtLargeMapControl in a simple example.</p>
-
-<p><a href="../examples/usage01.html">View example (usage01.html)</a></p>
-<p><a href="../examples/usage02.html">View example (usage02.html)</a></p>
-<p><a href="../examples/usage03.html">View example (usage03.html)</a></p>
 
 </body>
 </html>

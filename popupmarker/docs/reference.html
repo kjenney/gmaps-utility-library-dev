@@ -9,7 +9,19 @@
   <body>
     <h1>PopupMarker</h1>
     <p>
-Creates a popup with marker.</p>
+This library gives the popup next to with a marker.
+It has two method.
+One is simple popup. The popup can show texts, images and HTML,
+but it can not change background-color.
+Another popup is using output of the Google Chart API.
+It can show texts and changees the background-color by some
+options. But it NOT support a lot of change.
+(e.g. change texts when on dragging event)
+You can select it by set the "style" option when creating new the PopupMarker.
+
+ref. <a href="http://groups.google.com/group/google-chart-api/web/chart-types-for-information-bubbles">
+     The Google Chart API - Chart types for information bubbles
+     </a></p>
     <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
     
       <h2><a name="PopupMarker"></a>class PopupMarker</h2>
@@ -26,9 +38,11 @@ Creates a popup with marker.</p>
             </tr>
             
               <tr class="odd">
-                <td><code>PopupMarker()</code></td>
+                <td><code>PopupMarker(<span class="type">latlng:GLatLng</span>, <span class="type">opts?:PopupMarkerOptions</span>)</code></td>
                 
-                <td>Creates a PopupMarker at the latlng with options specified in PopupMarkerOptions and GMarkerOptions. By default markers are clickable & have the default icon G_DEFAULT_ICON.</td>
+                <td>Creates a marker with options specified in <code><a href="reference.html#PopupMarkerOptions">PopupMarkerOptions</a></code>
+     (extension of <code>GMarkerOptions</code>). Creates a popup and then
+      calls the <code>GMarker</code> constructor.</td>
               </tr>
             
           </tbody>
@@ -39,83 +53,265 @@ Creates a popup with marker.</p>
           
           <tbody>
             <tr>
-              <th>Method</th>
+              <th>Methods</th>
               
-              <th>Return<br>Value</th>
+                
+                  <th>Return&nbsp;Value</th>
+                
               
               <th>Description</th>
             </tr>
             
               <tr class="odd">
-                <td><code>setTitle</code></td>
+                <td><code>hide()</code></td>
                 
-                <td><code>None</code></td>
+                  
+                    <td><code>None</code></td>
+                  
                 
-                <td>Set marker's title.Able to HTML text.</td>
+                <td>Hides the marker and popup</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>hidePopup()</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Hides the popup</td>
               </tr>
             
               <tr class="odd">
-                <td><code>getTitle</code></td>
+                <td><code>setChartBgColor(<span class="type">bgColor:String</span>)</code></td>
                 
-                <td><code>Strings</code></td>
+                  
+                    <td><code>None</code></td>
+                  
                 
-                <td>Return marker's strings.</td>
+                <td>Set background color, also as a 6-digit hexadecimal number. 
+      If the style property not set "chart", then this property is ignored.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>setChartIcon(<span class="type">iconName:String</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Set icon's name of the Google Chart API.
+      If the style property not set "chart", then this property is ignored.</td>
               </tr>
             
               <tr class="odd">
-                <td><code>showPopup</code></td>
+                <td><code>setChartStyle(<span class="type">styleName:String</span>)</code></td>
                 
-                <td><code>None</code></td>
+                  
+                    <td><code>None</code></td>
+                  
                 
-                <td>Show popup.</td>
+                <td>Set chart style for the Google Chart API.
+      If the style property not set "chart", then this property is ignored.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>setChartTextColor(<span class="type">textColor:String</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Set text color, also as a 6-digit hexadecimal number. 
+      If the style property not set "chart", then this property is ignored.</td>
               </tr>
             
               <tr class="odd">
-                <td><code>hidePopup</code></td>
+                <td><code>setShapeStyle(<span class="type">colorValue:String</span>)</code></td>
                 
-                <td><code>None</code></td>
+                  
+                    <td><code>None</code></td>
+                  
                 
-                <td>Hide popup.</td>
+                <td>Set shape style for the Google Chart API.
+    This may, in the future, allow you to use different shapes for the bubble.
+    For now, "bb" is the only valid option.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>setText(<span class="type">message:Strings</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Set the text of the popup message.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>show()</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Shows marker.
+   Note that this method shows only the marker.
+   If you want show marker and the popup,
+   then use the showPopup method.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>showPopup()</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Shows the marker and the popup.</td>
               </tr>
             
           </tbody>
         </table>
+      
+    
+      <h2><a name="PopupMarkerChartAPIOptions"></a>class PopupMarkerChartAPIOptions</h2>
+      <p>This call represents options passed within the PopupMarkerChartAPIOptions to
+    the PopupMarkerOptions object. It has no constructor, but is instantiated as an object literal.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
+      
+        <h3>Properties</h3>
+        <table summary="class PopupMarkerChartAPIOptions - Properties" width="90%">
+          
+          <tbody>
+            <tr>
+              <th>Properties</th>
+              
+                
+                  <th>Type</th>
+                
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>bgColor</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>Specifies background color, also as a 6-digit hexadecimal number.  The default value is <code> "FFFFFF"</code>.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>chartStyle</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>Specifies style for the Google Chart API,
+    chooses from "d_bubble_icon_text_small", "d_bubble_icon_text_big",
+    "d_bubble_icon_texts_big" or "d_bubble_texts_big".  The default value is <code> ""</code>.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>icon</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>Specifies, icon's name of the Google Chart API.  The default value is <code> ""</code>.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>shapeStyle</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>Specifies shape style for the Google Chart API.
+    This may, in the future, allow you to use different shapes for the bubble.
+    For now, "bb" is the only valid option.  The default value is <code> "bb"</code>.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>textColor</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>Specifies text color, as a 6-digit hexadecimal number,
+    for example 000000 for black, FF0000 for red, FFFFFF for white, or FFFF00 for yellow.  The default value is <code> "000000"</code>.</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
     
       <h2><a name="PopupMarkerOptions"></a>class PopupMarkerOptions</h2>
-      <p></p>
+      <p>This class represents optional arguments to <code><a href="reference.html#PopupMarker">PopupMarker</a></code> and <code>GMarker</code>.
+    Each of the functions use a subset of these arguments. See the function descriptions
+    for the list of supported options.
+    It has no constructor, but is instantiated as an object literal.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
       
         <h3>Properties</h3>
         <table summary="class PopupMarkerOptions - Properties" width="90%">
           
           <tbody>
             <tr>
-              <th>Property</th>
+              <th>Properties</th>
               
-              <th>Type</th>
+                
+                  <th>Type</th>
+                
               
               <th>Description</th>
             </tr>
             
               <tr class="odd">
+                <td><code>chart</code></td>
+                
+                  
+                    <td><code>PopupMarkerChartAPIOptions</code></td>
+                  
+                
+                <td>This property specifies the options to configure
+    the Google Chart API. These options are passed to the PopupMarkerOptions object literal
+    when the marker is constructed, and are used to construct the PopupMarker
+    when PopupMarker.showPopup() is called.
+    If the style property not set "chart", then this property is ignored.  The default value is <code> {}</code>.</td>
+              </tr>
+            
+              <tr class="even">
                 <td><code>style</code></td>
                 
-                <td><code>String</code></td>
+                  
+                    <td><code>String</code></td>
+                  
                 
-                <td>The "normal" is default popup.<br>The "chart" is the Charts API.</td>
+                <td>Specifies style for popup, chooses from "normal" or "chart".
+    If it set "chart", then this library shows the popup using output of the Google Chart API.  The default value is <code> "normal"</code>.</td>
               </tr>
             
               <tr class="odd">
-                <td><code>title</code></td>
+                <td><code>text</code></td>
                 
-                <td><code>Strings</code></td>
+                  
+                    <td><code>String</code></td>
+                  
                 
-                <td>This string will appear as popup on the marker.</td>
+                <td>Specifies text for popup. If the style property set "chart",
+    then it follow format for text property of the Google Chart API.  The default value is <code> ""</code>.</td>
               </tr>
-            
             
           </tbody>
         </table>
-
+      
+    
     <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
     <script type="text/javascript">
       _uacct = "UA-964209-4";

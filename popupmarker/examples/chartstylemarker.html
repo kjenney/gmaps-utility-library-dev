@@ -13,7 +13,7 @@
     function initialize() {
       if (GBrowserIsCompatible()) {
         var map = new GMap2(document.getElementById("map_canvas"));
-        map.setCenter(new GLatLng(48.859862, 2.292024), 15);
+        map.setCenter(new GLatLng(37.4419, -122.1419), 1);
         
         var chartAPI_Opt = {
                               chartStyle : "d_bubble_icon_texts_big",
@@ -26,27 +26,33 @@
                            draggable  :  true,
                            style      : "chart",
                            chart      : chartAPI_Opt,
-                           title      : "LoCost+Fuel|$3.05/gal+unleaded|$2.10/gal+diesel"
+                           text       : "With the Google Chart API.|Please drag me!"
                         };
-        var marker = new PopupMarker(new GLatLng(48.859862, 2.282024),markerOpt);
+        var marker = new PopupMarker(new GLatLng(35.681382, 139.766084), markerOpt);
         map.addOverlay(marker);
         marker.showPopup();
         
+        GEvent.addListener(marker, "click", function(){
+          marker.openInfoWindow("This marker using output of the Google Chart API.<br>"
+            + "If you want use this, then set \"chart\" to \"style\" properties.");
+          marker.hidePopup();
+        });
+        
         
         var markerOpt2 = {"style":"chart"};
-        var marker2 = new PopupMarker(new GLatLng(48.859862, 2.292024),markerOpt2);
+        var marker2 = new PopupMarker(new GLatLng(-40.756054, -73.986951), markerOpt2);
         marker2.setChartStyle("d_bubble_icon_text_big");
         marker2.setChartIcon("snack");
         marker2.setChartTextColor("000000");
         marker2.setChartBgColor("FFBB00");
         marker2.setShapeStyle("bb");
-        marker2.setTitle("Click me!");
+        marker2.setText("Click me!");
         map.addOverlay(marker2);
         marker2.showPopup();
 
         GEvent.addListener(marker2, "click", function(){
           marker2.setChartIcon("ski");
-          marker2.setTitle("change!");
+          marker2.setText("Change!");
           marker2.setChartTextColor("FFBB00");
           marker2.setChartBgColor("000000");
           marker2.showPopup();

@@ -1,26 +1,75 @@
-/*
-* PopupMarker Class, v1.0
-*
-*
-*/
-
+/**
+ * @name PopupMarker
+ * @version 1.0
+ * @author Masashi Katsumata
+ * @fileoverview This library gives the popup next to with a marker.
+ * It has two method.
+ * One is simple popup. The popup can show texts, images and HTML,
+ * but it can not change background-color.
+ * Another popup is using output of the Google Chart API.
+ * It can show texts and changees the background-color by some
+ * options. But it NOT support a lot of change.
+ * (e.g. change texts when on dragging event)
+ * You can select it by set the "style" option when creating new the PopupMarker.
+ *
+ * ref. <a href="http://groups.google.com/group/google-chart-api/web/chart-types-for-information-bubbles">
+ *      The Google Chart API - Chart types for information bubbles
+ *      </a>
+ */
 
 /**
- *
- * @constructor
+ * @name PopupMarkerOptions
+ * @class This class represents optional arguments to {@link PopupMarker} and <code>GMarker</code>.
+ *     Each of the functions use a subset of these arguments. See the function descriptions
+ *     for the list of supported options.
+ *     It has no constructor, but is instantiated as an object literal.
+ * @property {String} [style = "normal"] Specifies style for popup, chooses from "normal" or "chart".
+ *     If it set "chart", then this library shows the popup using output of the Google Chart API.
+ * @property {String} [text = ""] Specifies text for popup. If the style property set "chart",
+ *     then it follow format for text property of the Google Chart API.
+ * @property {PopupMarkerChartAPIOptions} [chart = {} ] This property specifies the options to configure
+ *     the Google Chart API. These options are passed to the PopupMarkerOptions object literal
+ *     when the marker is constructed, and are used to construct the PopupMarker
+ *     when PopupMarker.showPopup() is called.
+ *     If the style property not set "chart", then this property is ignored.
  */
-function PopupMarker(latlng, opt_opts_) {
+
+/**
+ * @name PopupMarkerChartAPIOptions
+ * @class This call represents options passed within the PopupMarkerChartAPIOptions to
+ *     the PopupMarkerOptions object. It has no constructor, but is instantiated as an object literal.
+ * @property {String} [chartStyle = ""] Specifies style for the Google Chart API,
+ *     chooses from "d_bubble_icon_text_small", "d_bubble_icon_text_big",
+ *     "d_bubble_icon_texts_big" or "d_bubble_texts_big".
+ * @property {String} [icon = ""] Specifies, icon's name of the Google Chart API.
+ * @property {String} [shapeStyle = "bb" ] Specifies shape style for the Google Chart API.
+ *     This may, in the future, allow you to use different shapes for the bubble.
+ *     For now, "bb" is the only valid option.
+ * @property {String} [textColor = "000000" ] Specifies text color, as a 6-digit hexadecimal number,
+ *     for example 000000 for black, FF0000 for red, FFFFFF for white, or FFFF00 for yellow. 
+ * @property {String} [bgColor = "FFFFFF" ] Specifies background color, also as a 6-digit hexadecimal number. 
+ */
+
+/**
+ * @desc Creates a marker with options specified in {@link PopupMarkerOptions}
+ *      (extension of <code>GMarkerOptions</code>). Creates a popup and then
+ *       calls the <code>GMarker</code> constructor.
+ * @param {GLatLng} latlng Initial marker position
+ * @param {PopupMarkerOptions} [opts] Named optional arguments.
+ * @constructor
+ */    
+function PopupMarker(latlng, opts) {
   this.latlng_ = latlng;
-  opt_opts_ = opt_opts_ || {};
+  opts = opts || {};
   
-  this.title_ = opt_opts_.title || "";
-  if (opt_opts_.title) {
-    opt_opts_.title = undefined;
+  this.text_ = opts.text || "";
+  if (opts.text) {
+    opts.text = undefined;
   }
-  this.opts_ = opt_opts_;
+  this.opts_ = opts;
   
-  this.popupStyle_ = opt_opts_.style || "normal";
-  this.chart_ = opt_opts_.chart || {};
+  this.popupStyle_ = opts.style || "normal";
+  this.chart_ = opts.chart || {};
   
   var agt    = navigator.userAgent.toLowerCase();
   var is_ie_ = ((agt.indexOf("msie") !== -1) && (agt.indexOf("opera") === -1));
@@ -48,8 +97,15 @@ function PopupMarker(latlng, opt_opts_) {
   GMarker.apply(this, arguments);
 }
 
+/**
+ * @private
+ */
 PopupMarker.prototype = new GMarker(new GLatLng(0, 0));
 
+/**
+ * @desc Initialize the marker
+ * @private
+ */
 PopupMarker.prototype.initialize = function (map) {
   GMarker.prototype.initialize.apply(this, arguments);
   this.map_ = map;
@@ -64,9 +120,9 @@ PopupMarker.prototype.initialize = function (map) {
   this.container_.style.visibility = "hidden";
   
   if (this.popupStyle_ === "chart") {
-    this.makeChartPopup();
+    this.makeChartPopup_();
   } else {
-    this.makeNormalPopup();
+    this.makeNormalPopup_();
   }
   
   //======================//
@@ -90,8 +146,11 @@ PopupMarker.prototype.initialize = function (map) {
   });
 };
 
-
-PopupMarker.prototype.makeNormalPopup = function () {
+/**
+ * @desc Create normal popup
+ * @private
+ */
+PopupMarker.prototype.makeNormalPopup_ = function () {
   //==========================//
   //     left-top corner      //
   //==========================//
@@ -185,8 +244,11 @@ PopupMarker.prototype.makeNormalPopup = function () {
 
 };
 
-
-PopupMarker.prototype.makeChartPopup = function () {
+/**
+ * @desc Create popup container for the Chart API
+ * @private
+ */
+PopupMarker.prototype.makeChartPopup_ = function () {
   this.chartImg_ = this.makeImgDiv_("http://www.google.com/mapfiles/transparent.png", {"left" : 0, "top" : 0, "width" : 0, "height" : 0 });
   this.chartImg_.firstChild.style.MozUserSelect = "none";
   this.chartImg_.firstChild.style.KhtmlUserSelect = "none";
@@ -197,7 +259,6 @@ PopupMarker.prototype.makeChartPopup = function () {
 
 
 /**
- * @private
  * @ignore
  */
 PopupMarker.prototype.redraw = function (force) {
@@ -211,51 +272,54 @@ PopupMarker.prototype.redraw = function (force) {
 };
 
 /**
- * @private
  * @ignore
  */
 PopupMarker.prototype.copy = function () {
-  this.opts_.title = this.title_;
+  this.opts_.text = this.text_;
   return new PopupMarker(this.latlng_, this.opts_);
 };
 
 /**
- * @name hide
- * @desc hidden marker and popup
- * @param none
- * @return none
+ * @desc Hides the marker and popup
  */
 PopupMarker.prototype.hide = function () {
   GMarker.prototype.hide.apply(this, arguments);
   this.container_.style.visibility = "hidden";
 };
 
+
 /**
- * @name showPopup
- * @desc show marker's popup
- * @param title : popup's title[opt]
- * @return none
+ * @desc Shows marker.
+ *    Note that this method shows only the marker.
+ *    If you want show marker and the popup,
+ *    then use the showPopup method.
+ */
+PopupMarker.prototype.show = function () {
+  GMarker.prototype.show.apply(this, arguments);
+};
+
+/**
+ * @desc Shows the marker and the popup.
  */
 PopupMarker.prototype.showPopup = function () {
   
+  this.show();
+  
   if (this.popupStyle_ === "chart") {
-    this.redrawChartImg_(this.title_);
+    this.redrawChartImg_(this.text_);
   } else {
-    this.redrawNormalPopup_(this.title_);
+    this.redrawNormalPopup_(this.text_);
   }
   
   var info = this.map_.getInfoWindow();
-  if (!info.isHidden() || this.isNull(this.title_)) {
+  if (!info.isHidden() || this.isNull(this.text_)) {
     return;
   }
   this.container_.style.visibility = "visible";
 };
 
 /**
- * @name hidePopup
- * @desc hidden marker's popup
- * @param none
- * @return none
+ * @desc Hides the popup
  */
 PopupMarker.prototype.hidePopup = function () {
   this.container_.style.visibility = "hidden";
@@ -263,7 +327,6 @@ PopupMarker.prototype.hidePopup = function () {
 
 
 /**
- * @private
  * @ignore
  */
 PopupMarker.prototype.remove = function () {
@@ -279,132 +342,139 @@ PopupMarker.prototype.remove = function () {
 
 
 /**
- * @name setTitle
- * @desc set marker's title
- * @param title : new marker's title
- * @return none
+ * @desc Set the text of the popup message.
+ * @param {Strings} message
  */
-PopupMarker.prototype.setTitle = function (title) {
-  this.title_ = title;
+PopupMarker.prototype.setText = function (text) {
+  this.text_ = text;
 };
 
 /**
+ * @desc Redraws the normal popup.
  * @private
  * @ignore
  */
-PopupMarker.prototype.redrawNormalPopup_ = function (title) {
-  while (this.bodyContainer_.firstChild) {
-    this.bodyContainer_.removeChild(this.bodyContainer_.firstChild);
-  }
-  this.bodyContainer_.innerHTML = title;
-  if (this.isIE_() === false && this.bodyContainer_.hasChildNodes) {
-    if (this.bodyContainer_.firstChild.nodeType === 1) {
-      this.bodyContainer_.firstChild.style.margin = 0;
+PopupMarker.prototype.redrawNormalPopup_ = function (text) {
+  
+  if (this.beforeNormalPopupText_ !== text) {
+    while (this.bodyContainer_.firstChild) {
+      this.bodyContainer_.removeChild(this.bodyContainer_.firstChild);
     }
+    this.bodyContainer_.innerHTML = text;
+    if (this.isIE_() === false && this.bodyContainer_.hasChildNodes) {
+      if (this.bodyContainer_.firstChild.nodeType === 1) {
+        this.bodyContainer_.firstChild.style.margin = 0;
+      }
+    }
+    var offsetBorder = this.isIE_() ? 2 : 0;
+    var cSize  = this.getHtmlSize_(text);
+    var rightX = this.popupTbl.leftTop.width + cSize.width;
+    
+    this.leftBottom_.style.top = (cSize.height +  this.popupTbl.leftBody.top) + "px";
+    this.leftBody_.style.height = cSize.height + "px";
+    this.bodyContainer_.style.width = cSize.width + "px";
+    this.bodyContainer_.style.height = cSize.height + "px";
+    this.bodyContainer_.style.top = this.popupTbl.leftBody.top;
+    this.rightTop_.style.left = rightX + "px";
+    this.rightBottom_.style.left = this.rightTop_.style.left;
+    this.rightBottom_.style.top = this.leftBottom_.style.top;
+    this.rightBody_.style.left = rightX + "px";
+    this.rightBody_.style.height = this.leftBody_.style.height;
+    this.centerBottom_.style.top = this.leftBottom_.style.top;
+    this.centerBottom_.style.width = cSize.width + "px";
+    this.centerTop_.style.width = cSize.width + "px";
+    
+    this.size_ = {"width" : (rightX + this.popupTbl.rightTop.width), "height" : (cSize.height + this.popupTbl.leftTop.height + this.popupTbl.leftBottom.height) };
+    this.container_.style.width = this.size_.width + "px";
+    this.container_.style.height = this.size_.height + "px";
   }
-  var offsetBorder = this.isIE_() ? 2 : 0;
-  var cSize  = this.getHtmlSize_(title);
-  var rightX = this.popupTbl.leftTop.width + cSize.width;
-  
-  this.leftBottom_.style.top = (cSize.height +  this.popupTbl.leftBody.top) + "px";
-  this.leftBody_.style.height = cSize.height + "px";
-  this.bodyContainer_.style.width = cSize.width + "px";
-  this.bodyContainer_.style.height = cSize.height + "px";
-  this.bodyContainer_.style.top = this.popupTbl.leftBody.top;
-  this.rightTop_.style.left = rightX + "px";
-  this.rightBottom_.style.left = this.rightTop_.style.left;
-  this.rightBottom_.style.top = this.leftBottom_.style.top;
-  this.rightBody_.style.left = rightX + "px";
-  this.rightBody_.style.height = this.leftBody_.style.height;
-  this.centerBottom_.style.top = this.leftBottom_.style.top;
-  this.centerBottom_.style.width = cSize.width + "px";
-  this.centerTop_.style.width = cSize.width + "px";
-  
-  this.size_ = {"width" : (rightX + this.popupTbl.rightTop.width), "height" : (cSize.height + this.popupTbl.leftTop.height + this.popupTbl.leftBottom.height) };
-  this.container_.style.width = this.size_.width + "px";
-  this.container_.style.height = this.size_.height + "px";
   
   var pxPos = this.map_.fromLatLngToDivPixel(this.latlng_);
   this.container_.style.left =  pxPos.x + "px";
   this.container_.style.top = (pxPos.y - this.size_.height) + "px";
+  
+  this.beforeNormalPopupText_ = text;
 };
 
 /**
- * @name setChartStyle
- * @param iconName : bubble's icon name
- *                   (d_bubble_icon_text_small / d_bubble_icon_text_big / d_bubble_icon_texts_big / d_bubble_texts_big)
- * @return none
+ * @desc Set chart style for the Google Chart API.
+ *       If the style property not set "chart", then this property is ignored.
+ * @param {String} styleName
  */
 PopupMarker.prototype.setChartStyle = function (styleName) {
   this.chart_.chartStyle = styleName;
 };
 
 /**
- * @name setChartIcon
- * @param iconName : bubble's icon name
- *                   (e.g. WC / airport / bar / wheelchair / beer / bike ...)
- * @return none
+ * @desc Set icon's name of the Google Chart API.
+ *       If the style property not set "chart", then this property is ignored.
+ * @param {String} iconName
  */
 PopupMarker.prototype.setChartIcon = function (iconName) {
   this.chart_.icon = iconName;
 };
 
 /**
- * @name setChartTextColor
- * @param iconName : bubble's text color(e.g. FF0000)
- * @return none
+ * @desc Set text color, also as a 6-digit hexadecimal number. 
+ *       If the style property not set "chart", then this property is ignored.
+ * @param {String} textColor
  */
 PopupMarker.prototype.setChartTextColor = function (textColor) {
   this.chart_.textColor = textColor;
 };
 
 /**
- * @name setChartBgColor
- * @param colorValue : bubble's fill color(e.g. FF0000)
- * @return none
+ * @desc Set background color, also as a 6-digit hexadecimal number. 
+ *       If the style property not set "chart", then this property is ignored.
+ * @param {String} bgColor
  */
 PopupMarker.prototype.setChartBgColor = function (bgColor) {
   this.chart_.bgColor = bgColor;
 };
 
 /**
- * @name setShapeStyle
- * @desc reserved function
- * @param colorValue : style name
- *                     (this may, in the future, allow you to use different shapes for the bubble. For now, "bb" is the only valid option.)
- * @return none
+ * @desc Set shape style for the Google Chart API.
+ *     This may, in the future, allow you to use different shapes for the bubble.
+ *     For now, "bb" is the only valid option.
+ * @param {String} colorValue
  */
 PopupMarker.prototype.setShapeStyle = function (style) {
   this.chart_.shapeStyle = "bb";
 };
 
 /**
+ * @desc Redraws and re-requests output of the Google Chart API.
  * @private
  * @ignore
  */
-PopupMarker.prototype.redrawChartImg_ = function (title) {
+PopupMarker.prototype.redrawChartImg_ = function (text) {
 
   if (!this.isNull(this.chart_.shapeStyle)) {
     this.chart_.shapeStyle = "bb";
   }
+  this.chart_.textColor = this.chart_.textColor || "000000";
+  this.chart_.bgColor = this.chart_.bgColor || "FFFFFF";
+  
+  this.chart_.textColor = this.chart_.textColor.replace("#", "");
+  this.chart_.bgColor = this.chart_.bgColor.replace("#", "");
   
   var params = "chst=" + this.chart_.chartStyle;
   switch (this.chart_.chartStyle) {
   case "d_bubble_icon_text_small":
   case "d_bubble_icon_text_big":
-    params = params + "&chld=" + this.chart_.icon + "|" + this.chart_.shapeStyle + "|" + title + "|" + this.chart_.bgColor + "|" + this.chart_.textColor;
+    params = params + "&chld=" + this.chart_.icon + "|" + this.chart_.shapeStyle + "|" + text + "|" + this.chart_.bgColor + "|" + this.chart_.textColor;
     break;
     
   case "d_bubble_icon_texts_big":
-    title = title.replace(/[\r]/, "");
-    title = title.replace(/[\n]/, "|");
-    params = params + "&chld=" + this.chart_.icon + "|" + this.chart_.shapeStyle + "|" + this.chart_.bgColor + "|" + this.chart_.textColor + "|" + title;
+    text = text.replace(/[\r]/, "");
+    text = text.replace(/[\n]/, "|");
+    params = params + "&chld=" + this.chart_.icon + "|" + this.chart_.shapeStyle + "|" + this.chart_.bgColor + "|" + this.chart_.textColor + "|" + text;
     break;
     
   case "d_bubble_texts_big":
-    title = title.replace(/[\r]/, "");
-    title = title.replace(/[\n]/, "|");
-    params = params + "&chld=" + this.chart_.shapeStyle + "|" + this.chart_.bgColor + "|" + this.chart_.textColor + "|" + title;
+    text = text.replace(/[\r]/, "");
+    text = text.replace(/[\n]/, "|");
+    params = params + "&chld=" + this.chart_.shapeStyle + "|" + this.chart_.bgColor + "|" + this.chart_.textColor + "|" + text;
     break;
     
   }
@@ -413,7 +483,7 @@ PopupMarker.prototype.redrawChartImg_ = function (title) {
   
   if (this.beforeParams === params) {
     //re-calcurate popup's position
-    var imgHeight = parseInt(this.chartImg_.firstChild.offsetHeight);  //for IE
+    var imgHeight = parseInt(this.chartImg_.firstChild.offsetHeight, 10);  //for IE
     this.container_.style.left =  pxPos.x + "px";
     this.container_.style.top = (pxPos.y - imgHeight) + "px";
     
@@ -433,7 +503,7 @@ PopupMarker.prototype.redrawChartImg_ = function (title) {
     if (dummyImg.complete === true) {
       this_.size_ = {"width" : dummyImg.width, "height" : dummyImg.height };
       if (is_ie_ === true) {
-        this_.chartImg_.firstChild.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://www.google.com/chart?" + params + "')";
+        this_.chartImg_.firstChild.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://chart.apis.google.com/chart?" + params + "')";
       } else {
         this_.chartImg_.removeChild(this_.chartImg_.firstChild);
         this_.chartImg_.appendChild(dummyImg);
@@ -456,15 +526,6 @@ PopupMarker.prototype.redrawChartImg_ = function (title) {
   redraw();
 };
 
-/**
- * @name getTitle
- * @desc return marker's current title
- * @param none
- * @return marker's title
- */
-PopupMarker.prototype.getTitle = function () {
-  return this.title_;
-};
 
 /**
  * @private
@@ -486,39 +547,36 @@ PopupMarker.prototype.isNull = function (value) {
 
 /**
  * @private
- * @name getHtmlSize_
  * @desc return size of html elements
  * @param html : html elements
  * @return GSize
  */
 PopupMarker.prototype.getHtmlSize_ = function (html) {
-  var dummyTextNode = document.createElement("span");
-  dummyTextNode.innerHTML = html;
-  dummyTextNode.style.display = "inline";
-  document.body.appendChild(dummyTextNode);
   
-  var elements = dummyTextNode.getElementsByTagName("*");
-  var size = {};
-  if (elements.length) {
-    var maxX = 0;
-    var width = 6;  //margin
-    var height = 6;  //margin
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].style.display = "inline";
-      width = elements[i].offsetWidth;
-      if (maxX < width) {
-        maxX = width;
-      }
-      height += elements[i].offsetHeight;
-    }
-    size.width = dummyTextNode.offsetWidth;
-    size.height = height;
-  } else {
+  var mapContainer = this.map_.getContainer();
+  var onlineHTMLsize_ = function (text) {
+    var dummyTextNode = document.createElement("span");
+    dummyTextNode.innerHTML = text;
+    dummyTextNode.style.display = "inline";
+    mapContainer.appendChild(dummyTextNode);
+    
+    var size = {};
     size.width = dummyTextNode.offsetWidth;
     size.height = dummyTextNode.offsetHeight;
+    
+    mapContainer.removeChild(dummyTextNode);
+    return size;
+  };
+  
+  var ret;
+  var lines = html.split(/\n/i);
+  var totalSize = new GSize(1, 1); // "1" is margin
+  for (var i = 0; i < lines.length; i++) {
+    ret = onlineHTMLsize_(lines[i]);
+    totalSize.width += ret.width;
+    totalSize.height += ret.height;
   }
-  document.body.removeChild(dummyTextNode);
-  return size;
+  return totalSize;
 };
 
 /**
