@@ -665,7 +665,7 @@
     style: {
       icon: null,
       strokeColor: "#FF0000",
-      strokeWeight: 2,
+      strokeWeight: 8,
       strokeOpacity: 0.5,
       outlineColor: "#FF0000",
       outlineWeight: 2,
