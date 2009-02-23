@@ -16,17 +16,14 @@ function SnapShotControl() {
   var container = undefined;
   var opts_ = {};
   var s = 1, idx = 1;
-  var obj, key;
+  var obj;
   //detect constructor params
   if (arguments.length > 0) {
     if (!this.isNull(arguments[0].style)) {
       container = arguments[0];
       
       if (arguments.length === 2) {
-        obj = arguments[1];
-        for (key in obj) {
-          opts_[key] = obj[key];
-        }
+        opts_ = arguments[1];
       }
       
     }
@@ -60,7 +57,7 @@ function SnapShotControl() {
   
   //find api key
   var scripts = document.getElementsByTagName("script");
-  key = "";
+  var key = "";
   for (var i = 0;i < scripts.length; i++) {
     var scriptNode = scripts[i];
     if (scriptNode.src.match(/^http:\/\/maps\.google\..*?&(?:amp;)?key=([^\&]+)/gi)) {
@@ -130,7 +127,7 @@ SnapShotControl.prototype.initialize = function (map) {
   GEvent.bind(map, "removeoverlay", this, this._removeOverlay);
 
   if (this.isHidden_ === true) {
-    container.style.visibility = "hidden";
+    this._container.style.visibility = "hidden";
     this.isHidden_ = true;
   }
 
@@ -147,8 +144,8 @@ SnapShotControl.prototype._addOverlay = function (overlay) {
   var polygonInfo = {};
   var polylineInfo = {};
   var markerInfo = {};
-  
-  switch (this.detectOverlay(overlay)) {
+  var tmp = this.detectOverlay(overlay);
+  switch (tmp) {
   case "GPolygon":
     polygonInfo.handle = overlay;
     polygonInfo.color = overlay.color.replace("#", "0x");
@@ -241,7 +238,7 @@ SnapShotControl.prototype._removeOverlay = function (overlay) {
  * @desc change visibility of the control to visible
  */
 SnapShotControl.prototype.show = function () {
-  this._container.style.visilibity = "visible";
+  this._container.style.visibility = "visible";
   this.isHidden_ = false;
 };
 
@@ -249,8 +246,8 @@ SnapShotControl.prototype.show = function () {
  * @name hide
  * @desc change visibility of the control to hidden
  */
-SnapShotControl.prototype.show = function () {
-  this._container.style.visilibity = "visible";
+SnapShotControl.prototype.hide = function () {
+  this._container.style.visibility = "hidden";
   this.isHidden_ = true;
 };
 
@@ -267,34 +264,32 @@ SnapShotControl.prototype.isHidden = function () {
  * @desc detecting the overlay
  */
 SnapShotControl.prototype.detectOverlay = function (overlay) {
-  var overlayProperties = [];
-  var key;
-  for (key in overlay) {
-    overlayProperties[key] = 1;
-  }
   
-  var this_ = this;
-  
-  var matchingTest = function (checkClass) {
-    for (var key2 in checkClass.prototype) {
-      if (this_.isNull(overlayProperties[key2]) && key2 !== "prototype" && key2 !== "__super") {
-        return false;
-      }
-    }
-    return true;
-  };
-  
-  if (matchingTest(GPolyline)) {
+  if (this.matchingTest(overlay, GPolyline)) {
     return "GPolyline";
   }
-  if (matchingTest(GPolygon)) {
+  if (this.matchingTest(overlay, GPolygon)) {
     return "GPolygon";
   }
-  if (matchingTest(GMarker)) {
+  if (this.matchingTest(overlay, GMarker)) {
     return "GMarker";
   }
   return undefined;
 };
+
+/**
+ * @private
+ * @desc matching test targetObject and matchClass
+ */
+SnapShotControl.prototype.matchingTest = function (targetObject, matchClass) {
+  for (var key in matchClass.prototype) {
+    if (key in targetObject === false && key !== "prototype" && key !== "__super") {
+      return false;
+    }
+  }
+  return true;
+};
+
 
 /**
  * @name getImage
@@ -302,6 +297,9 @@ SnapShotControl.prototype.detectOverlay = function (overlay) {
  */
 SnapShotControl.prototype.getImage = function () {
   var url = "http://maps.google.com/staticmap?key=" + this.apiKey_;
+  
+  var bounds = this.map_.getBounds();
+  var zoom = this.map_.getZoom();
   
   //center position
   var mapCenterPos = this.map_.getCenter();
@@ -335,7 +333,7 @@ SnapShotControl.prototype.getImage = function () {
   
   
   //zoom level
-  url += "&zoom=" + this.map_.getZoom();
+  url += "&zoom=" + zoom;
   
   //map type
   var maptype = "";
@@ -384,7 +382,6 @@ SnapShotControl.prototype.getImage = function () {
   }
 
   //polylines
-  var bounds = this.map_.getBounds();
   var is_draw_ = false;
   var lineBound, i, j;
   for (i = 0; i < this.polylines_.length; i++) {
