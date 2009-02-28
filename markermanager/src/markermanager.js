@@ -7,19 +7,18 @@
  * @fileoverview Marker manager is an interface between the map and the user,
  * designed to manage adding and removing many points when the viewport changes.
  * <br /><br />
- * Algorithm: The MM places its markers onto a grid, similar to the map tiles.
- * When the user moves the viewport, the MM computes which grid cells have
+ * <b>How it Works</b>:<br/> 
+ * The MarkerManager places its markers onto a grid, similar to the map tiles.
+ * When the user moves the viewport, it computes which grid cells have
  * entered or left the viewport, and shows or hides all the markers in those
  * cells.
- * <br />
  * (If the users scrolls the viewport beyond the markers that are loaded,
- * no markers will be visible until the EVENT_moveend triggers an update.)
- * <br /><br />
+ * no markers will be visible until the <code>EVENT_moveend</code> 
+ * triggers an update.)
  * In practical consequences, this allows 10,000 markers to be distributed over
  * a large area, and as long as only 100-200 are visible in any given viewport,
  * the user will see good performance corresponding to the 100 visible markers,
  * rather than poor performance corresponding to the total 10,000 markers.
- * <br /><br />
  * Note that some code is optimized for speed over space,
  * with the goal of accommodating thousands of markers.
  */
@@ -52,8 +51,8 @@
  *     visible.
  * @property {Boolean} [trackMarkers=false] Indicates whether or not a marker
  *     manager should track markers' movements. If you wish to move managed
- *     markers using the {@link setPoint} method, this option should be set to
- *     {@link true}.
+ *     markers using the {@link setPoint}/{@link setLatLng} methods, 
+ *     this option should be set to {@link true}.
  */
 
 /**
@@ -151,8 +150,8 @@ MarkerManager.prototype.resetManager_ = function () {
 };
 
 /**
- * Removes all currently displayed markers
- * and calls resetManager to clear arrays
+ * Removes all markers in the manager, and
+ * removes any visible markers from the map.
  */
 MarkerManager.prototype.clearMarkers = function () {
   var me = this;
@@ -256,7 +255,7 @@ MarkerManager.prototype.onMarkerMoved_ = function (marker, oldPoint, newPoint) {
   while (zoom >= 0 && (oldGrid.x !== newGrid.x || oldGrid.y !== newGrid.y)) {
     var cell = me.getGridCellNoCreate_(oldGrid.x, oldGrid.y, zoom);
     if (cell) {
-      if (me.removeFromArray(cell, marker)) {
+      if (me.removeFromArray_(cell, marker)) {
         me.getGridCellCreate_(newGrid.x, newGrid.y, zoom).push(marker);
       }
     }
@@ -290,9 +289,8 @@ MarkerManager.prototype.onMarkerMoved_ = function (marker, oldPoint, newPoint) {
 
 
 /**
- * Searches at every zoom level to find grid cell
- * that marker would be in, removes from that array if found.
- * Also removes marker with removeOverlay if visible.
+ * Removes marker from the manager and from the map
+ * (if it's currently visible).
  * @param {GMarker} marker The marker to delete.
  */
 MarkerManager.prototype.removeMarker = function (marker) {
@@ -305,7 +303,7 @@ MarkerManager.prototype.removeMarker = function (marker) {
     var cell = me.getGridCellNoCreate_(grid.x, grid.y, zoom);
 
     if (cell) {
-      me.removeFromArray(cell, marker);
+      me.removeFromArray_(cell, marker);
     }
     // For the current zoom we also need to update the map. Markers that no
     // longer are visible are removed from the map. This also lets us keep the count
@@ -372,9 +370,9 @@ MarkerManager.prototype.getMarkerCount = function (zoom) {
 };
 
 /** 
- * Returns a marker given latitude, longitude and zoom. If the marker does not exist, 
- * the method will return a new marker. If a new marker is created, it will NOT be 
- * added to the MarkerManager. 
+ * Returns a marker given latitude, longitude and zoom. If the marker does not 
+ * exist, the method will return a new marker. If a new marker is created, 
+ * it will NOT be added to the manager. 
  * 
  * @param {Number} lat - the latitude of a marker. 
  * @param {Number} lng - the longitude of a marker. 
@@ -575,41 +573,39 @@ MarkerManager.prototype.visible = function () {
 
 
 /**
- * Is this layer hidden?
- *
- * Returns inverted visibility setting
- *
+ * Returns true if the manager is hidden.
+ * Otherwise returns false.
  * @return {Boolean} Hidden
  */
-MarkerManager.prototype.hidden = function () {
+MarkerManager.prototype.isHidden = function () {
   return !this.show_;
 };
 
 
 /**
- * Shows the layer
- * Shows the layer. Call refresh() to update the map.
+ * Shows the manager if it's currently hidden.
  */
 MarkerManager.prototype.show = function () {
   this.show_ = true;
+  this.refresh();
 };
 
 
 /**
- * Hides the layer
- * Hides the layer. Call refresh() to update the map.
+ * Hides the manager if it's currently visible
  */
 MarkerManager.prototype.hide = function () {
   this.show_ = false;
+  this.refresh();
 };
 
 
 /**
- * Toggles the layer
- * Toggles visibility of the layer on/off. Call refresh() to update the map.
+ * Toggles the visibility of the manager.
  */
 MarkerManager.prototype.toggle = function () {
   this.show_ = !this.show_;
+  this.refresh();
 };
 
 
@@ -733,7 +729,7 @@ MarkerManager.prototype.addCellMarkers_ = function (x, y, z) {
 
 
 /**
- * Use the rectangleDiffCoords function to process all grid cells
+ * Use the rectangleDiffCoords_ function to process all grid cells
  * that are in bounds1 but not bounds2, using a callback, and using
  * the current MarkerManager object as the instance.
  *
@@ -746,7 +742,7 @@ MarkerManager.prototype.addCellMarkers_ = function (x, y, z) {
  */
 MarkerManager.prototype.rectangleDiff_ = function (bounds1, bounds2, callback) {
   var me = this;
-  me.rectangleDiffCoords(bounds1, bounds2, function (x, y) {
+  me.rectangleDiffCoords_(bounds1, bounds2, function (x, y) {
     callback.apply(me, [x, y, bounds1.z]);
   });
 };
@@ -760,7 +756,7 @@ MarkerManager.prototype.rectangleDiff_ = function (bounds1, bounds2, callback) {
  * @param {Function} callback The callback function to call
  *                   for each grid coordinate.
  */
-MarkerManager.prototype.rectangleDiffCoords = function (bounds1, bounds2, callback) {
+MarkerManager.prototype.rectangleDiffCoords_ = function (bounds1, bounds2, callback) {
   var minX1 = bounds1.minX;
   var minY1 = bounds1.minY;
   var maxX1 = bounds1.maxX;
@@ -807,7 +803,7 @@ MarkerManager.prototype.rectangleDiffCoords = function (bounds1, bounds2, callba
  * @param {Boolean} opt_notype  Flag to disable type checking in equality.
  * @return {Number}  The number of instances of value that were removed.
  */
-MarkerManager.prototype.removeFromArray = function (array, value, opt_notype) {
+MarkerManager.prototype.removeFromArray_ = function (array, value, opt_notype) {
   var shift = 0;
   for (var i = 0; i < array.length; ++i) {
     if (array[i] === value || (opt_notype && array[i] === value)) {
