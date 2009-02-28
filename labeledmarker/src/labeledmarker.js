@@ -63,8 +63,8 @@ function LabeledMarker(latlng, opt_opts) {
   this.labelText_ = opt_opts.labelText || "";
   this.labelClass_ = opt_opts.labelClass || "LabeledMarker_markerLabel";
   this.labelOffset_ = opt_opts.labelOffset || new GSize(0, 0);
-
-  this.clickable_ = opt_opts.clickable || true;
+  
+  this.clickable_ = (opt_opts.clickable == false) ? false : true;
   this.title_ = opt_opts.title || "";
   this.labelVisibility_ = true;
   // ownVisibility_ is a workaround for the issue with GMarker that it
@@ -72,13 +72,6 @@ function LabeledMarker(latlng, opt_opts) {
   // regardless of any visibility settings applied before it; this property
   // may eventually go away, when GMarker behavior allows...
   this.ownVisibility_ = true;
-
-  this.div_ = document.createElement("div");
-  this.div_.className = this.labelClass_;
-  this.div_.innerHTML = this.labelText_;
-  this.div_.style.position = "absolute";
-  this.div_.style.cursor = "pointer";
-  this.div_.title = this.title_;
 
   if (opt_opts.draggable) {
     // This version of LabeledMarker doesn't support dragging.
@@ -106,6 +99,15 @@ LabeledMarker.prototype.initialize = function (map) {
   GMarker.prototype.initialize.apply(this, arguments);
 
   this.map_ = map;
+
+  this.div_ = document.createElement("div");
+  this.div_.className = this.labelClass_;
+  this.div_.innerHTML = this.labelText_;
+  this.div_.style.position = "absolute";
+  if (this.clickable_) {
+    this.div_.style.cursor = "pointer";
+  }
+  this.div_.title = this.title_;
 
   if (!this.ownVisibility_) {
     this.hide();
