@@ -15,11 +15,11 @@
         var map = new GMap2(document.getElementById("map_canvas"));
         map.setCenter(new GLatLng(37.4419, -122.1419), 1);
         
-        var opt = {text:"<img src='japan.jpg' width='20' height='13'>Japan, Tokyo<br><br>Please drag me!", draggable:true};
+        var opt = {text:"<img src='images/japan.jpg' width='20' height='13'>Japan, Tokyo<br><br>Please drag me!", draggable:true};
         var marker1 = createMaker(new GLatLng(35.681382, 139.766084), "Japan,Tokyo", opt);
         map.addOverlay(marker1);
         
-        var opt = {text:"<img src='usa.jpg' width='20' height='13'>USA,NewYork", draggable:true};
+        var opt = {text:"<img src='images/usa.jpg' width='20' height='13'>USA,NewYork", draggable:true};
         var marker2 = new PopupMarker(new GLatLng(40.756054, -73.986951), opt);
         map.addOverlay(marker2);
         marker2.showPopup();

@@ -2,52 +2,54 @@
  * @name PopupMarker
  * @version 1.0
  * @author Masashi Katsumata
- * @fileoverview This library gives the popup next to with a marker.
- * It has two method.
- * One is simple popup. The popup can show texts, images and HTML,
- * but it can not change background-color.
- * Another popup is using output of the Google Chart API.
- * It can show texts and changees the background-color by some
- * options. But it NOT support a lot of change.
- * (e.g. change texts when on dragging event)
- * You can select it by set the "style" option when creating new the PopupMarker.
- *
- * ref. <a href="http://groups.google.com/group/google-chart-api/web/chart-types-for-information-bubbles">
- *      The Google Chart API - Chart types for information bubbles
- *      </a>
+ * @fileoverview 
+ * This library displays a "popup" (mini infowindow) to the side of a marker.
+ * There are two types of popups that this library can create for you.
+ * The first is a simple popup that can render text or HTML, but its 
+ * background color cheme cannot be changed.
+ * The second type of popup is generated using the 
+ * <a href="http://groups.google.com/group/google-chart-api/web/chart-types-for
+ * -information-bubbles">Google Charts API</a>,
+ * and can show text and icons, with any desired color scheme.
+ * Since the second popup effectively re-generates an image anytime
+ * its options are changed, it's not recommended for use in situations
+ * where you want to animate the content of the popup at a fast rate.
+ * The popup types are chosen based on the value of "type" in the options.
  */
 
 /**
  * @name PopupMarkerOptions
- * @class This class represents optional arguments to {@link PopupMarker} and <code>GMarker</code>.
- *     Each of the functions use a subset of these arguments. See the function descriptions
- *     for the list of supported options.
- *     It has no constructor, but is instantiated as an object literal.
- * @property {String} [style = "normal"] Specifies style for popup, chooses from "normal" or "chart".
- *     If it set "chart", then this library shows the popup using output of the Google Chart API.
- * @property {String} [text = ""] Specifies text for popup. If the style property set "chart",
- *     then it follow format for text property of the Google Chart API.
- * @property {PopupMarkerChartAPIOptions} [chart = {} ] This property specifies the options to configure
- *     the Google Chart API. These options are passed to the PopupMarkerOptions object literal
- *     when the marker is constructed, and are used to construct the PopupMarker
- *     when PopupMarker.showPopup() is called.
- *     If the style property not set "chart", then this property is ignored.
+ * @class This class represents optional arguments to {@link PopupMarker} and 
+ *   <code>GMarker</code>. 
+ *   It has no constructor, but is instantiated as an object literal.
+ * @property {String} [style = "normal"] Specifies style of popup.
+ *  If set to "chart", then this library shows the popup using the 
+ *  output of the Google Chart API, and additional options should be specified 
+ *  in the {@link chart} property.
+ * @property {String} [text = ""] Specifies the text shown in the popup. 
+ *  If the {@link style} property is set to "chart", then this string must follow
+ *  the format for text in the Google Charts API.
+ * @property {PopupMarkerChartAPIOptions} [chart = {} ] This property specifies 
+ *  various customization options for the Charts API output. 
+ *  If the {@link style} property is not set to "chart", then this property is 
+ *  ignored.
  */
 
 /**
  * @name PopupMarkerChartAPIOptions
- * @class This call represents options passed within the PopupMarkerChartAPIOptions to
- *     the PopupMarkerOptions object. It has no constructor, but is instantiated as an object literal.
- * @property {String} [chartStyle = ""] Specifies style for the Google Chart API,
- *     chooses from "d_bubble_icon_text_small", "d_bubble_icon_text_big",
- *     "d_bubble_icon_texts_big" or "d_bubble_texts_big".
- * @property {String} [icon = ""] Specifies, icon's name of the Google Chart API.
- * @property {String} [shapeStyle = "bb" ] Specifies shape style for the Google Chart API.
- *     This may, in the future, allow you to use different shapes for the bubble.
- *     For now, "bb" is the only valid option.
- * @property {String} [textColor = "000000" ] Specifies text color, as a 6-digit hexadecimal number,
- *     for example 000000 for black, FF0000 for red, FFFFFF for white, or FFFF00 for yellow. 
- * @property {String} [bgColor = "FFFFFF" ] Specifies background color, also as a 6-digit hexadecimal number. 
+ * @class This class represents options passed to the {@link chart} property 
+ *  in {@link PopupMarkerOptions}. It has no constructor, but is instantiated as 
+ *  an object literal.
+ * @property {String} [chartStyle = ""] Specifies layout/size. Valid options are
+ *   "d_bubble_icon_text_small", "d_bubble_icon_text_big",
+ *   "d_bubble_icon_texts_big", and "d_bubble_texts_big". Those options are shown
+ *  <a href="http://groups.google.com/group/google-chart-api/web/chart-types-for-information-bubbles">here</a>.
+ * @property {String} [icon = ""] Specifies an icon name. Valid options are shown
+ *  <a href="http://groups.google.com/group/google-chart-api/web/chart-types-for-information-bubbles#large_icons">here</a>.
+ * @property {String} [textColor = "000000" ] Specifies text color
+ *  as a 6-digit hexadecimal number.
+ * @property {String} [bgColor = "FFFFFF" ] Specifies background color 
+ *  as a 6-digit hexadecimal number. 
  */
 
 /**
@@ -280,7 +282,7 @@ PopupMarker.prototype.copy = function () {
 };
 
 /**
- * @desc Hides the marker and popup
+ * @desc Hides the marker and popup.
  */
 PopupMarker.prototype.hide = function () {
   GMarker.prototype.hide.apply(this, arguments);
@@ -289,10 +291,10 @@ PopupMarker.prototype.hide = function () {
 
 
 /**
- * @desc Shows marker.
+ * @desc Shows the marker.
  *    Note that this method shows only the marker.
- *    If you want show marker and the popup,
- *    then use the showPopup method.
+ *    If you want to show marker and the popup,
+ *    then use the {@link showPopup}.
  */
 PopupMarker.prototype.show = function () {
   GMarker.prototype.show.apply(this, arguments);
@@ -302,7 +304,6 @@ PopupMarker.prototype.show = function () {
  * @desc Shows the marker and the popup.
  */
 PopupMarker.prototype.showPopup = function () {
-  
   this.show();
   
   if (this.popupStyle_ === "chart") {
@@ -319,7 +320,7 @@ PopupMarker.prototype.showPopup = function () {
 };
 
 /**
- * @desc Hides the popup
+ * @desc Hides the popup.
  */
 PopupMarker.prototype.hidePopup = function () {
   this.container_.style.visibility = "hidden";
@@ -397,8 +398,9 @@ PopupMarker.prototype.redrawNormalPopup_ = function (text) {
 };
 
 /**
- * @desc Set chart style for the Google Chart API.
- *       If the style property not set "chart", then this property is ignored.
+ * @desc Sets the chart style.
+ *   If the {@link style} property not set to "chart", 
+ *   then this property is ignored.
  * @param {String} styleName
  */
 PopupMarker.prototype.setChartStyle = function (styleName) {
@@ -406,8 +408,9 @@ PopupMarker.prototype.setChartStyle = function (styleName) {
 };
 
 /**
- * @desc Set icon's name of the Google Chart API.
- *       If the style property not set "chart", then this property is ignored.
+ * @desc Sets the icon name.
+ *   If the {@link style} property not set to "chart", 
+ *   then this property is ignored.
  * @param {String} iconName
  */
 PopupMarker.prototype.setChartIcon = function (iconName) {
@@ -415,8 +418,9 @@ PopupMarker.prototype.setChartIcon = function (iconName) {
 };
 
 /**
- * @desc Set text color, also as a 6-digit hexadecimal number. 
- *       If the style property not set "chart", then this property is ignored.
+ * @desc Sets the text color. 
+ *   If the {@link style} property not set to "chart", 
+ *   then this property is ignored.
  * @param {String} textColor
  */
 PopupMarker.prototype.setChartTextColor = function (textColor) {
@@ -424,22 +428,13 @@ PopupMarker.prototype.setChartTextColor = function (textColor) {
 };
 
 /**
- * @desc Set background color, also as a 6-digit hexadecimal number. 
- *       If the style property not set "chart", then this property is ignored.
+ * @desc Sets the background color. 
+ *   If the {@link style} property not set to "chart", 
+ *   then this property is ignored.
  * @param {String} bgColor
  */
 PopupMarker.prototype.setChartBgColor = function (bgColor) {
   this.chart_.bgColor = bgColor;
-};
-
-/**
- * @desc Set shape style for the Google Chart API.
- *     This may, in the future, allow you to use different shapes for the bubble.
- *     For now, "bb" is the only valid option.
- * @param {String} colorValue
- */
-PopupMarker.prototype.setShapeStyle = function (style) {
-  this.chart_.shapeStyle = "bb";
 };
 
 /**
