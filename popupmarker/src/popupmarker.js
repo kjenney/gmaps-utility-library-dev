@@ -444,9 +444,7 @@ PopupMarker.prototype.setChartBgColor = function (bgColor) {
  */
 PopupMarker.prototype.redrawChartImg_ = function (text) {
 
-  if (!this.isNull(this.chart_.shapeStyle)) {
-    this.chart_.shapeStyle = "bb";
-  }
+  this.chart_.shapeStyle = "bb";
   this.chart_.textColor = this.chart_.textColor || "000000";
   this.chart_.bgColor = this.chart_.bgColor || "FFFFFF";
   
@@ -481,12 +479,10 @@ PopupMarker.prototype.redrawChartImg_ = function (text) {
     var imgHeight = parseInt(this.chartImg_.firstChild.offsetHeight, 10);  //for IE
     this.container_.style.left =  pxPos.x + "px";
     this.container_.style.top = (pxPos.y - imgHeight) + "px";
-    
     return;
   }
   var dummyImg = new Image();
   dummyImg.src = "http://chart.apis.google.com/chart?" + params;
-  
   var this_  = this;
   var is_ie_  = this.isIE_();
   var limitCnt = 100;
