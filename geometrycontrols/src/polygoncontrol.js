@@ -1,8 +1,14 @@
 /**
-* PolygonControl Class v0.1
-*  Copyright (c) 2008
-*  Author: Chris Marx
-* 
+ * @class PolygonControl 
+ * @version 0.3
+ * @copyright (c) . 2008
+ * @author Chris Marx
+ *
+ * @fileoverview MarkerControl is used to create points/markers
+ * <br /><br />
+ */
+
+/*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
@@ -14,12 +20,11 @@
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 * See the License for the specific language governing permissions and
 * limitations under the License.
-*
-* This class lets you add a polygon control for digitizing polygons to the GeometryControls framework.
 */
 
 /**
- * Constructor for PolygonControl, which is used for creating/digitizing polygons.
+ * PolygonControl
+ * @constructor 
  * @param {Object} opt_opts
  *   @param {Object} button_opts
  *     @param {String} opt_opts.img_up_url The image to display on the button in the up state
@@ -132,7 +137,7 @@ function PolygonControl(opt_opts) {
   };
   
   //TODO candidate to move to GeometryControls
-  //overide the default marker options
+  //overide the default options
   if(typeof(opt_opts)!="undefined"){
   	for (var o in opt_opts) {
       if(typeof(opt_opts[o]) === "object"){
@@ -338,8 +343,12 @@ PolygonControl.prototype.addGeometryListeners = function(polygon, html){
   var me = this, opts = me.Options.geometryListenerOpts, map = me.zuper.map;
 
   if (opts.mouseoverEditingEnabled) {
-    polygon.enableEditing({onEvent: "mouseover"});
-    polygon.disableEditing({onEvent: "mouseout"});
+    GEvent.addListener(polygon,"mouseover",function(){
+      polygon.enableEditing();  
+    });
+    GEvent.addListener(polygon,"mouseout",function(){
+      polygon.disableEditing();
+    });
   }
   if (opts.infoWindowHtmlEnabled && !opts.infoWindowTabsEnabled) {
     GEvent.addListener(polygon,"click",function(para) {
@@ -368,8 +377,9 @@ PolygonControl.prototype.addGeometryListeners = function(polygon, html){
     });  
   }
 
+  //pass polygon on to optional geometry listeners
   if(me.Options.optionalGeometryListeners){
-    me.Options.optionalGeometryListeners();
+    me.Options.optionalGeometryListeners(polygon);
   }
   
   //expose the object to aop functions
