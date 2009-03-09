@@ -294,7 +294,7 @@
   * in onMouseMove_.
   * @return true if mouse is on top of the map div.
   */
-  DragZoom.prototype.isMouseOnMap_ = function() {
+  DragZoom.prototype.isMouseOnMap_ = function () {
     var mousePos = this.mousePosn_;
     if (mousePos) {
       var mapPos = this.mapPosn_;
@@ -306,7 +306,8 @@
       // if user never moved mouse
       return false;
     }
-  }
+  };
+  
    /**
    * Handle key down. Activate the tool if 
    * @param {Event} e
@@ -372,7 +373,7 @@
    * @param {Event} e
    */
   DragZoom.prototype.onMouseMove_ = function (e) {
-    this.mousePosn_ = getMousePosition (e);
+    this.mousePosn_ = getMousePosition(e);
     if (this.dragging_) {
       this.endPt_ = this.getMousePoint_(e);
       var left = Math.min(this.startPt_.x, this.endPt_.x);
