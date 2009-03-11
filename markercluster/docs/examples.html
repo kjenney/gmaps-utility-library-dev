@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>MarkerCluster Documentation: Examples</title>
+    <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
+    <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
+    <script type="text/javascript" src="http://code.google.com/js/prettify.js"></script>
+  </head>
+  <body onload="prettyPrint()">
+<h1><a name="Marker_Cluster_Examples" id="Marker_Cluster_Examples"></a>Marker Cluster Examples</h1>
+
+<p>To use a marker cluster, create a <code>MarkerCluster</code> object. In the simplest case, just pass a map to it.</p>
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map"));
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+var mc = new MarkerCluster(map);
+</pre>
+
+<p>You may also specify a number of options to fine-tune the marker manager's performance. These options are passed via a <code>MarkerClusterOptions</code> object, which contains the following fields:</p>
+
+<ul>
+  <li><code>maxZoom</code>: specifies the maximum zoom level monitored by this marker cluster. The default value is the highest zoom level supported by Google maps. When zoom level exceed max level, there will be no cluster, all markers will be showed.</li>
+  <li><code>gridSize</code>: specifies the size of a cluster, in pixels. This decide a grid side of a cluster and affect the performance of marker cluster. The default value is 60.</li>
+  <li><code>clusterImages</code>: specifies the images you want to use on <code>ClusterMarker_</code>.</li>
+
+</ul>
+<p>
+The <code>MarkerClusterOptions</code> object is an object literal, so you simply declare the object without a constructor:
+</p>
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map"));
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+var mcOptions = { gridSize: 50, maxZoom: 15};
+var mc = new MarkerCluster(map, [], mcOptions);
+</pre>
+
+<p>Once you create a marker cluster, you will want to add markers to it. <code>MarkerCluster</code> supports adding single markers one at a time using the <code>addMarker()</code> method or a collection passed as an array using the <code>addMarkers()</code> method. Single markers added using <code>addMarker()</code> will appear immediately on the map and join a certain cluster.</p>
+
+<p>Adding markers collectively using <code>addMarkers()</code> is recommended as it is more efficient. After this initial display, <code>MarkerCluster</code> takes care of all visual updates by monitoring the map's "moveend" events.</p>
+
+<p>Also, you can add markers by providing a array of markers to marker cluster constructor:</p>
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map"));
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+var mcOptions = { gridSize: 50, maxZoom: 15};
+var markers = [...]; // Create the markers you want to add and collect them into a array.
+var mc = new MarkerCluster(map, markers, mcOptions);
+</pre>
+
+<h2><a name="Marker_Cluster" id="Marker_Cluster"></a>A Simple Marker Cluster Example:</h2>
+
+<p>This example will show 100 markers on map.</p>
+
+<pre class="prettyprint">
+  if(GBrowserIsCompatible()) {
+    map = new GMap2($('map'));
+    map.setCenter(new GLatLng(39.91, 116.38), 2);
+    map.addControl(new GLargeMapControl());
+
+    var markers = [];
+    for (var i = 0; i < 100; ++i) {
+      var latlng = new GLatLng(data.photos[i].latitude, data.photos[i].longitude);
+      var marker = new GMarker(latlng);
+      markers.push(marker);
+    }
+    var markerCluster = new MarkerCluster(map, markers);
+  }
+</pre>
+
+<p><a href="../examples/simple_example.html">View example (simple_example.html)</a></p>
+
+<h2><a name="Marker_Cluster_Advanced" id="Marker_Cluster_Advanced"></a>A comparision of drawing markers with Marker Cluster and without Marker Cluster</h2>
+<p>This example will compare Marker Cluster with normal method of adding markers. You can change the method of adding markers and compare the time each method used.<br /> The data came from <a href="http://www.parnoramio.com/" target="_blank">parnoramio</a></p>
+<p><a href="../examples/comparision_example.html">View example (comparision_example.html)</a>
+
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Google Maps Marker Cluster Demo Advanced </title>
+    <style type="text/css" title="currentStyle" media="screen"> 
+		  @import "amc.css";
+	  </style> 
+  </head>
+  <body>
+    <div id="wrap">
+      <div id="userpanel">
+        <h3>Advance Marker Cluster Demo</h3>
+        <div style="margin:20px 5px 5px 10px;">
+          <input type="checkbox" id="usegmm" checked="true" onclick="AMC.changeType()"></input>
+          <span>Use Marker Cluster</span>
+        </div>
+        <span style="margin-left:10px">Markers: <select id="mcounts" onchange="AMC.changeNums()">
+            <option value="10">10</option>
+            <option value="50">50</option>
+            <option value="100" selected="true">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+        </select></span>
+        <span style="margin-left:10px">Time used: <span style="color:red;font-size:1.2em;" id="tcounts"></span> ms</span>
+        <div style="font-size:1.1em;font-weight:bold;margin-left:10px;margin-top:10px;">Marker List:</div>
+        <div id="markerlist">
+        </div>
+      </div>
+      <div id="mappanel">
+        <div id="map">
+        </div>
+      </div>
+    </div>
+    <script src="dynamicloader.js"></script>
+    <script>
+      var _debug = true;
+      _DynamicLoader(
+        ['data.js', '../src/markercluster.js', 'amc.js'],
+        "AMC.init()",
+        'ABQIAAAAec0uG9m_VSLs4ZXN8YGMoRTD9uafkkzDhLPecS9POo8mzN4tDBSpJpECPM0UCHhROxov8yyy5vwVSQ'
+      );
+    </script>
+  </body>
+</html>
+
