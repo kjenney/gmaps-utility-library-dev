@@ -14,6 +14,12 @@
       if (GBrowserIsCompatible()) {
         var map = new GMap2(document.getElementById("map_canvas"));
         map.setCenter(new GLatLng(37.4419, -122.1419), 1);
+        
+        //add map types
+        map.addMapType(G_PHYSICAL_MAP);
+        map.addMapType(G_MOON_VISIBLE_MAP);
+        
+        //add control
         var carouselMapTypeControl = new CarouselMapTypeControl();
         map.addControl(carouselMapTypeControl);
       }

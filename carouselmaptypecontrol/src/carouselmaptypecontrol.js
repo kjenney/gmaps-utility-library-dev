@@ -6,6 +6,8 @@
  * A CarouselMapTypeControl provides a control as like carousel for selecting and switching between supported map types.
  */
 
+/*global G_PHYSICAL_MAP, G_HYBRID_MAP, G_SATELLITE_MAP, G_NORMAL_MAP, GLatLngBounds, _mHL  */
+
 /**
  * @desc Creates an CarouselMapTypeControl, No configuration options are available.
  * @constructor
@@ -23,6 +25,21 @@ function CarouselMapTypeControl() {
   this.angleStep_ = 10;
   this.screenZ_ = 300;
   this.imgSrc_ = "http://maps.google.com/mapfiles/hpimgs11.png";
+  
+  this.hl_ = _mHL;
+
+  //find api key
+  var scripts = document.getElementsByTagName("script");
+  var key = "";
+  for (var i = 0;i < scripts.length; i++) {
+    var scriptNode = scripts[i];
+    if (scriptNode.src.match(/^http:\/\/maps\.google\..*?&(?:amp;)?key=([^\&]+)/gi)) {
+      key = RegExp.$1;
+      break;
+    }
+  }
+  this.apiKey_ = key;
+
 }
 
 
@@ -500,10 +517,9 @@ CarouselMapTypeControl.prototype.makeThumbnail = function (mapType, thumbnailSiz
   var tileSize = mapType.getTileSize();
   var projection = mapType.getProjection();
   var wrapWidth = projection.getWrapWidth(zoom);
-  var centerPos = projection.fromPixelToLatLng(new GPoint(thumbnailSize.width / 2, thumbnailSize.heigt / 2), zoom);
 
   var tileNW = this.getTileIndex(mapType, projection.fromPixelToLatLng(new GPoint(0, 0), zoom), zoom);
-  var tileSE = this.getTileIndex(mapType, projection.fromPixelToLatLng(thumbnailSize, zoom), zoom);
+  var tileSE = this.getTileIndex(mapType, projection.fromPixelToLatLng(new GPoint(wrapWidth, thumbnailSize.height), zoom), zoom);
 
   var x1 = tileNW.x;
   var x2 = tileSE.x;
@@ -514,6 +530,7 @@ CarouselMapTypeControl.prototype.makeThumbnail = function (mapType, thumbnailSiz
     incrementX = -1;
   }
   
+
   var thumbnailContainer = this.createDiv_({left : 0, top : 0, width : 0, height : 0});
   thumbnailContainer.style.backgroundColor = "white";
   thumbnailContainer.style.borderColor = "white #808080 #808080 white";
@@ -523,13 +540,14 @@ CarouselMapTypeControl.prototype.makeThumbnail = function (mapType, thumbnailSiz
   initDomSize(thumbnailContainer, {x : 0, y : 0}, thumbnailSize);
 
   zoomScale = thumbnailSize.width / wrapWidth;
+  var tileSizeOrg = tileSize;
   tileSize = Math.floor(tileSize * zoomScale);
   
   var dx = Math.floor(thumbnailSize.width / tileSize);
-  var initX = dx;
+  //var initX = dx;
   if (thumbnailSize.width % tileSize !== 0) {
     dx++;
-    initX -= (thumbnailSize.width - tileSize) / 2;
+  //  initX -= (thumbnailSize.width - tileSize) / 2;
   }
 
   var dy = Math.floor(thumbnailSize.height / tileSize);
@@ -543,6 +561,17 @@ CarouselMapTypeControl.prototype.makeThumbnail = function (mapType, thumbnailSiz
   var tileSizeXY = new GSize(tileSize, tileSize);
   var zeroPosXY = new GPoint(0, 0);
   
+  if (mapType === G_SATELLITE_MAP || 
+    mapType === G_HYBRID_MAP ||
+    mapType === G_PHYSICAL_MAP ||
+    mapType === G_NORMAL_MAP) {
+    
+    var centerPos = new GPoint(wrapWidth / 2, ((dy * tileSizeOrg) - initY) / 2);
+    var centerPosLatLng = projection.fromPixelToLatLng(centerPos, zoom);
+    return this.makeThumbnailWithStaticMapAPI_(mapType, thumbnailSize, centerPosLatLng, zoom, new GSize(wrapWidth, dy * tileSizeOrg));
+  }
+
+
   var j = this.cache_.length;
   var tileLayers = mapType.getTileLayers();
   var isPng = false;
@@ -847,3 +876,117 @@ CarouselMapTypeControl.prototype.getHashLength_ = function (hashObj) {
   }
   return cnt;
 };
+
+/**
+ * @private
+ * @desc  get new static map's image.
+ */
+CarouselMapTypeControl.prototype.makeThumbnailWithStaticMapAPI_ = function (mapType, thumbnailSize, mapCenterPos, zoom, imgSize) {
+  var url = "http://maps.google.com/staticmap?key=" + this.apiKey_;
+  
+  //center position
+  url += "&center=" + this.floor6decimal(mapCenterPos.lat()) + "," + this.floor6decimal(mapCenterPos.lng());
+  
+  //size
+  if (imgSize.width > 600) {
+    imgSize.width = 600;
+  }
+  if (imgSize.height > 600) {
+    imgSize.height = 600;
+  }
+  url += "&size=" + imgSize.width + "x" + imgSize.height;
+  
+  //zoom level
+  url += "&zoom=" + zoom;
+  
+  //map type
+  var maptypeCode = "";
+  switch (mapType) {
+  case G_SATELLITE_MAP:
+    maptypeCode = "satellite";
+    break;
+  case G_HYBRID_MAP:
+    maptypeCode = "hybrid";
+    break;
+  case G_PHYSICAL_MAP:
+    maptypeCode = "terrain";
+    break;
+  default:
+    maptypeCode = "roadmap";
+  }
+  url += "&maptype=" + maptypeCode;
+  
+  //language
+  if (this.hl_ !== "" && String(this.hl_).toLowerCase() !== "en") {
+    url += "&hl=" + this.hl_.toLowerCase();
+  }
+  
+  //format
+  url += "&format=gif";
+  
+  //var thumbnailContainer = this.createDiv_({left : 0, top : 0, width : 0, height : 0});
+  var thumbnailContainer = this.makeImgDivSlim_(url, {left : 0, top : 0, width : thumbnailSize.width, height : thumbnailSize.height, isPng : false});
+  thumbnailContainer.style.backgroundColor = "white";
+  thumbnailContainer.style.borderColor = "white #808080 #808080 white";
+  thumbnailContainer.style.borderWidth = "2px";
+  thumbnailContainer.style.borderStyle = "solid";
+  thumbnailContainer.style.cursor = "pointer";
+  thumbnailContainer.style.left = 0;
+  thumbnailContainer.style.top = 0;
+  thumbnailContainer.style.width = 0;
+  thumbnailContainer.style.height = 0;
+
+  //var thumbnailContainer = this.makeImgDiv_(url, {left : 0 , top : 0, width : 0, height : 0});
+  
+  var elementInfoList = [];
+  var j = this.cache_.length;
+  this.cache_[j] = thumbnailContainer.firstChild;
+  elementInfoList.push({x : 0, y : 0, idx : j});
+
+  var label = this.createDiv_({left : 0, top : thumbnailSize.height - 15, width : 1, height : 1});
+  label.style.backgroundColor = "white";
+  label.style.textColor = "black";
+  label.style.fontSize = "13px";
+  label.style.lineHeight = "15px";
+  label.style.height = "15px";
+  label.style.fontWeight = "bold";
+  label.style.textAlign = "center";
+  if (this._is_ie) {
+    label.style.filter = "alpha(opacity=70)";
+  } else {
+    label.style.MozOpacity = 0.7;
+    label.style.opacity = 0.7;
+  }
+  label.style.width = thumbnailSize.width + "px";
+  label.appendChild(document.createTextNode(mapType.getName()));
+  thumbnailContainer.appendChild(label);
+  
+  var this_ = this;
+  GEvent.bindDom(thumbnailContainer, "click", this, function () {
+    if (this_.enableClick_ === true) {
+      if (this_.map_.getCurrentMapType() !== mapType) {
+        var mIndex = this_.getMapTypeIndex(mapType);
+        this_.selectFrontThumbnail(mIndex, function () {
+          this_.feedOut(function () {
+            this_.onClick();
+            this_.map_.setMapType(mapType);
+          });
+        });
+      } else {
+        this_.feedOut();
+        this_.hideThumbnailLayer();
+      }
+    }
+  });
+
+  return {ele : thumbnailContainer, infoList : elementInfoList, tileSize : thumbnailSize.width};
+};
+
+/**
+ * @private
+ * @ignore
+ */
+CarouselMapTypeControl.prototype.floor6decimal = function (value) {
+  return (Math.floor(value * 1000000) / 1000000);
+};
+
