@@ -313,9 +313,8 @@
     }
   };
   
-   /**
-   * Handle key down. Activate the tool if 
-   * @param {Event} e
+  /**
+   * Show or hide the overlay pane, depending on whether the mouse is over the map.
    */
   DragZoom.prototype.setPaneVisibility_ = function () {
     if (this.map_ && this.hotKeyDown_ && this.isMouseOnMap_()) {
