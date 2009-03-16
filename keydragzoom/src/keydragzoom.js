@@ -1,12 +1,15 @@
 /**
  * @name Key Drag Zoom
- * @version 1.0.3
+ * @version 1.0.4
  * @author: Nianwei Liu [nianwei at gmail dot com] & Gary Little [gary at luxcentral dot com]
  * @fileoverview This library adds a drag zoom capability to a Google map.
  *  When drag zoom is enabled, holding down a user-defined hot key <code>(shift | ctrl | alt)</code>
  *  while dragging a box around an area of interest will zoom the map
  *  to that area when the hot key is released. 
  *  Only one line of code is needed: <code>GMap2.enableKeyDragZoom();</code>
+ *  <p>
+ *  Note that if the map's container has a border around it, the border widths must be specified
+ *  in pixel units (or as thin, medium, or thick). This is required because of an MSIE limitation.
  */
 /*!
  *
@@ -52,11 +55,11 @@
     return px;
   };
  /**
- * Get the widths of the borders of an HTML element.
- *
- * @param {Object} h  HTML element
- * @return {Object} widths object (top, bottom left, right)
- */
+  * Get the widths of the borders of an HTML element.
+  *
+  * @param {Object} h  HTML element
+  * @return {Object} widths object (top, bottom left, right)
+  */
   var getBorderWidths = function (h) {
     var computedStyle;
     var bw = {};
@@ -70,7 +73,7 @@
         bw.right = parseInt(computedStyle.borderRightWidth, 10) || 0;
         return bw;
       }
-    } else if (document.documentElement.currentStyle) {
+    } else if (document.documentElement.currentStyle) { // MSIE
       if (h.currentStyle) {
         // The current styles may not be in pixel units so try to convert (bad!)
         bw.top = parseInt(toPixels(h.currentStyle.borderTopWidth), 10) || 0;
@@ -80,6 +83,7 @@
         return bw;
       }
     }
+    // Shouldn't get this far for any modern browser
     bw.top = parseInt(h.style["border-top-width"], 10) || 0;
     bw.bottom = parseInt(h.style["border-bottom-width"], 10) || 0;
     bw.left = parseInt(h.style["border-left-width"], 10) || 0;
@@ -141,7 +145,7 @@
       top: posY
     };
   };
-   /**
+  /**
    * Set the properties of an object to those from another object.
    * @param {Object} obj target object
    * @param {Object} vals source object
@@ -175,14 +179,15 @@
    * @property {String} [key] the hot key to hold down to activate a drag zoom, <code>shift | ctrl | alt</code>.
    * The default is <code>shift</code>.
    * @property {Object} [boxStyle] the css style of the zoom box.
-   * The default is <code>{border: 'thin solid #FF0000'}</code>
+   * The default is <code>{border: 'thin solid #FF0000'}</code>.
+   * Border widths must be specified in pixel units (or as thin, medium, or thick).
    * @property {Object} [paneStyle] the css style of the pane which overlays the map when a drag zoom is activated.
    * The default is <code>{backgroundColor: 'white', opacity: 0.0, cursor: 'crosshair'}</code>.
    */
   /**
    * @name DragZoom
    * @class This class represents a drag zoom object for a map. The object is activated by holding down the hot key.
-   * This object is created when <code>GMap2.enableKeyDragZoom</code> is called; it can not be created directly.
+   * This object is created when <code>GMap2.enableKeyDragZoom</code> is called; it cannot be created directly.
    * Use <code>GMap2.getDragZoomObject</code> to gain access to this object in order to attach event listeners.
    * @param {GMap2} map
    * @param {KeyDragZoomOptions} opt_zoomOpts
@@ -205,7 +210,7 @@
     });
     // allow overwrite 
     setVals(this.paneDiv_.style, opt_zoomOpts.paneStyle);
-    // stuff that can not be overwritten
+    // stuff that cannot be overwritten
     setVals(this.paneDiv_.style, {
       position: 'absolute',
       overflow: 'hidden',
@@ -238,6 +243,7 @@
     this.keyDownListener_ = GEvent.bindDom(document, 'keydown',  this, this.onKeyDown_);
     this.keyUpListener_ = GEvent.bindDom(document, 'keyup', this, this.onKeyUp_);
     this.mouseDownListener_ = GEvent.bindDom(this.paneDiv_, 'mousedown', this, this.onMouseDown_);
+    this.mouseDownListenerDocument_ = GEvent.bindDom(document, 'mousedown', this, this.onMouseDownDocument_);
     this.mouseMoveListener_ = GEvent.bindDom(document, 'mousemove', this, this.onMouseMove_);
     this.mouseUpListener_ = GEvent.bindDom(document, 'mouseup', this, this.onMouseUp_);
   
@@ -249,7 +255,7 @@
     this.boxMaxY_ = null;
     this.mousePosn_ = null;
     this.mapPosn_ = getElementPosition(this.map_.getContainer());
-
+    this.mouseDown_ = false;
   }
  
   /**
@@ -290,18 +296,17 @@
   };
   
   /**
-  * Checks if the mouse is on top of the map. The position is captured 
-  * in onMouseMove_.
-  * @return true if mouse is on top of the map div.
-  */
+   * Checks if the mouse is on top of the map. The position is captured 
+   * in onMouseMove_.
+   * @return true if mouse is on top of the map div.
+   */
   DragZoom.prototype.isMouseOnMap_ = function () {
     var mousePos = this.mousePosn_;
     if (mousePos) {
       var mapPos = this.mapPosn_;
       var size = this.map_.getSize();
       return mousePos.left > mapPos.left && mousePos.left < mapPos.left + size.width &&
-      mousePos.top > mapPos.top &&
-      mousePos.top < mapPos.top + size.height;
+      mousePos.top > mapPos.top && mousePos.top < mapPos.top + size.height;
     } else {
       // if user never moved mouse
       return false;
@@ -312,9 +317,8 @@
    * Handle key down. Activate the tool if 
    * @param {Event} e
    */
-  DragZoom.prototype.onKeyDown_ = function (e) {
-    if (this.map_ && !this.hotKeyDown_ && this.isHotKeyDown_(e) && this.isMouseOnMap_()) {
-      this.hotKeyDown_ = true;
+  DragZoom.prototype.setPaneVisibility_ = function () {
+    if (this.map_ && this.hotKeyDown_ && this.isMouseOnMap_()) {
       var size = this.map_.getSize();
       this.paneDiv_.style.left = 0 + 'px';
       this.paneDiv_.style.top = 0 + 'px';
@@ -323,8 +327,20 @@
       this.paneDiv_.style.display = 'block';
       this.boxMaxX_ = parseInt(this.paneDiv_.style.width, 10) - (this.boxBorderWidths_.left + this.boxBorderWidths_.right);
       this.boxMaxY_ = parseInt(this.paneDiv_.style.height, 10) - (this.boxBorderWidths_.top + this.boxBorderWidths_.bottom);
+    } else {
+      this.paneDiv_.style.display = 'none';
+    }
+  };
+  /**
+   * Handle key down. Activate the tool only if the mouse is on top of the map.
+   * @param {Event} e
+   */
+  DragZoom.prototype.onKeyDown_ = function (e) {
+    if (this.map_ && !this.hotKeyDown_ && this.isHotKeyDown_(e)) {
+      this.hotKeyDown_ = true;
+      this.setPaneVisibility_();
      /**
-       * This event is fired after the DragZoom tool is activated. 
+       * This event is fired when the hot key is pressed. 
        * @name DragZoom#activate
        * @event
        */
@@ -367,7 +383,13 @@
       GEvent.trigger(this, 'dragstart', latlng);
     }
   };
- 
+  /**
+   * Handle mouse down at the document level.
+   * @param {Event} e
+   */
+  DragZoom.prototype.onMouseDownDocument_ = function (e) {
+    this.mouseDown_ = true;
+  };
   /**
    * Handle mouse move.
    * @param {Event} e
@@ -397,6 +419,8 @@
        * @event
        */
       GEvent.trigger(this, 'drag', new GPoint(left, top + height), new GPoint(left + width, top)); 
+    } else if (!this.mouseDown_) {
+      this.setPaneVisibility_();
     }
   };
   /**
@@ -404,6 +428,7 @@
    * @param {Event} e
    */
   DragZoom.prototype.onMouseUp_ = function (e) {
+    this.mouseDown_ = false;
     if (this.dragging_) {
       var left = Math.min(this.startPt_.x, this.endPt_.x);
       var top = Math.min(this.startPt_.y, this.endPt_.y);
@@ -452,7 +477,7 @@
    * <a href  = 'http://code.google.com/apis/maps/documentation/reference.html#GMap2'>GMap2</a>
    * class.
    */
-   /**
+  /**
    * Enable drag zoom. The user can zoom to an area of interest by holding down the hot key
    * <code>(shift | ctrl | alt )</code> while dragging a box around the area. 
    * @param {KeyDragZoomOptions} opt_zoomOpts
@@ -468,6 +493,7 @@
     var d = this.dragZoom_;
     if (d) {
       GEvent.removeListener(d.mouseDownListener_);
+      GEvent.removeListener(d.mouseDownListenerDocument_);
       GEvent.removeListener(d.mouseMoveListener_);
       GEvent.removeListener(d.mouseUpListener_);
       GEvent.removeListener(d.keyUpListener_);

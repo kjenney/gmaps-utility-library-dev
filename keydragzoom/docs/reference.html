@@ -2,18 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Key Drag Zoom v1.0.3 Reference</title>
+    <title>Key Drag Zoom v1.0.4 Reference</title>
     <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
     <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
   </head>
   <body>
     <h1>Key Drag Zoom</h1>
     <p>
-This library adds a drag zoom capability to a Google map. When drag zoom is enabled, holding down a user-defined hot key <code>(shift | ctrl | alt)</code> while dragging a box around an area of interest will zoom the map to that area when the hot key is released.  Only one line of code is needed: <code>GMap2.enableKeyDragZoom();</code></p>
+This library adds a drag zoom capability to a Google map. When drag zoom is enabled, holding down a user-defined hot key <code>(shift | ctrl | alt)</code> while dragging a box around an area of interest will zoom the map to that area when the hot key is released.  Only one line of code is needed: <code>GMap2.enableKeyDragZoom();</code> <p> Note that if the map's container has a border around it, the border widths must be specified in pixel units (or as thin, medium, or thick). This is required because of an MSIE limitation.</p>
     <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
     
       <h2><a name="DragZoom"></a>class DragZoom</h2>
-      <p>This class represents a drag zoom object for a map. The object is activated by holding down the hot key.This object is created when <code>GMap2.enableKeyDragZoom</code> is called; it can not be created directly.Use <code>GMap2.getDragZoomObject</code> to gain access to this object in order to attach event listeners.</p>
+      <p>This class represents a drag zoom object for a map. The object is activated by holding down the hot key.This object is created when <code>GMap2.enableKeyDragZoom</code> is called; it cannot be created directly.Use <code>GMap2.getDragZoomObject</code> to gain access to this object in order to attach event listeners.</p>
       
         <h3>Events</h3>
         <table summary="class DragZoom - Events" width="90%">
@@ -36,7 +36,7 @@ This library adds a drag zoom capability to a Google map. When drag zoom is ena
                     <td><code>None</code></td>
                   
                 
-                <td>This event is fired after the DragZoom tool is activated.</td>
+                <td>This event is fired when the hot key is pressed.</td>
               </tr>
             
               <tr class="even">
@@ -168,7 +168,7 @@ This library adds a drag zoom capability to a Google map. When drag zoom is ena
                     <td><code>Object</code></td>
                   
                 
-                <td>the css style of the zoom box.The default is <code>{border: 'thin solid #FF0000'}</code></td>
+                <td>the css style of the zoom box.The default is <code>{border: 'thin solid #FF0000'}</code>.Border widths must be specified in pixel units (or as thin, medium, or thick).</td>
               </tr>
             
               <tr class="even">
