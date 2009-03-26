@@ -247,10 +247,12 @@ LabeledMarker.prototype.getLabelVisibility = function () {
  * @private
  */
 LabeledMarker.prototype.applyLabelVisibility_ = function () {
-  if ((!this.isHidden()) && this.labelVisibility_) {
-    this.div_.style.display = 'block';
-  } else {
-    this.div_.style.display = 'none';
+  if(this.div_){
+    if ((!this.isHidden()) && this.labelVisibility_) {
+      this.div_.style.display = 'block';
+    } else {
+      this.div_.style.display = 'none';
+    }
   }
 };
 
