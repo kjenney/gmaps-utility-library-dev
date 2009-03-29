@@ -1,13 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>ExtMapTypeControl V1.0 Reference</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>ExtMapTypeControl V1.4 Reference</title>
 <link rel="stylesheet" type="text/css" href="http://code.google.com/css/dev_docs.css"></link>
 </head>
 <body>
 <h2>
 <a name="ExtMapTypeControl"></a>class ExtMapTypeControl</h2>
 <p>
-This class lets you add a control to the map which looks like the typical GMapTypeControl from the obfuscated API. By specifying additional options however, you can also add a Traffic button to the control and a drop-down legend for that button.
+This class lets you add a control to the map which looks like the typical GMapTypeControl from the obfuscated API. By specifying additional options you can also add additional buttons: a More...Button, a Traffic button and a drop-down legend for that button, and buttons to save the map position.
 It extends <a href="http://www.google.com/apis/maps/documentation/reference.html#GControl" target="_blank">GControl</a>.
 </p>
 <h3>Constructor</h3>
@@ -19,7 +22,7 @@ It extends <a href="http://www.google.com/apis/maps/documentation/reference.html
 <tr class="odd">
 <td class="code">ExtMapTypeControl(<span class="type" title="type:  ExtMapTypeControlOptions">opt_options</span>)</td>
 <td>
-Creates a ExtMapTypeControl with the specified option hash (optional).
+Creates an ExtMapTypeControl with the specified option hash (optional).
 </td>
 </tr>
 </tbody></table>
@@ -29,9 +32,40 @@ Creates a ExtMapTypeControl with the specified option hash (optional).
 <a name="ExtMapTypeControlOptions"></a>class ExtMapTypeControlOptions</h2>
 <p>Instances of this class are used in the <code><span class="nomatch">opts_options</span></code> argument to the constructor of the
 <code><span class="xref"><a href="#ExtMapTypeControl">ExtMapTypeControl</a></span></code> class. There is no constructor for this class. 
-Instead, this class is instantiated as a javascript object literal. 
+Instead, this class is instantiated as a javascript object literal.</p> 
+
+
+<h3>Non optional Properties</h3>
+<p>From the following two properties only one should be used.</p>
+
+<table style="width: 90%;" summary="class ExtMapTypeControlOptions - Properties">
+<tbody><tr>
+<th>Properties</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr class="odd">
+<td class="code">showMapTypes</td>
+<td class="code"> Boolean</td>
+<td>If set to true, Map Type buttons will be created by ExtMapTypeControl.</td>
+
+</tr>
+<tr class="even">
+<td class="code">posRight</td>
+<td class="code"> Integer</td>
+<td>If you want to create Map Type Buttons using GMapTypeControl, GHierarchicalMapTypeControl, GMenuMapTypeControl, or setUIToDefault instead, this option should be used to specify an appropriate position for the further buttons. The integer value defines the spacing of first displayed button from the right map border.
+ </td>
+
+</tr>
+</tbody>
+</table>
+
+
+
+
+
 <h3>Properties</h3>
-<p>As the name of this class indicates, all properties are optional.</p>
+<p>All further properties are optional.</p>
 
 <table style="width: 90%;" summary="class ExtMapTypeControlOptions - Properties">
 <tbody><tr>
@@ -48,8 +82,21 @@ Instead, this class is instantiated as a javascript object literal.
 <tr class="even">
 <td class="code">showTrafficKey</td>
 <td class="code"> Boolean</td>
-<td> If this option and showTraffic are set to true, a "?" button will appear next to Traffic button, and show a drop-down legend when clicked.
-</td>
+<td> If this option and showTraffic are set to true, a "?" button will appear next to Traffic button, and show a drop-down legend when clicked. </td>
+
+</tr>
+<tr class="even">
+<td class="code">showMore</td>
+<td class="code"> Boolean</td>
+<td> If set to true, a More...Button will be shown to display additional layers. </td>
+
+</tr>
+<tr class="even">
+<td class="code">showSave</td>
+<td class="code"> Boolean</td>
+<td> If set to true, two further buttons will be shown: one to save the actual position of the map and another to return to it. </td>
+
+
 </tr>
 </tbody>
 </table>
