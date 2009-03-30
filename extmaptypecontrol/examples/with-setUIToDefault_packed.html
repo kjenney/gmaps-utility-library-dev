@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Google Maps API Example - Custom Control</title>
+
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q&amp;sensor=false" type="text/javascript">
+</script>
+
+<script src="../src/extmaptypecontrol_packed.js" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+
+function loadMap() {
+
+ if(GBrowserIsCompatible()) {
+   var map = new GMap2(document.getElementById("map"));
+   map.setCenter(new GLatLng(37.441944, -122.141944), 10);
+
+  // Add ExtMapTypeControl with posRight option
+   map.addControl(new ExtMapTypeControl( { posRight: 290, showTraffic: true, showTrafficKey: true, showMore: true } ));
+
+   // Set default UI
+   map.setUIToDefault();
+ }
+}
+
+</script>
+</head>
+
+<body onload="loadMap()" onunload="GUnload()">
+
+<div id="map" style="width: 600px; height: 400px"></div>
+
+</body>
+</html>
