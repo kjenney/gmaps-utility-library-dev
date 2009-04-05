@@ -6,7 +6,7 @@
  * A CarouselMapTypeControl provides a control as like carousel for selecting and switching between supported map types.
  */
 
-/*global G_PHYSICAL_MAP, G_HYBRID_MAP, G_SATELLITE_MAP, G_NORMAL_MAP, GLatLngBounds, _mHL  */
+/*global G_PHYSICAL_MAP, G_HYBRID_MAP, G_SATELLITE_MAP, G_NORMAL_MAP, GLatLngBounds, _mHL */
 
 /**
  * @desc Creates an CarouselMapTypeControl, No configuration options are available.
@@ -191,9 +191,9 @@ CarouselMapTypeControl.prototype.createBtn_ = function (contentsObj, btnWidth) {
  * @desc      Click events action for the before button
  */
 CarouselMapTypeControl.prototype.onBefore = function () {
-  if (this.tAngle !== this.mAngle) {
-    return;
-  }
+  //if (this.tAngle !== this.mAngle) {
+  //  return;
+  //}
   
   var len = this.getHashLength_(this.mapTypeThumbnails_);
   this.tAngle -= 360 / len;
@@ -206,9 +206,10 @@ CarouselMapTypeControl.prototype.onBefore = function () {
  * @desc      Click events action for the next button
  */
 CarouselMapTypeControl.prototype.onNext = function () {
-  if (this.tAngle !== this.mAngle) {
-    return;
-  }
+  //if (this.tAngle !== this.mAngle) {
+  //  return;
+  //}
+  
   var len = this.getHashLength_(this.mapTypeThumbnails_);
   this.tAngle += 360 / len;
   this.tAngleDirection = 1;
@@ -924,7 +925,6 @@ CarouselMapTypeControl.prototype.makeThumbnailWithStaticMapAPI_ = function (mapT
   //format
   url += "&format=gif";
   
-  //var thumbnailContainer = this.createDiv_({left : 0, top : 0, width : 0, height : 0});
   var thumbnailContainer = this.makeImgDivSlim_(url, {left : 0, top : 0, width : thumbnailSize.width, height : thumbnailSize.height, isPng : false});
   thumbnailContainer.style.backgroundColor = "white";
   thumbnailContainer.style.borderColor = "white #808080 #808080 white";
@@ -936,8 +936,6 @@ CarouselMapTypeControl.prototype.makeThumbnailWithStaticMapAPI_ = function (mapT
   thumbnailContainer.style.width = 0;
   thumbnailContainer.style.height = 0;
 
-  //var thumbnailContainer = this.makeImgDiv_(url, {left : 0 , top : 0, width : 0, height : 0});
-  
   var elementInfoList = [];
   var j = this.cache_.length;
   this.cache_[j] = thumbnailContainer.firstChild;
