@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Google Maps JavaScript API Example: ExtOverviewMapControl</title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q" type="text/javascript"></script>
+    <script type="text/javascript">
+    document.write('<script type="text/javascript" src="../src/extoverviewmapcontrol'+(document.location.search.indexOf('packed')>-1?'_packed':'')+'.js"><'+'/script>');
+  </script>
+    <script type="text/javascript">
+
+    function initialize() {
+      if (GBrowserIsCompatible()) {
+        var initPos = new GLatLng(48.859862, 2.292024);
+        var initZoom = 15;
+      
+        var map = new GMap2(document.getElementById("map_canvas"));
+        map.addControl(new GMapTypeControl());
+        map.addControl(new GLargeMapControl());
+        map.setCenter(initPos, initZoom);
+        var extOverviewMapControl = new ExtOverviewMapControl(new GSize(120, 120));
+        map.addControl(extOverviewMapControl);
+        map.addMapType(G_PHYSICAL_MAP);
+        
+        var map2 = new GMap2(document.getElementById("map_canvas2"));
+        map2.addControl(new GMapTypeControl());
+        map2.addControl(new GLargeMapControl());
+        map2.setCenter(initPos, initZoom);
+        map2.addControl(new GOverviewMapControl(new GSize(120,120)));
+        map2.addMapType(G_PHYSICAL_MAP);
+      }
+    }
+    
+
+    </script>
+  </head>
+  <body onload="initialize()" onunload="GUnload()">
+  <table>
+  <tr><td>
+  <h3>ExtOverviewMapControl</h3>
+    <div id="map_canvas" style="width: 500px; height: 350px"></div>
+  </td><td>
+  <h3>GOverviewMapControl</h3>
+    <div id="map_canvas2" style="width: 500px; height: 350px"></div>
+  </td></tr>
+  </table>
+  </body>
+</html>
+
