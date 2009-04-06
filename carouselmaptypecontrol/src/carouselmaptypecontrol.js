@@ -80,6 +80,7 @@ CarouselMapTypeControl.prototype.initialize = function (map) {
 
   var agt = navigator.userAgent.toLowerCase();
   this._is_ie    = ((agt.indexOf("msie") !== -1) && (agt.indexOf("opera") === -1));
+  this._is_ie8    = (agt.indexOf("msie 8") !== -1);
   this._is_gecko = (agt.indexOf('gecko') !== -1);
   this._is_opera = (agt.indexOf("opera") !== -1);
 
@@ -98,6 +99,10 @@ CarouselMapTypeControl.prototype.initialize = function (map) {
   // before button
   var img = this.makeImgDiv_(this.imgSrc_, { left : 0, top : -1, width : 19, height : 20});
   img.style.position = "relative";
+  if (this._is_ie8 === true) {
+    img.style.marginLeft = "auto";
+    img.style.marginRight = "auto";
+  }
   if (!this._is_ie) {
     img.style.left = "20px";
   }
@@ -106,6 +111,7 @@ CarouselMapTypeControl.prototype.initialize = function (map) {
   this.beforeBtn_.style.position = "absolute";
   this.beforeBtn_.style.left = "0px";
   this.beforeBtn_.style.top = "0px";
+  this.beforeBtn_.style.textAlign = "center";
   this.beforeBtn_.firstChild.style.color = "blue";
   this.beforeBtn_.firstChild.style.fontWeight = "bold";
   this.beforeBtn_.firstChild.style.textDecoration = "underline";
