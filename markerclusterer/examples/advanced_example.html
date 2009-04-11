@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>Advanced Marker Clusterer Example</title>
+    <title>Advanced MarkerClusterer Example</title>
     <style>
       html, body, div {
         font-size: 12px;
@@ -11,8 +11,10 @@
         padding: 0;
       }
     </style>
-    <script src="http://ditu.google.cn/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q" type="text/javascript"></script>
-    <script src="../src/markerclusterer.js" type="text/javascript"></script>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q&sensor=false" type="text/javascript"></script>
+    <script type="text/javascript">
+      document.write('<script type="text/javascript" src="../src/markerclusterer' + (document.location.search.indexOf('packed') > -1 ? '_packed' : '') + '.js"><' + '/script>');
+    </script>
     <script src="data.json" type="text/javascript"></script>
     <script type="text/javascript">
       var styles = [[{
@@ -83,6 +85,7 @@
           map = new GMap2(document.getElementById('map'));
           map.setCenter(new GLatLng(39.91, 116.38), 2);
           map.addControl(new GLargeMapControl());
+          map.addControl(new GMapTypeControl());
           for (var i = 0; i < 1000; ++i) {
             var latlng = new GLatLng(data.photos[i].latitude, data.photos[i].longitude);
             var marker = new GMarker(latlng);
@@ -106,7 +109,8 @@
     </script>
   </head>
   <body onload="initialize()" onunload="GUnload()">
-    <h4>An advanced marker clusterer example</h4>
+    <h4>An advanced MarkerClusterer example</h4>
+    <a href="?packed">Packed</a>&nbsp;|&nbsp;<a href="?">Unpacked</a> Version of the script.
     <div>
       <span>Max zoom level: 
         <select id="zoom">

@@ -72,7 +72,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
   // private members
   var clusters_ = [];
   var map_ = map;
-  var maxZoom_ = 17;
+  var maxZoom_ = null;
   var me_ = this;
   var gridSize_ = 60;
   var sizes = [53, 56, 66, 78, 90];
@@ -89,15 +89,6 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
     });
   }
 
-  var mapTypes = map.getMapTypes();
-  maxZoom_ = mapTypes[0].getMaximumResolution();
-  for (i = 0; i < mapTypes.length; i++) {
-    var mapTypeMaxZoom = mapTypes[i].getMaximumResolution();
-    if (mapTypeMaxZoom > maxZoom_) {
-      maxZoom_ = mapTypeMaxZoom;
-    }
-  }
-
   if (typeof opt_opts === "object" && opt_opts !== null) {
     if (typeof opt_opts.gridSize === "number" && opt_opts.gridSize > 0) {
       gridSize_ = opt_opts.gridSize;
@@ -110,6 +101,11 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
     }
   }
 
+  /**
+   * When we add a marker, the marker may not in the viewport of map, then we don't deal with it, instead
+   * we add the marker into a array called leftMarkers_. When we reset MarkerClusterer we should add the
+   * leftMarkers_ into MarkerClusterer.
+   */
   function addLeftMarkers_() {
     if (leftMarkers_.length === 0) {
       return;
@@ -131,7 +127,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
   };
 
   /**
-   * Destroy the marker cluster.
+   * Remove all markers from MarkerClusterer.
    */
   this.clearMarkers = function () {
     for (var i = 0; i < clusters_.length; ++i) {
@@ -144,10 +140,20 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
     GEvent.removeListener(mcfn_);
   };
 
+  /**
+   * Check a marker, whether it is in current map viewport.
+   * @private
+   * @return {Boolean} if it is in current map viewport
+   */
   function isMarkerInViewport_(marker) {
     return map_.getBounds().containsLatLng(marker.getLatLng());
   }
 
+  /**
+   * When reset MarkerClusterer, there will be some markers get out of its cluster.
+   * These markers should be add to new clusters.
+   * @param {Array of GMarker} markers Markers to add.
+   */
   function reAddMarkers_(markers) {
     var len = markers.length;
     var clusters = [];
@@ -258,10 +264,8 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
   this.getClustersInViewport = function () {
     var clusters = [];
     var curBounds = map_.getBounds();
-    var sw = map_.fromLatLngToDivPixel(curBounds.getSouthWest());
-    var ne = map_.fromLatLngToDivPixel(curBounds.getNorthEast());
     for (var i = 0; i < clusters_.length; i ++) {
-      if (clusters_[i].isInViewport(sw, ne)) {
+      if (clusters_[i].isInBounds(curBounds)) {
         clusters.push(clusters_[i]);
       }
     }
@@ -325,7 +329,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
 
     for (var i = 0; i < clusters.length; ++i) {
       var cluster = clusters[i];
-      var oldZoom = cluster.getZoom();
+      var oldZoom = cluster.getCurrentZoom();
       if (oldZoom === null) {
         continue;
       }
@@ -337,7 +341,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
         var mks = cluster.getMarkers();
         for (var j = 0; j < mks.length; ++j) {
           var newMarker = {
-            'isAdded': mks[j].isAdded,
+            'isAdded': false,
             'marker': mks[j].marker
           };
           tmpMarkers.push(newMarker);
@@ -386,7 +390,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
  * Create a cluster to collect markers.
  * A cluster includes some markers which are in a block of area.
  * If there are more than one markers in cluster, the cluster
- * will create a {@link ClusterMarker} and show the total number
+ * will create a {@link ClusterMarker_} and show the total number
  * of markers in cluster.
  *
  * @constructor
@@ -398,7 +402,7 @@ function Cluster(markerClusterer) {
   var markerClusterer_ = markerClusterer;
   var map_ = markerClusterer.getMap_();
   var clusterMarker_ = null;
-  var zoom_ = null;
+  var zoom_ = map_.getZoom();
 
   /**
    * Get markers of this cluster.
@@ -410,25 +414,21 @@ function Cluster(markerClusterer) {
   };
 
   /**
-   * If this cluster in viewport.
+   * If this cluster intersects certain bounds.
    *
-   * @param {GLatLng} opt_sw The south-west point. if not provided, use
-   *     current map viewport.
-   * @param {GLatLng} opt_ne The north-east point. if not provided, use
-   *     current map viewport.
-   * @return {Boolean}
+   * @param {GLatLngBounds} bounds A bounds to test
+   * @return {Boolean} Is this cluster intersects the bounds
    */
-  this.isInViewport = function (opt_sw, opt_ne) {
+  this.isInBounds = function (bounds) {
     if (center_ === null) {
       return false;
     }
-    var sw = opt_sw;
-    var ne = opt_ne;
-    if (!(sw instanceof GLatLng && ne instanceof GLatLng)) {
-      var curBounds = map_.getBounds();
-      sw = map_.fromLatLngToDivPixel(curBounds.getSouthWest());
-      ne = map_.fromLatLngToDivPixel(curBounds.getNorthEast());
+
+    if (!bounds) {
+      bounds = map_.getBounds();
     }
+    var sw = map_.fromLatLngToDivPixel(bounds.getSouthWest());
+    var ne = map_.fromLatLngToDivPixel(bounds.getNorthEast());
 
     var centerxy = map_.fromLatLngToDivPixel(center_);
     var inViewport = true;
@@ -499,7 +499,7 @@ function Cluster(markerClusterer) {
    *
    * @return {Number}
    */
-  this.getZoom = function () {
+  this.getCurrentZoom = function () {
     return zoom_;
   };
 
@@ -510,14 +510,18 @@ function Cluster(markerClusterer) {
    *     in viewport.
    */
   this.redraw_ = function (isForce) {
-    if (!isForce && !this.isInViewPort()) {
+    if (!isForce && !this.isInBounds()) {
       return;
     }
 
     // Set cluster zoom level.
     zoom_ = map_.getZoom();
     var i = 0;
-    if (zoom_ >= markerClusterer.getMaxZoom_() || this.getTotalMarkers() === 1) {
+    var mz = markerClusterer.getMaxZoom_();
+    if (mz === null) {
+      mz = map_.getCurrentMapType().getMaximumResolution();
+    }
+    if (zoom_ >= mz || this.getTotalMarkers() === 1) {
 
       // If current zoom level is beyond the max zoom level or the cluster
       // have only one marker, the marker(s) in cluster will be showed on map.
@@ -543,7 +547,7 @@ function Cluster(markerClusterer) {
         }
       }
       if (clusterMarker_ === null) {
-        clusterMarker_ = new ClusterMarker(center_, this.getTotalMarkers(), markerClusterer_.getStyles_(), markerClusterer_.getGridSize_());
+        clusterMarker_ = new ClusterMarker_(center_, this.getTotalMarkers(), markerClusterer_.getStyles_(), markerClusterer_.getGridSize_());
         map_.addOverlay(clusterMarker_);
       } else {
         if (clusterMarker_.isHidden()) {
@@ -555,7 +559,7 @@ function Cluster(markerClusterer) {
   };
 
   /**
-   * Destroy cluster.
+   * Remove all the markers from this cluster.
    */
   this.clearMarkers = function () {
     if (clusterMarker_ !== null) {
@@ -579,10 +583,11 @@ function Cluster(markerClusterer) {
 }
 
 /**
- * ClusterMarker creates a marker that shows the number of markers that
+ * ClusterMarker_ creates a marker that shows the number of markers that
  * a cluster contains.
  *
  * @constructor
+ * @private
  * @param {GLatLng} latlng Marker's lat and lng.
  * @param {Number} count Number to show.
  * @param {Array of Object} styles The image list to be showed:
@@ -593,7 +598,7 @@ function Cluster(markerClusterer) {
  *   {String} textColor text color.
  * @param {Number} padding Padding of marker center.
  */
-function ClusterMarker(latlng, count, styles, padding) {
+function ClusterMarker_(latlng, count, styles, padding) {
   var index = 0;
   var dv = count;
   while (dv !== 0) {
@@ -616,13 +621,13 @@ function ClusterMarker(latlng, count, styles, padding) {
   this.padding_ = padding;
 }
 
-ClusterMarker.prototype = new GOverlay();
+ClusterMarker_.prototype = new GOverlay();
 
 /**
  * Initialize cluster marker.
  * @private
  */
-ClusterMarker.prototype.initialize = function (map) {
+ClusterMarker_.prototype.initialize = function (map) {
   this.map_ = map;
   var div = document.createElement("div");
   var latlng = this.latlng_;
@@ -673,7 +678,7 @@ ClusterMarker.prototype.initialize = function (map) {
  * Remove this overlay.
  * @private
  */
-ClusterMarker.prototype.remove = function () {
+ClusterMarker_.prototype.remove = function () {
   this.div_.parentNode.removeChild(this.div_);
 };
 
@@ -681,15 +686,15 @@ ClusterMarker.prototype.remove = function () {
  * Copy this overlay.
  * @private
  */
-ClusterMarker.prototype.copy = function () {
-  return new ClusterMarker(this.latlng_, this.index_, this.text_, this.styles_, this.padding_);
+ClusterMarker_.prototype.copy = function () {
+  return new ClusterMarker_(this.latlng_, this.index_, this.text_, this.styles_, this.padding_);
 };
 
 /**
  * Redraw this overlay.
  * @private
  */
-ClusterMarker.prototype.redraw = function (force) {
+ClusterMarker_.prototype.redraw = function (force) {
   if (!force) {
     return;
   }
@@ -703,14 +708,14 @@ ClusterMarker.prototype.redraw = function (force) {
 /**
  * Hide this cluster marker.
  */
-ClusterMarker.prototype.hide = function () {
+ClusterMarker_.prototype.hide = function () {
   this.div_.style.display = "none";
 };
 
 /**
  * Show this cluster marker.
  */
-ClusterMarker.prototype.show = function () {
+ClusterMarker_.prototype.show = function () {
   this.div_.style.display = "";
 };
 
@@ -718,6 +723,6 @@ ClusterMarker.prototype.show = function () {
  * Get whether the cluster marker is hidden.
  * @return {Boolean}
  */
-ClusterMarker.prototype.isHidden = function () {
+ClusterMarker_.prototype.isHidden = function () {
   return this.div_.style.display === "none";
 };

@@ -1,7 +1,7 @@
 /**
- * @fileoverview This demo is used for Marker Cluster. It will show 100 markers
- * using Marker Cluster and count the time to show the difference between using
- * Marker Cluster and without Marker Cluster.
+ * @fileoverview This demo is used for MarkerClusterer. It will show 100 markers
+ * using MarkerClusterer and count the time to show the difference between using
+ * MarkerClusterer and without MarkerClusterer.
  * @author Xiaoxi Wu
  */
 

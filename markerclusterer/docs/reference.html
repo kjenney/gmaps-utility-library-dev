@@ -43,7 +43,7 @@ destroy the clusters in viewport and regroup them into new clusters.<br /></p>
                 <td>Create a cluster to collect markers.
 A cluster includes some markers which are in a block of area.
 If there are more than one markers in cluster, the cluster
-will create a <code><a href="reference.html#ClusterMarker">ClusterMarker</a></code> and show the total number
+will create a <code>ClusterMarker_</code> and show the total number
 of markers in cluster.</td>
               </tr>
             
@@ -81,7 +81,7 @@ of markers in cluster.</td>
                     <td><code>None</code></td>
                   
                 
-                <td>Destroy cluster.</td>
+                <td>Remove all the markers from this cluster.</td>
               </tr>
             
               <tr class="odd">
@@ -95,27 +95,7 @@ of markers in cluster.</td>
               </tr>
             
               <tr class="even">
-                <td><code>getMarkers()</code></td>
-                
-                  
-                    <td><code>Array of GMarker</code></td>
-                  
-                
-                <td>Get markers of this cluster.</td>
-              </tr>
-            
-              <tr class="odd">
-                <td><code>getTotalMarkers()</code></td>
-                
-                  
-                    <td><code>Number</code></td>
-                  
-                
-                <td>Get number of markers.</td>
-              </tr>
-            
-              <tr class="even">
-                <td><code>getZoom()</code></td>
+                <td><code>getCurrentZoom()</code></td>
                 
                   
                     <td><code>Number</code></td>
@@ -126,13 +106,33 @@ Note: the cluster zoom level and map zoom level not always the same.</td>
               </tr>
             
               <tr class="odd">
-                <td><code>isInViewport(<span class="type">opt_sw:GLatLng</span>, <span class="type">opt_ne:GLatLng</span>)</code></td>
+                <td><code>getMarkers()</code></td>
+                
+                  
+                    <td><code>Array of GMarker</code></td>
+                  
+                
+                <td>Get markers of this cluster.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>getTotalMarkers()</code></td>
+                
+                  
+                    <td><code>Number</code></td>
+                  
+                
+                <td>Get number of markers.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>isInBounds(<span class="type">bounds:GLatLngBounds</span>)</code></td>
                 
                   
                     <td><code>Boolean</code></td>
                   
                 
-                <td>If this cluster in viewport.</td>
+                <td>If this cluster intersects certain bounds.</td>
               </tr>
             
               <tr class="even">
@@ -143,77 +143,6 @@ Note: the cluster zoom level and map zoom level not always the same.</td>
                   
                 
                 <td>Remove a marker from cluster.</td>
-              </tr>
-            
-          </tbody>
-        </table>
-      
-    
-      <h2><a name="ClusterMarker"></a>class ClusterMarker</h2>
-      <p></p>
-      
-        <h3>Constructor</h3>
-        <table summary="class ClusterMarker - Constructor" width="90%">
-          
-          <tbody>
-            <tr>
-              <th>Constructor</th>
-              
-              <th>Description</th>
-            </tr>
-            
-              <tr class="odd">
-                <td><code>ClusterMarker(<span class="type">latlng:GLatLng</span>, <span class="type">count:Number</span>, <span class="type">styles:Array of Object</span>, <span class="type">padding:Number</span>)</code></td>
-                
-                <td>ClusterMarker creates a marker that shows the number of markers that
-a cluster contains.</td>
-              </tr>
-            
-          </tbody>
-        </table>
-      
-        <h3>Methods</h3>
-        <table summary="class ClusterMarker - Methods" width="90%">
-          
-          <tbody>
-            <tr>
-              <th>Methods</th>
-              
-                
-                  <th>Return&nbsp;Value</th>
-                
-              
-              <th>Description</th>
-            </tr>
-            
-              <tr class="odd">
-                <td><code>hide()</code></td>
-                
-                  
-                    <td><code>None</code></td>
-                  
-                
-                <td>Hide this cluster marker.</td>
-              </tr>
-            
-              <tr class="even">
-                <td><code>isHidden()</code></td>
-                
-                  
-                    <td><code>Boolean</code></td>
-                  
-                
-                <td>Get whether the cluster marker is hidden.</td>
-              </tr>
-            
-              <tr class="odd">
-                <td><code>show()</code></td>
-                
-                  
-                    <td><code>None</code></td>
-                  
-                
-                <td>Show this cluster marker.</td>
               </tr>
             
           </tbody>
@@ -284,7 +213,7 @@ Add many markers one time will much faster then add these markers one by one.</t
                     <td><code>None</code></td>
                   
                 
-                <td>Destroy the marker cluster.</td>
+                <td>Remove all markers from MarkerClusterer.</td>
               </tr>
             
               <tr class="even">
