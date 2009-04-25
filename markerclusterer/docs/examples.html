@@ -17,29 +17,17 @@ map.setCenter(new GLatLng(37.4419, -122.1419), 13);
 var mc = new MarkerClusterer(map);
 </pre>
 
-<p>You may also specify a number of options to fine-tune the marker manager's performance. These options are passed via a <code>MarkerClustererOptions</code> object, which contains the following fields:</p>
-
-<ul>
-  <li><code>maxZoom</code>: specifies the maximum zoom level monitored by this marker cluster. The default value is the highest zoom level supported by Google maps. When zoom level exceed max level, there will be no cluster, all markers will be showed.</li>
-  <li><code>gridSize</code>: specifies the size of a cluster, in pixels. This decide a grid side of a cluster and affect the performance of marker cluster. The default value is 60.</li>
-  <li><code>styles</code>: specifies the images you want to use on <code>ClusterMarker_</code>, and also the size, text color and text align...</li>
-
-</ul>
-<p>
+<p>You may also specify a number of options to fine-tune the marker manager's performance. These options are passed via a <a href="reference.html#MarkerClustererOptions"><code>MarkerClustererOptions</code></a> object.
 The <code>MarkerClustererOptions</code> object is an object literal, so you simply declare the object without a constructor:
 </p>
 <pre class="prettyprint">
 var map = new GMap2(document.getElementById("map"));
 map.setCenter(new GLatLng(37.4419, -122.1419), 13);
-var mcOptions = { gridSize: 50, maxZoom: 15};
+var mcOptions = {gridSize: 50, maxZoom: 15};
 var mc = new MarkerClusterer(map, [], mcOptions);
 </pre>
 
-<p>Once you create a marker cluster, you will want to add markers to it. <code>MarkerClusterer</code> supports adding single markers one at a time using the <code>addMarker()</code> method or a collection passed as an array using the <code>addMarkers()</code> method. Single markers added using <code>addMarker()</code> will appear immediately on the map and join a certain cluster.</p>
-
-<p>Adding markers collectively using <code>addMarkers()</code> is recommended as it is more efficient. After this initial display, <code>MarkerClusterer</code> takes care of all visual updates by monitoring the map's "moveend" events.</p>
-
-<p>Also, you can add markers by providing a array of markers to marker clusterer constructor:</p>
+<p>Once you create a marker cluster, you will want to add markers to it. <code>MarkerClusterer</code> supports adding markers using the <code>addMarkers()</code> method or by providing a array of markers to the constructor:</p>
 <pre class="prettyprint">
 var map = new GMap2(document.getElementById("map"));
 map.setCenter(new GLatLng(37.4419, -122.1419), 13);
@@ -59,7 +47,7 @@ var mc = new MarkerClusterer(map, markers, mcOptions);
     map.addControl(new GLargeMapControl());
 
     var markers = [];
-    for (var i = 0; i < 100; ++i) {
+    for (var i = 0; i &lt; 100; ++i) {
       var latlng = new GLatLng(data.photos[i].latitude, data.photos[i].longitude);
       var marker = new GMarker(latlng);
       markers.push(marker);
@@ -74,14 +62,16 @@ var mc = new MarkerClusterer(map, markers, mcOptions);
   <a name="Marker_Clusterer_Advanced" id="Marker_Clusterer_Advanced"></a>
   Advanced MarkerClusterer Example:
 </h2>
-<p>With this example, you can test MarkerClusterer with different max zoom levels, cluster grid size and styles. You will learn how to use MarkerClustererOptions.<br /></p>
+<p>With this example, you can test <code>MarkerClusterer</code> with different 
+max zoom levels, grid size and styles, all the options in <code>MarkerClustererOptions</code>.<br /></p>
 <p><a href="../examples/advanced_example.html">View example (advanced_example.html)</a></p>
 
 <h2>
   <a name="Marker_Clusterer_Speed_Test" id="Marker_Clusterer_Speed_Test"></a>
-  Test the speed of marker clusterer and a  comparision of drawing markers with MarkerClusterer and without MarkerClusterer
+  Speed Test Example
 </h2>
-<p>This example will compare MarkerClusterer with normal method of adding markers. You can change the method of adding markers and compare the time each method used.<br /> The data came from <a href="http://www.parnoramio.com/" target="_blank">parnoramio</a></p>
+<p>This example will compare adding markers with <code>MarkerClusterer</code>
+to the normal method of adding markers, and display the time for each.
 <p><a href="../examples/speed_test_example.html">View example (speed_test_example.html)</a></p>
 
 

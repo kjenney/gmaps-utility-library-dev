@@ -3,19 +3,22 @@
  * @version 1.0
  * @author Xiaoxi Wu
  * @copyright (c) 2009 Xiaoxi Wu
- * @fileoverview This javascript library gives you a class to manage
- *  marker by clustering, so that you can add many markers (maybe
- * hundreds or thousands) with a high speed and more clear layout.<br />
- * The idea of this library came from http://www.mapeed.com.<br />
+ * @fileoverview
+ * This javascript library creates and manages per-zoom-level 
+ * clusters for large amounts of markers (hundreds or thousands).
+ * This library was inspired by the <a href="http://www.maptimize.com">
+ * Maptimize</a> hosted clustering solution.
+ * <br /><br/>
  * <b>How it works</b>:<br/>
- * A marker cluster will group markers into clusters according to
- * its distance from cluster's center. When a marker is added,
- * the marker cluster will find a position in all the clusters, if failed,
- * a new cluster will be created, centered by this marker and the
- * marker is also added. The number of markers in a cluster will be showed
- * on the cluster marker.<br />
- * When the map status changed (moved or zoomed), MarkerClusterer will
- * destroy the clusters in viewport and regroup them into new clusters.<br />
+ * The <code>MarkerClusterer</code> will group markers into clusters according to
+ * their distance from a cluster's center. When a marker is added,
+ * the marker cluster will find a position in all the clusters, and 
+ * if it fails to find one, it will create a new cluster with the marker.
+ * The number of markers in a cluster will be displayed
+ * on the cluster marker. When the map viewport changes,
+ * <code>MarkerClusterer</code> will destroy the clusters in the viewport 
+ * and regroup them into new clusters.
+ *
  */
 
 /*
@@ -39,34 +42,37 @@
  * constructor.
  * @property {Number} [maxZoom] The max zoom level monitored by a
  * marker cluster. If not given, the marker cluster assumes the maximum map
- * zoom level. When maxZoom is reached or exceeded all marker will be showed
+ * zoom level. When maxZoom is reached or exceeded all markers will be shown
  * without cluster.
  * @property {Number} [gridSize=60] The grid size of a cluster in pixel. Each
- * cluster will be a square. If you want marker cluster faster you can set
+ * cluster will be a square. If you want the algorithm to run faster, you can set
  * this value larger.
- * @property {Array of Object} [styles] Custom styles of cluster marker:
- *   {String} [url] Image url.
- *   {Number} [height] Image height.
- *   {Number} [height] Image width.
- *   {Array of Number} [opt_anchor] Text anchor of image top and left. if
- *       not set, the text will align center and middle.
- *   {String} [opt_textColor] Text color. Default color is white.
- *   Note: The marker cluster have different level of clusters depending on
- *   the numbers of markers in cluster, different level will have different
- *   image of cluster marker.
- *   level 0: 2-9, level1: 10-99, level2: 100-999 ...
+ * @property {Array of MarkerStyleOptions} [styles]
+ * Custom styles for the cluster markers.
+ * The array should be ordered according to increasing cluster size,
+ * with the style for the smallest clusters first, and the style for the
+ * largest clusters last.
  */
 
 /**
- * Create a new MarkerClusterer to manage markers on map.
+ * @name MarkerStyleOptions
+ * @class An array of these is passed into the {@link MarkerClustererOptions}
+ * styles option.
+ * @property {String} [url] Image url.
+ * @property {Number} [height] Image height.
+ * @property {Number} [height] Image width.
+ * @property {Array of Number} [opt_anchor] Anchor for label text, like [24, 12]. 
+ *    If not set, the text will align center and middle.
+ * @property {String} [opt_textColor="black"] Text color.
+ */
+
+/**
+ * Creates a new MarkerClusterer to cluster markers on the map.
  *
  * @constructor
- * @param {GMap2} map The map where MarkerClusterer should be add.
- * @param {Array of GMarker} opt_markers Markers you want to add.
- * @param {Object} opt_opts A container for optional arguments:
- *   {Number} maxZoom Max zoom level that marker cluster support.
- *   {Number} gridSize The size of a cluster in pixel.
- *   {Array of Object} styles Custom styles of cluster marker.
+ * @param {GMap2} map The map that the markers should be added to.
+ * @param {Array of GMarker} opt_markers Initial set of markers to be clustered.
+ * @param {MarkerClustererOptions} opt_opts A container for optional arguments.
  */
 function MarkerClusterer(map, opt_markers, opt_opts) {
   // private members
@@ -83,7 +89,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
   var i = 0;
   for (i = 1; i <= 5; ++i) {
     styles_.push({
-      'url': "http://jsbackyard.appspot.com/gmm/img/m" + i + ".png",
+      'url': "http://gmaps-utility-library.googlecode.com/svn/trunk/markerclusterer/images/m" + i + ".png",
       'height': sizes[i - 1],
       'width': sizes[i - 1]
     });
@@ -165,7 +171,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
 
   /**
    * Add a marker.
-   *
+   * @private
    * @param {GMarker} marker Marker you want to add
    * @param {Boolean} opt_isNodraw Whether redraw the cluster contained the marker
    * @param {Boolean} opt_isAdded Whether the marker is added to map. Never use it.
@@ -251,7 +257,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
    * Redraw all clusters in viewport.
    */
   this.redraw_ = function () {
-    var clusters = this.getClustersInViewport();
+    var clusters = this.getClustersInViewport_();
     for (var i = 0; i < clusters.length; ++i) {
       clusters[i].redraw_(true);
     }
@@ -261,7 +267,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
    * Get all clusters in viewport.
    * @return {Array of Cluster}
    */
-  this.getClustersInViewport = function () {
+  this.getClustersInViewport_ = function () {
     var clusters = [];
     var curBounds = map_.getBounds();
     for (var i = 0; i < clusters_.length; i ++) {
@@ -323,7 +329,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
    * Collect all markers of clusters in viewport and regroup them.
    */
   this.resetViewport = function () {
-    var clusters = this.getClustersInViewport();
+    var clusters = this.getClustersInViewport_();
     var tmpMarkers = [];
     var removed = 0;
 
@@ -363,8 +369,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
 
 
   /**
-   * Add some markers.
-   * Add many markers one time will much faster then add these markers one by one.
+   * Add a set of markers.
    *
    * @param {Array of GMarker} markers The markers you want to add.
    */
@@ -394,6 +399,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
  * of markers in cluster.
  *
  * @constructor
+ * @private
  * @param {MarkerClusterer} markerClusterer The marker cluster object
  */
 function Cluster(markerClusterer) {
@@ -655,10 +661,11 @@ ClusterMarker_.prototype.initialize = function (map) {
     mstyle += 'height:' + this.height_ + 'px;line-height:' + this.height_ + 'px;';
     mstyle += 'width:' + this.width_ + 'px;text-align:center;';
   }
-  var txtColor = this.textColor_ ? this.textColor_ : 'white';
+  var txtColor = this.textColor_ ? this.textColor_ : 'black';
 
   div.style.cssText = mstyle + 'cursor:pointer;top:' + pos.y + "px;left:" +
-      pos.x + "px;color:" + txtColor +  ";position:absolute;font-size:11px;";
+      pos.x + "px;color:" + txtColor +  ";position:absolute;font-size:11px;" +
+      'font-family:Arial,sans-serif;font-weight:bold';
   div.innerHTML = this.text_;
   map.getPane(G_MAP_MAP_PANE).appendChild(div);
   var padding = this.padding_;

@@ -54,6 +54,8 @@
    function showMarkers(init) {
      map.clearOverlays();
      markers = [];
+     var icon = new GIcon(G_DEFAULT_ICON);
+     icon.image = "http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png";
      var type = 1;
 
      if($("usegmm").checked) {
@@ -86,7 +88,7 @@
                                });
        }
        var latlng = new GLatLng(pics[i].latitude, pics[i].longitude);
-       var marker = new GMarker(latlng);
+       var marker = new GMarker(latlng, {icon: icon});
        var fn = markerClickFn(pics[i], latlng);
        GEvent.addListener(marker, "click", fn);
        if (init) {
