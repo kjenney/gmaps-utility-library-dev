@@ -4,12 +4,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>MarkerClusterer v1.0 Reference</title>
     <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
-    <link rel="stylesheet" type="text/css" href="http://gmaps-utility-library.googlecode.com/svn/trunk/util/docs/template/local_extensions.css"></link>
+    <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
   </head>
   <body>
     <h1>MarkerClusterer</h1>
     <p>
-This javascript library creates and manages per-zoom-level 
+This javascript library creates and manages per-zoom-level
 clusters for large amounts of markers (hundreds or thousands).
 This library was inspired by the <a href="http://www.maptimize.com">
 Maptimize</a> hosted clustering solution.
@@ -17,11 +17,11 @@ Maptimize</a> hosted clustering solution.
 <b>How it works</b>:<br/>
 The <code>MarkerClusterer</code> will group markers into clusters according to
 their distance from a cluster's center. When a marker is added,
-the marker cluster will find a position in all the clusters, and 
+the marker cluster will find a position in all the clusters, and
 if it fails to find one, it will create a new cluster with the marker.
 The number of markers in a cluster will be displayed
 on the cluster marker. When the map viewport changes,
-<code>MarkerClusterer</code> will destroy the clusters in the viewport 
+<code>MarkerClusterer</code> will destroy the clusters in the viewport
 and regroup them into new clusters.</p>
     <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
     
@@ -230,7 +230,7 @@ styles option.  There is no constructor for this class.  Instead, this class is 
                     <td><code>Array of Number</code></td>
                   
                 
-                <td>Anchor for label text, like [24, 12]. 
+                <td>Anchor for label text, like [24, 12].
    If not set, the text will align center and middle.</td>
               </tr>
             

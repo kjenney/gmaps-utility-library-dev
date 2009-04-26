@@ -4,7 +4,7 @@
  * @author Xiaoxi Wu
  * @copyright (c) 2009 Xiaoxi Wu
  * @fileoverview
- * This javascript library creates and manages per-zoom-level 
+ * This javascript library creates and manages per-zoom-level
  * clusters for large amounts of markers (hundreds or thousands).
  * This library was inspired by the <a href="http://www.maptimize.com">
  * Maptimize</a> hosted clustering solution.
@@ -12,11 +12,11 @@
  * <b>How it works</b>:<br/>
  * The <code>MarkerClusterer</code> will group markers into clusters according to
  * their distance from a cluster's center. When a marker is added,
- * the marker cluster will find a position in all the clusters, and 
+ * the marker cluster will find a position in all the clusters, and
  * if it fails to find one, it will create a new cluster with the marker.
  * The number of markers in a cluster will be displayed
  * on the cluster marker. When the map viewport changes,
- * <code>MarkerClusterer</code> will destroy the clusters in the viewport 
+ * <code>MarkerClusterer</code> will destroy the clusters in the viewport
  * and regroup them into new clusters.
  *
  */
@@ -61,7 +61,7 @@
  * @property {String} [url] Image url.
  * @property {Number} [height] Image height.
  * @property {Number} [height] Image width.
- * @property {Array of Number} [opt_anchor] Anchor for label text, like [24, 12]. 
+ * @property {Array of Number} [opt_anchor] Anchor for label text, like [24, 12].
  *    If not set, the text will align center and middle.
  * @property {String} [opt_textColor="black"] Text color.
  */
@@ -667,7 +667,7 @@ ClusterMarker_.prototype.initialize = function (map) {
       pos.x + "px;color:" + txtColor +  ";position:absolute;font-size:11px;" +
       'font-family:Arial,sans-serif;font-weight:bold';
   div.innerHTML = this.text_;
-  map.getPane(G_MAP_MAP_PANE).appendChild(div);
+  map.getPane(G_MAP_MARKER_PANE).appendChild(div);
   var padding = this.padding_;
   GEvent.addDomListener(div, "click", function () {
     var pos = map.fromLatLngToDivPixel(latlng);
