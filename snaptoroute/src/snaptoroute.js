@@ -134,7 +134,7 @@ SnapToRoute.prototype.getClosestLatLng = function (latlng) {
  * @return {Number} Distance in meters;
  */
 SnapToRoute.prototype.getDistAlongRoute = function (latlng) {
-  if (typeof(opt_latlng) === 'undefined') {
+  if (typeof(latlng) === 'undefined') {
     latlng = this.marker_.getLatLng();
   }
 
@@ -249,4 +249,4 @@ SnapToRoute.prototype.getClosestPointOnLines_ = function (pXy, aXys) {
   }
 
   return {'x': x, 'y': y, 'i': i, 'to': to, 'from': from};
-}
+};
