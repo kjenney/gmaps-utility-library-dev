@@ -8,7 +8,7 @@
     </classpath>
   </taskdef>
   <taskdef resource="svntask.properties" classpathref="lib.path"/>
-  <target name="all">
+  <target name="all" description="Executes all-pack, all-docs, and all-setalltypes targets.">
     <foreach param="LIBLOC" target="pack">
       <path>
         <dirset dir="${basedir}" includes="*" excludes="util"/>
@@ -25,21 +25,21 @@
       </path>
     </foreach>
   </target>
-  <target name="all-pack">
+  <target name="all-pack" description="Pack (compress) all non-packed JS files.">
     <foreach param="LIBLOC" target="pack">
       <path>
         <dirset dir="${basedir}" includes="*" excludes="util"/>
       </path>
     </foreach>
   </target>
-  <target name="all-docs">
+  <target name="all-docs" description="Generate HTML documentation from all non-packed JS files.">
     <foreach param="LIBLOC" target="docs">
       <path>
         <dirset dir="${basedir}" includes="*" excludes="util"/>
       </path>
     </foreach>
   </target>
-  <target name="all-setalltypes">
+  <target name="all-setalltypes" description="Set correct MIME types in SVN for CSS, JS, XML, and HTML files.">
     <foreach param="LIBLOC" target="setalltypes">
       <path>
         <dirset dir="${basedir}" includes="*" excludes="util"/>
