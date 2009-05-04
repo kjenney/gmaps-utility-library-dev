@@ -47,6 +47,8 @@
  * @property {Number} [gridSize=60] The grid size of a cluster in pixel. Each
  * cluster will be a square. If you want the algorithm to run faster, you can set
  * this value larger.
+ * @property {Number} [minClusterSize=2] The minimum number of markers that must
+ * exist in the cluster grid area in order for a cluster to be created.
  * @property {Array of MarkerStyleOptions} [styles]
  * Custom styles for the cluster markers.
  * The array should be ordered according to increasing cluster size,
@@ -81,6 +83,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
   var maxZoom_ = null;
   var me_ = this;
   var gridSize_ = 60;
+  var minClusterSize_ = 2;
   var sizes = [53, 56, 66, 78, 90];
   var styles_ = [];
   var leftMarkers_ = [];
@@ -98,6 +101,9 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
   if (typeof opt_opts === "object" && opt_opts !== null) {
     if (typeof opt_opts.gridSize === "number" && opt_opts.gridSize > 0) {
       gridSize_ = opt_opts.gridSize;
+    }
+    if (typeof opt_opts.minClusterSize === "number" && opt_opts.minClusterSize > 2) {
+      minClusterSize_ = opt_opts.minClusterSize;
     }
     if (typeof opt_opts.maxZoom === "number") {
       maxZoom_ = opt_opts.maxZoom;
@@ -306,6 +312,15 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
   };
 
   /**
+   * Get minumum cluster size
+   * @private
+   * @return {Number}
+   */
+  this.getMinClusterSize_ = function () {
+    return minClusterSize_;
+  };
+
+  /**
    * Get total number of markers.
    * @return {Number}
    */
@@ -394,7 +409,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
 /**
  * Create a cluster to collect markers.
  * A cluster includes some markers which are in a block of area.
- * If there are more than one markers in cluster, the cluster
+ * If there are at least minClusterSize markers in cluster, the cluster
  * will create a {@link ClusterMarker_} and show the total number
  * of markers in cluster.
  *
@@ -527,10 +542,11 @@ function Cluster(markerClusterer) {
     if (mz === null) {
       mz = map_.getCurrentMapType().getMaximumResolution();
     }
-    if (zoom_ >= mz || this.getTotalMarkers() === 1) {
+    if (zoom_ >= mz || this.getTotalMarkers() < markerClusterer.getMinClusterSize_()) {
 
       // If current zoom level is beyond the max zoom level or the cluster
-      // have only one marker, the marker(s) in cluster will be showed on map.
+      // doesn't contain enough markers, the marker(s) in cluster
+      // will be shown on the map.
       for (i = 0; i < markers_.length; ++i) {
         if (markers_[i].isAdded) {
           if (markers_[i].marker.isHidden()) {
