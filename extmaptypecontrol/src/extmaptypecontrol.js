@@ -431,6 +431,7 @@ MoreControl.prototype.createLayerBox_ = function() {
   me.layerboxDiv.style.fontSize = "12px";
   me.layerboxDiv.style.padding = "4px";
   me.layerboxDiv.style.width = "120px";
+  me.layerboxDiv.style.color = "#000";
   me.layerboxDiv.style.backgroundColor = "#fff";
   me.layerboxDiv.style.border = "1px solid gray";
   me.layerboxDiv.style.cursor = "default";
