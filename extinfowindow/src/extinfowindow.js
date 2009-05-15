@@ -37,13 +37,16 @@
  *    {Number} beakOffset The repositioning offset for when aligning the beak element. 
  *                    This is used to make sure the beak lines up correcting if the 
  *                    info window styling containers a border.
+ *    {Number} maxPanning The maximum panning distance when the marker is not 
+ *                    in screen. This is used to make sure the map will not pan to
+ *                     much when opening a marker outside the viewport
  */
 function ExtInfoWindow(marker, windowId, html, opt_opts) {
   this.html_ = html;
   this.marker_ = marker;
   this.infoWindowId_ = windowId;
 
-  this.options_ = opt_opts == null ? {} : opt_opts;
+  this.options_ = opt_opts === null ? {} : opt_opts;
   this.ajaxUrl_ = this.options_.ajaxUrl == null ? null : this.options_.ajaxUrl;
   this.callback_ = this.options_.ajaxCallback == null ? null : this.options_.ajaxCallback;
   
@@ -54,6 +57,8 @@ function ExtInfoWindow(marker, windowId, html, opt_opts) {
   this.borderSize_ = this.options_.beakOffset == null ? 0 : this.options_.beakOffset;
   this.paddingX_ = this.options_.paddingX == null ? 0 + this.borderSize_ : this.options_.paddingX + this.borderSize_;
   this.paddingY_ = this.options_.paddingY == null ? 0 + this.borderSize_ : this.options_.paddingY + this.borderSize_;
+  
+  this.maxPanning_ = this.options_.maxPanning == null ? 500 : this.options_.maxPanning;
 
   this.map_ = null;
 
@@ -106,8 +111,8 @@ ExtInfoWindow.prototype.initialize = function(map) {
     close:{t:0, l:0, w:0, h:0, domElement: null}
   };
   if( this.maximizeEnabled_ ){
-    this.wrapperParts.max = {t:0, l:0, w:0, h:0, domElement: null}
-    this.wrapperParts.min = {t:0, l:0, w:0, h:0, domElement: null}
+    this.wrapperParts.max = {t:0, l:0, w:0, h:0, domElement: null};
+    this.wrapperParts.min = {t:0, l:0, w:0, h:0, domElement: null};
   }
 
   for (var i in this.wrapperParts ) {
@@ -387,12 +392,12 @@ ExtInfoWindow.prototype.toggleMaxMin_ = function(){
     if (this.isMaximized_) {
       this.wrapperParts.max.domElement.style.display = 'none';
       this.wrapperParts.min.domElement.style.display = 'block';
-    }else{
+    } else {
       this.wrapperParts.max.domElement.style.display = 'block';
       this.wrapperParts.min.domElement.style.display = 'none';
     }
   }
-}
+};
 
 /**
  * Determine the dimensions of the contents to recalculate and reposition the 
@@ -493,7 +498,11 @@ ExtInfoWindow.prototype.repositionMap_ = function(){
   }
 
   if (panX != 0 || panY != 0 && this.map_.getExtInfoWindow() != null ) {
-    this.map_.panBy(new GSize(panX,panY));
+      if ((panY < 0 - this.maxPanning_ || panY > this.maxPanning_) && (panX < 0 - this.maxPanning_ || panX > this.maxPanning_)) {
+        this.map_.setCenter(this.marker_.getPoint());
+      }else {
+        this.map_.panBy(new GSize(panX,panY));
+      }
   }
 };
 
@@ -703,7 +712,7 @@ GMap2.prototype.getExtInfoWindow = function(){
  */
 GMap2.prototype.setExtInfoWindow_ = function( extInfoWindow ){
   this.ExtInfoWindowInstance_ = extInfoWindow;
-}
+};
 /**
  * Remove the ExtInfoWindow from the map
  */
