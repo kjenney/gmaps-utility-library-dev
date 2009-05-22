@@ -175,7 +175,6 @@
  */
   function TabbedMaxContent(iw) {
     this.infoWindow_ = iw;
-    GEvent.bind(iw, 'maximizeclick', this, this.onMaximizeClick_);
     GEvent.bind(iw, 'restoreclick', this, this.onRestoreClick_);
     GEvent.bind(iw, 'maximizeend', this, this.onMaximizeEnd_);
     this.style_ = {};
@@ -225,15 +224,6 @@
       createEl('span', null, null, this.style_.tabRight, this.navsNode_);
     }
   };
-  /**
-   * Setup event listeners. The core API seems removed all liteners when restored to normal size
-   * @private
-   */
-  TabbedMaxContent.prototype.onMaximizeClick_ = function () {
-    for (var i = 0, ct = this.tabs_.length; i < ct; i++) {
-      GEvent.addDomListener(this.tabs_[i].navNode_, 'click', GEvent.callback(this, this.selectTab, i));
-    }
-  };
   
   /**
    * Clean up listeners on tabs.
@@ -245,10 +235,13 @@
     }
   };
   /**
-   * Clean up listeners on tabs.
+   * Setup up listeners on tabs.
    * @private
    */
   TabbedMaxContent.prototype.onMaximizeEnd_ = function () {
+    for (var i = 0, ct = this.tabs_.length; i < ct; i++) {
+      GEvent.addDomListener(this.tabs_[i].navNode_, 'click', GEvent.callback(this, this.selectTab, i));
+    }
     this.checkResize();
     this.selectTab(this.selectedTab_);
   };
