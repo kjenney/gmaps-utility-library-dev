@@ -88,6 +88,7 @@
  */
 function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
  // private members
+document.write('<!--DEBUG -->');
   var clusters_ = [];
   var map_ = map;
   var maxZoom_ = null;
