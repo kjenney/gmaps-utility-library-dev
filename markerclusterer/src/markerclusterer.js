@@ -159,7 +159,7 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
     }
     clusters_ = [];
     leftMarkers_ = [];
-    leftValues_ = []
+    leftValues_ = [];
     GEvent.removeListener(mcfn_);
   };
 
@@ -182,7 +182,7 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
     var len = markers.length;
     var clusters = [];
     for (var i = len - 1; i >= 0; --i) {
-      me_.addMarker(markers[i].marker, opt_values[i],true, markers[i].isAdded, clusters, true); //puntofisso added opt_values[i]
+      me_.addMarker(markers[i].marker, opt_values[i], true, markers[i].isAdded, clusters, true); //puntofisso added opt_values[i]
     }
     addLeftMarkers_();
   }
@@ -198,10 +198,11 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
    *     cluster will only check these cluster where the marker should join.
    */
   this.addMarker = function (marker, opt_value, opt_isNodraw, opt_isAdded, opt_clusters, opt_isNoCheck) { //puntofisso added opt_value
+
     if (opt_isNoCheck !== true) {
       if (!isMarkerInViewport_(marker)) {
         leftMarkers_.push(marker);
-	leftValues_.push(opt_value); // puntofisso
+        leftValues_.push(opt_value); // puntofisso
         return;
       }
     }
@@ -229,7 +230,7 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
       // Found a cluster which contains the marker.
       if (pos.x >= center.x - gridSize_ && pos.x <= center.x + gridSize_ &&
           pos.y >= center.y - gridSize_ && pos.y <= center.y + gridSize_) {
-        cluster.addMarker(opt_value,{ // puntofisso added opt_value
+        cluster.addMarker(opt_value, { // puntofisso added opt_value
           'isAdded': isAdded,
           'marker': marker
         });
@@ -241,7 +242,7 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
     }
     // No cluster contain the marker, create a new cluster.
     cluster = new Cluster(opt_function, this, map); //puntofisso added opt_function
-    cluster.addMarker(opt_value,{//puntofisso added opt_value
+    cluster.addMarker(opt_value, {//puntofisso added opt_value
       'isAdded': isAdded,
       'marker': marker 	
     });
@@ -377,14 +378,14 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
         // If the cluster zoom level changed then destroy the cluster
         // and collect its markers.
         var mks = cluster.getMarkers();
-	var vls = cluster.getValues(); //puntofisso
+        var vls = cluster.getValues(); //puntofisso
         for (var j = 0; j < mks.length; ++j) {
           var newMarker = {
             'isAdded': false,
             'marker': mks[j].marker
           };
           tmpMarkers.push(newMarker);
-	  tmpValues.push(vls[j]);
+          tmpValues.push(vls[j]);
         }
         cluster.clearMarkers(); 
         removed++;
@@ -412,7 +413,14 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
  	
 
     for (var i = 0; i < markers.length; ++i) {
-      this.addMarker(markers[i], opt_values[i], true); //puntofisso added opt_values[i] to call
+      if (opt_values !== undefined) 
+      { //puntofisso added to cater for null opt_values situation
+        this.addMarker(markers[i], opt_values[i], true); //puntofisso added opt_values[i] to call
+      }
+      else
+      {
+        this.addMarker(markers[i], null, true); //puntofisso added opt_values[i] to call
+      }
       
     }
     this.redraw_();
@@ -545,7 +553,7 @@ function Cluster(opt_function, markerClusterer) {
           map_.removeOverlay(markers_[i].marker);
         }
         markers_.splice(i, 1);
-	values_.splice(i, 1); //puntofisso added removal from values - same index as markers for how they're built
+        values_.splice(i, 1); //puntofisso added removal from values - same index as markers for how they're built
         return true;
       }
     }
@@ -681,10 +689,10 @@ function ClusterMarker_(latlng, count, styles, padding, opt_values, opt_function
   this.index_ = index;
   this.styles_ = styles;
   //this.text_ =  count;			
-  if ((opt_function !== undefined) && (opt_values !==undefined)) {
-	this.text_ = opt_function(opt_values);	//puntofisso
+  if ((opt_function !== undefined) && (opt_values !== undefined)) {
+    this.text_ = opt_function(opt_values);	//puntofisso
   } else {
-	this.text_ = opt_values.length;
+    this.text_ = opt_values.length;
   }
   this.padding_ = padding;
 }
