@@ -1,6 +1,6 @@
 /**
  * @name ExtLargeMapControl
- * @version 1.0
+ * @version 1.2
  * @author Masashi, Bjorn Brala
  * @fileoverview Creates a control with buttons to pan in four directions,
  * and zoom in and zoom out, and a zoom slider. The UI is based on the 
@@ -96,6 +96,8 @@ ExtLargeMapControl.prototype.initialize = function (map) {
   var agt = navigator.userAgent.toLowerCase();
   
   this._is_ie    = ((agt.indexOf("msie") !== -1) && (agt.indexOf("opera") === -1));
+  this._is_ie67  = (agt.indexOf("msie 6") !== -1 || agt.indexOf("msie 7"));
+  this._is_ie8   = (agt.indexOf("msie 8") !== -1);
   this._is_gecko = (agt.indexOf('gecko') !== -1);
   this._is_opera = (agt.indexOf("opera") !== -1);
 
@@ -538,7 +540,7 @@ ExtLargeMapControl.prototype.makeImgDiv_ = function (imgSrc, params) {
   
   
   var img = null;
-  if (!this._is_ie) {
+  if (!this._is_ie || this._is_ie8) {
     img = new Image();
     img.src = imgSrc;
   } else {
