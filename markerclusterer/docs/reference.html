@@ -82,6 +82,16 @@ and regroup them into new clusters.</p>
               </tr>
             
               <tr class="odd">
+                <td><code>getCalculator()</code></td>
+                
+                  
+                    <td><code>Object</code></td>
+                  
+                
+                <td>Get calculator function.</td>
+              </tr>
+            
+              <tr class="even">
                 <td><code>getTotalClusters()</code></td>
                 
                   
@@ -91,7 +101,7 @@ and regroup them into new clusters.</p>
                 <td>Get total number of clusters.</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>getTotalMarkers()</code></td>
                 
                   
@@ -101,7 +111,7 @@ and regroup them into new clusters.</p>
                 <td>Get total number of markers.</td>
               </tr>
             
-              <tr class="odd">
+              <tr class="even">
                 <td><code>removeMarker(<span class="type">marker:GMarker</span>)</code></td>
                 
                   
@@ -111,7 +121,7 @@ and regroup them into new clusters.</p>
                 <td>Remove a marker.</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>resetViewport()</code></td>
                 
                   
@@ -119,6 +129,16 @@ and regroup them into new clusters.</p>
                   
                 
                 <td>Collect all markers of clusters in viewport and regroup them.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>setCalculator(<span class="type">calculator:Function</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Set calculator function</td>
               </tr>
             
           </tbody>
@@ -144,6 +164,30 @@ constructor.  There is no constructor for this class.  Instead, this class is in
             </tr>
             
               <tr class="odd">
+                <td><code>calculator</code></td>
+                
+                  
+                    <td><code>Function</code></td>
+                  
+                
+                <td>A function to calculator what will be showed
+on cluster marker and what kind of style will cluster marker be.
+This function auto called by Cluster. The default calculator will show number
+of markers in a cluster. This function take two parm: markers and styles.
+You can add some property to marker of this markers array. The styles will be
+the styles you passed by MarkerClustererOptions or the default styles.
+This function returns an object:
+{
+  'text': 'The text to be showed on cluster marker',
+  'index': 'Style index in styles'
+}
+
+The original idea of this feature came from Puntofisso and he did most of the
+work to make this done. Pamela suggest add property into markers and I (xiaoxi)
+finished this suggestion.</td>
+              </tr>
+            
+              <tr class="even">
                 <td><code>gridSize</code></td>
                 
                   
@@ -155,7 +199,7 @@ cluster will be a square. If you want the algorithm to run faster, you can set
 this value larger.  The default value is <code>60</code>.</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>maxZoom</code></td>
                 
                   
@@ -166,16 +210,6 @@ this value larger.  The default value is <code>60</code>.</td>
 marker cluster. If not given, the marker cluster assumes the maximum map
 zoom level. When maxZoom is reached or exceeded all markers will be shown
 without cluster.</td>
-              </tr>
-            
-              <tr class="odd">
-                <td><code>minClusterSize</code></td>
-                
-                  
-                    <td><code>Number</code></td>
-                  
-                
-                <td>The minimum number of markers that mustexist in the cluster grid area in order for a cluster to be created.  The default value is <code>2</code>.</td>
               </tr>
             
               <tr class="even">

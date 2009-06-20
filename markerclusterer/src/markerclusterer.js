@@ -1,10 +1,10 @@
 /**
  * @name MarkerClusterer
- * @version 2.0
- * @author Giuseppe Sollazzo, based on previous work by Xiaoxi Wu
+ * @version 1.0
+ * @author Xiaoxi Wu
  * @copyright (c) 2009 Xiaoxi Wu
  * @fileoverview
- * This javascript library creates and manages per-zoom-level 
+ * This javascript library creates and manages per-zoom-level
  * clusters for large amounts of markers (hundreds or thousands).
  * This library was inspired by the <a href="http://www.maptimize.com">
  * Maptimize</a> hosted clustering solution.
@@ -12,23 +12,13 @@
  * <b>How it works</b>:<br/>
  * The <code>MarkerClusterer</code> will group markers into clusters according to
  * their distance from a cluster's center. When a marker is added,
- * the marker cluster will find a position in all the clusters, and 
+ * the marker cluster will find a position in all the clusters, and
  * if it fails to find one, it will create a new cluster with the marker.
  * The number of markers in a cluster will be displayed
  * on the cluster marker. When the map viewport changes,
- * <code>MarkerClusterer</code> will destroy the clusters in the viewport 
+ * <code>MarkerClusterer</code> will destroy the clusters in the viewport
  * and regroup them into new clusters.
  *
- * Addendum by Giuseppe Sollazzo "puntofisso" [http://puntofisso.net]
- * I added the possibility of attaching values to the markers, and passing a function
- * to make calculations out of the values. 
- * The original Version 1.0 displayed as label of the cluster marker only the
- * number of markers in that cluster. I made it possible to decide what to display. 
- * An obvious use for this is to display some alternative information about the cluster, 
- * like the sum of the attached values, or their average.
- * The actual value is calculated by a user-specified function, whose only requirement is to receive
- * as argument the array of values. See the example at
- * http://puntofisso.net/techblog/?page_id=73
  */
 
 /*
@@ -62,6 +52,21 @@
  * The array should be ordered according to increasing cluster size,
  * with the style for the smallest clusters first, and the style for the
  * largest clusters last.
+ * @property {Function} [calculator] A function to calculator what will be showed
+ * on cluster marker and what kind of style will cluster marker be.
+ * This function auto called by Cluster. The default calculator will show number
+ * of markers in a cluster. This function take two parm: markers and styles.
+ * You can add some property to marker of this markers array. The styles will be
+ * the styles you passed by MarkerClustererOptions or the default styles.
+ * This function returns an object:
+ * {
+ *   'text': 'The text to be showed on cluster marker',
+ *   'index': 'Style index in styles'
+ * }
+ *
+ * The original idea of this feature came from Puntofisso and he did most of the
+ * work to make this done. Pamela suggest add property into markers and I (xiaoxi)
+ * finished this suggestion.
  */
 
 /**
@@ -71,7 +76,7 @@
  * @property {String} [url] Image url.
  * @property {Number} [height] Image height.
  * @property {Number} [height] Image width.
- * @property {Array of Number} [opt_anchor] Anchor for label text, like [24, 12]. 
+ * @property {Array of Number} [opt_anchor] Anchor for label text, like [24, 12].
  *    If not set, the text will align center and middle.
  * @property {String} [opt_textColor="black"] Text color.
  */
@@ -83,11 +88,9 @@
  * @param {GMap2} map The map that the markers should be added to.
  * @param {Array of GMarker} opt_markers Initial set of markers to be clustered.
  * @param {MarkerClustererOptions} opt_opts A container for optional arguments.
- * @param {Array of Number} opt_values Array of values on which function will be calculated //puntofisso
- * @param {Function} opt_function The function to aggregate markers' data - //puntofisso
  */
-function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
- // private members
+function MarkerClusterer(map, opt_markers, opt_opts) {
+  // private members
   var clusters_ = [];
   var map_ = map;
   var maxZoom_ = null;
@@ -96,30 +99,64 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
   var sizes = [53, 56, 66, 78, 90];
   var styles_ = [];
   var leftMarkers_ = [];
-  var leftValues_ = []; //puntofisso: to manage values in each cluster
   var mcfn_ = null;
+  var calculator_ = function (markers, styles) {
+    var index = 0;
+    var count = markers.length;
+    var dv = count;
+    while (dv !== 0) {
+      dv = parseInt(dv / 10, 10);
+      index ++;
+    }
+    if (styles.length < index) {
+      index = styles.length;
+    }
+    return {
+      'text': count,
+      'index': index
+    };
+  };
 
   var i = 0;
-      //'url': "http://gmaps-utility-library.googlecode.com/svn/trunk/markerclusterer/images/m" + i + ".png",
   for (i = 1; i <= 5; ++i) {
     styles_.push({
-      'url': "http://gmaps-utility-library.googlecode.com/svn/trunk/markerclusterer/images/m3.png",
+      'url': 'http://gmaps-utility-library.googlecode.com/svn/trunk/markerclusterer/images/m' + i + '.png',
       'height': sizes[i - 1],
       'width': sizes[i - 1]
     });
   }
 
-  if (typeof opt_opts === "object" && opt_opts !== null) {
-    if (typeof opt_opts.gridSize === "number" && opt_opts.gridSize > 0) {
+  if (typeof opt_opts === 'object' && opt_opts !== null) {
+    if (typeof opt_opts.gridSize === 'number' && opt_opts.gridSize > 0) {
       gridSize_ = opt_opts.gridSize;
     }
-    if (typeof opt_opts.maxZoom === "number") {
+    if (typeof opt_opts.maxZoom === 'number') {
       maxZoom_ = opt_opts.maxZoom;
     }
-    if (typeof opt_opts.styles === "object" && opt_opts.styles !== null && opt_opts.styles.length !== 0) {
+    if (typeof opt_opts.styles === 'object' && opt_opts.styles !== null && opt_opts.styles.length !== 0) {
       styles_ = opt_opts.styles;
     }
+    if (typeof opt_opts.calculator === 'function') {
+      calculator_ = opt_opts.calculator;
+    }
   }
+
+  /**
+   * Set calculator function
+   * @param {Function} calculator calculator function.
+   */
+  this.setCalculator = function(calculator) {
+    calculator_ = calculator;
+  };
+
+  /**
+   * Get calculator function.
+   * @return {Object}
+   */
+  this.getCalculator = function () {
+    return calculator_;
+  };
+
   /**
    * When we add a marker, the marker may not in the viewport of map, then we don't deal with it, instead
    * we add the marker into a array called leftMarkers_. When we reset MarkerClusterer we should add the
@@ -130,13 +167,15 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
       return;
     }
     var leftMarkers = [];
-    var leftValues = []; //puntofisso: to manage values in each cluster
-    for (i = 0; i < leftMarkers_.length; ++i) {
-      me_.addMarker(leftMarkers_[i], leftValues_[i], true, null, null, true); //puntofisso: added leftValues_[i]
 
+    for (i = 0; i < leftMarkers_.length; ++i) {
+      if (isMarkerInViewport_(leftMarkers_[i])) {
+        me_.addMarker(leftMarkers_[i], true, null, null, true);
+      } else {
+        leftMarkers.push(leftMarkers_[i]);
+      }
     }
     leftMarkers_ = leftMarkers;
-    leftValues_ = leftValues; //puntofisso: added to manage values
   }
 
   /**
@@ -159,8 +198,7 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
     }
     clusters_ = [];
     leftMarkers_ = [];
-    leftValues_ = [];
-    GEvent.removeListener(mcfn_);
+//    GEvent.removeListener(mcfn_);
   };
 
   /**
@@ -176,13 +214,12 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
    * When reset MarkerClusterer, there will be some markers get out of its cluster.
    * These markers should be add to new clusters.
    * @param {Array of GMarker} markers Markers to add.
-   * @param {Array of Number} opt_values Values for the markers //puntofisso
    */
-  function reAddMarkers_(markers, opt_values) {
+  function reAddMarkers_(markers) {
     var len = markers.length;
     var clusters = [];
     for (var i = len - 1; i >= 0; --i) {
-      me_.addMarker(markers[i].marker, opt_values[i], true, markers[i].isAdded, clusters, true); //puntofisso added opt_values[i]
+      me_.addMarker(markers[i].marker, true, markers[i].isAdded, clusters, true);
     }
     addLeftMarkers_();
   }
@@ -191,21 +228,19 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
    * Add a marker.
    * @private
    * @param {GMarker} marker Marker you want to add
-   * @param {Number} opt_value Value for the marker // puntofisso
    * @param {Boolean} opt_isNodraw Whether redraw the cluster contained the marker
    * @param {Boolean} opt_isAdded Whether the marker is added to map. Never use it.
    * @param {Array of Cluster} opt_clusters Provide a list of clusters, the marker
    *     cluster will only check these cluster where the marker should join.
    */
-  this.addMarker = function (marker, opt_value, opt_isNodraw, opt_isAdded, opt_clusters, opt_isNoCheck) { //puntofisso added opt_value
-
+  this.addMarker = function (marker, opt_isNodraw, opt_isAdded, opt_clusters, opt_isNoCheck) {
     if (opt_isNoCheck !== true) {
       if (!isMarkerInViewport_(marker)) {
         leftMarkers_.push(marker);
-        leftValues_.push(opt_value); // puntofisso
         return;
       }
     }
+
     var isAdded = opt_isAdded;
     var clusters = opt_clusters;
     var pos = map_.fromLatLngToDivPixel(marker.getLatLng());
@@ -230,7 +265,7 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
       // Found a cluster which contains the marker.
       if (pos.x >= center.x - gridSize_ && pos.x <= center.x + gridSize_ &&
           pos.y >= center.y - gridSize_ && pos.y <= center.y + gridSize_) {
-        cluster.addMarker(opt_value, { // puntofisso added opt_value
+        cluster.addMarker({
           'isAdded': isAdded,
           'marker': marker
         });
@@ -240,11 +275,12 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
         return;
       }
     }
+
     // No cluster contain the marker, create a new cluster.
-    cluster = new Cluster(opt_function, this, map); //puntofisso added opt_function
-    cluster.addMarker(opt_value, {//puntofisso added opt_value
+    cluster = new Cluster(this, map);
+    cluster.addMarker({
       'isAdded': isAdded,
-      'marker': marker 	
+      'marker': marker
     });
     if (!opt_isNodraw) {
       cluster.redraw_();
@@ -262,34 +298,21 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
    *
    * @param {GMarker} marker The marker you want to remove.
    */
-/**
-  *this.removeMarker = function (marker) { 
-  *  for (var i = 0; i < clusters_.length; ++i) {
-  *    if (clusters_[i].remove(marker)) { 
-  *      clusters_[i].redraw_();
-  *      return;
-  *    }
-  *  }
-  *};
-  * BUGGY?? It calls clusters_[i].remove, does it exist?
-  */
-  this.removeMarker = function (marker) { //puntofisso - just in case
+
+  this.removeMarker = function (marker) {
     for (var i = 0; i < clusters_.length; ++i) {
-      if (clusters_[i].removeMarker(marker)) { //puntofisso I think calling 'remove' was wrong, so switched to call removeMarker
+      if (clusters_[i].removeMarker(marker)) {
         clusters_[i].redraw_();
         return;
       }
     }
   };
 
-
-
   /**
    * Redraw all clusters in viewport.
    */
   this.redraw_ = function () {
     var clusters = this.getClustersInViewport_();
-
     for (var i = 0; i < clusters.length; ++i) {
       clusters[i].redraw_(true);
     }
@@ -363,7 +386,6 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
   this.resetViewport = function () {
     var clusters = this.getClustersInViewport_();
     var tmpMarkers = [];
-    var tmpValues = []; //puntofisso 
     var removed = 0;
 
     for (var i = 0; i < clusters.length; ++i) {
@@ -378,16 +400,14 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
         // If the cluster zoom level changed then destroy the cluster
         // and collect its markers.
         var mks = cluster.getMarkers();
-        var vls = cluster.getValues(); //puntofisso
         for (var j = 0; j < mks.length; ++j) {
           var newMarker = {
             'isAdded': false,
             'marker': mks[j].marker
           };
           tmpMarkers.push(newMarker);
-          tmpValues.push(vls[j]);
         }
-        cluster.clearMarkers(); 
+        cluster.clearMarkers();
         removed++;
         for (j = 0; j < clusters_.length; ++j) {
           if (cluster === clusters_[j]) {
@@ -398,7 +418,7 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
     }
 
     // Add the markers collected into marker cluster to reset
-    reAddMarkers_(tmpMarkers, tmpValues); //puntofisso added tmpValues
+    reAddMarkers_(tmpMarkers);
     this.redraw_();
   };
 
@@ -407,28 +427,17 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
    * Add a set of markers.
    *
    * @param {Array of GMarker} markers The markers you want to add.
-   * @param {Array of Number} opt_values The values for markers //puntofisso
    */
-  this.addMarkers = function (markers, opt_values) { //puntofisso added opt_values
- 	
-
+  this.addMarkers = function (markers) {
     for (var i = 0; i < markers.length; ++i) {
-      if (opt_values !== undefined) 
-      { //puntofisso added to cater for null opt_values situation
-        this.addMarker(markers[i], opt_values[i], true); //puntofisso added opt_values[i] to call
-      }
-      else
-      {
-        this.addMarker(markers[i], null, true); //puntofisso added opt_values[i] to call
-      }
-      
+      this.addMarker(markers[i], true);
     }
     this.redraw_();
   };
 
   // initialize
   if (typeof opt_markers === "object" && opt_markers !== null) {
-    this.addMarkers(opt_markers, opt_values); //puntofisso added opt_values
+    this.addMarkers(opt_markers);
   }
 
   // when map move end, regroup.
@@ -447,15 +456,13 @@ function MarkerClusterer(map, opt_markers, opt_opts, opt_values, opt_function) {
  * @constructor
  * @private
  * @param {MarkerClusterer} markerClusterer The marker cluster object
- * @param {Function} opt_function The function which aggregates markers' data //puntofisso
  */
-function Cluster(opt_function, markerClusterer) {
+function Cluster(markerClusterer) {
   var center_ = null;
   var markers_ = [];
-  var values_ = [];	//puntofisso
   var markerClusterer_ = markerClusterer;
   var map_ = markerClusterer.getMap_();
-  var clusterMarker_ = null; 
+  var clusterMarker_ = null;
   var zoom_ = map_.getZoom();
 
   /**
@@ -466,16 +473,6 @@ function Cluster(opt_function, markerClusterer) {
   this.getMarkers = function () {
     return markers_;
   };
-
-/**
-   * Get values of this cluster. //puntofisso 
-   *
-   * @return {Array of Number}
-   */
-  this.getValues = function () {
-    return values_;
-  };
-
 
   /**
    * If this cluster intersects certain bounds.
@@ -521,13 +518,12 @@ function Cluster(opt_function, markerClusterer) {
 
   /**
    * Add a marker.
-   * 
-   * @param {Number} opt_value The value for the object
+   *
    * @param {Object} marker An object of marker you want to add:
    *   {Boolean} isAdded If the marker is added on map.
    *   {GMarker} marker The marker you want to add.
    */
-  this.addMarker = function (opt_value, marker) { //puntofisso added opt_value
+  this.addMarker = function (marker) {
     if (center_ === null) {
       /*var pos = marker['marker'].getLatLng();
        pos = map.fromLatLngToContainerPixel(pos);
@@ -537,7 +533,6 @@ function Cluster(opt_function, markerClusterer) {
       center_ = marker.marker.getLatLng();
     }
     markers_.push(marker);
-    values_.push(opt_value); //puntofisso
   };
 
   /**
@@ -553,7 +548,6 @@ function Cluster(opt_function, markerClusterer) {
           map_.removeOverlay(markers_[i].marker);
         }
         markers_.splice(i, 1);
-        values_.splice(i, 1); //puntofisso added removal from values - same index as markers for how they're built
         return true;
       }
     }
@@ -588,15 +582,14 @@ function Cluster(opt_function, markerClusterer) {
     if (mz === null) {
       mz = map_.getCurrentMapType().getMaximumResolution();
     }
+    if (zoom_ >= mz || this.getTotalMarkers() === 1) {
 
-    if (zoom_ >= mz || this.getTotalMarkers() === 1) { 
       // If current zoom level is beyond the max zoom level or the cluster
       // have only one marker, the marker(s) in cluster will be showed on map.
       for (i = 0; i < markers_.length; ++i) {
         if (markers_[i].isAdded) {
           if (markers_[i].marker.isHidden()) {
             markers_[i].marker.show();
-	    //puntofisso markers_[i] -> could set text here - but I think it should already be in the text of the marker itself
           }
         } else {
           map_.addOverlay(markers_[i].marker);
@@ -608,15 +601,16 @@ function Cluster(opt_function, markerClusterer) {
       }
     } else {
       // Else add a cluster marker on map to show the number of markers in
-      // this cluster. //puntofisso: in my version, it will be not just the number, but the result of the function
+      // this cluster.
       for (i = 0; i < markers_.length; ++i) {
         if (markers_[i].isAdded && (!markers_[i].marker.isHidden())) {
           markers_[i].marker.hide();
         }
       }
       if (clusterMarker_ === null) {
-        clusterMarker_ = new ClusterMarker_(center_, this.getTotalMarkers(), markerClusterer_.getStyles_(), markerClusterer_.getGridSize_(), values_, opt_function); 
-				//puntofisso: added passing of values_
+
+        var sums = markerClusterer_.getCalculator()(this.getRealMarkers(), markerClusterer_.getStyles_());
+        clusterMarker_ = new ClusterMarker_(center_, sums, markerClusterer_.getStyles_(), markerClusterer_.getGridSize_());
         map_.addOverlay(clusterMarker_);
       } else {
         if (clusterMarker_.isHidden()) {
@@ -640,7 +634,6 @@ function Cluster(opt_function, markerClusterer) {
       }
     }
     markers_ = [];
-    values_ = []; //puntofisso added values clear
   };
 
   /**
@@ -649,6 +642,18 @@ function Cluster(opt_function, markerClusterer) {
    */
   this.getTotalMarkers = function () {
     return markers_.length;
+  };
+
+  /**
+   * Get all real markers by array.
+   * @return {GMarker}
+   */
+  this.getRealMarkers = function () {
+    var result = [];
+    for (var i = 0; i < markers_.length; ++i) {
+      result.push(markers_[i].marker);
+    }
+    return result;
   };
 }
 
@@ -659,7 +664,9 @@ function Cluster(opt_function, markerClusterer) {
  * @constructor
  * @private
  * @param {GLatLng} latlng Marker's lat and lng.
- * @param {Number} count Number to show.
+ * @param {Object} sums text and image to show:
+ *   {String} text Text to show.
+ *   {Number} index Image index by styles.
  * @param {Array of Object} styles The image list to be showed:
  *   {String} url Image url.
  *   {Number} height Image height.
@@ -667,19 +674,19 @@ function Cluster(opt_function, markerClusterer) {
  *   {Array of Number} anchor Text anchor of image left and top.
  *   {String} textColor text color.
  * @param {Number} padding Padding of marker center.
- * @param {Array of Number} opt_values The values on which the function is to be calculated
- * @param {Function} opt_function The function to calculate the value to be returned
  */
-function ClusterMarker_(latlng, count, styles, padding, opt_values, opt_function) {
-  var index = 0;
+function ClusterMarker_(latlng, sums, styles, padding) {
+/*  var index = 0;
   var dv = count;
   while (dv !== 0) {
     dv = parseInt(dv / 10, 10);
     index ++;
   }
+
   if (styles.length < index) {
     index = styles.length;
-  }
+  }*/
+  var index = sums.index;
   this.url_ = styles[index - 1].url;
   this.height_ = styles[index - 1].height;
   this.width_ = styles[index - 1].width;
@@ -688,13 +695,9 @@ function ClusterMarker_(latlng, count, styles, padding, opt_values, opt_function
   this.latlng_ = latlng;
   this.index_ = index;
   this.styles_ = styles;
-  //this.text_ =  count;			
-  if ((opt_function !== undefined) && (opt_values !== undefined)) {
-    this.text_ = opt_function(opt_values);	//puntofisso
-  } else {
-    this.text_ = opt_values.length;
-  }
+  this.text_ = sums.text;
   this.padding_ = padding;
+  this.sums_ = sums;
 }
 
 ClusterMarker_.prototype = new GOverlay();
@@ -764,7 +767,7 @@ ClusterMarker_.prototype.remove = function () {
  * @private
  */
 ClusterMarker_.prototype.copy = function () {
-  return new ClusterMarker_(this.latlng_, this.index_, this.text_, this.styles_, this.padding_);
+  return new ClusterMarker_(this.latlng_, this.sums_, this.text_, this.styles_, this.padding_);
 };
 
 /**
