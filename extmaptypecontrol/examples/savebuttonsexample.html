@@ -11,11 +11,10 @@
 <script type="text/javascript">
 
 // Load packed or unpacked version of library script
-var toSearch = (window.location.search.indexOf("packed") > -1) ? "_packed.js" : ".js";
-var useScript = document.createElement("script");
+var useScript = document.getElementsByTagName("head")[0].appendChild(document.createElement("script"));
+var toSearch = (window.location.search.indexOf("packed") != -1) ? "_packed.js" : ".js";
 useScript.type = "text/javascript";
 useScript.src = "../src/extmaptypecontrol" + toSearch;
-document.getElementsByTagName("head")[0].appendChild(useScript);
 
 </script>
 
