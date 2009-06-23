@@ -55,18 +55,13 @@
  * @property {Function} [calculator] A function to calculator what will be showed
  * on cluster marker and what kind of style will cluster marker be.
  * This function auto called by Cluster. The default calculator will show number
- * of markers in a cluster. This function take two parm: markers and styles.
- * You can add some property to marker of this markers array. The styles will be
- * the styles you passed by MarkerClustererOptions or the default styles.
+ * of markers in a cluster. This function take one parm: markers.
+ * You can add some property to marker of this markers array to calculat values.
  * This function returns an object:
  * {
  *   'text': 'The text to be showed on cluster marker',
- *   'index': 'Style index in styles'
+ *   'index': 'Style index in array of MarginStylesOptions user passed.'
  * }
- *
- * The original idea of this feature came from Puntofisso and he did most of the
- * work to make this done. Pamela suggest add property into markers and I (xiaoxi)
- * finished this suggestion.
  */
 
 /**
@@ -100,7 +95,9 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
   var styles_ = [];
   var leftMarkers_ = [];
   var mcfn_ = null;
-  var calculator_ = function (markers, styles) {
+
+  // default calculator function
+  var calculator_ = function (markers) {
     var index = 0;
     var count = markers.length;
     var dv = count;
@@ -108,8 +105,9 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
       dv = parseInt(dv / 10, 10);
       index ++;
     }
-    if (styles.length < index) {
-      index = styles.length;
+    var stylesCount = this.getStyles().length;
+    if (stylesCount < index) {
+      index = this.getStyles.length;
     }
     return {
       'text': count,
@@ -145,7 +143,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
    * Set calculator function
    * @param {Function} calculator calculator function.
    */
-  this.setCalculator = function(calculator) {
+  this.setCalculator = function (calculator) {
     calculator_ = calculator;
   };
 
@@ -154,7 +152,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
    * @return {Object}
    */
   this.getCalculator = function () {
-    return calculator_;
+    return GEvent.callback(this, calculator_);
   };
 
   /**
@@ -180,10 +178,9 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
 
   /**
    * Get cluster marker images of this marker cluster. Mostly used by {@link Cluster}
-   * @private
    * @return {Array of String}
    */
-  this.getStyles_ = function () {
+  this.getStyles = function () {
     return styles_;
   };
 
@@ -609,8 +606,8 @@ function Cluster(markerClusterer) {
       }
       if (clusterMarker_ === null) {
 
-        var sums = markerClusterer_.getCalculator()(this.getRealMarkers(), markerClusterer_.getStyles_());
-        clusterMarker_ = new ClusterMarker_(center_, sums, markerClusterer_.getStyles_(), markerClusterer_.getGridSize_());
+        var sums = markerClusterer_.getCalculator()(this.getRealMarkers());
+        clusterMarker_ = new ClusterMarker_(center_, sums, markerClusterer_.getStyles(), markerClusterer_.getGridSize_());
         map_.addOverlay(clusterMarker_);
       } else {
         if (clusterMarker_.isHidden()) {

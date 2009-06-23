@@ -10,15 +10,19 @@
       document.write('<script type="text/javascript" src="../src/markerclusterer' + (document.location.search.indexOf('packed') > -1 ? '_packed' : '') + '.js"><' + '/script>');
     </script>
     <script type="text/javascript">
-      function average(markers, styles) {
+      function average(markers) {
 	      var total = 0;
         for (var i = 0;i < markers.length; i++) {
           total = total + markers[i].value;
         }
+        var value = Math.round(total * 10 / markers.length) / 10;
+
+        // different index for different icons showed on cluster maker.
+        var index = parseInt(value / 30, 10) + 1;
         return {
-          text: Math.round((total * 100 / markers.length) / 100),
-          index: 2 
-        }
+          text: value,
+          index: index
+        };
       };
 
 
@@ -34,6 +38,8 @@
             var latlng = new GLatLng(data.photos[i].latitude, data.photos[i].longitude);
             var marker = new GMarker(latlng, {icon: icon});
             markers.push(marker);
+
+            // add a value property to marker.
             marker.value = i;
           }
           var markerCluster = new MarkerClusterer(map, markers, {'calculator': average}); 

@@ -92,6 +92,16 @@ and regroup them into new clusters.</p>
               </tr>
             
               <tr class="even">
+                <td><code>getStyles()</code></td>
+                
+                  
+                    <td><code>Array of String</code></td>
+                  
+                
+                <td>Get cluster marker images of this marker cluster. Mostly used by <code>Cluster</code></td>
+              </tr>
+            
+              <tr class="odd">
                 <td><code>getTotalClusters()</code></td>
                 
                   
@@ -101,7 +111,7 @@ and regroup them into new clusters.</p>
                 <td>Get total number of clusters.</td>
               </tr>
             
-              <tr class="odd">
+              <tr class="even">
                 <td><code>getTotalMarkers()</code></td>
                 
                   
@@ -111,7 +121,7 @@ and regroup them into new clusters.</p>
                 <td>Get total number of markers.</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>removeMarker(<span class="type">marker:GMarker</span>)</code></td>
                 
                   
@@ -121,7 +131,7 @@ and regroup them into new clusters.</p>
                 <td>Remove a marker.</td>
               </tr>
             
-              <tr class="odd">
+              <tr class="even">
                 <td><code>resetViewport()</code></td>
                 
                   
@@ -131,7 +141,7 @@ and regroup them into new clusters.</p>
                 <td>Collect all markers of clusters in viewport and regroup them.</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>setCalculator(<span class="type">calculator:Function</span>)</code></td>
                 
                   
@@ -173,18 +183,13 @@ constructor.  There is no constructor for this class.  Instead, this class is in
                 <td>A function to calculator what will be showed
 on cluster marker and what kind of style will cluster marker be.
 This function auto called by Cluster. The default calculator will show number
-of markers in a cluster. This function take two parm: markers and styles.
-You can add some property to marker of this markers array. The styles will be
-the styles you passed by MarkerClustererOptions or the default styles.
+of markers in a cluster. This function take one parm: markers.
+You can add some property to marker of this markers array to calculat values.
 This function returns an object:
 {
   'text': 'The text to be showed on cluster marker',
-  'index': 'Style index in styles'
-}
-
-The original idea of this feature came from Puntofisso and he did most of the
-work to make this done. Pamela suggest add property into markers and I (xiaoxi)
-finished this suggestion.</td>
+  'index': 'Style index in array of MarginStylesOptions user passed.'
+}</td>
               </tr>
             
               <tr class="even">
