@@ -33,18 +33,6 @@
             marker.openInfoWindowHtml(msg);
             marker.hidePopup();
         });
-        GEvent.addListener(marker,"dragstart", function(){
-            marker.hidePopup();
-        });
-        GEvent.addListener(marker,"dragend", function(){
-            marker.showPopup(marker.getLatLng());
-        });
-        GEvent.addListener(marker,"mouseover", function(){
-            marker.showPopup();
-        });
-        GEvent.addListener(marker,"mouseout", function(){
-            marker.hidePopup();
-        });
         return marker;
     }
     </script>

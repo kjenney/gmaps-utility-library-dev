@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>PopupMarker v1.0 Reference</title>
+    <title>PopupMarker v1.1 Reference</title>
     <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
     <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
   </head>
@@ -255,6 +255,19 @@ The popup types are chosen based on the value of "type" in the options.</p>
             </tr>
             
               <tr class="odd">
+                <td><code>bgColor</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>Specifies background color 
+ as a 6-digit hexadecimal number. 
+ If the <code>style</code> property is not set to "chart", then this property is 
+ ignored.  The default value is <code> "CCCCFF"</code>.</td>
+              </tr>
+            
+              <tr class="even">
                 <td><code>chart</code></td>
                 
                   
@@ -267,7 +280,7 @@ The popup types are chosen based on the value of "type" in the options.</p>
  ignored.  The default value is <code> {}</code>.</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>style</code></td>
                 
                   
@@ -280,7 +293,7 @@ The popup types are chosen based on the value of "type" in the options.</p>
  in the <code>chart</code> property.  The default value is <code> "normal"</code>.</td>
               </tr>
             
-              <tr class="odd">
+              <tr class="even">
                 <td><code>text</code></td>
                 
                   
@@ -290,6 +303,19 @@ The popup types are chosen based on the value of "type" in the options.</p>
                 <td>Specifies the text shown in the popup. 
  If the <code>style</code> property is set to "chart", then this string must follow
  the format for text in the Google Charts API.  The default value is <code> ""</code>.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>textColor</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>Specifies text color
+ as a 6-digit hexadecimal number.
+ If the <code>style</code> property is not set to "chart", then this property is 
+ ignored.  The default value is <code> "000000"</code>.</td>
               </tr>
             
           </tbody>

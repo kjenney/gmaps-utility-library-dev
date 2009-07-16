@@ -1,6 +1,6 @@
 /**
  * @name PopupMarker
- * @version 1.0
+ * @version 1.1
  * @author Masashi Katsumata
  * @fileoverview 
  * This library displays a "popup" (mini infowindow) to the side of a marker.
@@ -31,6 +31,14 @@
  *  the format for text in the Google Charts API.
  * @property {PopupMarkerChartAPIOptions} [chart = {} ] This property specifies 
  *  various customization options for the Charts API output. 
+ *  If the {@link style} property is not set to "chart", then this property is 
+ *  ignored.
+ * @property {String} [textColor = "000000" ] Specifies text color
+ *  as a 6-digit hexadecimal number.
+ *  If the {@link style} property is not set to "chart", then this property is 
+ *  ignored.
+ * @property {String} [bgColor = "CCCCFF" ] Specifies background color 
+ *  as a 6-digit hexadecimal number. 
  *  If the {@link style} property is not set to "chart", then this property is 
  *  ignored.
  */
@@ -74,28 +82,37 @@ function PopupMarker(latlng, opts) {
   this.chart_ = opts.chart || {};
   
   var agt    = navigator.userAgent.toLowerCase();
-  var is_ie_ = ((agt.indexOf("msie") !== -1) && (agt.indexOf("opera") === -1));
+  this._is_ie    = ((agt.indexOf("msie") !== -1) && (agt.indexOf("opera") === -1));
+  this._is_ie67  = (agt.indexOf("msie 6") !== -1 || agt.indexOf("msie 7"));
+  this._is_ie8   = (this._is_ie === true && this._is_ie67 === false);
+  this._is_gecko = (agt.indexOf('gecko') !== -1);
+  this._is_opera = (agt.indexOf("opera") !== -1);
   
+  this.color_   = opts.textColor || "000000";
+  this.bgcolor_ = opts.bgColor || "CCCCFF";
+
   //marker popup's matrix
   var yPos = 0;
-  this.popupImgSrc_ = "http://maps.google.com/mapfiles/transit/markers/1280.png";
+  this.popupImgSrc_ = "http://chart.apis.google.com/chart?chst=d_bubble_icon_text_small&chld=petrol|bb|%20|" + this.bgcolor_;
   this.popupTbl = {};
-  this.popupTbl.leftTop        = { "left" : 0,    "top" : yPos, "width" : 19, "height" : 7};
-  this.popupTbl.leftTopFill    = { "left" : 16,   "top" : 3,    "width" : 4,  "height" : 4};
-  this.popupTbl.rightTop       = { "left" : 19,   "top" : yPos, "width" : 10, "height" : 7};
-  this.popupTbl.rightTopImg    = { "left" : -125, "top" : 0,    "width" : 10, "height" : 7};
-  this.popupTbl.centerTopFill  = { "left" : 19,   "top" : yPos, "width" : 0,  "height" : 7};
-  
+  this.popupTbl.leftTop        = {"left" : 0,   "top" : yPos, "width" : 21, "height" : 7};
+  this.popupTbl.leftTopFill    = {"left" : 18,  "top" : 6,    "width" : 3,  "height" : 1};
+  this.popupTbl.rightTop       = {"left" : 46,  "top" : yPos, "width" : 6,  "height" : 7};
+  this.popupTbl.rightTopImg    = {"left" : -46, "top" : 0,    "width" : 6,  "height" : 7};
+  this.popupTbl.centerTopFill  = {"left" : 21,  "top" : yPos, "width" : 0,  "height" : 7};
+
   yPos += this.popupTbl.leftTop.height;
-  this.popupTbl.leftBody       = { "left" : 11, "top" : yPos, "width" : 8,  "height" : 0};
-  this.popupTbl.centerBodyFill = { "left" : 19, "top" : yPos, "width" : 40, "height" : 15};
-  this.popupTbl.rightBody      = { "left" : 19, "top" : yPos, "width" : 9,  "height" : 0};
-  this.popupTbl.leftBottom     = { "left" : 0,  "top" : yPos, "width" : 20, "height" : 21};
-  this.popupTbl.leftBottomImg  = { "left" : 0,  "top" : -13,  "width" : 20, "height" : 21};
-  this.popupTbl.leftBottomFill = { "left" : 16, "top" : 0,    "width" : 4,  "height" : 6};
-  this.popupTbl.rightBottom    = { "left" : 19, "top" : yPos, "width" : 10, "height" : 7};
-  this.popupTbl.rightBottomImg = { "left" : -125, "top" : -13, "width": 10, "height" : 7};
-  this.popupTbl.centerBottomFill = { "left" : 19, "top" : (yPos + (is_ie_ ? -1 : 0)), "width" : 0, "height" : (6 + (is_ie_ ? 1 : 0)) };
+  this.popupTbl.leftBody       = {"left" : 12, "top" : yPos, "width" : (8 + (this._is_ie67 ? 1 : 0)),  "height" : 0};
+  this.popupTbl.centerBodyFill = {"left" : 21, "top" : yPos, "width" : 40, "height" : 15};
+  this.popupTbl.rightBody      = {"left" : 19, "top" : yPos, "width" : 4,  "height" : 0};
+  this.popupTbl.leftBottom     = {"left" : 0,  "top" : yPos, "width" : 21, "height" : 20};
+  this.popupTbl.leftBottomImg  = {"left" : 0,  "top" : -23,  "width" : 21, "height" : 20};
+  this.popupTbl.leftBottomFill = {"left" : 13, "top" : 0,    "width" : 1,  "height" : 6};
+  this.popupTbl.rightBottom    = {"left" : 19, "top" : yPos, "width" : 6,  "height" : (6 + (!this._is_ie67 ? -1 : 0))};
+  this.popupTbl.rightBottomImg = {"left" : -46, "top" : -23, "width" : 6,  "height" : 6};
+  this.popupTbl.centerBottomFill = {"left" : 21, "top" : yPos, "width" : 0, "height" : 5};
+
+
   GMarker.apply(this, arguments);
 }
 
@@ -117,9 +134,9 @@ PopupMarker.prototype.initialize = function (map) {
   //==========================//
   this.container_ = document.createElement("div");
   map.getPane(G_MAP_MARKER_PANE).appendChild(this.container_);
-  this.container_.style.zIndex = GOverlay.getZIndex(this.latlng_.lat());
+  this.container_.style.zIndex = this.getZIndex(this.latlng_.lat());
   this.container_.style.position = "absolute";
-  this.container_.style.visibility = "hidden";
+  //this.container_.style.visibility = "hidden";
   
   if (this.popupStyle_ === "chart") {
     this.makeChartPopup_();
@@ -131,21 +148,25 @@ PopupMarker.prototype.initialize = function (map) {
   //        events        //
   //======================//
   var this_ = this;
-  GEvent.bindDom(this.container_, "mousedown", this, function () {
+  GEvent.bindDom(this.container_, "mousedown", this, function (e) {
     return GEvent.trigger(this_, "mousedown");
   });
-  GEvent.bindDom(this.container_, "dragstart", this, function () {
-    return GEvent.trigger(this_, "dragstart");
-  });
-  GEvent.bindDom(this.container_, "mouseup", this, function () {
+  GEvent.bindDom(this.container_, "mouseup", this, function (e) {
     return GEvent.trigger(this_, "mouseup");
   });
-  GEvent.bindDom(this.container_, "mouseover", this, function () {
+  GEvent.bindDom(this.container_, "mouseover", this, function (e) {
     return GEvent.trigger(this_, "mouseover");
   });
-  GEvent.bindDom(this.container_, "mouseout", this, function () {
-    return GEvent.trigger(this_, "mouseout");
+  GEvent.bindDom(this.container_, "mouseout", this, function (e) {
+    return GEvent.trigger(this_, "mouseout", e);
   });
+  GEvent.bind(this, "dragstart", this, function (e) {
+    this_.hidePopup();
+  });
+  GEvent.bind(this, "dragend", this, function (e) {
+    this_.showPopup();
+  });
+
 };
 
 /**
@@ -187,7 +208,7 @@ PopupMarker.prototype.makeNormalPopup_ = function () {
   //make text container
   this.bodyContainer_  = document.createElement("div");
   this.bodyContainer_.style.position = "absolute";
-  this.bodyContainer_.style.backgroundColor = "#CCCCFF";
+  this.bodyContainer_.style.backgroundColor = "#" + this.bgcolor_;
   this.bodyContainer_.style.overflow = "hidden";
   this.bodyContainer_.style.left = this.popupTbl.centerBodyFill.left + "px";
   this.bodyContainer_.style.top = this.popupTbl.centerBodyFill.top + "px";
@@ -267,9 +288,13 @@ PopupMarker.prototype.redraw = function (force) {
   GMarker.prototype.redraw.apply(this, arguments);
   
   if (force) {
-    this.showPopup();
+    if (this.popupStyle_ === "chart") {
+      this.redrawChartImg_(this.text_);
+    } else {
+      this.redrawNormalPopup_(this.text_, force);
+    }
     this.latlng_ = this.getLatLng();
-    this.container_.style.zIndex = GOverlay.getZIndex(this.latlng_.lat());
+    this.container_.style.zIndex = this.getZIndex(this.latlng_.lat());
   }
 };
 
@@ -355,46 +380,61 @@ PopupMarker.prototype.setText = function (text) {
  * @private
  * @ignore
  */
-PopupMarker.prototype.redrawNormalPopup_ = function (text) {
+PopupMarker.prototype.redrawNormalPopup_ = function (text, force) {
   
   if (this.beforeNormalPopupText_ !== text) {
     while (this.bodyContainer_.firstChild) {
       this.bodyContainer_.removeChild(this.bodyContainer_.firstChild);
     }
-    this.bodyContainer_.innerHTML = text;
-    if (this.isIE_() === false && this.bodyContainer_.hasChildNodes) {
-      if (this.bodyContainer_.firstChild.nodeType === 1) {
-        this.bodyContainer_.firstChild.style.margin = 0;
-      }
+    var ret = this.getTextCanvas_(text);
+    while (this.bodyContainer_.firstChild) {
+      this.bodyContainer_.removeChild(this.bodyContainer_.firstChild);
     }
-    var offsetBorder = this.isIE_() ? 2 : 0;
-    var cSize  = this.getHtmlSize_(text);
-    var rightX = this.popupTbl.leftTop.width + cSize.width;
-    
-    this.leftBottom_.style.top = (cSize.height +  this.popupTbl.leftBody.top) + "px";
-    this.leftBody_.style.height = cSize.height + "px";
-    this.bodyContainer_.style.width = cSize.width + "px";
-    this.bodyContainer_.style.height = cSize.height + "px";
-    this.bodyContainer_.style.top = this.popupTbl.leftBody.top;
+    this.bodyContainer_.appendChild(ret.ele);
+
+    var yPos = 0;
+    var centerX = this.popupTbl.centerTopFill.left;
+    var rightX = (this.popupTbl.centerTopFill.left + ret.size.width);
+
+    //locate centerTop and rightTop
+    this.centerTop_.style.width = ret.size.width + "px";
     this.rightTop_.style.left = rightX + "px";
-    this.rightBottom_.style.left = this.rightTop_.style.left;
-    this.rightBottom_.style.top = this.leftBottom_.style.top;
-    this.rightBody_.style.left = rightX + "px";
-    this.rightBody_.style.height = this.leftBody_.style.height;
-    this.centerBottom_.style.top = this.leftBottom_.style.top;
-    this.centerBottom_.style.width = cSize.width + "px";
-    this.centerTop_.style.width = cSize.width + "px";
+
+    //locate leftBody, bodyContainer and rightBody
+    yPos = this.popupTbl.leftTop.height;
+    this.leftBody_.style.top = yPos + "px";
+    this.leftBody_.style.height = ret.size.height + "px";
+    this.bodyContainer_.style.left = centerX + "px";
+    this.bodyContainer_.style.top = yPos + "px";
+    this.bodyContainer_.style.width = (ret.size.width + (this._is_ie ? 1 : 0)) + "px";
+    this.bodyContainer_.style.height = (ret.size.height + (this._is_ie ? 1 : 0)) + "px";
+    this.rightBody_.style.left = (rightX + (this._is_ie ? 1 : 0)) + "px";
+    this.rightBody_.style.top = yPos + "px";
+    this.rightBody_.style.height = (ret.size.height + (!this._is_ie ? 1 : 0)) + "px";
+
+    //locate leftBottom, centerBottom, rightBottom
+    yPos += ret.size.height;
+    this.leftBottom_.style.top = yPos + "px";
+    this.centerBottom_.style.top = yPos + "px";
+    this.centerBottom_.style.left = centerX + "px";
+    this.centerBottom_.style.width = ret.size.width + "px";
+    this.rightBottom_.style.top = (yPos + (!this._is_ie ? 1 : 0)) + "px";
+    this.rightBottom_.style.left = rightX + "px";
     
-    this.size_ = {"width" : (rightX + this.popupTbl.rightTop.width), "height" : (cSize.height + this.popupTbl.leftTop.height + this.popupTbl.leftBottom.height) };
+    //container's size
+    this.size_ = new GSize(rightX + this.popupTbl.rightTop.width, yPos + this.popupTbl.leftBottom.height);
     this.container_.style.width = this.size_.width + "px";
     this.container_.style.height = this.size_.height + "px";
+    this.normalPopupCache_ = this.container_.innerHTML;
+    
+    this.beforeNormalPopupText_ = text;
+  } else if (force === true) {
+    this.container_.innerHTML = this.normalPopupCache_;
   }
   
   var pxPos = this.map_.fromLatLngToDivPixel(this.latlng_);
   this.container_.style.left =  pxPos.x + "px";
   this.container_.style.top = (pxPos.y - this.size_.height) + "px";
-  
-  this.beforeNormalPopupText_ = text;
 };
 
 /**
@@ -443,7 +483,7 @@ PopupMarker.prototype.setChartBgColor = function (bgColor) {
  * @ignore
  */
 PopupMarker.prototype.redrawChartImg_ = function (text) {
-
+  text = text.toString();
   this.chart_.shapeStyle = "bb";
   this.chart_.textColor = this.chart_.textColor || "000000";
   this.chart_.bgColor = this.chart_.bgColor || "FFFFFF";
@@ -473,18 +513,10 @@ PopupMarker.prototype.redrawChartImg_ = function (text) {
   }
   
   var pxPos = this.map_.fromLatLngToDivPixel(this.latlng_);
-  
-  if (this.beforeParams === params) {
-    //re-calcurate popup's position
-    var imgHeight = parseInt(this.chartImg_.firstChild.offsetHeight, 10);  //for IE
-    this.container_.style.left =  pxPos.x + "px";
-    this.container_.style.top = (pxPos.y - imgHeight) + "px";
-    return;
-  }
   var dummyImg = new Image();
   dummyImg.src = "http://chart.apis.google.com/chart?" + params;
   var this_  = this;
-  var is_ie_  = this.isIE_();
+  var is_ie_  = this._is_ie;
   var limitCnt = 100;
   var redraw = function () {
     limitCnt--;
@@ -506,13 +538,13 @@ PopupMarker.prototype.redrawChartImg_ = function (text) {
       this_.container_.style.top = (pxPos.y - this_.size_.height) + "px";
       this_.container_.style.width = this_.size_.width + "px";
       this_.container_.style.height = this_.size_.height + "px";
+      this_.beforeParams = params;
     } else {
       var own = arguments.callee;
       setTimeout(own, 10);
     }
   };
   
-  this.beforeParams = params;
   
   redraw();
 };
@@ -538,37 +570,53 @@ PopupMarker.prototype.isNull = function (value) {
 
 /**
  * @private
- * @desc return size of html elements
+ * @desc return size and html elements
  * @param html : html elements
- * @return GSize
+ * @return {ele : html elements, size: totalSize}
  */
-PopupMarker.prototype.getHtmlSize_ = function (html) {
-  
-  var mapContainer = this.map_.getContainer();
+
+PopupMarker.prototype.getTextCanvas_ = function (html) {
+  html = html.toString();
+  var layer = this.map_.getContainer();
+  var textContainer_ = document.createElement("div");
+  textContainer_.style.color = "#" + this.color_;
+  layer.appendChild(textContainer_);
   var onlineHTMLsize_ = function (text) {
     var dummyTextNode = document.createElement("span");
+    textContainer_.appendChild(dummyTextNode);
     dummyTextNode.innerHTML = text;
-    dummyTextNode.style.display = "inline";
-    mapContainer.appendChild(dummyTextNode);
+    var children = dummyTextNode.getElementsByTagName("*");
+    for (var i = 0; i < children.length; i++) {
+      if (children[i].nodeType === 1) {
+        children[i].style.margin = 0;
+      }
+    }
+    dummyTextNode.style.whiteSpace = "nowrap";
     
     var size = {};
     size.width = dummyTextNode.offsetWidth;
     size.height = dummyTextNode.offsetHeight;
+    dummyTextNode.style.display = "block";
     
-    mapContainer.removeChild(dummyTextNode);
     return size;
   };
-  
+
   var ret;
   var lines = html.split(/\n/i);
   var totalSize = new GSize(1, 1); // "1" is margin
   for (var i = 0; i < lines.length; i++) {
     ret = onlineHTMLsize_(lines[i]);
-    totalSize.width += ret.width;
+    if (ret.width > totalSize.width) {
+      totalSize.width = ret.width;
+    }
     totalSize.height += ret.height;
   }
-  return totalSize;
+  textContainer_.style.width = totalSize.width + "px";
+  textContainer_.style.height = totalSize.height + "px";
+  layer.removeChild(textContainer_);
+  return {ele : textContainer_, size: totalSize};
 };
+
 
 /**
  * @private
@@ -578,6 +626,7 @@ PopupMarker.prototype.makeImgDiv_ = function (imgSrc, params) {
   var imgDiv = document.createElement("div");
   imgDiv.style.position = "absolute";
   imgDiv.style.overflow = "hidden";
+  
   if (params.width) {
     imgDiv.style.width = params.width + "px";
   }
@@ -585,8 +634,9 @@ PopupMarker.prototype.makeImgDiv_ = function (imgSrc, params) {
     imgDiv.style.height = params.height + "px";
   }
   
+  
   var img = null;
-  if (this.isIE_() === false) {
+  if (!this._is_ie || this._is_ie8) {
     img = new Image();
     img.src = imgSrc;
   } else {
@@ -606,6 +656,7 @@ PopupMarker.prototype.makeImgDiv_ = function (imgSrc, params) {
   return imgDiv;
 };
 
+
 /**
  * @private
  * @desc      create div element into fill color with #CCCCFF
@@ -614,7 +665,7 @@ PopupMarker.prototype.fillDiv_ = function (params) {
   
   var bgDiv = document.createElement("div");
   bgDiv.style.position = "absolute";
-  bgDiv.style.backgroundColor = "#CCCCFF";
+  bgDiv.style.backgroundColor = "#" + this.bgcolor_;
   bgDiv.style.fontSize = "1px";
   bgDiv.style.lineHeight = "1px";
   bgDiv.style.overflow = "hidden";
@@ -627,11 +678,8 @@ PopupMarker.prototype.fillDiv_ = function (params) {
 
 /**
  * @private
- * @desc      detect IE
- * @param     none
- * @return    true  :  blowser is Interner Explorer
- *            false :  blowser is not Interner Explorer
+ * @desc      return z-index for marker
  */
-PopupMarker.prototype.isIE_ = function () {
-  return (navigator.userAgent.toLowerCase().indexOf('msie') !== -1) ? true : false;
+PopupMarker.prototype.getZIndex = function (lat) {
+  return this.opts_.zIndexProcess ? this.opts_.zIndexProcess(this) : GOverlay.getZIndex(lat);
 };
