@@ -579,7 +579,7 @@ function Cluster(markerClusterer) {
     if (mz === null) {
       mz = map_.getCurrentMapType().getMaximumResolution();
     }
-    if (zoom_ >= mz || this.getTotalMarkers() === 1) {
+    if (zoom_ > mz || this.getTotalMarkers() === 1) {
 
       // If current zoom level is beyond the max zoom level or the cluster
       // have only one marker, the marker(s) in cluster will be showed on map.
