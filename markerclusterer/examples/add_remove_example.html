@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>MarkerClusterer Example </title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q&sensor=false" type="text/javascript"></script>
+    <script type="text/javascript" src="data.json"></script>
+    <script type="text/javascript">
+      document.write('<script type="text/javascript" src="../src/markerclusterer' + (document.location.search.indexOf('packed') > -1 ? '_packed' : '') + '.js"><' + '/script>');
+    </script>
+    <script type="text/javascript">
+	  markers = [];
+	  markerCluster = null;
+	  latlng = new GLatLng(39.91, 116.38);
+	  icon = new GIcon(G_DEFAULT_ICON);
+	  
+	
+      function initialize() {
+        if(GBrowserIsCompatible()) {
+          var map = new GMap2(document.getElementById('map'));
+          map.setCenter(new GLatLng(39.91, 116.38), 10);
+          map.addControl(new GLargeMapControl());
+          icon.image = "http://chart.apis.google.com/chart?cht=mm&chs=24x32&chco=FFFFFF,008CFF,000000&ext=.png";
+          
+		  for (var i = 0; i < 3; ++i) {
+            var marker = new GMarker(latlng, {icon: icon});
+            markers.push(marker);
+          }
+          markerCluster = new MarkerClusterer(map, markers);
+        }
+      }
+	  
+	  function remove() {
+		var marker = markers.pop();
+		if (marker) {
+		  markerCluster.removeMarker(marker);
+		} return false;
+	  }
+	  
+	  function add(nodraw) {
+		var marker = new GMarker(latlng, {icon: icon});
+		markers.push(marker);
+		markerCluster.addMarker(marker, nodraw);
+		return false;
+      }
+     
+    </script>
+  </head>
+  <body onload="initialize()" onunload="GUnload()">
+    <h3>An add remove example of MarkerClusterer (3 markers initially)</h3>
+    <p><a href="?packed">Packed</a>&nbsp;|&nbsp;<a href="?">Unpacked</a> version of the script.</p>
+	<a href="#" onclick="add(false)">Add a marker and redraw</a>
+    <a href="#" onclick="add(true)">Add a marker without redraw</a>
+	<a href="#" onclick="remove()">Remove a marker</a>
+    <div id="map" style="width:600px;height:400px;"></div>
+  </body>
+</html>

@@ -596,7 +596,7 @@ function Cluster(markerClusterer) {
       if (clusterMarker_ !== null) {
         clusterMarker_.hide();
       }
-    } else {
+    } else if (this.getTotalMarkers() > 1) {
       // Else add a cluster marker on map to show the number of markers in
       // this cluster.
       for (i = 0; i < markers_.length; ++i) {
@@ -604,15 +604,15 @@ function Cluster(markerClusterer) {
           markers_[i].marker.hide();
         }
       }
+      var sums = markerClusterer_.getCalculator()(this.getRealMarkers());
       if (clusterMarker_ === null) {
-
-        var sums = markerClusterer_.getCalculator()(this.getRealMarkers());
         clusterMarker_ = new ClusterMarker_(center_, sums, markerClusterer_.getStyles(), markerClusterer_.getGridSize_());
         map_.addOverlay(clusterMarker_);
       } else {
         if (clusterMarker_.isHidden()) {
           clusterMarker_.show();
         }
+        clusterMarker_.setSums(sums);
         clusterMarker_.redraw(true);
       }
     }
@@ -684,11 +684,8 @@ function ClusterMarker_(latlng, sums, styles, padding) {
     index = styles.length;
   }*/
   var index = sums.index;
-  this.url_ = styles[index - 1].url;
-  this.height_ = styles[index - 1].height;
-  this.width_ = styles[index - 1].width;
-  this.textColor_ = styles[index - 1].opt_textColor;
-  this.anchor_ = styles[index - 1].opt_anchor;
+  this.useStyle(styles[index-1]);
+  this.styleDirty_ = false;
   this.latlng_ = latlng;
   this.index_ = index;
   this.styles_ = styles;
@@ -700,16 +697,58 @@ function ClusterMarker_(latlng, sums, styles, padding) {
 ClusterMarker_.prototype = new GOverlay();
 
 /**
+ * Populates style dependant fields given a particular style.
+ * @private
+ */
+ClusterMarker_.prototype.useStyle = function(style) {
+  this.url_ = style.url;
+  this.height_ = style.height;
+  this.width_ = style.width;
+  this.textColor_ = style.opt_textColor;
+  this.anchor_ = style.opt_anchor;
+};
+
+/**
  * Initialize cluster marker.
  * @private
  */
 ClusterMarker_.prototype.initialize = function (map) {
   this.map_ = map;
   var div = document.createElement("div");
-  var latlng = this.latlng_;
-  var pos = map.fromLatLngToDivPixel(latlng);
+  var latlng = this.latlng_;  
+  var pos = this.getPosFromLatLng(latlng);  
+  div.style.cssText = this.createCss(pos);
+  div.innerHTML = this.text_;
+  map.getPane(G_MAP_MAP_PANE).appendChild(div);
+  var padding = this.padding_;
+  GEvent.addDomListener(div, "click", function () {
+    var pos = map.fromLatLngToDivPixel(latlng);
+    var sw = new GPoint(pos.x - padding, pos.y + padding);
+    sw = map.fromDivPixelToLatLng(sw);
+    var ne = new GPoint(pos.x + padding, pos.y - padding);
+    ne = map.fromDivPixelToLatLng(ne);
+    var zoom = map.getBoundsZoomLevel(new GLatLngBounds(sw, ne), map.getSize());
+    map.setCenter(latlng, zoom);
+  });
+  this.div_ = div;
+};
+
+/**
+ * Returns position to place the div depending on the latlong.
+ * @private
+ */
+ClusterMarker_.prototype.getPosFromLatLng = function(latlng) {
+  var pos = this.map_.fromLatLngToDivPixel(latlng);
   pos.x -= parseInt(this.width_ / 2, 10);
   pos.y -= parseInt(this.height_ / 2, 10);
+  return pos;
+};
+
+/**
+ * Returns the css style string to be applied to the div given its position.
+ * @private
+ */
+ClusterMarker_.prototype.createCss = function(pos) {
   var mstyle = "";
   if (document.all) {
     mstyle = 'filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="' + this.url_ + '");';
@@ -732,23 +771,9 @@ ClusterMarker_.prototype.initialize = function (map) {
     mstyle += 'width:' + this.width_ + 'px;text-align:center;';
   }
   var txtColor = this.textColor_ ? this.textColor_ : 'black';
-
-  div.style.cssText = mstyle + 'cursor:pointer;top:' + pos.y + "px;left:" +
+  return mstyle + 'cursor:pointer;top:' + pos.y + "px;left:" +
       pos.x + "px;color:" + txtColor +  ";position:absolute;font-size:11px;" +
       'font-family:Arial,sans-serif;font-weight:bold';
-  div.innerHTML = this.text_;
-  map.getPane(G_MAP_MAP_PANE).appendChild(div);
-  var padding = this.padding_;
-  GEvent.addDomListener(div, "click", function () {
-    var pos = map.fromLatLngToDivPixel(latlng);
-    var sw = new GPoint(pos.x - padding, pos.y + padding);
-    sw = map.fromDivPixelToLatLng(sw);
-    var ne = new GPoint(pos.x + padding, pos.y - padding);
-    ne = map.fromDivPixelToLatLng(ne);
-    var zoom = map.getBoundsZoomLevel(new GLatLngBounds(sw, ne), map.getSize());
-    map.setCenter(latlng, zoom);
-  });
-  this.div_ = div;
 };
 
 /**
@@ -775,11 +800,15 @@ ClusterMarker_.prototype.redraw = function (force) {
   if (!force) {
     return;
   }
-  var pos = this.map_.fromLatLngToDivPixel(this.latlng_);
-  pos.x -= parseInt(this.width_ / 2, 10);
-  pos.y -= parseInt(this.height_ / 2, 10);
-  this.div_.style.top =  pos.y + "px";
-  this.div_.style.left = pos.x + "px";
+  var pos = this.getPosFromLatLng(this.latlng_);
+  if (this.styleDirty_) {
+    this.styleDirty_ = false;
+    this.useStyle(this.styles_[this.index_-1]);
+    this.div_.style.cssText = this.createCss(pos);
+  } else {
+    this.div_.style.top =  pos.y + "px";
+    this.div_.style.left = pos.x + "px";
+  }
 };
 
 /**
@@ -802,4 +831,20 @@ ClusterMarker_.prototype.show = function () {
  */
 ClusterMarker_.prototype.isHidden = function () {
   return this.div_.style.display === "none";
+};
+
+/**
+ * Sets this cluster marker sums value, updates its text and marks the style for updating on next redraw if necessary.
+ * @param {Object} sums text and image to show:
+ *   {String} text Text to show.
+ *   {Number} index Image index by styles.
+ */
+ClusterMarker_.prototype.setSums = function (sums) {
+  if (sums.index_ !== this.index_) {
+    this.styleDirty_ = true;
+  }
+  this.sums_ = sums;
+  this.text_ = sums.text;
+  this.index_ = sums.index;
+  this.div_.innerHTML = sums.text;
 };
