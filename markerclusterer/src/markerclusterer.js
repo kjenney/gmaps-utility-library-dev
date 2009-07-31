@@ -107,7 +107,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
     }
     var stylesCount = this.getStyles().length;
     if (stylesCount < index) {
-      index = this.getStyles.length;
+      index = stylesCount;
     }
     return {
       'text': count,
@@ -840,7 +840,7 @@ ClusterMarker_.prototype.isHidden = function () {
  *   {Number} index Image index by styles.
  */
 ClusterMarker_.prototype.setSums = function (sums) {
-  if (sums.index_ !== this.index_) {
+  if (sums.index !== this.index_) {
     this.styleDirty_ = true;
   }
   this.sums_ = sums;
