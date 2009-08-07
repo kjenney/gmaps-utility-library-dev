@@ -130,7 +130,10 @@
                   // avoid turning in wrong clockwise.
                   angle -=360;
                 }
-                stepText+='('+angle+')('+ a.getYaw()+')';
+                if (a.getYaw() - angle > 180) {
+                  angle +=360;
+                }
+                //stepText+='('+angle+')('+ a.getYaw()+')';
                 if (!turning) {
                   map.openInfoWindow(latlng, new InfoWindowOptions({
                     contentHTML: stepText,
