@@ -11,7 +11,7 @@
                 map = mp;
                 map.addEventListener('mapevent_mappreinitialize', onMapPreinitialize);
                 map.addEventListener('mapevent_mapready', onMapReady);
-              });
+              }, {targetVersion:'10.0.0'});
             }
             
             function onMapPreinitialize(e) {
