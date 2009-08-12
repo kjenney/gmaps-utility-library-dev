@@ -58,11 +58,8 @@
    * @name MapBridgeOptions
    * @class This class represents the optional parameter passed into <code>MapBridge.createMap</code>.
    * @property {String} [swf] The customized swf file that may compiled with more classes.
-   *                      Default value is the MapBridge.swf in the same folder as the JS.
+   *                      Default value is the MapBridge_9(or 10).swf in the same folder as the JS.
    *                      The swf class must contains 'MapBridge' in its name if it extends MapBridge.as.
-   * @property {String} [targetVersion] The target version of flash player. The lib will load the default swfs 
-   *     based on the major version number, if the actual swf path is not set. 
-   *    Default is 9.0.0. Set targetVersion = 10 may result a smoother rendering in Map3D.
    */
   /**
    * Static methods to create a flash map instance. After map instance is created,
@@ -96,11 +93,12 @@
     opt_bridge = opt_bridge ||
     {};
     var swfUrl = opt_bridge.swf;
-    var tarVersion = opt_bridge.targetVersion || "9.0.0";
+    var playerVersion = swfobject.getFlashPlayerVersion(); // returns a JavaScript object
+    var majorVersion = playerVersion.major < 9 ? 9 : playerVersion.major;
     if (!swfUrl) {
-      swfUrl = ps.path + 'MapBridge_' + parseInt(tarVersion, 10) + '.swf';
+      swfUrl = ps.path + 'MapBridge_' + majorVersion + '.swf';
     }
-    swfobject.embedSWF(swfUrl, embedNode.id, node.offsetWidth, node.offsetHeight, tarVersion, false, flashvars);
+    swfobject.embedSWF(swfUrl, embedNode.id, node.offsetWidth, node.offsetHeight, '' + majorVersion + '.0.0', false, flashvars);
     FABridge.addInitializationCallback(bridgeName, function () {
       var bridge = FABridge[bridgeName];
       var map = bridge.root();
