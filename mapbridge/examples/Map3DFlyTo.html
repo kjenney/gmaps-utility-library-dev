@@ -11,7 +11,7 @@
                 map = mp;
                 map.addEventListener('mapevent_mappreinitialize', onMapPreinitialize);
                 map.addEventListener('mapevent_mapready', onMapReady);
-              }, {targetVersion:'10.0.0'});
+              });
             }
             
             function onMapPreinitialize(e) {
@@ -59,7 +59,7 @@
     </head>
     <body onload="init()">
         <form action="#" onsubmit="doFlyTo(); return false">
-            Enter Address:<input id="address" type="text" value="Coney Island, Brooklyn, NY" size="40"/><input type="button" value="Search" onclick="doFlyTo()"/>
+            Enter Address:<input id="address" type="text" value="Coney Island, Brooklyn, NY" size="40"/><input type="button" value="Search" onclick="doFlyTo();"/>
         </form>
         <div id="map_canvas" style="width:100%;height:95%">
         </div>
