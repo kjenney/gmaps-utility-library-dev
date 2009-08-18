@@ -76,6 +76,7 @@
  * @property {Array of Number} [opt_anchor] Anchor for label text, like [24, 12].
  *    If not set, the text will align center and middle.
  * @property {String} [opt_textColor="black"] Text color.
+ * @property {Number} [opt_textSize=11] Text size in px.
  */
 
 /**
@@ -312,7 +313,7 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
 
   this.removeMarker = function (marker) {
     for (var i = 0; i < clusters_.length; ++i) {
-      if (clusters_[i].removeMarker(marker)) {
+      if (clusters_[i] && clusters_[i].removeMarker(marker)) {
         clusters_[i].redraw_();
         return;
       }
@@ -746,6 +747,7 @@ ClusterMarker_.prototype.useStyle = function(style) {
   this.width_ = style.width;
   this.textColor_ = style.opt_textColor;
   this.anchor_ = style.opt_anchor;
+  this.textSize_ = style.opt_textSize;
 };
 
 /**
@@ -815,8 +817,10 @@ ClusterMarker_.prototype.createCss = function(pos) {
     mstyle += 'width:' + this.width_ + 'px;text-align:center;';
   }
   var txtColor = this.textColor_ ? this.textColor_ : 'black';
+  var txtSize = this.textSize_ ? this.textSize_ : 11;
+  
   return mstyle + 'cursor:pointer;top:' + pos.y + "px;left:" +
-      pos.x + "px;color:" + txtColor +  ";position:absolute;font-size:11px;" +
+      pos.x + "px;color:" + txtColor +  ";position:absolute;font-size:" + txtSize + "px;" +
       'font-family:Arial,sans-serif;font-weight:bold';
 };
 
