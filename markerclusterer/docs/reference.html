@@ -92,6 +92,16 @@ and regroup them into new clusters.</p>
               </tr>
             
               <tr class="even">
+                <td><code>getParentCluster(<span class="type">marker:GMarker</span>)</code></td>
+                
+                  
+                    <td><code>Cluster</code></td>
+                  
+                
+                <td>Returns the cluster containing this marker, if any.</td>
+              </tr>
+            
+              <tr class="odd">
                 <td><code>getStyles()</code></td>
                 
                   
@@ -101,7 +111,7 @@ and regroup them into new clusters.</p>
                 <td>Get cluster marker images of this marker cluster. Mostly used by <code>Cluster</code></td>
               </tr>
             
-              <tr class="odd">
+              <tr class="even">
                 <td><code>getTotalClusters()</code></td>
                 
                   
@@ -111,7 +121,7 @@ and regroup them into new clusters.</p>
                 <td>Get total number of clusters.</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>getTotalMarkers()</code></td>
                 
                   
@@ -119,6 +129,16 @@ and regroup them into new clusters.</p>
                   
                 
                 <td>Get total number of markers.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>isZoomOnClick()</code></td>
+                
+                  
+                    <td><code>Boolean</code></td>
+                  
+                
+                <td>Get boolean value representing whether default behaviour of zooming on cluster upon clicking should be used.</td>
               </tr>
             
               <tr class="odd">
@@ -228,6 +248,17 @@ without cluster.</td>
 The array should be ordered according to increasing cluster size,
 with the style for the smallest clusters first, and the style for the
 largest clusters last.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>zoomOnClick</code></td>
+                
+                  
+                    <td><code>Boolean</code></td>
+                  
+                
+                <td>Whether default behaviour of zooming on a cluster
+upon clicking should be used.  The default value is <code>true</code>.</td>
               </tr>
             
           </tbody>
