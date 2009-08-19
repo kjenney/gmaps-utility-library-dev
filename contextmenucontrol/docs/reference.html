@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>ContextMenuControl V1.0 Reference</title>
+<link rel="stylesheet" type="text/css" href="http://code.google.com/css/dev_docs.css"></link>
+</head>
+<body>
+<h2>
+<a name="ContextMenuControl"></a>class ContextMenuControl</h2>
+<p>
+This class lets you add a context menu to the map which mimics the context menu of Google Maps. All currently available six items of the context menu will be shown by default, i.e. when no options are specified. By specifying additional options any particular item can be excluded. This control extends <a href="http://www.google.com/apis/maps/documentation/reference.html#GControl" target="_blank">GControl</a>.
+</p><p>
+Note: ContextMenuControl doesn't work in Opera because Opera doesn't support the oncontextmenu event, and right mouse clicks aren't accessible with Javascript - neither mousedowns nor mouseups. </p>
+
+<h3>Constructor</h3>
+<table summary="class ContextMenuControl - Constructor">
+<tbody><tr>
+<th>Constructor</th>
+<th>Description</th>
+</tr>
+<tr class="odd">
+<td class="code">ContextMenuControl(<span class="type" title="type:  ContextMenuControlOptions">opt_options</span>)</td>
+<td>
+Creates a ContextMenuControl with the specified option hash (optional).
+</td>
+</tr>
+</tbody></table>
+
+
+<h2>
+<a name="ContextMenuControlOptions"></a>class ContextMenuControlOptions</h2>
+<p>Instances of this class are used in the <code><span class="nomatch">opts_options</span></code> argument to the constructor of the
+<code><span class="xref"><a href="#ContextMenuControl">ContextMenuControl</a></span></code> class. There is no constructor for this class. 
+Instead, this class is instantiated as a javascript object literal.</p> 
+
+
+<h3>Optional Properties</h3>
+<p>Each property is optional and - if used - should be severally set to false. The value true causes the same result as if no particular option was specified, i.e. the item will be shown.</p>
+
+<table style="width: 90%;" summary="class ContextMenuControlOptions - Properties">
+<tbody><tr>
+<th>Properties</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+<tr class="odd">
+<td class="code">dirsFrom </td>
+<td class="code"> false</td>
+<td>If set to false, ContextMenuControl's item 'Directions from here' will not be shown.</td>
+
+</tr>
+<tr class="even">
+<td class="code">dirsTo</td>
+<td class="code"> false</td>
+<td>If set to false, ContextMenuControl's item 'Directions to here' will not be shown.
+ </td>
+
+</tr>
+<tr class="even">
+<td class="code">zoomIn</td>
+<td class="code"> false</td>
+<td>If set to false, ContextMenuControl's item 'Zoom In' will not be shown.
+ </td>
+</tr>
+<tr class="even">
+<td class="code">zoomOut</td>
+<td class="code"> false</td>
+<td>If set to false, ContextMenuControl's item 'Zoom Out' will not be shown.
+ </td>
+</tr>
+<tr class="even">
+<td class="code">centerMap</td>
+<td class="code"> false</td>
+<td>If set to false, ContextMenuControl's item 'Center Map here' will not be shown.
+ </td>
+</tr>
+<tr class="even">
+<td class="code">whatsHere</td>
+<td class="code"> false</td>
+<td>If set to false, ContextMenuControl's item 'What's here?' will not be shown.
+ </td>
+
+</tr>
+</tbody>
+</table>
+
+<!--
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+
+<script type="text/javascript">
+_uacct = "UA-964209-4";
+urchinTracker();
+</script>
+
+-->
+
+</body>
+</html>
