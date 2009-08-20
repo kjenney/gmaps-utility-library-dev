@@ -1,5 +1,5 @@
 /*
-* ExtMapTypeControl Class v1.2 
+* ExtMapTypeControl Class v1.3 
 *  Copyright (c) 2007, Google 
 *  Author: Pamela Fox, others
 * 
@@ -76,7 +76,7 @@ ExtMapTypeControl.prototype.initialize = function(map) {
     trafficDiv.firstChild.style.cssFloat = "left";
     trafficDiv.firstChild.style.styleFloat = "left";
     // Sending true makes overlay hidden by default
-    me.trafficInfo = new GTrafficOverlay(true);
+    me.trafficInfo = new GTrafficOverlay({hide:true});
     me.trafficInfo.hidden = true;
     // We have to do this so that we can sense if traffic is in view
     GEvent.addListener(me.trafficInfo, "changed", function(hasTrafficInView) {
