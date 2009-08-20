@@ -52,8 +52,9 @@ function ContextMenuControl(opt_opts) {
 
 /*
  * Extends GOverlay class from the Google Maps API
+ *  Second param (selectable) should be set to true.
  */
-ContextMenuControl.prototype = new GControl();
+ContextMenuControl.prototype = new GControl(false, true);
 
 /*
  * Is called by GMap2's addOverlay method.
