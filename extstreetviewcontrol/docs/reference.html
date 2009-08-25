@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>ExtStreetviewControl v1.0 Reference</title>
+    <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
+    <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
+  </head>
+  <body>
+    <h1>ExtStreetviewControl</h1>
+    <p>
+This library creates a collapsible StreetView display in the corner of the main map.
+And the ExtStreetviewControl adds a marker for reference location on the main map.
+You can draggble it and change location main map and StreetView display location.
+Note: Unlike other controls, you can only place this control in the bottom right corner of the map (G_ANCHOR_BOTTOM_RIGHT).</p>
+    <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
+    
+      <h2><a name="ExtStreetviewControl"></a>class ExtStreetviewControl</h2>
+      <p></p>
+      
+        <h3>Constructor</h3>
+        <table summary="class ExtStreetviewControl - Constructor" width="90%">
+          
+          <tbody>
+            <tr>
+              <th>Constructor</th>
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>ExtStreetviewControl(<span class="type">opt_opts?:ExtStreetviewOptions</span>)</code></td>
+                
+                <td>Creates a control and a marker with options specified in <code><a href="reference.html#ExtStreetviewOptions">ExtStreetviewOptions</a></code>.</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3>Methods</h3>
+        <table summary="class ExtStreetviewControl - Methods" width="90%">
+          
+          <tbody>
+            <tr>
+              <th>Methods</th>
+              
+                
+                  <th>Return&nbsp;Value</th>
+                
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>getMarker()</code></td>
+                
+                  
+                    <td><code>GMarker</code></td>
+                  
+                
+                <td>Get marker for StreetviewControl</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>getPov()</code></td>
+                
+                  
+                    <td><code>GPov</code></td>
+                  
+                
+                <td>Get current Panorama View</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>setLocationAndPOV(<span class="type">latlng:GLatLng</span>, <span class="type">pov?:GPov</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Set location of panorama and marker, and view of panorama.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>toString()</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>Return this control's name</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+    
+      <h2><a name="ExtStreetviewOptions"></a>class ExtStreetviewOptions</h2>
+      <p>This class represents optional arguments to <code><a href="reference.html#ExtStreetviewControl">ExtStreetviewControl</a></code>. 
+  It has no constructor, but is instantiated as an object literal.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
+      
+        <h3>Properties</h3>
+        <table summary="class ExtStreetviewOptions - Properties" width="90%">
+          
+          <tbody>
+            <tr>
+              <th>Properties</th>
+              
+                
+                  <th>Type</th>
+                
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>latlng</code></td>
+                
+                  
+                    <td><code>GLatLng</code></td>
+                  
+                
+                <td>Specifies latlng of panorama.
+ If it is not set, then c gets center location of main map.  The default value is <code> null</code>.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>pov</code></td>
+                
+                  
+                    <td><code>GPov</code></td>
+                  
+                
+                <td>This property specifies  The default value is <code> {yaw : 0, pitch : 0, panoId : null}</code>.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>size</code></td>
+                
+                  
+                    <td><code>GSize</code></td>
+                  
+                
+                <td>Specifies control's size.  The default value is <code> GSize(300, 210)</code>.</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+    
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      _uacct = "UA-964209-4";
+      urchinTracker();
+    </script> 
+  </body>
+</html>
