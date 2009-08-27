@@ -1,72 +1,111 @@
 /**
- * @name SnapShotControl(tempolary class name)
+ * @name SnapShotControl
  * @version 1.0
+ * @author Masashi Katsumata
+ * @fileoverview 
+ * This library generates url of image with Google Static Maps API version 2.
+ * You can get it using by your map. It's really easy.
+ *
+ * This control can detect type of overlay that there are GMarker, GPolygon and GPolyline.
+ * And url string are optimized for short that followed map's status.
+ *
+ * You can also specifies parameters in the detail with contractor options or 
+ * some methods(likes setMapType). And markers can have extension parameters.
+ * There are "ssColor", "ssAlpha", "ssCharactor", "ssSize". If there are set paramters, then
+ * this controll followed your design. But, if there are not set, then this control
+ * can also detect marker's color, size, alphanumeric-charactor followed some
+ * naming habit. It can not detect marker's alpha.
+ * If you want to set marker's alpha, it sets into ssAlpha(between 0 to 1).
+ *
+ * For example, if image file name of marker's icon is "marker_greenA.png",
+ * then this control detects; ssColor is "green", ssCharactor is "A".
+ * And ssSize followed marker's dimension(width * height).
+ *
+ * Note that you should set "{@link useAutoDetectMarker} = false",
+ * when doen't want to this function.
+ *
+ * 
  */
 
-/*global GPolygon, GPolyline, GMarker, G_PHYSICAL_MAP, G_HYBRID_MAP, G_SATELLITE_MAP, GLatLngBounds, _mHL  */
+/**
+ * @name SnapShotControlOptions
+ * @class This class represents optional arguments to {@link SnapShotControl}. 
+ *  It has no constructor, but is instantiated as an object literal.
+ * @property {String} [buttonLabelHtml = "Say cheese!"] Specify label's html of snapshot button.
+ * @property {String} [maptype = ""] Specify maptype name.
+ *  You can choice one from "roadmap", "satellite", "hybrid", "terrain" or not set("").
+ *  If it is not set, then the library detects same maptype with main map.
+ * @property {Boolean} [hidden = false] Specify visibility when adds control to the map.
+ *  If it is set true, the snapshot button is hidden.
+ * @property {String} [language = ""] Specify image's language for map's copyright.
+ *  If it is not set, then this library detects same language with main map.
+ * @property {String} [format = "gif"] Specify image's format.
+ *  You can choice one from "gif", "jpg", "jpg-baseline", "png8", "png32".
+ * @property {Boolean} [mobile = false] Specify about using mobile map type.
+ *  If set to true, then this library specifies "mobile=true" into image's url.
+ *  This property is ignored, when the {@link style} property is not set "roadmap".
+ * @property {Boolean} [usePolylineEncode = false] Specify about using polyline/polygon encode.
+ * @property {Boolean} [useAutoDetectMarker = true] If it is set true, this control auto detects
+ *  marker's color, alphanumeric-charactor and size followed famous naming habit of images.
+ */
+
+/*global GPolygon, GPolyline, GMarker, G_PHYSICAL_MAP, G_HYBRID_MAP, G_SATELLITE_MAP, GLatLngBounds, _mHL, GLanguage  */
 
 
 /**
+ * @desc Creates a control with options specified in {@link SnapShotControlOptions}.
+ * @param {SnapShotControlOptions} [opt_opts] Named optional arguments.
  * @constructor
- */    
-function SnapShotControl() {
-  this.cameraImgSrc = "http://www.google.com/mapfiles/cb/camera.png";
+ */
+function SnapShotControl(opt_opts) {
+
   this.transImgSrc = "http://www.google.com/mapfiles/transparent.png";
   
   var container = undefined;
-  var opts_ = {};
   var s = 1, idx = 1;
   var obj;
-  //detect constructor params
-  if (arguments.length > 0) {
-    if (!this.isNull(arguments[0].style)) {
-      container = arguments[0];
-      
-      if (arguments.length === 2) {
-        opts_ = arguments[1];
-      }
-      
+  if (opt_opts === undefined) {
+    opt_opts = {};
+  }
+  
+  this.buttonLabel_ = opt_opts.buttonLabelHtml || "Say cheese!";
+  this.maptype_ = opt_opts.maptype || "";
+  this.size_ = opt_opts.size || "";
+  this.isHidden_ = opt_opts.hidden || false;
+  this.hl_ = opt_opts.language || "";
+  if (!this.hl_) {
+    if (typeof GLanguage === "object") {
+      this.hl_ = GLanguage.getLanguageCode();
     }
-    
   }
+  this.imgFormat_ = opt_opts.format || "gif";
+  this.isMobile_ = opt_opts.mobile || false;
+  this.usePolylineEncode_ = opt_opts.usePolylineEncode || false;
+  this.useAutoDetectMarker_ = opt_opts.useAutoDetectMarker || true;
   
-  this.snapContainer = container;
-  
-  this.snapContainerImg = new Image();
-  this.snapContainerImg.src = this.transImgSrc;
-  if (!this.isNull(container)) {
-    container.appendChild(this.snapContainerImg);
-  } else {
-    opts_.hidden = true;
-  }
-  
-  this.buttonLabel_ = opts_.buttonLabel || "shot!";
-  this.maptype_ = opts_.maptype || "";
-  this.size_ = opts_.size || "";
-  this.isHidden_ = opts_.hidden || false;
-  this.hl_ = opts_.hl || _mHL;
-  this.hl_ = this.hl_ || "";
-  this.frame_ = opts_.frame || false;
-  this.imgFormat_ = opts_.format || "gif";
-  
-  this.divTbl = {};
-  this.divTbl.container = { "left" : 0, "top" : 0, "width" : 60, "height" : 26, "bgcolor" : "white"};
-  this.divTbl.cameraImg = { "left" : 2, "top" : 2, "width" : 27, "height" : 22};
-  this.divTbl.camera =    { "left" : 1, "top" : 1};
-  this.divTbl.buttonLabel = { "left" : 30, "top" : 1};
-  
-  //find api key
+  //find api key, google server and sensor
   var scripts = document.getElementsByTagName("script");
   var key = "";
+  var sensor = false;
+  var server = "";
   for (var i = 0;i < scripts.length; i++) {
     var scriptNode = scripts[i];
     if (scriptNode.src.match(/^http:\/\/maps\.google\..*?&(?:amp;)?key=([^\&]+)/gi)) {
       key = RegExp.$1;
+      
+      scriptNode.src.match(/^http:\/\/maps\.google\..*?&(?:amp;)?sensor=([^\&]+)/gi);
+      sensor = RegExp.$1;
+      
+      scriptNode.src.match(/^http:\/\/(maps\.google\.[^\/]+)/gi);
+      server = RegExp.$1;
+      
       break;
     }
   }
   this.apiKey_ = key;
-
+  this.sensor_ = sensor || false;
+  this.server_ = server || "maps.google.com";
+  this.mapImgSize = {width : 0, height : 0};
 }
 
 
@@ -74,7 +113,6 @@ function SnapShotControl() {
  * @private
  */
 SnapShotControl.prototype = new GControl();
-
 
 /**
  * @desc Initialize the map control
@@ -85,43 +123,43 @@ SnapShotControl.prototype.initialize = function (map) {
   this.polylines_ = [];
   this.markers_ = [];
 
-  var agt = navigator.userAgent.toLowerCase(this.divTbl.container);
-  
-  this._is_ie    = ((agt.indexOf("msie") !== -1) && (agt.indexOf("opera") === -1));
-  this._is_gecko = (agt.indexOf('gecko') !== -1);
-  this._is_opera = (agt.indexOf("opera") !== -1);
-  
-  //calculating of the button label
-  var text = document.createElement("span");
-  text.appendChild(document.createTextNode(this.buttonLabel_));
-  text.style.position = "absolute";
-  text.style.left = this.divTbl.buttonLabel.left + "px";
-  text.style.bottom = this.divTbl.buttonLabel.top + "px";
-  text.style.fontSize = "12px";
-  text.style.lineHeight = "12px";
-  
+  this.checkBrowserAgent();
+
+  var mapContainer = map.getContainer();
   
   // create container
-  var container = this.createDiv_(this.divTbl.container);
+  var container = this.createDiv_();
+  container.style.fontSize = "12px";
+  container.style.lineHeight = "15px";
   container.style.borderStyle = "solid";
   container.style.borderWidth = "1px";
-  container.style.borderColor = "white #b0b0b0 #b0b0b0 white";
+  container.style.borderColor = "black";
   container.style.color = "black";
+  container.style.backgroundColor = "white";
   container.style.cursor = "pointer";
+  container.style.whiteSpace = "nowrap";
   this._container = container;
 
-  //camera Img
-  var cameraImg = this.makeImgDiv_(this.cameraImgSrc, this.divTbl.cameraImg);
-  cameraImg.style.cursor = "pointer";
-  cameraImg.style.left = this.divTbl.camera.left + "px";
-  cameraImg.style.top = this.divTbl.camera.top + "px";
-  container.appendChild(cameraImg); 
-  
-  //button label
-  container.appendChild(text); 
+  //calculating of the button label
+  var btnSize = this.getHtmlSize(this.buttonLabel_);
+  if (this._is_gecko && this.buttonLabel_.match(/</)) {
+    btnSize.width += 3;
+    btnSize.height += 3;
+  }
+  var htmlContainer = container.cloneNode(false);
+  htmlContainer.style.padding = "1px";
+  htmlContainer.style.textAlign = "center";
+  htmlContainer.style.width = btnSize.width + "px";
+  htmlContainer.style.height = btnSize.height + "px";
+  htmlContainer.innerHTML = this.buttonLabel_; 
+  htmlContainer.style.borderColor = "white #b0b0b0 #b0b0b0 white";
+  container.appendChild(htmlContainer);
 
   // events
-  GEvent.bindDom(container, "click", this, this.getImage);
+  var this_ = this;
+  GEvent.bindDom(container, 'click', this, function () {
+    this_.showPopup();
+  });
   GEvent.bind(map, "addoverlay", this, this._addOverlay);
   GEvent.bind(map, "clearoverlays", this, this._clearOverlays);
   GEvent.bind(map, "removeoverlay", this, this._removeOverlay);
@@ -131,16 +169,30 @@ SnapShotControl.prototype.initialize = function (map) {
     this.isHidden_ = true;
   }
 
-  map.getContainer().appendChild(container);
+  mapContainer.appendChild(container);
   
   return container;
+};
+
+/**
+ * @desc Check browser agent
+ * @private
+ */
+SnapShotControl.prototype.checkBrowserAgent = function () {
+  var agt = navigator.userAgent.toLowerCase();
+  this._is_ie    = ((agt.indexOf("msie") !== -1) && (agt.indexOf("opera") === -1));
+  this._is_ie67  = (agt.indexOf("msie 6") !== -1 || agt.indexOf("msie 7") !== -1);
+  this._is_ie8   = (this._is_ie === true && this._is_ie67 === false);
+  this._is_gecko = (agt.indexOf("gecko") !== -1);
+  this._is_opera = (agt.indexOf("opera") !== -1);
+  this._is_chrome = (agt.indexOf("chrome") !== -1);
 };
 
 /**
  * @private
  */
 SnapShotControl.prototype._addOverlay = function (overlay) {
-  var i, pos;
+  var i, pos, imgSrc, color, imgSize, dimension;
   var polygonInfo = {};
   var polylineInfo = {};
   var markerInfo = {};
@@ -148,9 +200,12 @@ SnapShotControl.prototype._addOverlay = function (overlay) {
   switch (tmp) {
   case "GPolygon":
     polygonInfo.handle = overlay;
-    polygonInfo.color = overlay.color.replace("#", "0x");
-    polygonInfo.weight = overlay.weight;
-    polygonInfo.opacity = Math.floor(overlay.opacity * 255).toString(16);
+    polygonInfo.type = tmp;
+    polygonInfo.color = overlay.C[0].color.replace("#", "0x");
+    polygonInfo.fillcolor = overlay.color.replace("#", "0x");
+    polygonInfo.fillopacity = Math.floor(overlay.opacity * 255).toString(16);
+    polygonInfo.weight = overlay.C[0].weight;
+    polygonInfo.opacity = Math.floor(overlay.C[0].opacity * 255).toString(16);
     polygonInfo.vertexCount = overlay.getVertexCount();
     polygonInfo.vertexList = [];
     polygonInfo.drawFlagList = [];
@@ -163,6 +218,7 @@ SnapShotControl.prototype._addOverlay = function (overlay) {
 
   case "GPolyline":
     polylineInfo.handle = overlay;
+    polylineInfo.type = tmp;
     polylineInfo.color = overlay.color.replace("#", "0x");
     polylineInfo.weight = overlay.weight;
     polylineInfo.opacity = Math.floor(overlay.opacity * 255).toString(16);
@@ -178,7 +234,44 @@ SnapShotControl.prototype._addOverlay = function (overlay) {
       
   case "GMarker":
     markerInfo.handle = overlay;
+    markerInfo.type = tmp;
     
+    if (this.useAutoDetectMarker_) {
+      //Auto detect a character and color of marker.
+      imgSrc = overlay.getIcon().image;
+      if (imgSrc.match(/\/(?:(?:marker)|(?:icon))[\_\-]([a-z0-9]+)([a-z0-9])\.[a-z]+$/i)) {
+        color = this.normalizeColor_(RegExp.$1);
+        if (color && this.isNull(overlay.ssColor)) {
+          overlay.ssColor = color;
+        }
+        if (this.isNull(overlay.ssCharacter)) {
+          overlay.ssCharacter = RegExp.$2;
+        }
+      } else if (imgSrc.match(/marker([A-Z0-9])?\./i)) {
+        if (this.isNull(overlay.ssColor)) {
+          overlay.ssColor = "red";
+        }
+        if (!this.isNull(RegExp.$1) && this.isNull(overlay.ssCharacter)) {
+          overlay.ssCharacter = RegExp.$1;
+        }
+      }
+      
+      //size
+      if (this.isNull(overlay.ssSize)) {
+        imgSize = overlay.getIcon().iconSize;
+        dimension = imgSize.width * imgSize.height;
+        if (dimension < 200) {
+          overlay.ssSize = "tiny";
+          overlay.ssCharacter = "";
+        } else if (dimension < 420) {
+          overlay.ssSize = "mid";
+        } else if (dimension < 650) {
+          overlay.ssSize = "small";
+        } else {
+          overlay.ssSize = "";
+        }
+      }
+    }
     this.markers_.push(markerInfo);
     break;
   }
@@ -234,7 +327,6 @@ SnapShotControl.prototype._removeOverlay = function (overlay) {
 
 
 /**
- * @name show
  * @desc change visibility of the control to visible
  */
 SnapShotControl.prototype.show = function () {
@@ -243,7 +335,6 @@ SnapShotControl.prototype.show = function () {
 };
 
 /**
- * @name hide
  * @desc change visibility of the control to hidden
  */
 SnapShotControl.prototype.hide = function () {
@@ -252,8 +343,8 @@ SnapShotControl.prototype.hide = function () {
 };
 
 /**
- * @name isHidden
- * @desc return true when visibility of the control is hidden 
+ * @desc return true when visibility of the control is hidden
+ * @return {Boolean}
  */
 SnapShotControl.prototype.isHidden = function () {
   return this.isHidden_;
@@ -290,21 +381,130 @@ SnapShotControl.prototype.matchingTest = function (targetObject, matchClass) {
   return true;
 };
 
+/**
+ * @desc  Get new static map's image and show popup it.
+ * @param {GLatLng} [mapCenterPos] center location of image
+ */
+SnapShotControl.prototype.showPopup = function (mapCenterPos) {
+  var imgUrl = this.getImage(mapCenterPos);
+  var bodyEleSize;
+  var bodyEle;
+  bodyEle = document.getElementsByTagName("body")[0];
+  bodyEleSize = this.getPageSize_();
+  
+  var popupContainer = this.createDiv_({"left" : 0, "top" : 0, "width" : bodyEleSize.width, "height" : bodyEleSize.height});
+  popupContainer.style.backgroundColor = "black";
+  popupContainer.style.margin = 0;
+  popupContainer.style.padding = 0;
+  popupContainer.style.MozUserSelect = "none";
+  popupContainer.style.visibility = "hidden";
+  var time = new Date();
+  var eleID = "p" + time.getTime();
+  popupContainer.name = eleID;
+  popupContainer.id = eleID;
+  bodyEle.appendChild(popupContainer);
+  
+  var js = "var ele=document.getElementById(\"" + eleID + "\");" +
+           "ele.parentNode.removeChild(ele);" +
+           "ele=document.getElementById(\"tbl_" + eleID + "\");" +
+           "ele.parentNode.removeChild(ele);";
+
+  var tableHtml = "<table style='text-align;center;'>" +
+                  "<tbody>" +
+                  "<tr><td><center><img src='" + imgUrl + "' style='border:1px solid black;'></center></td></tr>" +
+                  "<tr><td><input type='text' style='width:" + this.mapImgSize.width + "px;' value='" + imgUrl + "'></td></tr>" +
+                  "<tr><td><center><input type='button' value='close' " +
+                  "onclick='javascript:" + js + "'></center></td></tr>" +
+                  "</tbody>" + 
+                  "</table>";
+
+
+  var tableHtmlSize = this.getHtmlSize(tableHtml);
+  var w, h;
+  w = tableHtmlSize.width + 10;
+  if (w < this.mapImgSize.width) {
+    w = this.mapImgSize.width + 10;
+  }
+  h = tableHtmlSize.height + 10;
+  if (h < this.mapImgSize.height) {
+    h = this.mapImgSize.height + 70;
+  }
+  var tableContainer = this.createDiv_({"left" : 0, "top" : 0, "width" : w, "height" : h});
+  tableContainer.style.backgroundColor = "white";
+  tableContainer.style.width = 0;
+  tableContainer.style.height = 0;
+  tableContainer.style.padding = "5px";
+  tableContainer.style.border = "1px solid black";
+  tableContainer.id = "tbl_" + eleID;
+  tableContainer.name = "tbl_" + eleID;
+
+  tableContainer.style.left = (Math.floor(bodyEleSize.width - w) / 2) + "px";
+  tableContainer.style.top = (Math.floor(bodyEleSize.height - h) / 2) + "px";
+  
+  tableContainer.innerHTML = tableHtml;
+  tableContainer.style.left = Math.floor(bodyEleSize.width / 2) + "px";
+  
+  bodyEle.appendChild(tableContainer);
+
+  var setOpacity = function (ele, opacity) {
+    ele.style.filter = "alpha(opacity=" + opacity + ")";
+    ele.style.mozOpacity = opacity / 100;
+    ele.style.opacity = opacity / 100;
+  };
+  var this_ = this;
+  var feedinAnimation = function (ele, cnt, maxCnt, cntStep) {
+    setOpacity(ele, cnt);
+    cnt += cntStep;
+    if (cnt < maxCnt) {
+      setTimeout(function () {
+        feedinAnimation(ele, cnt, maxCnt, cntStep);
+      }, 10);
+    } else {
+      setTimeout(function () {
+        this_.openboard(tableContainer, "step1", w, h, bodyEleSize);
+      }, 400);
+    }
+  };
+  
+  setOpacity(popupContainer, 0);
+  
+  feedinAnimation(popupContainer, 1, 80, 10);
+  popupContainer.style.visibility = "visible";
+};
 
 /**
- * @name getImage
- * @desc  get new static map's image.
+ * @private
  */
-SnapShotControl.prototype.getImage = function () {
-  var url = "http://maps.google.com/staticmap?key=" + this.apiKey_;
+SnapShotControl.prototype.normalizePos_ = function (pos) {
+  if (this.matchingTest(pos, GLatLng)) {
+    var tmp = this.floor6decimal(pos.lat()) + "," + this.floor6decimal(pos.lng());
+    return tmp;
+  } else {
+    return pos;
+  }
+};
+
+
+/**
+ * @desc  Get new static map's image.
+ *  If it is not set, then this control uses map's center location.
+ *  If it is set false, then this control doesn't specify center location.
+ *  It means that center of image is decided by google.
+ * @param {GLatLng} [mapCenterPos] center location of image
+ * @return {String} image's url
+ */
+SnapShotControl.prototype.getImage = function (mapCenterPos) {
+  var url = "http://" + this.server_ + "/maps/api/staticmap?";
   
   var bounds = this.map_.getBounds();
-  var zoom = this.map_.getZoom();
   
   //center position
-  var mapCenterPos = this.map_.getCenter();
-  url += "&center=" + this.floor6decimal(mapCenterPos.lat()) + "," + this.floor6decimal(mapCenterPos.lng());
-  
+  if (mapCenterPos !== false) {
+    if (this.isNull(mapCenterPos)) {
+      mapCenterPos = this.map_.getCenter();
+    }
+    url += 'center=' + this.normalizePos_(mapCenterPos);
+  }
   //size
   var mapSize = this.map_.getSize();
   if (!this.isNull(this.size_)) {
@@ -316,8 +516,8 @@ SnapShotControl.prototype.getImage = function () {
     }
     
     url += "&size=" + this.size_.width + "x" + this.size_.height;
-    this.snapContainerImg.width = this.size_.width;
-    this.snapContainerImg.height = this.size_.height;
+    this.mapImgSize.width = this.size_.width;
+    this.mapImgSize.height = this.size_.height;
   } else {
     if (mapSize.width > 640) {
       mapSize.width = 640;
@@ -327,12 +527,16 @@ SnapShotControl.prototype.getImage = function () {
     }
     
     url += "&size=" + mapSize.width + "x" + mapSize.height;
-    this.snapContainerImg.width = mapSize.width;
-    this.snapContainerImg.height = mapSize.height;
+    this.mapImgSize.width = mapSize.width;
+    this.mapImgSize.height = mapSize.height;
   }
-  
+
   
   //zoom level
+  var zoom = this.map_.getZoom();
+  if (zoom > 20) {
+    zoom = "21+";
+  }
   url += "&zoom=" + zoom;
   
   //map type
@@ -350,22 +554,20 @@ SnapShotControl.prototype.getImage = function () {
       break;
     default:
       maptype = "roadmap";
-      if (this.snapContainerImg.width < 300 || this.snapContainerImg.height < 300) {
-        maptype = "mobile";
-      }
     }
   } else {
     maptype = this.maptype_;
   }
+  maptype = maptype.toLowerCase();
   if (maptype !== "") {
     url += "&maptype=" + maptype;
+  }
+  if (this.isMobile_ === true && (maptype === "roadmap" || maptype === "")) {
+    url += "&mobile=true";
   }
   
   if (this.hl_ !== "" && String(this.hl_).toLowerCase() !== "en") {
     url += "&hl=" + this.hl_.toLowerCase();
-  }
-  if (String(this.frame_).toLowerCase() === "true") {
-    url += "&frame=true";
   }
   
   if (!this.isNull(this.imgFormat_)) {
@@ -386,6 +588,7 @@ SnapShotControl.prototype.getImage = function () {
   var lineBound, i, j;
   for (i = 0; i < this.polylines_.length; i++) {
     var polyline = this.polylines_[i];
+    var polylineVertex = [];
     
     if (polyline.handle.isHidden() === false) {
       var vertexLatLng;
@@ -395,7 +598,7 @@ SnapShotControl.prototype.getImage = function () {
       polyline.drawFlagList[0] = bounds.containsLatLng(polyline.vertexList[0]);
       addedList[0] = 0;
       if (polyline.drawFlagList[0] === true) {
-        pathStr += "|" + polyline.vertexList[0].lat() + "," + polyline.vertexList[0].lng();
+        polylineVertex.push(polyline.vertexList[0]);
         addedList[0] = 1;
       }
       
@@ -404,9 +607,9 @@ SnapShotControl.prototype.getImage = function () {
         polyline.drawFlagList[j] = bounds.containsLatLng(polyline.vertexList[j]);
         if (polyline.drawFlagList[j - 1] === true || polyline.drawFlagList[j] === true) {
           if (polyline.drawFlagList[j - 1] === false && addedList[j - 1] === 0) {
-            pathStr += "|" + polyline.vertexList[j - 1].lat() + "," + polyline.vertexList[j - 1].lng();
+            polylineVertex.push(polyline.vertexList[j - 1]);
           }
-          pathStr += "|" + polyline.vertexList[j].lat() + "," + polyline.vertexList[j].lng();
+          polylineVertex.push(polyline.vertexList[j]);
           addedList[j] = 1;
           
         } else {
@@ -416,31 +619,39 @@ SnapShotControl.prototype.getImage = function () {
           
           if (polyline.drawFlagList[j] === true) {
             if (polyline.drawFlagList[j - 1] === false && addedList[j - 1] === 0) {
-              pathStr += "|" + polyline.vertexList[j - 1].lat() + "," + polyline.vertexList[j - 1].lng();
+              polylineVertex.push(polyline.vertexList[j - 1]);
             }
-            pathStr += "|" + polyline.vertexList[j].lat() + "," + polyline.vertexList[j].lng();
+            polylineVertex.push(polyline.vertexList[j]);
             addedList[j] = 1;
           } else if (polyline.drawFlagList[j - 1] === true) {
             if (addedList[j - 1] === 0) {
-              pathStr += "|" + polyline.vertexList[j - 1].lat() + "," + polyline.vertexList[j - 1].lng();
+              polylineVertex.push(polyline.vertexList[j - 1]);
             }
-            pathStr += "|" + polyline.vertexList[j].lat() + "," + polyline.vertexList[j].lng();
+            polylineVertex.push(polyline.vertexList[j]);
             addedList[j] = 1;
           }
         }
       }
-      if (pathStr !== "") {
-        var path = "&path=";
-        if (polyline.opacity.toLowerCase() === "7f") {
-          path += "rgb:" + polyline.color;
-        } else {
-          path += "rgba:" + polyline.color + polyline.opacity;
+      if (polylineVertex.length) {
+        var path = "";
+        var polylineColor = polyline.color;
+        path = "color:" + this.normalizeColor_(polyline.color) + polyline.opacity.toString(16);
+        if (polyline.type === "GPolygon") {
+          path += "|fillcolor:" + this.normalizeColor_(polyline.fillcolor) + polyline.fillopacity.toString(16);
         }
+        
         if (!this.isNull(polyline.weight)) {
-          path += ",weight:" + polyline.weight;
+          if (polyline.weight !== 5) {
+            path += (path !== "" ? "|" : "") + "weight:" + polyline.weight;
+          }
         }
-        path += pathStr;
-        url += path;
+        
+        url += "&path=" + path + "|";
+        if (this.usePolylineEncode_ === true) {
+          url += "enc:" + this.createEncodings_(polylineVertex);
+        } else {
+          url += polylineVertex.join("|").replace(/[\(\)\s]/g, "");
+        }
       }
     }
   }
@@ -451,140 +662,180 @@ SnapShotControl.prototype.getImage = function () {
   var markerSize;
   var markerAlphaNumeric;
   var markerColor;
+  var markerAlpha = 1;
   var optStr = "";
+  var markerConditions = {};
 
   for (i = 0; i < this.markers_.length; i++) {
     markerLatLng = this.markers_[i].handle.getLatLng();
     if (!this.markers_[i].handle.isHidden() && bounds.containsLatLng(markerLatLng)) {
     
-      markerStr += (markerStr !== "" ? "|":"") + this.floor6decimal(markerLatLng.lat()) + "," + this.floor6decimal(markerLatLng.lng());
-      
       optStr = "";
       //{size}
       markerSize = this.markers_[i].handle.ssSize;
       if (!this.isNull(markerSize)) {
         markerSize = markerSize.toLowerCase();
-        if (markerSize === "normal" || markerSize === "tiny" || markerSize === "mid" || markerSize === "small") {
-          optStr += markerSize;
+        if (markerSize === "tiny" || markerSize === "mid" || markerSize === "small") {
+          optStr += "size:" + markerSize;
         }
       }
       
-      //{color}
+      //{color},{alpha}
       markerColor = this.markers_[i].handle.ssColor;
+      markerAlpha = this.markers_[i].handle.ssAlpha;
+      if (!this.isNull(markerAlpha)) {
+        markerAlpha = Math.floor(markerAlpha * 255).toString(16);
+      } else {
+        markerAlpha = "";
+      }
       if (!this.isNull(markerColor)) {
-        markerColor = markerColor.toLowerCase();
-        
-        if (markerColor === "black" || markerColor === "brown" || markerColor === "purple" || markerColor === "green" || 
-          markerColor === "yellow" || markerColor === "blue" || markerColor === "gray" || markerColor === "orange" || 
-          markerColor === "red" || markerColor === "white") {
-          optStr += markerColor;
-        }
-      } else if (!this.isNull(markerSize)) {
-        optStr += "red";
+        markerColor = this.normalizeColor_(markerColor);
+        optStr += (optStr !== "" ? "|" : "") + "color:" + markerColor + markerAlpha;
+      } else if (markerAlpha) {
+        optStr += (optStr !== "" ? "|" : "") + "color:0xFF0000" + markerAlpha;
       }
       
       //{alphanumeric-character}
       markerAlphaNumeric = this.markers_[i].handle.ssCharacter;
-      if (!this.isNull(markerAlphaNumeric) && markerSize !== "small" && markerSize !== "tiny") {
+      if (!this.isNull(markerAlphaNumeric) && markerSize !== "tiny") {
         if (markerAlphaNumeric.match(/^[a-zA-Z0-9]/)) {
-          if (optStr === "") {
-            optStr = "red";
-          }
-          optStr += markerAlphaNumeric.substr(0, 1);
+          optStr += (optStr !== "" ? "|" : "") + "label:" + markerAlphaNumeric.substr(0, 1);
         }
       }
-      
-      if (optStr !== "") {
-        markerStr += "," + optStr;
+
+      if (!(optStr in markerConditions)) {
+        markerConditions[optStr] = "";
       }
+      markerLatLng = this.normalizePos_(markerLatLng);
+      markerConditions[optStr] += (markerConditions[optStr] !== "" ? "|" : "") + markerLatLng;
+      
     }
   }
-  url += "&markers=" + markerStr;
+  for (optStr in markerConditions) {
+    if (optStr in markerConditions) {
+      url += "&markers=" + optStr + (optStr !== "" ? "|" : "") + markerConditions[optStr];
+    }
+  }
 
-  this.snapContainerImg.src = url;
+  url += "&sensor=" + this.sensor_;
+  url += "&key=" + this.apiKey_;
+
   this.imgUrl_ = url;
   
   return url;
 };
 
 /**
- * @name setLanguage
+ * @private
+ */
+SnapShotControl.prototype.normalizeColor_ = function (color) {
+  if (typeof(color).toLowerCase() !== "string") {
+    return;
+  }
+  color = color.toLowerCase();
+  switch (color)
+  {
+  case "black":
+    color = "0x000000";
+    break;
+  case "brown":
+    color = "0x804000";
+    break;
+  case "purple":
+    color = "0x8e35ef";
+    break;
+  case "green":
+    color = "0x00ff00";
+    break;
+  case "yellow":
+    color = "0xffff00";
+    break;
+  case "blue":
+    color = "0x0000ff";
+    break;
+  case "gray":
+    color = "0x736f6e";
+    break;
+  case "orange":
+    color = "0xff8040";
+    break;
+  case "red":
+    color = "0xff0000";
+    break;
+  case "black":
+    color = "0x000000";
+    break;
+  default:
+    if (!color.match(/^0x/)) {
+      if (color.match(/^[0-9]$/)) {
+        color = "0x" + parseInt(color, 10).toString(16);
+      } else if (color.match(/^[0-9a-f]{6}$/i) || color.match(/^[0-9a-f]{8}$/i)) {
+        color = "0x" + color.toLowerCase();
+      } else {
+        return;
+      }
+    }
+  }
+  return color;
+};
+
+/**
+ * @desc Language code for static map's image.
+ * @param {String} lang
  */
 SnapShotControl.prototype.setLanguage = function (lang) {
   this.hl_ = lang;
 };
 
 /**
- * @name getLanguage
+ * @desc Specify about using polyline/polygon encode.
+ * @param {Boolean} useEncode
  */
-SnapShotControl.prototype.getLanguage = function () {
-  return this.hl_;
+SnapShotControl.prototype.usePolylineEncode = function (useEncode) {
+  this.usePolylineEncode_ = useEncode;
 };
+
 /**
- * @name setFormat
+ * @desc Specify about using mobile map type.
+ *  If set to true, then this library specifies "mobile=true" into image's url.
+ * @param {Boolean} mobile
+ */
+SnapShotControl.prototype.isMobile = function (mobile) {
+  this.isMobile_ = mobile;
+};
+
+/**
+ * @desc Specify image's format.
+ *  You can choice one from "gif", "jpg", "jpg-baseline", "png8", "png32".
+ * @param {String} format
  */
 SnapShotControl.prototype.setFormat = function (format) {
   this.imgFormat_ = format;
 };
 
-/**
- * @name getFormat
- */
-SnapShotControl.prototype.getFormat = function () {
-  return this.imgFormat_;
-};
 
 /**
- * @name setFrame
- * @param frame : true or false
- */
-SnapShotControl.prototype.setFrame = function (frame) {
-  this.frame_ = frame;
-};
-
-/**
- * @name getFrame
- */
-SnapShotControl.prototype.getFrame = function () {
-  return this.frame_;
-};
-
-
-/**
- * @name setMapSize
- * @desc set map size of static maps.
+ * @desc Specify image(map)'s size.
+ * @param {GSize} mapSize
  */
 SnapShotControl.prototype.setMapSize = function (mapSize) {
   this.size_ = mapSize;
 };
 
-/**
- * @name getMapSize
- * @desc return currently map size of static maps.
- */
-SnapShotControl.prototype.getMapSize = function () {
-  return this.size_;
-};
 
 /**
- * @name setMapType
- * @desc set map type of static maps.
+ * @desc Specify maptype name.
+ *  You can choice one from "roadmap", "satellite", "hybrid", "terrain" or not set("").
+ * @param {String} mapType
  */
 SnapShotControl.prototype.setMapType = function (mapType) {
   this.maptype_ = mapType;
 };
 
-/**
- * @name getMapType
- * @desc return currently map type of static maps.
- */
-SnapShotControl.prototype.getMapType = function () {
-  return this.maptype_;
-};
 
 /**
- * @name getImageUrl
- * @desc return currently url of static maps.
+ * @desc  Lastest getted image url of static maps.
+ * @return {String}
  */
 SnapShotControl.prototype.getImageUrl = function () {
   return this.imgUrl_;
@@ -680,35 +931,265 @@ SnapShotControl.prototype.makeImgDiv_ = function (imgSrc, params) {
     if (params.height) {
       img.style.height = params.height + "px";
     }
+    img.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + imgSrc + "')";
   }
   img.style.position = "relative";
   img.style.left = params.left + "px";
   img.style.top =  params.top + "px";
-  img.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + imgSrc + "')";
   imgDiv.appendChild(img);
   return imgDiv;
 };
 
 /**
  * @private
+ * @desc      create div element
  */
-SnapShotControl.prototype.createDiv_ = function (params) {
+SnapShotControl.prototype.createDiv_ = function (params, specifyTagName) {
+
+  var divEle = document.createElement(this.isNull(specifyTagName) ? "div" : specifyTagName);
   
-  var bgDiv = document.createElement("div");
-  bgDiv.style.position = "absolute";
-  if (!this.isNull(params.bgcolor)) {
-    bgDiv.style.backgroundColor = params.bgcolor;
+  if (!this.isNull(params)) {
+    for (var s in params.style) {
+      if (s in divEle.style) {
+        divEle.style[s] = params.style[s];
+      }
+    }
+    if (!this.isNull(params.left)) {
+      divEle.style.left = params.left + "px";
+    }
+    if (!this.isNull(params.right)) {
+      divEle.style.right = params.right + "px";
+    }
+    if (!this.isNull(params.top)) {
+      divEle.style.top = params.top + "px";
+    }
+    if (!this.isNull(params.bottom)) {
+      divEle.style.bottom = params.bottom + "px";
+    }
+    if (!this.isNull(params.width)) {
+      divEle.style.width = params.width + "px";
+    }
+    if (!this.isNull(params.height)) {
+      divEle.style.height = params.height + "px";
+    }    
+    divEle.style.position = "absolute";
+    divEle.style.fontSize = 0;
+    divEle.style.lineHeight = 0;
+    divEle.style.overflow = "hidden";
   }
-  if (!this.isNull(params.color)) {
-    bgDiv.style.backgroundColor = params.color;
+  return divEle;
+};
+
+
+/**
+ * @private
+ */
+SnapShotControl.prototype.getHtmlSize = function (html) {
+  var container = this.map_.getContainer();
+  var isNeedBlock = false;
+  if (!html.match(/</)) {
+    html = "<span>" + html + "</span>";
   }
-  bgDiv.style.fontSize = "1px";
-  bgDiv.style.lineHeight = "1px";
-  bgDiv.style.overflow = "hidden";
-  bgDiv.style.left = params.left + "px";
-  bgDiv.style.top = params.top + "px";
-  bgDiv.style.width = params.width + "px";
-  bgDiv.style.height = params.height + "px";
-  return bgDiv;
+  var textContainer_ = document.createElement("div");
+  container.appendChild(textContainer_);
+  var onlineHTMLsize_ = function (text) {
+    var dummyTextNode = document.createElement("span");
+    textContainer_.appendChild(dummyTextNode);
+    dummyTextNode.innerHTML = text;
+    var children = dummyTextNode.getElementsByTagName("*");
+    for (var i = 0; i < children.length; i++) {
+      if (children[i].nodeType === 1) {
+        children[i].style.margin = 0;
+      }
+    }
+    dummyTextNode.style.whiteSpace = "nowrap";
+    
+    var size = {};
+    size.width = dummyTextNode.offsetWidth;
+    size.height = dummyTextNode.offsetHeight;
+    
+    return size;
+  };
+
+  var ret;
+  var lines = html.split(/\n/i);
+  var totalSize = new GSize(1, 1); // "1" is margin
+  for (var i = 0; i < lines.length; i++) {
+    ret = onlineHTMLsize_(lines[i]);
+    if (ret.width > totalSize.width) {
+      totalSize.width = ret.width;
+    }
+    totalSize.height += ret.height;
+  }
+  container.removeChild(textContainer_);
+  return totalSize;
+};
+
+/**
+ * @private
+ */
+SnapShotControl.prototype.openboard = function (element, mode, maxW, maxH, pageSize) {
+  var this_ = this;
+  var arg_ = arguments;
+  var w, h;
+  if (mode === "step1") {
+    h = element.offsetHeight + Math.floor(maxH / 10);
+    if (h >= maxH) {
+      h = maxH;
+    }
+    element.style.height = h + "px";
+    
+    if (h === maxH) {
+      mode = "step2";
+      
+      setTimeout(function () {
+        arg_.callee.apply(this_, arg_);
+      }, 100);
+      return;
+    }
+  } else {
+    w = element.offsetWidth + Math.floor(maxW / 10);
+    if (w >= maxW) {
+      w = maxW;
+    }
+    element.style.left = ((pageSize.width - w) / 2) + "px";
+    element.style.width = w + "px";
+    
+    if (w === maxW) {
+      
+      return;
+    }
+  }
+  setTimeout(function () {
+    arg_.callee.apply(this_, arg_);
+  }, 30);
+};
+
+//=====================================
+//  createEncodings function
+//  source: http://code.google.com/intl/ja/apis/maps/documentation/include/polyline.js
+//=====================================
+/**
+ * @private
+ */
+SnapShotControl.prototype.createEncodings_ = function (points) {
+  var i = 0;
+  var plat = 0;
+  var plng = 0;
+  var encoded_points = "";
+  var dlat = 0;
+  var dlng = 0;
+  for (i = 0; i < points.length; ++i) {
+    var point = points[i];
+    var lat = point.lat();
+    var lng = point.lng();
+
+    var late5 = Math.floor(lat * 1e5);
+    var lnge5 = Math.floor(lng * 1e5);
+
+    dlat = late5 - plat;
+    dlng = lnge5 - plng;
+
+    plat = late5;
+    plng = lnge5;
+
+    encoded_points += this.encodeSignedNumber_(dlat) + this.encodeSignedNumber_(dlng);
+  }
+  return encoded_points;
+};
+
+/**
+ * @private
+ */
+SnapShotControl.prototype.encodeSignedNumber_ = function (num) {
+  var sgn_num = num << 1;
+
+  if (num < 0) {
+    sgn_num = ~(sgn_num);
+  }
+
+  return this.encodeNumber_(sgn_num);
+};
+
+/**
+ * @private
+ * Encode an unsigned number in the encode format.
+ */
+SnapShotControl.prototype.encodeNumber_ = function (num) {
+  var encodeString = "";
+
+  while (num >= 0x20) {
+    encodeString += String.fromCharCode((0x20 | (num & 0x1f)) + 63);
+    num >>= 5;
+  }
+
+  encodeString += String.fromCharCode(num + 63);
+  return encodeString;
+};
+
+
+
+//=====================================
+//  Lightbox v2.04
+//  by Lokesh Dhakar - http://www.lokeshdhakar.com
+//  Last Modification: 2/9/08
+//
+//  For more information, visit:
+//  http://lokeshdhakar.com/projects/lightbox2/
+//
+//  Licensed under the Creative Commons Attribution 2.5 License - http://creativecommons.org/licenses/by/2.5/
+//    - Free for use in both personal and commercial projects
+//    - Attribution requires leaving author name, author link, and the license info intact.
+//=====================================
+
+SnapShotControl.prototype.getPageSize_ = function () {
+  var pageHeight = 0;
+  var pageWidth = 0;
+  var xScroll, yScroll;
+  
+  if (window.innerHeight && window.scrollMaxY) {  
+    xScroll = window.innerWidth + window.scrollMaxX;
+    yScroll = window.innerHeight + window.scrollMaxY;
+  } else if (document.body.scrollHeight > document.body.offsetHeight) { // all but Explorer Mac
+    xScroll = document.body.scrollWidth;
+    yScroll = document.body.scrollHeight;
+  } else { // Explorer Mac...would also work in Explorer 6 Strict, Mozilla and Safari
+    xScroll = document.body.offsetWidth;
+    yScroll = document.body.offsetHeight;
+  }
+  
+  var windowWidth, windowHeight;
+  
+  if (self.innerHeight) {  // all except Explorer
+    if (document.documentElement.clientWidth) {
+      windowWidth = document.documentElement.clientWidth; 
+    } else {
+      windowWidth = self.innerWidth;
+    }
+    windowHeight = self.innerHeight;
+  } else if (document.documentElement && document.documentElement.clientHeight) { // Explorer 6 Strict Mode
+    windowWidth = document.documentElement.clientWidth;
+    windowHeight = document.documentElement.clientHeight;
+  } else if (document.body) { // other Explorers
+    windowWidth = document.body.clientWidth;
+    windowHeight = document.body.clientHeight;
+  }  
+  
+  // for small pages with total height less then height of the viewport
+  if (yScroll < windowHeight) {
+    pageHeight = windowHeight;
+  } else { 
+    pageHeight = yScroll;
+  }
+  
+  // for small pages with total width less then width of the viewport
+  if (xScroll < windowWidth) {  
+    pageWidth = xScroll;    
+  } else {
+    pageWidth = windowWidth;
+  }
+
+  return new GSize(pageWidth, pageHeight);
+  
 };
 

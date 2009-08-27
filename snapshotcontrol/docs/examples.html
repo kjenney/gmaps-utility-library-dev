@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>SnapShotControl Documentation: Examples</title>
+<link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
+    <link rel="stylesheet" type="text/css" href="http://gmaps-utility-library.googlecode.com/svn/trunk/util/docs/template/local_extensions.css"></link>
+    <script type="text/javascript" src="http://code.google.com/js/prettify.js"></script>
+  </head>
+
+  <body onload="prettyPrint()">
+<h1>SnapShotControl Examples</h1>
+
+<p>To use the progress bar, create a SnapShotControl object and add this control to the map with GMap2.addControl(SnapShotControl).
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map_canvas"));
+map.setCenter(new GLatLng(35.676148, 139.74479), 1);
+
+// add control
+var snapShotControl = new SnapShotControl();
+map.addControl(snapShotControl);
+</pre>
+<h2>Basic Example</h2>
+
+<p>The following example shows the SnapShotControl in a simple example.</p>
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map_canvas"));
+map.setCenter(new GLatLng(35.676148, 139.74479), 1);
+
+// add control
+var snapShotControl = new SnapShotControl();
+map.addControl(snapShotControl);
+
+// add maptype control
+var menuMapTypeControl = new GMenuMapTypeControl();
+map.addControl(menuMapTypeControl);
+
+// add maptype
+map.addMapType(G_PHYSICAL_MAP);
+
+// add line
+var points=[];
+points.push(new GLatLng(35.676148, 139.74479));
+points.push(new GLatLng(25.48295117535531, 118.30078125));
+points.push(new GLatLng(-32.39851580247401, 135.17578125));
+points.push(new GLatLng(37.43997405227057, -121.9921875));
+var line = new GPolyline(points, "#FF0000", 10);
+map.addOverlay(line);
+
+// add markers
+for (var i = 0; i < points.length; i++) {
+  var marker = createMarker(points[i]);
+  map.addOverlay(marker);
+}
+</pre>
+<p><a href="../examples/usage.html">View example (usage.html)</a></p>
+
+
+</body>
+</html>
