@@ -699,7 +699,7 @@ SnapShotControl.prototype.getImage = function (mapCenterPos) {
       markerAlphaNumeric = this.markers_[i].handle.ssCharacter;
       if (!this.isNull(markerAlphaNumeric) && markerSize !== "tiny") {
         if (markerAlphaNumeric.match(/^[a-zA-Z0-9]/)) {
-          optStr += (optStr !== "" ? "|" : "") + "label:" + markerAlphaNumeric.substr(0, 1);
+          optStr += (optStr !== "" ? "|" : "") + "label:" + markerAlphaNumeric.substr(0, 1).toUpperCase();
         }
       }
 
@@ -742,25 +742,25 @@ SnapShotControl.prototype.normalizeColor_ = function (color) {
     color = "0x804000";
     break;
   case "purple":
-    color = "0x8e35ef";
+    color = "0x8E35EF";
     break;
   case "green":
-    color = "0x00ff00";
+    color = "0x00FF00";
     break;
   case "yellow":
-    color = "0xffff00";
+    color = "0xFFFF00";
     break;
   case "blue":
-    color = "0x0000ff";
+    color = "0x0000FF";
     break;
   case "gray":
-    color = "0x736f6e";
+    color = "0x736F6E";
     break;
   case "orange":
-    color = "0xff8040";
+    color = "0xFF8040";
     break;
   case "red":
-    color = "0xff0000";
+    color = "0xFF0000";
     break;
   case "black":
     color = "0x000000";
@@ -768,9 +768,9 @@ SnapShotControl.prototype.normalizeColor_ = function (color) {
   default:
     if (!color.match(/^0x/)) {
       if (color.match(/^[0-9]$/)) {
-        color = "0x" + parseInt(color, 10).toString(16);
+        color = "0x" + parseInt(color, 10).toString(16).toUpperCase();
       } else if (color.match(/^[0-9a-f]{6}$/i) || color.match(/^[0-9a-f]{8}$/i)) {
-        color = "0x" + color.toLowerCase();
+        color = "0x" + color.toUpperCase();
       } else {
         return;
       }

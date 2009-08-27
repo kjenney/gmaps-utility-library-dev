@@ -23,8 +23,7 @@
         map.setCenter(new GLatLng(35.676148, 139.74479), 1);
         
         // add control
-        var snapShotControlOptions = {hidden : true};
-        snapShotControl = new SnapShotControl(snapShotControlOptions);
+        snapShotControl = new SnapShotControl();
         map.addControl(snapShotControl);
         
         
@@ -51,7 +50,7 @@
           } else {
             marker.ssSize = "mid";
             marker.ssCharacter = "n";
-            marker.ssAlpha = 0.5;
+            marker.ssAlpha = 0.1;
           }
           map.addOverlay(marker);
         }
