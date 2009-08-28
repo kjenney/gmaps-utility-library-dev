@@ -11,11 +11,10 @@
  *
  * You can also specifies parameters in the detail with contractor options or 
  * some methods(likes setMapType). And markers can have extension parameters.
- * There are "ssColor", "ssAlpha", "ssCharactor", "ssSize". If there are set paramters, then
+ * There are "ssColor", "ssCharactor", "ssSize". If there are set paramters, then
  * this controll followed your design. But, if there are not set, then this control
  * can also detect marker's color, size, alphanumeric-charactor followed some
- * naming habit. It can not detect marker's alpha.
- * If you want to set marker's alpha, it sets into ssAlpha(between 0 to 1).
+ * naming habit.
  *
  * For example, if image file name of marker's icon is "marker_greenA.png",
  * then this control detects; ssColor is "green", ssCharactor is "A".
@@ -662,7 +661,6 @@ SnapShotControl.prototype.getImage = function (mapCenterPos) {
   var markerSize;
   var markerAlphaNumeric;
   var markerColor;
-  var markerAlpha = 1;
   var optStr = "";
   var markerConditions = {};
 
@@ -680,19 +678,10 @@ SnapShotControl.prototype.getImage = function (mapCenterPos) {
         }
       }
       
-      //{color},{alpha}
+      //{color}
       markerColor = this.markers_[i].handle.ssColor;
-      markerAlpha = this.markers_[i].handle.ssAlpha;
-      if (!this.isNull(markerAlpha)) {
-        markerAlpha = Math.floor(markerAlpha * 255).toString(16);
-      } else {
-        markerAlpha = "";
-      }
       if (!this.isNull(markerColor)) {
-        markerColor = this.normalizeColor_(markerColor);
-        optStr += (optStr !== "" ? "|" : "") + "color:" + markerColor + markerAlpha;
-      } else if (markerAlpha) {
-        optStr += (optStr !== "" ? "|" : "") + "color:0xFF0000" + markerAlpha;
+        optStr += (optStr !== "" ? "|" : "") + "color:" + this.normalizeColor_(markerColor);
       }
       
       //{alphanumeric-character}
