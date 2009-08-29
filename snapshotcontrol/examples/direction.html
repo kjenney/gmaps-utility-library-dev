@@ -21,7 +21,8 @@
       
       //add control
       var ctrlOpt = {};
-      ctrlOpt.buttonLabelHtml ="<img src='image/camera.png' >Say cheese!";
+      ctrlOpt.buttonLabelHtml = "<img src='image/camera.png' >Say cheese!";
+      ctrlOpt.usePolylineEncode = true;
       map.addControl(new SnapShotControl(ctrlOpt));
       
       doDirection();
