@@ -2,50 +2,52 @@
  * @name SnapShotControl
  * @version 1.0
  * @author Masashi Katsumata
- * @fileoverview 
- * This library generates url of image with Google Static Maps API version 2.
- * You can get it using by your map. It's really easy.
- *
- * This control can detect type of overlay that there are GMarker, GPolygon and GPolyline.
- * And url string are optimized for short that followed map's status.
- *
- * You can also specifies parameters in the detail with contractor options or 
- * some methods(likes setMapType). And markers can have extension parameters.
- * There are "ssColor", "ssCharactor", "ssSize". If there are set paramters, then
- * this controll followed your design. But, if there are not set, then this control
- * can also detect marker's color, size, alphanumeric-charactor followed some
- * naming habit.
- *
- * For example, if image file name of marker's icon is "marker_greenA.png",
- * then this control detects; ssColor is "green", ssCharactor is "A".
- * And ssSize followed marker's dimension(width * height).
- *
- * Note that you should set "{@link useAutoDetectMarker} = false",
- * when doen't want to this function.
- *
- * 
+ * @fileoverview
+ * <p>This library makes it easy to generate an image "snapshot" of your
+ * interactive map, using the Google Static Maps API.</p>
+ * <p>The default behavior adds a control to the map,
+ * and then shows a popup with the snapshot when the control is clicked.
+ * However, the control can be hidden and the generated
+ * snapshot URLs can be programmatically retrieved, so the library may be used
+ * in a more flexible manner.
+ * </p>
+ * <p>This control can detect the standard overlays (GMarker, GPolygon, GPolyline)
+ * and render them in the snapshot, and in the case of a poly with many points,
+ * it can pass in the points as an encoded string, resulting in a shorter URL.
+ * </p>
+ * <p>The control will attempt to sense everything about the map and overlays,
+ * including the color and label of the markers.
+ * For example, if the the filename of a marker's icon is "marker_greenA.png",
+ * then this control will parse that and set the parameters accordingly.
+ * </p>
+ * <p>Various options can be sent into the constructor to change the default
+ * rendering of the snapshot.
+ * </p>
  */
 
 /**
  * @name SnapShotControlOptions
- * @class This class represents optional arguments to {@link SnapShotControl}. 
- *  It has no constructor, but is instantiated as an object literal.
- * @property {String} [buttonLabelHtml = "Say cheese!"] Specify label's html of snapshot button.
- * @property {String} [maptype = ""] Specify maptype name.
- *  You can choice one from "roadmap", "satellite", "hybrid", "terrain" or not set("").
- *  If it is not set, then the library detects same maptype with main map.
- * @property {Boolean} [hidden = false] Specify visibility when adds control to the map.
- *  If it is set true, the snapshot button is hidden.
- * @property {String} [language = ""] Specify image's language for map's copyright.
- *  If it is not set, then this library detects same language with main map.
- * @property {String} [format = "gif"] Specify image's format.
+ * @class This class represents optional arguments to {@link SnapShotControl}.
+ * @property {String} [buttonLabelHtml = "Say cheese!"] Specify label HTML of 
+ *   control button.
+ * @property {String} [maptype = ""] Specify maptype for snapshot.
+ *  The options are "roadmap", "satellite", "hybrid", "terrain".
+ *  If it is not set, then the control detects the type of the map.
+ * @property {Boolean} [hidden = false] Specify visibility when control is
+ *  added to the map. If it is set to true, the button is hidden.
+ * @property {String} [language = ""] Specify language for snapshot's copyrights.
+ *  If it is not set, then this library detects the language of the map.
+ * @property {String} [format = "gif"] Specify image format for snapshot.
  *  You can choice one from "gif", "jpg", "jpg-baseline", "png8", "png32".
- * @property {Boolean} [mobile = false] Specify about using mobile map type.
- *  If set to true, then this library specifies "mobile=true" into image's url.
- *  This property is ignored, when the {@link style} property is not set "roadmap".
- * @property {Boolean} [usePolylineEncode = false] Specify about using polyline/polygon encode.
- * @property {Boolean} [useAutoDetectMarker = true] If it is set true, this control auto detects
- *  marker's color, alphanumeric-charactor and size followed famous naming habit of images.
+ * @property {Boolean} [mobile = false] Specify whether to use mobile optimized
+ *  tiles for snapshot. Useful for mobile devices. This property is ignored,
+ *  when the {@link style} property is not set to "roadmap".
+ * @property {Boolean} [usePolylineEncode = false] Specify whether to 
+ *   use encoded polys in the snapshot. Useful if you're sending in a big poly,
+ *   and want to stay within URL limits.
+ * @property {Boolean} [useAutoDetectMarker = true] If it is set to true, the
+ *  control attempts to auto detect the marker color, label, and size,
+ *  based on standard image naming conventions.
  */
 
 /*global GPolygon, GPolyline, GMarker, G_PHYSICAL_MAP, G_HYBRID_MAP, G_SATELLITE_MAP, GLatLngBounds, _mHL, GLanguage  */
@@ -58,15 +60,15 @@
  */
 function SnapShotControl(opt_opts) {
 
-  this.transImgSrc = "http://www.google.com/mapfiles/transparent.png";
-  
+  this.transImgSrc = "http://maps.gstatic.com/mapfiles/transparent.png";
+
   var container = undefined;
   var s = 1, idx = 1;
   var obj;
   if (opt_opts === undefined) {
     opt_opts = {};
   }
-  
+
   this.buttonLabel_ = opt_opts.buttonLabelHtml || "Say cheese!";
   this.maptype_ = opt_opts.maptype || "";
   this.size_ = opt_opts.size || "";
@@ -81,8 +83,8 @@ function SnapShotControl(opt_opts) {
   this.isMobile_ = opt_opts.mobile || false;
   this.usePolylineEncode_ = opt_opts.usePolylineEncode || false;
   this.useAutoDetectMarker_ = opt_opts.useAutoDetectMarker || true;
-  
-  //find api key, google server and sensor
+
+  //find API key, maps domain and sensor setting
   var scripts = document.getElementsByTagName("script");
   var key = "";
   var sensor = false;
@@ -91,13 +93,13 @@ function SnapShotControl(opt_opts) {
     var scriptNode = scripts[i];
     if (scriptNode.src.match(/^http:\/\/maps\.google\..*?&(?:amp;)?key=([^\&]+)/gi)) {
       key = RegExp.$1;
-      
+
       scriptNode.src.match(/^http:\/\/maps\.google\..*?&(?:amp;)?sensor=([^\&]+)/gi);
       sensor = RegExp.$1;
-      
+
       scriptNode.src.match(/^http:\/\/(maps\.google\.[^\/]+)/gi);
       server = RegExp.$1;
-      
+
       break;
     }
   }
@@ -125,7 +127,7 @@ SnapShotControl.prototype.initialize = function (map) {
   this.checkBrowserAgent();
 
   var mapContainer = map.getContainer();
-  
+
   // create container
   var container = this.createDiv_();
   container.style.fontSize = "12px";
@@ -169,12 +171,12 @@ SnapShotControl.prototype.initialize = function (map) {
   }
 
   mapContainer.appendChild(container);
-  
+
   return container;
 };
 
 /**
- * @desc Check browser agent
+ * @desc Determine browser agent
  * @private
  */
 SnapShotControl.prototype.checkBrowserAgent = function () {
@@ -230,11 +232,11 @@ SnapShotControl.prototype._addOverlay = function (overlay) {
     }
     this.polylines_.push(polylineInfo);
     break;
-      
+
   case "GMarker":
     markerInfo.handle = overlay;
     markerInfo.type = tmp;
-    
+
     if (this.useAutoDetectMarker_) {
       //Auto detect a character and color of marker.
       imgSrc = overlay.getIcon().image;
@@ -254,7 +256,7 @@ SnapShotControl.prototype._addOverlay = function (overlay) {
           overlay.ssCharacter = RegExp.$1;
         }
       }
-      
+
       //size
       if (this.isNull(overlay.ssSize)) {
         imgSize = overlay.getIcon().iconSize;
@@ -292,7 +294,7 @@ SnapShotControl.prototype._removeOverlay = function (overlay) {
   var polygonInfo = {};
   var markerInfo = {};
   var shiftFlag = false;
-  
+
   switch (this.detectOverlay(overlay)) {
   case "GPolygon":
   case "GPolyline":
@@ -307,10 +309,10 @@ SnapShotControl.prototype._removeOverlay = function (overlay) {
     }
     this.polylines_.length -= 1;
     break;
-    
+
   case "GMarker":
     markerInfo.handle = overlay;
-    
+
     for (i = 0; i < this.markers_.length; i++) {
       if (shiftFlag === true) {
         this.markers_[i - 1] = this.markers_[i];
@@ -326,7 +328,7 @@ SnapShotControl.prototype._removeOverlay = function (overlay) {
 
 
 /**
- * @desc change visibility of the control to visible
+ * @desc Change visibility of the control to visible.
  */
 SnapShotControl.prototype.show = function () {
   this._container.style.visibility = "visible";
@@ -334,7 +336,7 @@ SnapShotControl.prototype.show = function () {
 };
 
 /**
- * @desc change visibility of the control to hidden
+ * @desc Change visibility of the control to hidden.
  */
 SnapShotControl.prototype.hide = function () {
   this._container.style.visibility = "hidden";
@@ -342,7 +344,7 @@ SnapShotControl.prototype.hide = function () {
 };
 
 /**
- * @desc return true when visibility of the control is hidden
+ * @desc Returns true when the control is hidden.
  * @return {Boolean}
  */
 SnapShotControl.prototype.isHidden = function () {
@@ -351,10 +353,11 @@ SnapShotControl.prototype.isHidden = function () {
 
 /**
  * @private
- * @desc detecting the overlay
+ * @desc Detect type of overlay
+ * @return {String}
  */
 SnapShotControl.prototype.detectOverlay = function (overlay) {
-  
+
   if (this.matchingTest(overlay, GPolyline)) {
     return "GPolyline";
   }
@@ -381,8 +384,8 @@ SnapShotControl.prototype.matchingTest = function (targetObject, matchClass) {
 };
 
 /**
- * @desc  Get new static map's image and show popup it.
- * @param {GLatLng} [mapCenterPos] center location of image
+ * @desc  Generate new snapshot URL and show popup with image and URL.
+ * @param {GLatLng} [mapCenterPos] Center of snapshot
  */
 SnapShotControl.prototype.showPopup = function (mapCenterPos) {
   var imgUrl = this.getImage(mapCenterPos);
@@ -390,7 +393,7 @@ SnapShotControl.prototype.showPopup = function (mapCenterPos) {
   var bodyEle;
   bodyEle = document.getElementsByTagName("body")[0];
   bodyEleSize = this.getPageSize_();
-  
+
   var popupContainer = this.createDiv_({"left" : 0, "top" : 0, "width" : bodyEleSize.width, "height" : bodyEleSize.height});
   popupContainer.style.backgroundColor = "black";
   popupContainer.style.margin = 0;
@@ -402,7 +405,7 @@ SnapShotControl.prototype.showPopup = function (mapCenterPos) {
   popupContainer.name = eleID;
   popupContainer.id = eleID;
   bodyEle.appendChild(popupContainer);
-  
+
   var js = "var ele=document.getElementById(\"" + eleID + "\");" +
            "ele.parentNode.removeChild(ele);" +
            "ele=document.getElementById(\"tbl_" + eleID + "\");" +
@@ -439,10 +442,10 @@ SnapShotControl.prototype.showPopup = function (mapCenterPos) {
 
   tableContainer.style.left = (Math.floor(bodyEleSize.width - w) / 2) + "px";
   tableContainer.style.top = (Math.floor(bodyEleSize.height - h) / 2) + "px";
-  
+
   tableContainer.innerHTML = tableHtml;
   tableContainer.style.left = Math.floor(bodyEleSize.width / 2) + "px";
-  
+
   bodyEle.appendChild(tableContainer);
 
   var setOpacity = function (ele, opacity) {
@@ -464,9 +467,9 @@ SnapShotControl.prototype.showPopup = function (mapCenterPos) {
       }, 400);
     }
   };
-  
+
   setOpacity(popupContainer, 0);
-  
+
   feedinAnimation(popupContainer, 1, 80, 10);
   popupContainer.style.visibility = "visible";
 };
@@ -485,12 +488,12 @@ SnapShotControl.prototype.normalizePos_ = function (pos) {
 
 
 /**
- * @desc  Get new static map's image.
- *  If it is not set, then this control uses map's center location.
- *  If it is set false, then this control doesn't specify center location.
- *  It means that center of image is decided by google.
- * @param {GLatLng} [mapCenterPos] center location of image
- * @return {String} image's url
+ * @desc  Generate new URL for snapshot.
+ *  If no center is passed in, then it uses the center of the map.
+ *  If the center is set to false, then the center of the snapshot
+ *  is auto-calculated based on the overlay positions.
+ * @param {GLatLng} [mapCenterPos] Center of map
+ * @return {String} URL
  */
 SnapShotControl.prototype.getImage = function (mapCenterPos) {
   var url = "http://" + this.server_ + "/maps/api/staticmap?";
@@ -769,15 +772,15 @@ SnapShotControl.prototype.normalizeColor_ = function (color) {
 };
 
 /**
- * @desc Language code for static map's image.
- * @param {String} lang
+ * @desc Specify language for snapshot's copyright texts.
+ * @param {String} language
  */
-SnapShotControl.prototype.setLanguage = function (lang) {
-  this.hl_ = lang;
+SnapShotControl.prototype.setLanguage = function (language) {
+  this.hl_ = language;
 };
 
 /**
- * @desc Specify about using polyline/polygon encode.
+ * @desc Specify whether to use polyline encoding.
  * @param {Boolean} useEncode
  */
 SnapShotControl.prototype.usePolylineEncode = function (useEncode) {
@@ -785,8 +788,7 @@ SnapShotControl.prototype.usePolylineEncode = function (useEncode) {
 };
 
 /**
- * @desc Specify about using mobile map type.
- *  If set to true, then this library specifies "mobile=true" into image's url.
+ * @desc Specify whether to use mobile optimized tiles.
  * @param {Boolean} mobile
  */
 SnapShotControl.prototype.isMobile = function (mobile) {
@@ -794,8 +796,8 @@ SnapShotControl.prototype.isMobile = function (mobile) {
 };
 
 /**
- * @desc Specify image's format.
- *  You can choice one from "gif", "jpg", "jpg-baseline", "png8", "png32".
+ * @desc Specify image format.
+ *  The options are "gif," "jpg," "jpg-baseline," "png8," "png32".
  * @param {String} format
  */
 SnapShotControl.prototype.setFormat = function (format) {
@@ -804,7 +806,7 @@ SnapShotControl.prototype.setFormat = function (format) {
 
 
 /**
- * @desc Specify image(map)'s size.
+ * @desc Specify size for snapshot.
  * @param {GSize} mapSize
  */
 SnapShotControl.prototype.setMapSize = function (mapSize) {
@@ -813,8 +815,8 @@ SnapShotControl.prototype.setMapSize = function (mapSize) {
 
 
 /**
- * @desc Specify maptype name.
- *  You can choice one from "roadmap", "satellite", "hybrid", "terrain" or not set("").
+ * @desc Specify maptype for snapshot.
+ *  The options are "roadmap", "satellite", "hybrid", "terrain" or auto-detect("").
  * @param {String} mapType
  */
 SnapShotControl.prototype.setMapType = function (mapType) {
@@ -823,7 +825,7 @@ SnapShotControl.prototype.setMapType = function (mapType) {
 
 
 /**
- * @desc  Lastest getted image url of static maps.
+ * @desc The most recently generated URL.
  * @return {String}
  */
 SnapShotControl.prototype.getImageUrl = function () {
