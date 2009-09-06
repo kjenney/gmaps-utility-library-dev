@@ -202,11 +202,11 @@ SnapShotControl.prototype._addOverlay = function (overlay) {
   case "GPolygon":
     polygonInfo.handle = overlay;
     polygonInfo.type = tmp;
-    polygonInfo.color = overlay.C[0].color.replace("#", "0x");
-    polygonInfo.fillcolor = overlay.color.replace("#", "0x");
-    polygonInfo.fillopacity = Math.floor(overlay.opacity * 255).toString(16);
-    polygonInfo.weight = overlay.C[0].weight;
-    polygonInfo.opacity = Math.floor(overlay.C[0].opacity * 255).toString(16);
+    polygonInfo.color = (this.isNull(overlay.ssColor) ? "blue" : overlay.ssColor);
+    polygonInfo.fillcolor = (this.isNull(overlay.ssFillColor) ? "blue" : overlay.ssFillColor);
+    polygonInfo.fillopacity = Math.floor((this.isNull(overlay.ssFillOpacity) ? 0.5 : overlay.ssFillOpacity) * 255).toString(16);
+    polygonInfo.weight = (this.isNull(overlay.ssWeight) ? 5 : overlay.ssWeight);
+    polygonInfo.opacity = Math.floor((this.isNull(overlay.ssOpacity) ? 0.5 : overlay.ssOpacity) * 255).toString(16);
     polygonInfo.vertexCount = overlay.getVertexCount();
     polygonInfo.vertexList = [];
     polygonInfo.drawFlagList = [];
@@ -220,9 +220,9 @@ SnapShotControl.prototype._addOverlay = function (overlay) {
   case "GPolyline":
     polylineInfo.handle = overlay;
     polylineInfo.type = tmp;
-    polylineInfo.color = overlay.color.replace("#", "0x");
-    polylineInfo.weight = overlay.weight;
-    polylineInfo.opacity = Math.floor(overlay.opacity * 255).toString(16);
+    polylineInfo.color = (this.isNull(overlay.ssColor) ? "blue" : overlay.ssColor);
+    polylineInfo.weight = (this.isNull(overlay.ssWeight) ? 5 : overlay.ssWeight);
+    polylineInfo.opacity = Math.floor((this.isNull(overlay.ssOpacity) ? 0.5 : overlay.ssOpacity) * 255).toString(16);
     polylineInfo.vertexCount = overlay.getVertexCount();
     polylineInfo.vertexList = [];
     polylineInfo.drawFlagList = [];
@@ -734,10 +734,10 @@ SnapShotControl.prototype.normalizeColor_ = function (color) {
     color = "0x804000";
     break;
   case "purple":
-    color = "0x8E35EF";
+    color = "0x800080";
     break;
   case "green":
-    color = "0x00FF00";
+    color = "0x008000";
     break;
   case "yellow":
     color = "0xFFFF00";

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <title>SnapShotControl : Marker Parameters Example</title>
+    <title>SnapShotControl : Fill Example</title>
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q" type="text/javascript"></script>
     <script type="text/javascript">
     document.write('<script type="text/javascript" src="../src/snapshotcontrol'+(document.location.search.indexOf('packed')>-1?'_packed':'')+'.js"><'+'/script>');
@@ -22,46 +22,39 @@
         var map = new GMap2(document.getElementById("map_canvas"));
         map.setCenter(new GLatLng(35.676148, 139.74479), 1);
         
-        // add control
+        /*
+        *  add control
+        */
         snapShotControl = new SnapShotControl();
         map.addControl(snapShotControl);
         
+        /*
+        *  add maptype
+        */
+        var menuMapTypeControl = new GMenuMapTypeControl();
+        map.addControl(menuMapTypeControl);
+        map.addMapType(G_PHYSICAL_MAP);
         
+        
+        /*
+        *  add line
+        */
         var points=[];
         points.push(new GLatLng(35.676148, 139.74479));
         points.push(new GLatLng(25.48295117535531, 118.30078125));
         points.push(new GLatLng(-32.39851580247401, 135.17578125));
         points.push(new GLatLng(37.43997405227057, -121.9921875));
-        var line = new GPolyline(points, "red", 10, 1);
+        points.push(new GLatLng(35.676148, 139.74479));
+        var line = new GPolygon(points, "red", 10, 1, "green", 0.5);
+        line.ssColor = "red";
+        line.ssWeight = 10;
+        line.ssOpacity = 1;
+        line.ssFillColor = "green";
+        line.ssFillOpacity = 0.5;
         map.addOverlay(line);
         
-        
-        /*
-        *  add markers
-        */
-        for (var i = 0; i < points.length; i++) {
-          var marker = createMarker(points[i]);
-          if (i == 0) {
-            marker.ssColor = "blue";
-            marker.ssCharacter = "s";
-          } else if (i == points.length - 1) {
-            marker.ssColor = "orange";
-            marker.ssCharacter = "g";
-          } else {
-            marker.ssSize = "mid";
-            marker.ssCharacter = "n";
-          }
-          map.addOverlay(marker);
-        }
-
       }
     }
-    
-    function createMarker(latlng){
-      var marker = new GMarker(latlng);
-      return marker;
-    }
-    
 
     </script>
   </head>

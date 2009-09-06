@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <title>Google Maps JavaScript API Example: Simple Map</title>
+    <title>SnapShotControl : Advanced Example</title>
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q" type="text/javascript"></script>
     <script type="text/javascript">
     document.write('<script type="text/javascript" src="../src/snapshotcontrol'+(document.location.search.indexOf('packed')>-1?'_packed':'')+'.js"><'+'/script>');
@@ -46,6 +46,9 @@
         points.push(new GLatLng(-32.39851580247401, 135.17578125));
         points.push(new GLatLng(37.43997405227057, -121.9921875));
         var line = new GPolyline(points, "red", 10, 1);
+        line.ssColor = "red";
+        line.ssWeight = 10;
+        line.ssOpacity = 1;
         map.addOverlay(line);
         
         
@@ -71,10 +74,13 @@
         /*
         *  add line
         */
-        var points=[];
+        points=[];
         points.push(new GLatLng(35.676148, 139.74479));
         points.push(new GLatLng(37.43997405227057, -121.9921875));
-        var line = new GPolyline(points, "blue", 10, 1);
+        line = new GPolyline(points, "blue", 10, 1);
+        line.ssColor = "blue";
+        line.ssWeight = 10;
+        line.ssOpacity = 1;
         map.addOverlay(line);
         
         
