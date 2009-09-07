@@ -89,16 +89,22 @@ function SnapShotControl(opt_opts) {
   var key = "";
   var sensor = false;
   var server = "";
+  var regexp;
   for (var i = 0;i < scripts.length; i++) {
     var scriptNode = scripts[i];
-    if (scriptNode.src.match(/^http:\/\/maps\.google\..*?&(?:amp;)?key=([^\&]+)/gi)) {
+    regexp = scriptNode.src.match(/^http:\/\/maps\.google\..*?&(?:amp;)?key=([^\&]+)/gi);
+    if (regexp !== null) {
       key = RegExp.$1;
-
-      scriptNode.src.match(/^http:\/\/maps\.google\..*?&(?:amp;)?sensor=([^\&]+)/gi);
-      sensor = RegExp.$1;
-
-      scriptNode.src.match(/^http:\/\/(maps\.google\.[^\/]+)/gi);
-      server = RegExp.$1;
+      
+      regexp = scriptNode.src.match(/^http:\/\/maps\.google\..*?&(?:amp;)?sensor=([^\&]+)/gi);
+      if (regexp !== null) {
+        sensor = RegExp.$1;
+      }
+      
+      regexp = scriptNode.src.match(/^http:\/\/(maps\.google\.[^\/]+)/gi);
+      if (regexp !== null) {
+        server = RegExp.$1;
+      }
 
       break;
     }
