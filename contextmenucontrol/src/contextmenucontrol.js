@@ -1,32 +1,31 @@
-/*
- * @name ContextMenuControl
- * @version 1.0
- * @copyright (c) 2009 Wolfgang Pichler
- * @author Wolfgang Pichler (Pil), http://www.wolfpil.de
- *
- * @fileoverview
- * This class lets you add a control to the map which mimics
- * the context menu of Google Maps. The control supports all of the six
- * items supported by Google Maps: finding directions to/from a location,
- * zooming in/out, centering the map, and finding the address at the clicked
- * location. Any of these items may be suppressed by passing options into
- * the constructor. This control extends the 
- * <a href="http://www.google.com/apis/maps/documentation/reference.html#GControl">
- * GControl</a> interface.
- */
-
-/*
+/**
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ */
+
+/**
+ * @name ContextMenuControl
+ * @version 1.0
+ * @copyright 2009 Wolfgang Pichler
+ * @author Wolfgang Pichler (Pil), www.wolfpil.de
+ * @fileoverview
+ * <p>This class lets you add a control to the map which mimics
+ * the context menu of Google Maps. The control supports all of the six
+ * items supported by Google Maps: finding directions to/from a location,
+ * zooming in/out, centering the map, and finding the address at the clicked
+ * location. Any of these items may be suppressed by passing options into
+ * the constructor. This control extends the 
+ * <a href="http://www.google.com/apis/maps/documentation/reference.html#GControl">
+ * GControl</a> interface.</p>
  */
 
 /**
@@ -40,12 +39,11 @@
  * @property {Boolean} [whatsHere = true] "Shows "What's here?" item.
  */
 
-/* global GLatLng, GIcon, GMarker, GDirections */
 
-/*
- * Creates a control with options specified in {@link ContextMenuControlOptions}.
+/**
+ * @desc Creates a control with options specified in {@link ContextMenuControlOptions}.
+ * @param {ContextMenuControlOptions} [opt_opts] Named optional arguments.
  * @constructor
- * @param {ContextMenuControlOptions} [opt_opts] Named optional arguments:
  */
 function ContextMenuControl(opt_opts) {
   if(opt_opts) {
@@ -65,17 +63,13 @@ function ContextMenuControl(opt_opts) {
   this.index_ = -1;
 };
 
-/*
- * Extends GControl class from the Google Maps API
- * Second param (selectable) should be set to true.
+/**
  * @private
  */
 ContextMenuControl.prototype = new GControl(false, true);
 
-/*
- * Called called by GMap2's addOverlay method.
- * @param {GMap2} map The map that this control was added to.
- * @return {DOM Object} mapdiv The div that holds the map.
+/**
+ * @desc Initialize the map control
  * @private
  */
 ContextMenuControl.prototype.initialize = function(map) {
@@ -146,7 +140,7 @@ ContextMenuControl.prototype.initialize = function(map) {
   GEvent.addDomListener(mapdiv, "mouseout", function(e) {
    if (me.menuList.visible) {
     if (!e) var e = window.event;
-    if (me.checkMouseLeave(mapdiv, e)) {
+    if (me.checkMouseLeave_(mapdiv, e)) {
      me.hideMenu_();
     }
    }
@@ -164,7 +158,7 @@ ContextMenuControl.prototype.initialize = function(map) {
   return mapdiv;
 };
 
-/*
+/**
  * Creates a draggable marker for searching directions.
  * @param {String} letter Used to decide which icon to display.
  * @private
@@ -200,7 +194,7 @@ ContextMenuControl.prototype.searchDirs_ = function(letter) {
   }
 };
 
-/*
+/**
  * Creates an initially hidden unordered menu list.
  * @param {String} change Used to decide which item to replace.
  * @return {DOM Object} ul that holds the list entries of the context menu.
@@ -219,30 +213,30 @@ ContextMenuControl.prototype.createContextMenu_ = function(change) {
   me.menuList.style.border = "1px solid #666";
 
   if (me.options.dirsFrom !== false && !change) {
-   me.menuList.appendChild(me.createListItem("Directions from here", "from"));
+   me.menuList.appendChild(me.createListItem_("Directions from here", "from"));
   }
   if (me.options.dirsTo !== false && !change) {
-   me.menuList.appendChild(me.createListItem("Directions to here", "to"));
+   me.menuList.appendChild(me.createListItem_("Directions to here", "to"));
   }
   if(change == "add") {
-   me.menuList.appendChild(me.createListItem("Add a destination", "add"));
+   me.menuList.appendChild(me.createListItem_("Add a destination", "add"));
   }
   if(change == "remove") {
-   me.menuList.appendChild(me.createListItem("Remove this point", "rem"));
+   me.menuList.appendChild(me.createListItem_("Remove this point", "rem"));
   }
    me.menuList.appendChild(me.createRuler_());
   if (me.options.zoomIn !== false) {
-   me.menuList.appendChild(me.createListItem("Zoom In", "in"));
+   me.menuList.appendChild(me.createListItem_("Zoom In", "in"));
   }
   if (me.options.zoomOut !== false) {
-   me.menuList.appendChild(me.createListItem("Zoom Out", "out"));
+   me.menuList.appendChild(me.createListItem_("Zoom Out", "out"));
   }
   if (me.options.centerMap !== false) {
-   me.menuList.appendChild(me.createListItem("Center Map here", "center"));
+   me.menuList.appendChild(me.createListItem_("Center Map here", "center"));
   }
   if (me.options.whatsHere !== false) {
    me.menuList.appendChild(me.createRuler_());
-   me.menuList.appendChild(me.createListItem("What\'s here?", "here"));
+   me.menuList.appendChild(me.createListItem_("What\'s here?", "here"));
   }
   me.hideMenu_();
   // Adds context menu to the map container
@@ -250,7 +244,8 @@ ContextMenuControl.prototype.createContextMenu_ = function(change) {
   return me.menuList;
 };
 
-/* Avoids firing a mouseout event when the mouse moves over a child element.
+/**
+ * Avoids firing a mouseout event when the mouse moves over a child element.
  * This will be caused by event bubbling.
  * Borrowed from: http://www.faqts.com/knowledge_base/view.phtml/aid/1606/fid/145
  * @param {Element} element Parent div
@@ -258,22 +253,23 @@ ContextMenuControl.prototype.createContextMenu_ = function(change) {
  * @return {Boolean}
  * @private
  */
-ContextMenuControl.prototype.checkMouseLeave = function(element, evt) {
+ContextMenuControl.prototype.checkMouseLeave_ = function(element, evt) {
   if(element.contains && evt.toElement) {
    return !element.contains(evt.toElement);
   }
   else if(evt.relatedTarget) {
-   return !this.containsDOM(element, evt.relatedTarget);
+   return !this.containsDOM_(element, evt.relatedTarget);
   }
 };
 
-/* Checks if the mouse leaves the parent element.
+/**
+ * Checks if the mouse leaves the parent element.
  * @param {Element} container Parent div
  * @param {Event} containee Event of node that the mouse entered when leaving the target
  * @return {Boolean}
  * @private
  */
-ContextMenuControl.prototype.containsDOM = function(container, containee) {
+ContextMenuControl.prototype.containsDOM_ = function(container, containee) {
   var isParent = false;
   do {
    if((isParent = container == containee))
@@ -284,14 +280,14 @@ ContextMenuControl.prototype.containsDOM = function(container, containee) {
   return isParent;
 };
 
-/*
+/**
  * Creates clickable context menu list items.
  * @param {String} text Text to display in list item.
  * @param {String} arg Used to identify the clicked entry.
  * @return {Element} List item that holds the entry.
  * @private
  */
-ContextMenuControl.prototype.createListItem = function(text, arg) {
+ContextMenuControl.prototype.createListItem_ = function(text, arg) {
   var me = this;
   var entry = document.createElement("li");
   entry.style.padding = "0px 6px";
@@ -319,14 +315,14 @@ ContextMenuControl.prototype.createListItem = function(text, arg) {
     var point = me.clickedPoint_;
     me.map_.panTo(point);
    }
-   else if (arg == "here") { me.revGeocode(); }
+   else if (arg == "here") { me.getReverseGeocode_(); }
    // Hides the menu after it's been used
    me.hideMenu_();
   });
   return entry;
 };
 
-/*
+/**
  * Removes direction markers on contextual click.
  * Creates a new route when there are still more than
  * two markers on the map after removing a marker.
@@ -359,7 +355,7 @@ ContextMenuControl.prototype.removeDest_ = function() {
   }
 };
 
-/*
+/**
  * Adds previously removed and further destinations.
  * @private
  */
@@ -388,10 +384,10 @@ ContextMenuControl.prototype.addDest_ = function() {
   me.getDirs_(waypoints);
 };
 
-/*
+/**
  * Creates a styled horizontal ruler between the list entries.
- * @private
  * @return {Element} hr as separator.
+ * @private
  */
 ContextMenuControl.prototype.createRuler_ = function() {
   var hr = document.createElement("hr");
@@ -406,7 +402,7 @@ ContextMenuControl.prototype.createRuler_ = function() {
   return hr;
 };
 
-/*
+/**
  * Hides the context menu and sets its property visible to false.
  * @private
  */
@@ -415,10 +411,10 @@ ContextMenuControl.prototype.hideMenu_ = function() {
   this.menuList.visible = false;
 };
 
-/*
+/**
  * Removes the context menu from the map container and adds a changed one.
- * @private
  * @param {String} arg Used to decide which item to replace.
+ * @private
  */
 ContextMenuControl.prototype.rebuildMenu_ = function(arg) {
   this.map_.getContainer().removeChild(this.menuList);
@@ -431,10 +427,10 @@ ContextMenuControl.prototype.rebuildMenu_ = function(arg) {
   }
 };
 
-/*
+/**
  * Checks the finally touched marker to request the appropriate route.
- * @private
  * @param {String} opt_letter
+ * @private
  */
 ContextMenuControl.prototype.setChosen_ = function(letter) {
   if (letter == "A") {
@@ -448,20 +444,20 @@ ContextMenuControl.prototype.setChosen_ = function(letter) {
   }
 };
 
-/*
+/**
  * Creates alphabetically arranged capital letters for direction markers.
- * @private
  * @return {String} letter
+ * @private
  */
 ContextMenuControl.prototype.makeLetter_ = function() {
   this.index_++;
   return  String.fromCharCode(this.index_ + 65);
 };
 
-/*
+/**
  * Creates required properties for icons.
- * @private
  * @param {GIcon} icon
+ * @private
  */
 ContextMenuControl.prototype.addIconAttr_ = function(icon, type) {
   if (type) {
@@ -477,7 +473,7 @@ ContextMenuControl.prototype.addIconAttr_ = function(icon, type) {
   icon.infoWindowAnchor = new GPoint(19, 2);
 };
 
-/*
+/**
  * Creates and adds direction markers to the map.
  * @param {GLatLng) point The GLatLng for the marker.
  * @param {String) letter The markers letter.
@@ -538,7 +534,7 @@ ContextMenuControl.prototype.makeDirMarker_ = function(point, letter) {
   });
 };
 
-/*
+/**
  * Error alerts for failed direction queries.
  * @private
  */
@@ -570,7 +566,7 @@ ContextMenuControl.prototype.handleErrors_ = function() {
   }
 };
 
-/*
+/**
  * Callback function for direction queries.
  * @private
  */
@@ -626,13 +622,13 @@ ContextMenuControl.prototype.dirsLoad_ = function() {
   }
 };
 
-/*
+/**
  * Creates info windows for direction steps.
  * @param {String} info The returned description for each step.
  * @param {Number} nr counter to identify the appropriate info.
  * @param {Number} i counter to identify the last route.
- * @private
  * @return {Element} The styled info window.
+ * @private
  */
 ContextMenuControl.prototype.createRouteInfo = function(info, nr, i) {
   var me = this;
@@ -696,7 +692,7 @@ ContextMenuControl.prototype.createRouteInfo = function(info, nr, i) {
   return iw;
 };
 
-/*
+/**
  * Handles direction queries.
  * Either first or second param must be passed in.
  * @param {GLatLng[]} [points] Array of GLatLngs to load direction from waypoints.
@@ -729,7 +725,7 @@ ContextMenuControl.prototype.getDirs_ = function(points, addr) {
   }
 };
 
-/*
+/**
  * Creates the form for searching directions displayed in infowindow.
  * @param {String} letter Used to decide which form to load.
  * @return {Element} Nested elements in outer form.
@@ -828,7 +824,7 @@ ContextMenuControl.prototype.makeForm_ = function(letter) {
   return form;
 };
 
-/*
+/**
  * Removes markers and polylines from the map and resets globals.
  * @param {String} what Used to decide what to remove
  * @private
@@ -855,12 +851,12 @@ ContextMenuControl.prototype.removeOld_ = function(what) {
   }
 };
 
- /*
+/**
  * Tries to reverse geocode the clicked point and
  * creates two markers to show 'What's here'.
  * @private
  */
-ContextMenuControl.prototype.revGeocode = function() {
+ContextMenuControl.prototype.getReverseGeocode_ = function() {
   var dec2deg = function(dec) {
    var sign = (dec > 0) ? "+" : "";
    var deg = parseInt(dec);
