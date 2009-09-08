@@ -1,36 +1,51 @@
 /*
-*  ContextMenuControl
-*  Copyright (c) 2009 & Author: Wolfgang Pichler (Pil), http://www.wolfpil.de
-*
-*  Version 1.0
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*
-* This class lets you add a control to the map which mimics
-* the context menu of Google Maps.
-*/
+ * @name ContextMenuControl
+ * @version 1.0
+ * @copyright (c) 2009 Wolfgang Pichler
+ * @author Wolfgang Pichler (Pil), http://www.wolfpil.de
+ *
+ * @fileoverview
+ * This class lets you add a control to the map which mimics
+ * the context menu of Google Maps. The control supports all of the six
+ * items supported by Google Maps: finding directions to/from a location,
+ * zooming in/out, centering the map, and finding the address at the clicked
+ * location. Any of these items may be suppressed by passing options into
+ * the constructor. This control extends the 
+ * <a href="http://www.google.com/apis/maps/documentation/reference.html#GControl">
+ * GControl</a> interface.
+ */
 
 /*
- * Constructor for ContextMenuControl uses an option hash
- * to let you exclude particular items of the context menu.
- * If no options are defined all the following six will be displayed
- * @param {opt_opts} Named optional arguments:
- *  opt_opts.dirsFrom {false} Does not show 'Directions from here'
- *  opt_opts.dirsTo {false} Does not show 'Directions to here'
- *  opt_opts.zoomIn {false} Does not show 'Zoom In'
- *  opt_opts.zoomOut {false} Does not show 'Zoom Out'
- *  opt_opts.centerMap {false} Does not show 'Center Map here'
- *  opt_opts.whatsHere {false} Does not show 'What's here?'
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @name ContextMenuControlOptions
+ * @class This class represents optional arguments to {@link ContextMenuControl}.
+ * @property {Boolean} [dirsFrom = true] Shows "Directions from here" item.
+ * @property {Boolean} [dirsTo = true] Shows "Directions to here" item.
+ * @property {Boolean} [zoomIn = true] Shows "Zoom in" item.
+ * @property {Boolean} [zoomOut = true] Shows "Zoom out" item.
+ * @property {Boolean} [centerMap = true] "Shows "Center map here" item.
+ * @property {Boolean} [whatsHere = true] "Shows "What's here?" item.
+ */
+
+/* global GLatLng, GIcon, GMarker, GDirections */
+
+/*
+ * Creates a control with options specified in {@link ContextMenuControlOptions}.
+ * @constructor
+ * @param {ContextMenuControlOptions} [opt_opts] Named optional arguments:
  */
 function ContextMenuControl(opt_opts) {
   if(opt_opts) {
@@ -51,15 +66,17 @@ function ContextMenuControl(opt_opts) {
 };
 
 /*
- * Extends GOverlay class from the Google Maps API
- *  Second param (selectable) should be set to true.
+ * Extends GControl class from the Google Maps API
+ * Second param (selectable) should be set to true.
+ * @private
  */
 ContextMenuControl.prototype = new GControl(false, true);
 
 /*
- * Is called by GMap2's addOverlay method.
- *  @param {GMap2} map The map that has had this control added to.
- *  @return {DOM Object} mapdiv Div that holds the map.
+ * Called called by GMap2's addOverlay method.
+ * @param {GMap2} map The map that this control was added to.
+ * @return {DOM Object} mapdiv The div that holds the map.
+ * @private
  */
 ContextMenuControl.prototype.initialize = function(map) {
   var me = this;
@@ -149,7 +166,8 @@ ContextMenuControl.prototype.initialize = function(map) {
 
 /*
  * Creates a draggable marker for searching directions.
- *  @param {String} letter Used to decide which icon to display.
+ * @param {String} letter Used to decide which icon to display.
+ * @private
  */
 ContextMenuControl.prototype.searchDirs_ = function(letter) {
   var me = this;
@@ -184,8 +202,9 @@ ContextMenuControl.prototype.searchDirs_ = function(letter) {
 
 /*
  * Creates an initially hidden unordered menu list.
- *  @param {String} change Used to decide which item to replace.
- *  @return {DOM Object} ul that holds the list entries of the context menu.
+ * @param {String} change Used to decide which item to replace.
+ * @return {DOM Object} ul that holds the list entries of the context menu.
+ * @private
  */
 ContextMenuControl.prototype.createContextMenu_ = function(change) {
   var me = this;
@@ -232,11 +251,12 @@ ContextMenuControl.prototype.createContextMenu_ = function(change) {
 };
 
 /* Avoids firing a mouseout event when the mouse moves over a child element.
- *  This will be caused by event bubbling.
- *  Borrowed from: http://www.faqts.com/knowledge_base/view.phtml/aid/1606/fid/145
- *  @param {DOM Object} element Parent div
- *  @param {event} evt The passed mouse event
- *  @return {Boolean}
+ * This will be caused by event bubbling.
+ * Borrowed from: http://www.faqts.com/knowledge_base/view.phtml/aid/1606/fid/145
+ * @param {Element} element Parent div
+ * @param {Event} evt The passed mouse event
+ * @return {Boolean}
+ * @private
  */
 ContextMenuControl.prototype.checkMouseLeave = function(element, evt) {
   if(element.contains && evt.toElement) {
@@ -248,9 +268,10 @@ ContextMenuControl.prototype.checkMouseLeave = function(element, evt) {
 };
 
 /* Checks if the mouse leaves the parent element.
- *  @param {DOM Object} container Parent div
- *  @param {event} containee Event of node that the mouse entered when leaving the target
- *  @return {Boolean}
+ * @param {Element} container Parent div
+ * @param {Event} containee Event of node that the mouse entered when leaving the target
+ * @return {Boolean}
+ * @private
  */
 ContextMenuControl.prototype.containsDOM = function(container, containee) {
   var isParent = false;
@@ -265,9 +286,10 @@ ContextMenuControl.prototype.containsDOM = function(container, containee) {
 
 /*
  * Creates clickable context menu list items.
- *  @param {String} text Text to display in list item.
- *  @param {String} arg Used to identify the clicked entry.
- *  @return {DOM Object} li List item that holds the entry.
+ * @param {String} text Text to display in list item.
+ * @param {String} arg Used to identify the clicked entry.
+ * @return {Element} List item that holds the entry.
+ * @private
  */
 ContextMenuControl.prototype.createListItem = function(text, arg) {
   var me = this;
@@ -308,6 +330,7 @@ ContextMenuControl.prototype.createListItem = function(text, arg) {
  * Removes direction markers on contextual click.
  * Creates a new route when there are still more than
  * two markers on the map after removing a marker.
+ * @private
  */
 ContextMenuControl.prototype.removeDest_ = function() {
   var me = this;
@@ -338,7 +361,8 @@ ContextMenuControl.prototype.removeDest_ = function() {
 
 /*
  * Adds previously removed and further destinations.
-*/
+ * @private
+ */
 ContextMenuControl.prototype.addDest_ = function() {
   var me = this;
   var waypoints = [];
@@ -366,7 +390,8 @@ ContextMenuControl.prototype.addDest_ = function() {
 
 /*
  * Creates a styled horizontal ruler between the list entries.
- *  @return {DOM Object} hr as separator.
+ * @private
+ * @return {Element} hr as separator.
  */
 ContextMenuControl.prototype.createRuler_ = function() {
   var hr = document.createElement("hr");
@@ -383,6 +408,7 @@ ContextMenuControl.prototype.createRuler_ = function() {
 
 /*
  * Hides the context menu and sets its property visible to false.
+ * @private
  */
 ContextMenuControl.prototype.hideMenu_ = function() {
   this.menuList.style.visibility = "hidden";
@@ -391,7 +417,8 @@ ContextMenuControl.prototype.hideMenu_ = function() {
 
 /*
  * Removes the context menu from the map container and adds a changed one.
- *  @param {String} arg Used to decide which item to replace.
+ * @private
+ * @param {String} arg Used to decide which item to replace.
  */
 ContextMenuControl.prototype.rebuildMenu_ = function(arg) {
   this.map_.getContainer().removeChild(this.menuList);
@@ -406,7 +433,8 @@ ContextMenuControl.prototype.rebuildMenu_ = function(arg) {
 
 /*
  * Checks the finally touched marker to request the appropriate route.
- *  @param {String} (optional) letter
+ * @private
+ * @param {String} opt_letter
  */
 ContextMenuControl.prototype.setChosen_ = function(letter) {
   if (letter == "A") {
@@ -422,7 +450,8 @@ ContextMenuControl.prototype.setChosen_ = function(letter) {
 
 /*
  * Creates alphabetically arranged capital letters for direction markers.
- *  @return {String} letter
+ * @private
+ * @return {String} letter
  */
 ContextMenuControl.prototype.makeLetter_ = function() {
   this.index_++;
@@ -431,7 +460,8 @@ ContextMenuControl.prototype.makeLetter_ = function() {
 
 /*
  * Creates required properties for icons.
- *  @param {API Object} icon GIcon
+ * @private
+ * @param {GIcon} icon
  */
 ContextMenuControl.prototype.addIconAttr_ = function(icon, type) {
   if (type) {
@@ -449,9 +479,10 @@ ContextMenuControl.prototype.addIconAttr_ = function(icon, type) {
 
 /*
  * Creates and adds direction markers to the map.
- *  @param {API Object) point The GLatLng for the marker.
- *  @param {String) letter The markers letter.
-*/
+ * @param {GLatLng) point The GLatLng for the marker.
+ * @param {String) letter The markers letter.
+ * @private
+ */
 ContextMenuControl.prototype.makeDirMarker_ = function(point, letter) {
   var me = this;
   var d = me.dirmarks_;
@@ -509,6 +540,7 @@ ContextMenuControl.prototype.makeDirMarker_ = function(point, letter) {
 
 /*
  * Error alerts for failed direction queries.
+ * @private
  */
 ContextMenuControl.prototype.handleErrors_ = function() {
   var status = this.gdir.getStatus().code;
@@ -540,6 +572,7 @@ ContextMenuControl.prototype.handleErrors_ = function() {
 
 /*
  * Callback function for direction queries.
+ * @private
  */
 ContextMenuControl.prototype.dirsLoad_ = function() {
   var me = this;
@@ -595,10 +628,11 @@ ContextMenuControl.prototype.dirsLoad_ = function() {
 
 /*
  * Creates info windows for direction steps.
- *  @param {String} info The returned description for each step.
- *  @param {Number} nr counter to identify the appropriate info.
- *  @param {Number} (optional) i counter to identify the last route.
- *  @return {DOM Object} iw The styled info window.
+ * @param {String} info The returned description for each step.
+ * @param {Number} nr counter to identify the appropriate info.
+ * @param {Number} i counter to identify the last route.
+ * @private
+ * @return {Element} The styled info window.
  */
 ContextMenuControl.prototype.createRouteInfo = function(info, nr, i) {
   var me = this;
@@ -664,9 +698,10 @@ ContextMenuControl.prototype.createRouteInfo = function(info, nr, i) {
 
 /*
  * Handles direction queries.
- *  Either first or second param must be passed in.
- *  @param {Array} (optional) points Array of GLatLngs to load direction from waypoints.
- *  @param {String} (optional) addr The form input value.
+ * Either first or second param must be passed in.
+ * @param {GLatLng[]} [points] Array of GLatLngs to load direction from waypoints.
+ * @param {String} [addr] The form input value.
+ * @private
  */
 ContextMenuControl.prototype.getDirs_ = function(points, addr) {
   var me = this;
@@ -696,8 +731,9 @@ ContextMenuControl.prototype.getDirs_ = function(points, addr) {
 
 /*
  * Creates the form for searching directions displayed in infowindow.
- *  @param {String} letter Used to decide which form to load.
- *  @return {DOM Object} form Nested elements in outer form.
+ * @param {String} letter Used to decide which form to load.
+ * @return {Element} Nested elements in outer form.
+ * @private
  */
 ContextMenuControl.prototype.makeForm_ = function(letter) {
   var me = this;
@@ -794,7 +830,8 @@ ContextMenuControl.prototype.makeForm_ = function(letter) {
 
 /*
  * Removes markers and polylines from the map and resets globals.
- *  @param {String} what Used to decide what to remove
+ * @param {String} what Used to decide what to remove
+ * @private
  */
 ContextMenuControl.prototype.removeOld_ = function(what) {
   if (what == "here") {
@@ -820,7 +857,8 @@ ContextMenuControl.prototype.removeOld_ = function(what) {
 
  /*
  * Tries to reverse geocode the clicked point and
- *  creates two markers to show 'What's here'.
+ * creates two markers to show 'What's here'.
+ * @private
  */
 ContextMenuControl.prototype.revGeocode = function() {
   var dec2deg = function(dec) {
@@ -875,4 +913,3 @@ ContextMenuControl.prototype.revGeocode = function() {
    }
   });
 };
-
