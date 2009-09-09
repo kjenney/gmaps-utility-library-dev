@@ -1041,7 +1041,7 @@
               <tr class="odd">
                 <td><code>ArcGISGeometryService(<span class="type">url:String</span>)</code></td>
                 
-                <td>Creates an ArcGISGeometryService class.Params:<li><code>url</code>: URL of service, syntax:<code>	http://{catalog-url}/{serviceName}/GeometryServer</code></td>
+                <td>Creates an ArcGISGeometryService class.Params:<li><code>url</code>: URL of service, syntax:<code>	http://[catalog-url]/{serviceName}/GeometryServer</code></td>
               </tr>
             
           </tbody>
@@ -2463,7 +2463,7 @@
               <tr class="odd">
                 <td><code>ArcGISMapType(<span class="type">tileLayers:String|ArcGISTileLayer[]</span>, <span class="type">opt_typeOpts:MapTypeOptions</span>)</code></td>
                 
-                <td>Creates a MapType, with the following parameters:<li><code>tileLayers</code>: a array of <code><a href="reference.html#ArcGISTileLayer">ArcGISTileLayer</a></code>s,  or a single URL as shortcut.<li><code>opt_typeOpts</code>: optional. An instance of <code><a href="reference.html#ArcGISMapTypeOptions">ArcGISMapTypeOptions</a></code></td>
+                <td>Creates a MapType, with the following parameters:<li><code>tileLayers</code>: a array of <code><a href="reference.html#ArcGISTileLayer">ArcGISTileLayer</a></code>s, or a single URL as shortcut.<li><code>opt_typeOpts</code>: optional. An instance of <code><a href="reference.html#ArcGISMapTypeOptions">ArcGISMapTypeOptions</a></code></td>
               </tr>
             
           </tbody>
@@ -2490,7 +2490,7 @@
                     <td><code><span class="type">mapType:ArcGISMapType</span></code></td>
                   
                 
-                <td>This event is fired when all layer's services are loaded. Passing <code><a href="reference.html#ArcGISMapType">ArcGISMapType</a></code> as argument</td>
+                <td>This event is fired when all layer's services are loaded.Passing <code><a href="reference.html#ArcGISMapType">ArcGISMapType</a></code> as argument</td>
               </tr>
             
           </tbody>
@@ -2498,7 +2498,7 @@
       
     
       <h2><a name="ArcGISMapTypeOptions"></a>class ArcGISMapTypeOptions</h2>
-      <p>Instance of this class are used in the <code>ArcGISopt_typeOpts</code> argument to the constructor of the <code><a href="reference.html#ArcGISMapType">ArcGISMapType</a></code> class. In addition to the properties  listed below, it can also contain properties from  <a href  = http://code.google.com/apis/maps/documentation/reference.html#GMapTypeOptions>GMapTypeOptions</a>except the <code>tileSize</code> property, in which case it will be overwritten by the first <code><a href="reference.html#ArcGISTileLayer">ArcGISTileLayer</a></code>'s <code><a href="reference.html#ArcGISProjection">ArcGISProjection</a></code>.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
+      <p>Instance of this class are used in the <code>ArcGISopt_typeOpts</code> argument to the constructor of the <code><a href="reference.html#ArcGISMapType">ArcGISMapType</a></code> class. In addition to the properties listed below, it can also contain properties from <a href  = http://code.google.com/apis/maps/documentation/reference.html#GMapTypeOptions>GMapTypeOptions</a>except the <code>tileSize</code> property, in which case it willbe overwritten by the first <code><a href="reference.html#ArcGISTileLayer">ArcGISTileLayer</a></code>'s <code><a href="reference.html#ArcGISProjection">ArcGISProjection</a></code>.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
       
         <h3>Properties</h3>
         <table summary="class ArcGISMapTypeOptions - Properties" width="90%">
@@ -2531,7 +2531,7 @@
                     <td><code>ArcGISProjection</code></td>
                   
                 
-                <td>an instance of <code><a href="reference.html#ArcGISProjection">ArcGISProjection</a></code>. If this option is specified, you do not have to wait the 'load' event to use the MapType.</td>
+                <td>an instance of <code><a href="reference.html#ArcGISProjection">ArcGISProjection</a></code>. If this option isspecified, you do not have to wait the 'load' event to use the MapType.</td>
               </tr>
             
           </tbody>
@@ -2542,7 +2542,7 @@
       <p>A multipoint contains an array of points and a spatialReference.<br/> There is no constructor for this class. Use javascript object literal. Example:<pre>
     {
     "points" : [ [-97.06138,32.837], [-97.06133,32.836], [-97.06124,32.834], 
-     [-97.06127,32.832] ],
+    [-97.06127,32.832] ],
     "spatialReference" : {"wkid" : 4326}
     }</pre></p>
       
@@ -2642,10 +2642,10 @@
       <p>A polygon contains an array of rings and a spatialReference.<br/> There is no constructor for this class. Use javascript object literal. Example:<pre>
     {
     "rings" : [ 
-     [ [-97.06138,32.837], [-97.06133,32.836], [-97.06124,32.834], 
-     [-97.06127,32.832], [-97.06138,32.837] ], 
-     [ [-97.06326,32.759], [-97.06298,32.755], [-97.06153,32.749], 
-     [-97.06326,32.759] ]
+    [ [-97.06138,32.837], [-97.06133,32.836], [-97.06124,32.834], 
+    [-97.06127,32.832], [-97.06138,32.837] ], 
+    [ [-97.06326,32.759], [-97.06298,32.755], [-97.06153,32.749], 
+    [-97.06326,32.759] ]
     ],
     "spatialReference" : {"wkid" : 4326}
     }</pre></p>
@@ -2692,8 +2692,8 @@
       <p>A polyline contains an array of paths and a spatialReference.<br/> There is no constructor for this class. Use javascript object literal. Example:<pre>
     {
     "paths" : [ 
-     [ [-97.06138,32.837], [-97.06133,32.836], [-97.06124,32.834] ], 
-     [ [-97.06326,32.759], [-97.06298,32.755] ]
+    [ [-97.06138,32.837], [-97.06133,32.836], [-97.06124,32.834] ], 
+    [ [-97.06326,32.759], [-97.06298,32.755] ]
     ],
     "spatialReference" : {"wkid" : 4326}
     }</pre></p>
@@ -3042,8 +3042,8 @@
                   
                 
                 <td>The spatial relationship to be applied on the   input geometry while performing the query. The supported spatial relationships   include intersects, contains, envelope intersects, within, etc.   The default spatial relationship is intersects (esriSpatialRelIntersects).   esriSpatialRelIntersects | esriSpatialRelContains | esriSpatialRelCrosses
-   | esriSpatialRelEnvelopeIntersects | esriSpatialRelIndexIntersects
-   | esriSpatialRelOverlaps | esriSpatialRelTouches | esriSpatialRelWithin</td>
+    | esriSpatialRelEnvelopeIntersects | esriSpatialRelIndexIntersects
+    | esriSpatialRelOverlaps | esriSpatialRelTouches | esriSpatialRelWithin</td>
               </tr>
             
               <tr class="odd">
@@ -3234,7 +3234,7 @@
       
     
       <h2><a name="ArcGISSpatialReference"></a>class ArcGISSpatialReference</h2>
-      <p>This  class (<code>google.maputils.arcgis.SpatialReference</code>) is for coordinate systems that converts value between geographic and real-world coordinates. The following classes extend this class:   <code><a href="reference.html#ArcGISGeographic">ArcGISGeographic</a></code>, <code><a href="reference.html#ArcGISSphereMercator">ArcGISSphereMercator</a></code>, <code><a href="reference.html#ArcGISLambertConformalConic">ArcGISLambertConformalConic</a></code>, and <code><a href="reference.html#ArcGISTransverseMercator">ArcGISTransverseMercator</a></code>.</p>
+      <p>This  class (<code>google.maputils.arcgis.SpatialReference</code>) is for coordinate systems that converts valuebetween geographic and real-world coordinates. The following classes extend this class:   <code><a href="reference.html#ArcGISGeographic">ArcGISGeographic</a></code>, <code><a href="reference.html#ArcGISSphereMercator">ArcGISSphereMercator</a></code>, <code><a href="reference.html#ArcGISLambertConformalConic">ArcGISLambertConformalConic</a></code>, and <code><a href="reference.html#ArcGISTransverseMercator">ArcGISTransverseMercator</a></code>.</p>
       
         <h3>Constructor</h3>
         <table summary="class ArcGISSpatialReference - Constructor" width="90%">
@@ -3333,7 +3333,7 @@
                     <td><code>Envelope</code></td>
                   
                 
-                <td>Transform an extent to this Spatial Reference and return a new instance of <code><a href="reference.html#ArcGISEnvelope">ArcGISEnvelope</a></code> if the spatial references are different.</td>
+                <td>Transform an extent to this Spatial Reference and returna new instance of <code><a href="reference.html#ArcGISEnvelope">ArcGISEnvelope</a></code> if the spatial references are different.</td>
               </tr>
             
           </tbody>
@@ -3783,7 +3783,7 @@
                     <td><code><span class="type">layer:ArcGISTileLayer</span></code></td>
                   
                 
-                <td>This event is fired when the layer's service is loaded. Passing <code><a href="reference.html#ArcGISTileLayer">ArcGISTileLayer</a></code> as argument</td>
+                <td>This event is fired when the layer's service is loaded.Passing <code><a href="reference.html#ArcGISTileLayer">ArcGISTileLayer</a></code> as argument</td>
               </tr>
             
           </tbody>
@@ -3872,7 +3872,7 @@
       
     
       <h2><a name="ArcGISTileLayerOverlay"></a>class ArcGISTileLayerOverlay</h2>
-      <p>This class (<code>google.maputils.arcgis.TileLayerOverlay</code>) extends<a href  = 'http://code.google.com/apis/maps/documentation/reference.html#GTileLayerOverlay'>GTileLayerOverlay</a> from the core Google Maps API. It tracks ArcGISTileLayerOverlay collections in  <code>GMap2</code> internally and make them available via <code>GMap2.getArcGISOverlays()</code></p>
+      <p>This class (<code>google.maputils.arcgis.TileLayerOverlay</code>) extends<a href  = 'http://code.google.com/apis/maps/documentation/reference.html#GTileLayerOverlay'>GTileLayerOverlay</a> from the core Google Maps API. It tracks ArcGISTileLayerOverlay collections in <code>GMap2</code> internally and make them available via <code>GMap2.getArcGISOverlays()</code></p>
       
         <h3>Constructor</h3>
         <table summary="class ArcGISTileLayerOverlay - Constructor" width="90%">
@@ -4020,7 +4020,7 @@
     
       <h2><a name="ArcGISUtil"></a>namespace ArcGISUtil</h2>
       <p>
-A list of utilities ((<code>google.maputils.arcgis.Util</code>) for commonly used functions.</p>
+A list of utilities ((<code>google.maputils.arcgis.Util</code>)for commonly used functions.</p>
       
         <h3>Static Methods</h3>
         <table summary="namespace ArcGISUtil - Static Methods" width="90%">
@@ -4063,7 +4063,7 @@ A list of utilities ((<code>google.maputils.arcgis.Util</code>) for commonly us
                     <td><code>GOverlay[]</code></td>
                   
                 
-                <td>Convert a <code><a href="reference.html#ArcGISFeature">ArcGISFeature</a></code> or <code><a href="reference.html#ArcGISIdentifyResult">ArcGISIdentifyResult</a></code> or <code><a href="reference.html#ArcGISFindResult">ArcGISFindResult</a></code> to core Google Maps API overlays such as  <code>ArcGISGMarker</code>, <code>ArcGISGPolyline</code>, or <code>ArcGISGPolygon</code>s.Note ArcGIS Geometry may have multiple parts, but the coresponding GOverlay does not  support multi-parts, so the result is an array.<ul><li><code>feature</code>: an object returned by ArcGIS Server with at least <code>geometry</code> property of type <code><a href="reference.html#ArcGISGeometry">ArcGISGeometry</a></code>.  if it contains a name-value pair "attributes" property, it will be attached to the result overlays.<li><code>opt_sr</code>: optional <code><a href="reference.html#ArcGISSpatialReference">ArcGISSpatialReference</a></code>. Can be object literal. <li><code>opt_agsStyle</code> <code><a href="reference.html#ArcGISStyleOptions">ArcGISStyleOptions</a></code>. default is <code><a href="reference.html#ArcGISConfig">ArcGISConfig</a></code>.style.<li><code>opt_displayName</code> optional field name used for title of feature.</td>
+                <td>Convert a <code><a href="reference.html#ArcGISFeature">ArcGISFeature</a></code> or <code><a href="reference.html#ArcGISIdentifyResult">ArcGISIdentifyResult</a></code> or <code><a href="reference.html#ArcGISFindResult">ArcGISFindResult</a></code> to core Google Maps APIoverlays such as  <code>ArcGISGMarker</code>,<code>ArcGISGPolyline</code>, or <code>ArcGISGPolygon</code>s.Note ArcGIS Geometry may have multiple parts, but the coresponding GOverlaydoes not  support multi-parts, so the result is an array.<ul><li><code>feature</code>: an object returned by ArcGIS Server with at least <code>geometry</code> property of type <code><a href="reference.html#ArcGISGeometry">ArcGISGeometry</a></code>. if it contains a name-value pair "attributes" property, it will be attached to the result overlays.<li><code>opt_sr</code>: optional <code><a href="reference.html#ArcGISSpatialReference">ArcGISSpatialReference</a></code>. Can be object literal.<li><code>opt_agsStyle</code> <code><a href="reference.html#ArcGISStyleOptions">ArcGISStyleOptions</a></code>. default is <code><a href="reference.html#ArcGISConfig">ArcGISConfig</a></code>.style.<li><code>opt_displayName</code> optional field name used for title of feature.</td>
               </tr>
             
               <tr class="even">
@@ -4103,7 +4103,7 @@ A list of utilities ((<code>google.maputils.arcgis.Util</code>) for commonly us
                     <td><code>GLatLng</code></td>
                   
                 
-                <td>Helper method to convert an <code><a href="reference.html#ArcGISPoint">ArcGISPoint</a></code> object to <code>GLatLng</code> .<code>opt_sr</code> is required if the point itself does not carry SR info, such asthe case of geocode or query result.</td>
+                <td>Helper method to convert an <code><a href="reference.html#ArcGISPoint">ArcGISPoint</a></code> object to<code>GLatLng</code> .<code>opt_sr</code> is required if the point itself does not carry SR info, such asthe case of geocode or query result.</td>
               </tr>
             
               <tr class="even">
@@ -4302,7 +4302,7 @@ A list of utilities ((<code>google.maputils.arcgis.Util</code>) for commonly us
                     <td><code>String[]</code></td>
                   
                 
-                <td>overwrite default to allow dynamic overlay's copyrights. Get an array of copyrights string along with all <code><a href="reference.html#ArcGISMapOverlay">ArcGISMapOverlay</a></code>'s value;</td>
+                <td>overwrite default to allow dynamic overlay's copyrights. Get an array ofcopyrights string along with all <code><a href="reference.html#ArcGISMapOverlay">ArcGISMapOverlay</a></code>'s value;</td>
               </tr>
             
           </tbody>
