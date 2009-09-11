@@ -16,9 +16,12 @@
  * it can pass in the points as an encoded string, resulting in a shorter URL.
  * </p>
  * <p>The control will attempt to sense everything about the map and overlays,
- * including the color and label of the markers.
+ * within the limits of what the API offers accessors for.
  * For example, if the the filename of a marker's icon is "marker_greenA.png",
  * then this control will parse that and set the parameters accordingly.
+ * If you want the control to maintain the style of polys, you must
+ * set additional properties on each poly object: ssColor, ssWeight, ssOpacity,
+ * and for polygons, ssFillColor and ssFillOpacity.
  * </p>
  * <p>Various options can be sent into the constructor to change the default
  * rendering of the snapshot.

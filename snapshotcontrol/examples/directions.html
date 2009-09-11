@@ -3,31 +3,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml"  xmlns:v="urn:schemas-microsoft-com:vml"> 
   <head> 
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/> 
-    <title>SnapShotControl using case DrivingDirection</title> 
-    <style type="text/css">
-    v\:* {
-      behavior:url(#default#VML);
-    }
-    </style>
+    <title>SnapShotControl: Using with Directions</title> 
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q" type="text/javascript"></script>
     <script type="text/javascript"> 
     document.write('<script type="text/javascript" src="../src/snapshotcontrol'+(document.location.search.indexOf('packed')>-1?'_packed':'')+'.js"><'+'/script>');
- 
+
     var map;
 
     function initialize () {
       map = new GMap2(document.getElementById("map_canvas"));
       map.setCenter(new GLatLng(42.356015,-71.109085), 14);
-      
+
       //add control
       var ctrlOpt = {};
-      ctrlOpt.buttonLabelHtml = "<img src='image/camera.png' >Say cheese!";
+      ctrlOpt.buttonLabelHtml = "<img src=\"image/camera.png\" width=\"25\" height=\"20\">";
       ctrlOpt.usePolylineEncode = true;
       map.addControl(new SnapShotControl(ctrlOpt));
-      
+
       doDirection();
     }
-    
+
     function doDirection () {
       var directionsPanel = document.getElementById("route");
       directionsPanel.innerHTML = "";

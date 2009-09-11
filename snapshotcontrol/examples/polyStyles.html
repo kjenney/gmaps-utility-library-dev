@@ -3,58 +3,50 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <title>SnapShotControl : Fill Example</title>
+    <title>SnapShotControl: Poly Styles</title>
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q" type="text/javascript"></script>
     <script type="text/javascript">
     document.write('<script type="text/javascript" src="../src/snapshotcontrol'+(document.location.search.indexOf('packed')>-1?'_packed':'')+'.js"><'+'/script>');
   </script>
-    <style type="text/css">
-    v\:* {
-      behavior:url(#default#VML);
-    }
-    </style>
     <script type="text/javascript">
-    
-    var snapShotControl = null;
-    
-    function initialize() {
-      if (GBrowserIsCompatible()) {
+
+      var snapShotControl = null;
+
+      function initialize() {
         var map = new GMap2(document.getElementById("map_canvas"));
         map.setCenter(new GLatLng(35.676148, 139.74479), 1);
-        
+
         /*
         *  add control
         */
         snapShotControl = new SnapShotControl();
         map.addControl(snapShotControl);
-        
+
         /*
         *  add maptype
         */
         var menuMapTypeControl = new GMenuMapTypeControl();
         map.addControl(menuMapTypeControl);
         map.addMapType(G_PHYSICAL_MAP);
-        
-        
+
+
         /*
         *  add line
         */
-        var points=[];
-        points.push(new GLatLng(35.676148, 139.74479));
-        points.push(new GLatLng(25.48295117535531, 118.30078125));
-        points.push(new GLatLng(-32.39851580247401, 135.17578125));
-        points.push(new GLatLng(37.43997405227057, -121.9921875));
-        points.push(new GLatLng(35.676148, 139.74479));
-        var line = new GPolygon(points, "red", 10, 1, "green", 0.5);
+        var latlngs = [];
+        latlngs.push(new GLatLng(35.676148, 139.74479));
+        latlngs.push(new GLatLng(25.48295117535531, 118.30078125));
+        latlngs.push(new GLatLng(-32.39851580247401, 135.17578125));
+        latlngs.push(new GLatLng(37.43997405227057, -121.9921875));
+        latlngs.push(new GLatLng(35.676148, 139.74479));
+        var line = new GPolygon(latlngs, "red", 10, 1, "green", 0.5);
         line.ssColor = "red";
         line.ssWeight = 10;
         line.ssOpacity = 1;
         line.ssFillColor = "green";
         line.ssFillOpacity = 0.5;
         map.addOverlay(line);
-        
       }
-    }
 
     </script>
   </head>
