@@ -136,11 +136,12 @@ SnapShotControl.prototype.initialize = function (map) {
   this.checkBrowserAgent();
 
   var mapContainer = map.getContainer();
-
+//alert(map.style.fontSize);
   // create container
   var container = this.createDiv_();
   container.style.fontSize = "12px";
-  container.style.lineHeight = "15px";
+  container.style.lineHeight = "12px";
+  container.style.padding = 0;
   container.style.borderStyle = "solid";
   container.style.borderWidth = "1px";
   container.style.borderColor = "black";
@@ -156,13 +157,20 @@ SnapShotControl.prototype.initialize = function (map) {
     btnSize.width += 3;
     btnSize.height += 3;
   }
+  if (!this.buttonLabel_.match(/</)) {
+    btnSize.height = 13;
+  }
   var htmlContainer = container.cloneNode(false);
   htmlContainer.style.padding = "1px";
+  htmlContainer.style.fontSize = "12px";
+  htmlContainer.style.lineHeight = "12px";
   htmlContainer.style.textAlign = "center";
   htmlContainer.style.width = btnSize.width + "px";
   htmlContainer.style.height = btnSize.height + "px";
   htmlContainer.innerHTML = this.buttonLabel_; 
   htmlContainer.style.borderColor = "white #b0b0b0 #b0b0b0 white";
+  htmlContainer.style.fontFace = "sans serif";
+  htmlContainer.style.fontWeight = "bold";
   container.appendChild(htmlContainer);
 
   // events

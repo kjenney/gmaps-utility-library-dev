@@ -9,26 +9,7 @@
   <body>
     <h1>SnapShotControl</h1>
     <p>
-<p>This library makes it easy to generate an image "snapshot" of your
-interactive map, using the Google Static Maps API.</p>
-<p>The default behavior adds a control to the map,
-and then shows a popup with the snapshot when the control is clicked.
-However, the control can be hidden and the generated
-snapshot URLs can be programmatically retrieved, so the library may be used
-in a more flexible manner.
-</p>
-<p>This control can detect the standard overlays (GMarker, GPolygon, GPolyline)
-and render them in the snapshot, and in the case of a poly with many points,
-it can pass in the points as an encoded string, resulting in a shorter URL.
-</p>
-<p>The control will attempt to sense everything about the map and overlays,
-including the color and label of the markers.
-For example, if the the filename of a marker's icon is "marker_greenA.png",
-then this control will parse that and set the parameters accordingly.
-</p>
-<p>Various options can be sent into the constructor to change the default
-rendering of the snapshot.
-</p></p>
+<p>This library makes it easy to generate an image "snapshot" of yourinteractive map, using the Google Static Maps API.</p><p>The default behavior adds a control to the map,and then shows a popup with the snapshot when the control is clicked.However, the control can be hidden and the generatedsnapshot URLs can be programmatically retrieved, so the library may be usedin a more flexible manner.</p><p>This control can detect the standard overlays (GMarker, GPolygon, GPolyline)and render them in the snapshot, and in the case of a poly with many points,it can pass in the points as an encoded string, resulting in a shorter URL.</p><p>The control will attempt to sense everything about the map and overlays,within the limits of what the API offers accessors for.For example, if the the filename of a marker's icon is "marker_greenA.png",then this control will parse that and set the parameters accordingly.If you want the control to maintain the style of polys, you mustset additional properties on each poly object: ssColor, ssWeight, ssOpacity,and for polygons, ssFillColor and ssFillOpacity.</p><p>Various options can be sent into the constructor to change the defaultrendering of the snapshot.</p></p>
     <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
     
       <h2><a name="SnapShotControl"></a>class SnapShotControl</h2>
@@ -74,10 +55,7 @@ rendering of the snapshot.
                     <td><code>String</code></td>
                   
                 
-                <td>Generate new URL for snapshot.
- If no center is passed in, then it uses the center of the map.
- If the center is set to false, then the center of the snapshot
- is auto-calculated based on the overlay positions.</td>
+                <td>Generate new URL for snapshot. If no center is passed in, then it uses the center of the map. If the center is set to false, then the center of the snapshot is auto-calculated based on the overlay positions.</td>
               </tr>
             
               <tr class="even">
@@ -127,8 +105,7 @@ rendering of the snapshot.
                     <td><code>None</code></td>
                   
                 
-                <td>Specify image format.
- The options are "gif," "jpg," "jpg-baseline," "png8," "png32".</td>
+                <td>Specify image format. The options are "gif," "jpg," "jpg-baseline," "png8," "png32".</td>
               </tr>
             
               <tr class="odd">
@@ -158,8 +135,7 @@ rendering of the snapshot.
                     <td><code>None</code></td>
                   
                 
-                <td>Specify maptype for snapshot.
- The options are "roadmap", "satellite", "hybrid", "terrain" or auto-detect("").</td>
+                <td>Specify maptype for snapshot. The options are "roadmap", "satellite", "hybrid", "terrain" or auto-detect("").</td>
               </tr>
             
               <tr class="even">
@@ -220,8 +196,7 @@ rendering of the snapshot.
                     <td><code>String</code></td>
                   
                 
-                <td>Specify label HTML of 
-  control button.  The default value is <code> "Say cheese!"</code>.</td>
+                <td>Specify label HTML of   control button.  The default value is <code> "Say cheese!"</code>.</td>
               </tr>
             
               <tr class="even">
@@ -231,8 +206,7 @@ rendering of the snapshot.
                     <td><code>String</code></td>
                   
                 
-                <td>Specify image format for snapshot.
- You can choice one from "gif", "jpg", "jpg-baseline", "png8", "png32".  The default value is <code> "gif"</code>.</td>
+                <td>Specify image format for snapshot. You can choice one from "gif", "jpg", "jpg-baseline", "png8", "png32".  The default value is <code> "gif"</code>.</td>
               </tr>
             
               <tr class="odd">
@@ -242,8 +216,7 @@ rendering of the snapshot.
                     <td><code>Boolean</code></td>
                   
                 
-                <td>Specify visibility when control is
- added to the map. If it is set to true, the button is hidden.  The default value is <code> false</code>.</td>
+                <td>Specify visibility when control is added to the map. If it is set to true, the button is hidden.  The default value is <code> false</code>.</td>
               </tr>
             
               <tr class="even">
@@ -253,8 +226,7 @@ rendering of the snapshot.
                     <td><code>String</code></td>
                   
                 
-                <td>Specify language for snapshot's copyrights.
- If it is not set, then this library detects the language of the map.  The default value is <code> ""</code>.</td>
+                <td>Specify language for snapshot's copyrights. If it is not set, then this library detects the language of the map.  The default value is <code> ""</code>.</td>
               </tr>
             
               <tr class="odd">
@@ -264,9 +236,7 @@ rendering of the snapshot.
                     <td><code>String</code></td>
                   
                 
-                <td>Specify maptype for snapshot.
- The options are "roadmap", "satellite", "hybrid", "terrain".
- If it is not set, then the control detects the type of the map.  The default value is <code> ""</code>.</td>
+                <td>Specify maptype for snapshot. The options are "roadmap", "satellite", "hybrid", "terrain". If it is not set, then the control detects the type of the map.  The default value is <code> ""</code>.</td>
               </tr>
             
               <tr class="even">
@@ -276,9 +246,7 @@ rendering of the snapshot.
                     <td><code>Boolean</code></td>
                   
                 
-                <td>Specify whether to use mobile optimized
- tiles for snapshot. Useful for mobile devices. This property is ignored,
- when the <code>style</code> property is not set to "roadmap".  The default value is <code> false</code>.</td>
+                <td>Specify whether to use mobile optimized tiles for snapshot. Useful for mobile devices. This property is ignored, when the <code>style</code> property is not set to "roadmap".  The default value is <code> false</code>.</td>
               </tr>
             
               <tr class="odd">
@@ -288,9 +256,7 @@ rendering of the snapshot.
                     <td><code>Boolean</code></td>
                   
                 
-                <td>If it is set to true, the
- control attempts to auto detect the marker color, label, and size,
- based on standard image naming conventions.  The default value is <code> true</code>.</td>
+                <td>If it is set to true, the control attempts to auto detect the marker color, label, and size, based on standard image naming conventions.  The default value is <code> true</code>.</td>
               </tr>
             
               <tr class="even">
@@ -300,9 +266,7 @@ rendering of the snapshot.
                     <td><code>Boolean</code></td>
                   
                 
-                <td>Specify whether to 
-  use encoded polys in the snapshot. Useful if you're sending in a big poly,
-  and want to stay within URL limits.  The default value is <code> false</code>.</td>
+                <td>Specify whether to   use encoded polys in the snapshot. Useful if you're sending in a big poly,  and want to stay within URL limits.  The default value is <code> false</code>.</td>
               </tr>
             
           </tbody>
