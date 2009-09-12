@@ -535,8 +535,8 @@ SnapShotControl.prototype.getImage = function (mapCenterPos) {
     }
     
     url += "&size=" + this.size_.width + "x" + this.size_.height;
-    this.mapImgSize.width = this.size_.width;
-    this.mapImgSize.height = this.size_.height;
+    this.mapImgSize.width = parseInt(this.size_.width, 10);
+    this.mapImgSize.height = parseInt(this.size_.height, 10);
   } else {
     if (mapSize.width > 640) {
       mapSize.width = 640;
@@ -546,8 +546,8 @@ SnapShotControl.prototype.getImage = function (mapCenterPos) {
     }
     
     url += "&size=" + mapSize.width + "x" + mapSize.height;
-    this.mapImgSize.width = mapSize.width;
-    this.mapImgSize.height = mapSize.height;
+    this.mapImgSize.width = parseInt(mapSize.width, 10);
+    this.mapImgSize.height = parseInt(mapSize.height, 10);
   }
 
   
