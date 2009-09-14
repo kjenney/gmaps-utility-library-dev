@@ -13,7 +13,7 @@
  */
 /**
  * @name Streetview Mapsicle
- * @version 0.9.3
+ * @version 0.9.4
  * @author Stephen Davis &lt;stephen@projectx.co.nz&gt;.
  * @author Cameron Prebble &lt;cameron@projectx.co.nz&gt;.
  * @copyright (c) 2008-2009 ProjectX Technology Ltd.
@@ -40,7 +40,7 @@ window
  * @private
  */
 /*global SVOverlay*/
-SVOverlay = function () {};
+var SVOverlay = function () {};
 
 SVOverlay.prototype = {
   /** @private */
@@ -228,7 +228,7 @@ SVOverlay.prototype = {
  * @ignore
  */
 /*global SVDecal*/
-SVDecal = function (params) {
+var SVDecal = function (params) {
   this.overlayInit(params);
 
   this.content = params.content;
@@ -256,7 +256,7 @@ SVDecal.prototype.pos = function () {
  * @extends SVOverlay
  */
 /*global SVTrackingOverlay*/
-SVTrackingOverlay = function () {};
+var SVTrackingOverlay = function () {};
 
 SVTrackingOverlay.prototype = new SVOverlay();
 
@@ -423,7 +423,7 @@ SVTrackingOverlay.prototype.selectViewMode = function (pastCutoff, isGoal, inFOV
  * @param {SVMiniInfoBoxParams} params
  */
 /*global SVMiniInfoBox*/
-SVMiniInfoBox = function (params) {
+var SVMiniInfoBox = function (params) {
   this.prevOpac = -999;
 
   this.inner = params.inner;
@@ -446,7 +446,7 @@ SVMiniInfoBox = function (params) {
  * @property {number} width The width of the marker, in pixels. Note that you cannot set the height.
  */
 /*global SVMiniInfoBoxParams*/
-SVMiniInfoBoxParams = {
+var SVMiniInfoBoxParams = {
   prototype: {
     inner: null,
     width: null,
@@ -556,7 +556,7 @@ SVMiniInfoBox.prototype.setSize = function (width, height) {
  * @param {SVCustomInfoWindowParams} params
  */
 /*global SVCustomInfoWindow*/
-SVCustomInfoWindow = function (params) {
+var SVCustomInfoWindow = function (params) {
   this.inner = params.inner;
 
   this.callback = params.callback instanceof Function ? params.callback : function () {};
@@ -605,7 +605,7 @@ SVCustomInfoWindow.prototype.generateHTML = function () {
  * @param {SVMarkerParams} params
  */
 /*global SVMarker*/
-SVMarker = function (params) {
+var SVMarker = function (params) {
   this.scale = params.scale;
   this.iconURL = params.iconURL || MapsicleConfig.DEFAULT_ICON_URL;
   this.callback = params.callback instanceof Function ? params.callback : function () {};
@@ -627,7 +627,7 @@ SVMarker = function (params) {
  * @property {number} scale (optional) If 1 or undefined, the marker will always be the same size. If less than 1, the marker will be downscaled as it gets further away until it is the given fraction of its normal size.
  */
 /*global SVMarkerParams*/
-SVMarkerParams = {
+var SVMarkerParams = {
   prototype: {
     showOffscreen: null,
     iconURL: null,
@@ -748,7 +748,7 @@ SVMarker.prototype.setImageParameter = function (dimension, bonus) {
  * @param {SVLocationParams} params
  */
 /*global SVLocation*/
-SVLocation = function (params) {
+var SVLocation = function (params) {
   this.lat = params.lat;
   this.lng = params.lng;
   this.name = params.name;
@@ -776,7 +776,7 @@ SVLocation = function (params) {
  *     but not recommended to have more than one goal marker.
  */
 /*global SVLocationParams*/
-SVLocationParams = {
+var SVLocationParams = {
   prototype: {
     lat: null,
     lng: null,
@@ -890,7 +890,7 @@ SVLocation.prototype.infoWindowClicked = function (mouseEvent) {
  * @param {MapsicleConfig} custom (Optional) Any custom configuration parameters
  */
 /*global Mapsicle*/
-Mapsicle = function (name, glatlng, custom) {
+var Mapsicle = function (name, glatlng, custom) {
   this.mapsicleId = (Mapsicle.numMapsicles++);
 
   this.config = new MapsicleConfig();
@@ -1291,9 +1291,6 @@ Mapsicle.prototype.onPositionChangeComplete = function (loc) {
     this.locations.sort(function (a, b) {
       return a.targetYaw - b.targetYaw;
     });
-    // FIXME: Document reason for doing this here and not in upStreetView. There was one...
-    // TODO: is this still needed in current versions of Chrome and/or Street View?
-    //this.elems.doUtterlyTerrifyingBrowserHacks();
   }
 
   this.overlayMgr.stopMotion();
@@ -1302,6 +1299,8 @@ Mapsicle.prototype.onPositionChangeComplete = function (loc) {
     this.up = this.upStreetView();
     this.overlayMgr.setAllOpacities(0.0);
   }
+
+  this.elems.doUtterlyTerrifyingBrowserHacks();    
 
   this.triggerEvent("mapsicle_position_changed", loc);
 };
@@ -1646,7 +1645,7 @@ Mapsicle.ZIndices = {
  * @property {number} normalDistance At this distance (in metres), and any closer, a scaled marker will be displayed at full size
  */
 /*global MapsicleConfig*/
-MapsicleConfig = function () {};
+var MapsicleConfig = function () {};
 
 MapsicleConfig.prototype = {
   avoidOverlaps: false,
@@ -1949,8 +1948,6 @@ Mapsicle.PageElements.prototype = {
     setContainerSizes(this.svc, x, y);
   },
 
-  doneBrowserHacks: false,
-
   /**
    * @private
    *
@@ -1962,26 +1959,23 @@ Mapsicle.PageElements.prototype = {
    * FIXME: is this still needed in modern versions of Chrome and Street View?
    */
   doUtterlyTerrifyingBrowserHacks: function () {
-    if (!this.doneBrowserHacks) {
-      var flashObj = this.svc.getElementsByTagName("object")[0];
-      if (flashObj) {  /* Internet Explorer or Chrome */
-        var params = flashObj.getElementsByTagName("param");
-        var done = false;
-        for (var i = params.length - 1; i >= 0; --i) {
-          if (params[i].attributes.name.localName === "wmode") {
-            params[i].setAttribute('value', 'opaque');
-            done = true;
-            break;
-          }
-        }
-        if (!done) {
-          var wmode = document.createElement('param');
-          wmode.setAttribute('name', 'wmode');
-          wmode.setAttribute('value', 'opaque');
-          flashObj.appendChild(wmode);
+    var flashObj = this.svc.getElementsByTagName("object")[0];
+    if (flashObj) {  /* Internet Explorer or Chrome */
+      var params = flashObj.getElementsByTagName("param");
+      var done = false;
+      for (var i = params.length - 1; i >= 0; --i) {
+        if (params[i].attributes.name.localName === "wmode") {
+          params[i].setAttribute('value', 'opaque');
+          done = true;
+          break;
         }
       }
-      this.doneBrowserHacks = true;
+      if (!done) {
+        var wmode = document.createElement('param');
+        wmode.setAttribute('name', 'wmode');
+        wmode.setAttribute('value', 'opaque');
+        flashObj.appendChild(wmode);
+      }
     }
   }
 };
