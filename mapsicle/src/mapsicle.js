@@ -13,7 +13,7 @@
  */
 /**
  * @name Streetview Mapsicle
- * @version 0.9.2
+ * @version 0.9.3
  * @author Stephen Davis &lt;stephen@projectx.co.nz&gt;.
  * @author Cameron Prebble &lt;cameron@projectx.co.nz&gt;.
  * @copyright (c) 2008-2009 ProjectX Technology Ltd.
@@ -2123,7 +2123,6 @@ Mapsicle.Startup = {};
 Mapsicle.Startup.start = function () {
   Mapsicle.Startup.addStyleSheet();
   Mapsicle.Startup.addUnloadHandler();
-  Mapsicle.Startup.requireGoogleLibs();
 };
 
 Mapsicle.Startup.addStyleSheet = function () {
@@ -2144,10 +2143,6 @@ Mapsicle.Startup.addUnloadHandler = function () {
   } else if (window.attachEvent) {
     window.attachEvent("onunload", GUnload);
   }
-};
-
-Mapsicle.Startup.requireGoogleLibs = function () {
-  google.load("maps", "2");
 };
 
 Mapsicle.Startup.start();
