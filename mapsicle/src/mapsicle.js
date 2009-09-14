@@ -13,7 +13,7 @@
  */
 /**
  * @name Streetview Mapsicle
- * @version 0.9.4
+ * @version 0.9.5
  * @author Stephen Davis &lt;stephen@projectx.co.nz&gt;.
  * @author Cameron Prebble &lt;cameron@projectx.co.nz&gt;.
  * @copyright (c) 2008-2009 ProjectX Technology Ltd.
@@ -561,7 +561,7 @@ var SVCustomInfoWindow = function (params) {
 
   this.callback = params.callback instanceof Function ? params.callback : function () {};
 
-  this.generateHTML();
+  this.generateHTML(params.width, params.height);
   this.trackingInit(params);
 };
 
@@ -586,10 +586,10 @@ SVCustomInfoWindowParams = {
 SVCustomInfoWindow.prototype = new SVTrackingOverlay();
 
 /** @private */
-SVCustomInfoWindow.prototype.generateHTML = function () {
+SVCustomInfoWindow.prototype.generateHTML = function (width, height) {
   this.elem = Mapsicle.Utils.createDiv("mapsicle-overlays");
-  this.elem.style.height = this.height;
-  this.elem.style.width = this.width;
+  this.elem.style.height = height;
+  this.elem.style.width = width;
   this.elem.style.zIndex = Mapsicle.ZIndices.LABEL_BOTTOM;
   this.elem.appendChild(this.inner);
 };

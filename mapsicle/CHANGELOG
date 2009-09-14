@@ -1,19 +1,11 @@
-Mapsicle API v0.9.4 - 14 September 2009
-=======================================
+Next version...
 
+* fix height and width setting in Custom Info Windows, so example should now work in IE
 * ugly partial fix for markers not showing up in Chrome
-
-Mapsicle API v0.9.3 - 14 September 2009
-=======================================
-
 * fixed everything-is-broken-in-Internet-Explorer issue
-
-Mapsicle API v0.9.2 - 14 September 2009
-=======================================
-
 * use visibility: hidden rather than display: none to hide overlays during drag to fix issue with YouTube player being reloaded
 
-Mapsicle API v0.9.1 - 14 September 2009
+Mapsicle API v0.9.1 - 14 September 2009       
 =======================================
 
 * fixed z-index for SVCustomInfoWindow so it shows up over the top of markers, as SVMiniInfoBox does
