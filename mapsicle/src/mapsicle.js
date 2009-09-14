@@ -13,7 +13,7 @@
  */
 /**
  * @name Streetview Mapsicle
- * @version 0.9.0
+ * @version 0.9.1
  * @author Stephen Davis &lt;stephen@projectx.co.nz&gt;.
  * @author Cameron Prebble &lt;cameron@projectx.co.nz&gt;.
  * @copyright (c) 2008-2009 ProjectX Technology Ltd.
@@ -590,6 +590,7 @@ SVCustomInfoWindow.prototype.generateHTML = function () {
   this.elem = Mapsicle.Utils.createDiv("mapsicle-overlays");
   this.elem.style.height = this.height;
   this.elem.style.width = this.width;
+  this.elem.style.zIndex = Mapsicle.ZIndices.LABEL_BOTTOM;
   this.elem.appendChild(this.inner);
 };
 

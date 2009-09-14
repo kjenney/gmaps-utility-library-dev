@@ -1,3 +1,8 @@
+Mapsicle API v0.9.1 - 14 September 2009
+=======================================
+
+* fixed z-index for SVCustomInfoWindow so it shows up over the top of markers, as SVMiniInfoBox does
+
 Mapsicle API v0.9.0 - 14 September 2009
 =======================================
 
