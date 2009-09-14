@@ -13,7 +13,7 @@
  */
 /**
  * @name Streetview Mapsicle
- * @version 0.9.1
+ * @version 0.9.2
  * @author Stephen Davis &lt;stephen@projectx.co.nz&gt;.
  * @author Cameron Prebble &lt;cameron@projectx.co.nz&gt;.
  * @copyright (c) 2008-2009 ProjectX Technology Ltd.
@@ -2012,11 +2012,13 @@ Mapsicle.OverlayDisplayManager.prototype = {
   pauseMode: Mapsicle.OverlayDisplayMode.SOLID,
 
   hideAllOverlays: function () {
-    this.mapsicle.elems.labels.style.display = "none";
+    //this.mapsicle.elems.labels.style.display = "none";
+    this.mapsicle.elems.labels.style.visibility = "hidden";
   },
 
   unHideAllOverlays: function () {
-    this.mapsicle.elems.labels.style.display = "block";
+    //this.mapsicle.elems.labels.style.display = "block";
+    this.mapsicle.elems.labels.style.visibility = "visible";
   },
 
   startMotion: function () {
