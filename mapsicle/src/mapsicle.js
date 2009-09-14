@@ -61,7 +61,7 @@ SVOverlay.prototype = {
       }, false);
     } else if (this.elem.attachEvent) {
       this.elem.attachEvent("onmousedown", function (e) {
-        e.preventDefault();
+        e.returnValue = false;
       });
     }
   },
