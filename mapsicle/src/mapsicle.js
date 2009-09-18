@@ -573,7 +573,7 @@ var SVCustomInfoWindow = function (params) {
  * @property {number} height The height of the info window, in pixels
  */
 /*global SVCustomInfoWindowParams*/
-SVCustomInfoWindowParams = {
+var SVCustomInfoWindowParams = {
   prototype: {
     inner: null,
     width: null,
@@ -904,12 +904,10 @@ var Mapsicle = function (name, glatlng, custom) {
   this.elems = elems;
 
   // TODO: allow sizeX, sizeY as MapsicleParams
-  if (this.sizeX === 0) {
-    this.sizeX = Math.max(MapsicleConfig.MIN_PANORAMA_SIZE_X, elems.svc.clientWidth, elems.container.clientWidth);
-  }
-  if (this.sizeY === 0) {
-    this.sizeY = Math.max(MapsicleConfig.MIN_PANORAMA_SIZE_Y, elems.svc.clientHeight, elems.container.clientHeight);
-  }
+  this.sizeX = Math.max(MapsicleConfig.MIN_PANORAMA_SIZE_X, elems.svc.clientWidth, elems.container.clientWidth);
+  this.sizeY = Math.max(MapsicleConfig.MIN_PANORAMA_SIZE_Y, elems.svc.clientHeight, elems.container.clientHeight);
+
+  elems.listenForResize();
 
   var startLoc;
   if (glatlng) {
@@ -925,7 +923,7 @@ var Mapsicle = function (name, glatlng, custom) {
   var theMapsicle = this;
 
   this.setPosition(startLoc, function (code) {
-    this.setCannedMessage(code);
+    theMapsicle.setCannedMessage(code);
   });
 };
 
@@ -1082,13 +1080,13 @@ Mapsicle.prototype.upStreetView = function () {
  * @private
  */
 Mapsicle.prototype.handleClick = function (e) {
-  var panoX = e.pageX - this.elems.panelX;
-  var panoY = e.pageY - this.elems.panelY;
+  //var panoX = e.pageX - this.elems.panelX;
+  //var panoY = e.pageY - this.elems.panelY;
 
-  var screenPoint = new GScreenPoint(panoX, panoY);
-  var pov = this.panorama.getPOV(screenPoint);
+  //var screenPoint = new GScreenPoint(panoX, panoY);
+  //var pov = this.panorama.getPOV(screenPoint);
 
-  this.triggerEvent("mapsicle_click", pov);
+  this.triggerEvent("mapsicle_click", /*pov*/ null);
 };
 
 /*
@@ -1527,8 +1525,9 @@ Mapsicle.prototype.switchToPano = function (panoLocation, target) {
 
 /** @private */
 Mapsicle.prototype.setCannedMessage = function (code, replace) {
+  var theMapsicle = this;
   var show = replace ? function (inner) {
-    this.elems.svc.innerHTML = "<h2>" + inner + "</h2>";
+    theMapsicle.elems.svc.innerHTML = "<h2>" + inner + "</h2>";
   } : this.setMessage;
 
   switch (code) {
@@ -1890,9 +1889,6 @@ Mapsicle.PageElements = function (theMapsicle, name, uid) {
 
   this.svc = document.createElement('div');
   this.svc.setAttribute('id', this.svcId);
-  this.svc.onresize = function (e) {
-    theMapsicle.panoramaResized();
-  };
 
   this.svc.innerHTML = "<h2>Googling...</h2>";
   this.svc.className += " mapsicle-streetview";
@@ -1921,6 +1917,12 @@ Mapsicle.PageElements.prototype = {
     var streetPanelXY = this.findPos(this.svc);
     this.panelX = streetPanelXY[0];
     this.panelY = streetPanelXY[1];
+  },
+
+  listenForResize: function () {
+    this.svc.onresize = function (e) {
+      theMapsicle.panoramaResized();
+    };
   },
 
   // Thanks to http://www.quirksmode.org/js/findpos.html
