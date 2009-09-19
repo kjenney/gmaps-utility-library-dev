@@ -813,56 +813,6 @@ ExtStreetviewControl.prototype.isNull = function (value) {
  * @param     targetEle : target DOM element
  * @return    GPoint
  */
-ExtStreetviewControl.prototype.getOffsetPosition_ = function (targetEle) {
-  
-  var pos = new GPoint(0, 0);
-  while (targetEle) {
-    pos.x += targetEle.offsetLeft; 
-    pos.y += targetEle.offsetTop; 
-    targetEle = targetEle.offsetParent;
-
-    if (targetEle && this._is_ie) {
-      pos.x += (parseInt(this.getElementStyle_(targetEle, "border-left-width"), 10) || 0);
-      pos.y += (parseInt(this.getElementStyle_(targetEle, "border-top-width"), 10) || 0);
-    }
-  }
-
-  if (this._is_gecko) {
-    var bodyEle = document.getElementsByTagName("body")[0];
-    pos.x += 2 * (parseInt(this.getElementStyle_(bodyEle, "border-left-width"), 10) || 0);
-    pos.y += 2 * (parseInt(this.getElementStyle_(bodyEle, "border-top-width"), 10) || 0);
-  }
-  return pos;
-};
-
-/**
- * @private
- * @desc      calculate dom position
- * @param     targetEle : target DOM element
- * @return    GPoint
- */
-ExtStreetviewControl.prototype.getElementStyle_ = function (ele, cssProperty) {
-  if (this._is_ie) {
-    return ele.currentStyle[cssProperty];
-  }
-  cssProperty = cssProperty.replace('/-([a-z])/ig', function () {
-    var tmp = RegExp.$1.toUpperCase();
-    return tmp;
-  });
-  var view = window;
-  if (this._is_safari) {
-    view = document.defaultView;
-  }
-  var eleStyle = view.getComputedStyle(ele, "");
-  return eleStyle.getPropertyCSSValue(cssProperty);
-};
-
-/**
- * @private
- * @desc      calculate dom position
- * @param     targetEle : target DOM element
- * @return    GPoint
- */
 ExtStreetviewControl.prototype.setElementStyle_ = function (ele, cssProperty, value, priority) {
   if (this._is_ie) {
     ele.style[cssProperty] = value;
