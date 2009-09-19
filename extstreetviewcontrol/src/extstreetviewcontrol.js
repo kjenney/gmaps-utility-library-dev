@@ -14,12 +14,10 @@
  * @class This class represents optional arguments to {@link ExtStreetviewControl}. 
  *   It has no constructor, but is instantiated as an object literal.
  * @property {GLatLng} [latlng = null] Specifies latlng of panorama.
- *  If it is not set, then c gets center location of main map.
+ *  If it is not set, then control gets center location of main map.
  * @property {GSize} [size = GSize(300, 210)] Specifies control's size. 
- * @property {GPov} [pov = {yaw : 0, pitch : 0, panoId : null}] This property specifies 
+ * @property {GPov} [pov = {yaw : 0, pitch : 0, panoId : null}] Specifies initialize pov of panorama.
  */
-
-/*global GStreetviewClient, PegmanMarker, G_ANCHOR_BOTTOM_RIGHT, GStreetviewPanorama, GOverviewMapControl */
 
 /**
  * @desc
@@ -27,25 +25,16 @@
  * @param {ExtStreetviewOptions} [opt_opts] Optional arguments.
  * @constructor
  */
+
 function ExtStreetviewControl(opt_opts) {
-  
   //============================
   // Image and clip rect table
   //============================
-  this.minBtnTbl_ = {};
-  this.minBtnTbl_.btnSize = new GSize(15, 15);
-  this.minBtnTbl_.imageSrc = "http://maps.google.com/mapfiles/mapcontrols3d.png";
-  this.minBtnTbl_.images = [];
-  this.minBtnTbl_.images.push({"left" : 0, "top" : -428});
-  this.minBtnTbl_.images.push({"left" : 0, "top" : -443});
+  this.arrowBtnTbl_ = {};
   
-
-  this.maxBtnTbl_ = {};
-  this.maxBtnTbl_.btnSize = new GSize(15, 15);
-  this.maxBtnTbl_.imageSrc = "http://maps.google.com/mapfiles/mapcontrols3d.png";
-  this.maxBtnTbl_.images = [];
-  this.maxBtnTbl_.images.push({"left" : 0, "top" : -443});
-  this.maxBtnTbl_.images.push({"left" : 0, "top" : -428});
+  this.arrowBtnTbl_.src = "http://maps.gstatic.com/mapfiles/cb/resize_toggles.png";
+  this.arrowBtnTbl_.upArrow = {"left" : -1, "top" : -86, "width" : 15, "height" : 15};
+  this.arrowBtnTbl_.downArrow = {"left" : -1, "top" : -69, "width" : 15, "height" : 15};
   
   this.markerTbl_ = {};
   this.markerTbl_.icon = new GIcon();
@@ -86,146 +75,154 @@ function ExtStreetviewControl(opt_opts) {
   this.ctrlSize_ = opt_opts.size || new GSize(300, 210);
   this.pov_ = opt_opts.pov || {"yaw" : 0, "pitch" : 0, "panoId" : null};
   this.marker_ = null;
+  this.frameColor_ = "#6784C7";
 
-  ExtStreetviewControl.prototype.checkBrowserAgent();
+
+  this.windowStatus_ = "NORMAL";
+  this.mapStatus_ = "MAP";
+  
+  this.padding_ = 5;
 }
 
-/**
- * @private
- */
 ExtStreetviewControl.prototype = new GControl();
-
-/**
- * @desc Check browser agent
- * @private
- */
-ExtStreetviewControl.prototype.checkBrowserAgent = function () {
-  var agt = navigator.userAgent.toLowerCase();
-  this._is_ie    = ((agt.indexOf("msie") !== -1) && (agt.indexOf("opera") === -1));
-  this._is_ie67  = (agt.indexOf("msie 6") !== -1 || agt.indexOf("msie 7") !== -1);
-  this._is_ie8   = (this._is_ie === true && this._is_ie67 === false);
-  this._is_gecko = (agt.indexOf("gecko") !== -1);
-  this._is_opera = (agt.indexOf("opera") !== -1);
-  this._is_chrome = (agt.indexOf("chrome") !== -1);
-};
 
 /**
  * @desc Initialize the ExtStreetviewControl
  * @private
  */
 ExtStreetviewControl.prototype.initialize = function (map) {
+  var this_ = this;
   GControl.prototype.initialize.apply(this, arguments);
   
+  this.checkBrowserAgent();
+
   //Release streetview memory
   GEvent.bindDom(window, "unload", this, this.removeControl_);
-  
-  var _handleList = [];
-  
-  //initialize
+
+  //==============================================
+  //  Initialize
+  //==============================================
   this.latlng_ = this.latlng_ || map.getCenter();
   this.map_ = map;
+  this.mapContainer_ = map.getContainer();
   this.bounds_ = map.getBounds();
-  this.minimize_ = false;
-  this.maximize_ = false;
-  this.ctrlSize_ = this.ctrlSize_;
   this.stViewCnt_ = 0;
-  
-  //make container
-  this.container_ = this.createDiv_(this.ctrlSize_);
-  this.container_.style.zIndex = 0;
+
+  this.swapMapContainer_ = this.mapContainer_.cloneNode(false);
+
+  this.swapFlashContainer_ = document.createElement("div");
+  this.swapFlashContainer_.style.position = "absolute";
+  this.swapFlashContainer_.style.left = 0;
+  this.swapFlashContainer_.style.right = 0;
+  this.swapFlashContainer_.style.top = 0;
+  this.swapFlashContainer_.style.bottom = 0;
+  this.swapMapContainer_.appendChild(this.swapFlashContainer_);
+
+
+  this.swapiframeBase_ = this.createEle_(this.ctrlSize_, "iframe");
+  this.swapiframeBase_.style.bottom = 0;
+  this.swapiframeBase_.style.right = 0;
+  this.swapiframeBase_.style.borderStyle = "none";
+  this.swapiframeBase_.src = "";
+  this.swapiframeBase_.frameborder = 0;
+  this.swapMapContainer_.appendChild(this.swapiframeBase_);
+
+
+
+  this.mapContainer_.parentNode.replaceChild(this.swapMapContainer_, this.mapContainer_);
+  this.mapContainer_.setAttribute("id", null);
+  this.mapContainer_.setAttribute("class", null);
+  this.setElementStyle_(this.mapContainer_, "width", "100%", null);
+  this.setElementStyle_(this.mapContainer_, "height", "100%", null);
+  this.swapMapContainer_.appendChild(this.mapContainer_);
+
+
+  //==============================================
+  //  Create a window likes the GOverviewControl
+  //==============================================
+
+  //Create a streetview window
+  var result = this.createContainer_(this.ctrlSize_);
+  this.cornerInfo_ = result;
+  this.mainWindow_ = result.mainWindow;
+  this.container_ = result.container;
+  this.container_.style.right = 0;
+  this.container_.style.bottom = 0;
+  this.container_.style.backgroundColor = this.frameColor_;//"#a8acb8";  
+
+  this.cornerInfo_.containerIframe = this.swapiframeBase_;
+  this.swapMainWindow_ = this.mainWindow_.cloneNode(false);
+
+  //Append the container_
+  var mapParentEle = this.mapContainer_.parentNode;
+  if (this.isNull(mapParentEle)) {
+    mapParentEle = document.getElementsByTagName("body")[0];
+  }
   map.getContainer().appendChild(this.container_);
+
+
+  //Listening buttons click event
+  GEvent.bindDom(result.downArrowBtn, "click", this, function () {
+    if (this_.windowStatus_ === "NORMAL") {
+      //normal -> mini
+      this_.resizeCornerWindow_({endSize : this_.arrowBtnTbl_.downArrow, sizeDirection : -1}, "MINI");
+    }
+  });
+  GEvent.bindDom(result.upArrowBtn, "click", this, function () {
+    if (this_.windowStatus_ === "MINI") {
+      //mini -> normal
+      this_.resizeCornerWindow_({endSize : this_.ctrlSize_, sizeDirection : 1}, "NORMAL");
+    } else {
+      //swap container map and streetview
+      this_.swapMap2CornerWindow_();
+    }
+  });
   
-  //make visibleContainer
-  var divStyles = {"backgroundColor" : "#e8ecf8",
-                   "borderStyle" : "solid none none solid",
-                   "borderColor" : "#979797",
-                   "borderWidth" : "1px 0 0 1px"};
-  var divParams = {"width" : this.ctrlSize_.width,
-                   "height" : this.ctrlSize_.height,
-                   "style" : divStyles};
-  this.visibleContainer_ = this.createDiv_(divParams);
-  this.container_.appendChild(this.visibleContainer_);
-  
-  //streetview panorama container
-  divStyles = {"backgroundColor" : "#000000",
-               "zIndex" : 0};
-  divParams = {"left" : 5,
-               "top" : 5,
-               "width" : (this.ctrlSize_.width - 5),
-               "height" : (this.ctrlSize_.height - 5),
-               "style" : divStyles};
-  this.flashContainer_ = this.createDiv_(divParams);
-  this.visibleContainer_.appendChild(this.flashContainer_);
-  
-  
-  //minmize button
-  var btnBaseIFrame;
-  var params = this.minBtnTbl_.images[0];
-  params.width = this.minBtnTbl_.btnSize.width;
-  params.height = this.minBtnTbl_.btnSize.height;
-  this.minmizeBtn_ = this.makeImgDiv_(this.minBtnTbl_.imageSrc, params);
-  if (!this._is_ie) {
-    btnBaseIFrame = document.createElement("iframe");
-    btnBaseIFrame.style.position = "absolute";
-    btnBaseIFrame.style.right = 0;
-    btnBaseIFrame.style.bottom = 0;
-    btnBaseIFrame.style.width = this.minBtnTbl_.btnSize.width + "px";
-    btnBaseIFrame.style.height = this.minBtnTbl_.btnSize.height + "px";
-    btnBaseIFrame.style.zIndex = 1;
-    btnBaseIFrame.style.borderStyle = "none";
-    btnBaseIFrame.src = "";
-    btnBaseIFrame.frameborder = 0;
-    this.container_.appendChild(btnBaseIFrame);
-  }
-  this.minmizeBtn_.style.zIndex = 2;
-  this.minmizeBtn_.style.right = 0;
-  this.minmizeBtn_.style.bottom = 0;
-  this.minmizeBtn_.style.cursor = "pointer";
-  this.container_.appendChild(this.minmizeBtn_);
-  
-  //maximize button
-  var parmas = this.maxBtnTbl_.images[0];
-  params.width = this.maxBtnTbl_.btnSize.width;
-  params.height = this.maxBtnTbl_.btnSize.height;
-  this.maximizeBtn_ = this.makeImgDiv_(this.maxBtnTbl_.imageSrc, params);
-  if (!this._is_ie) {
-    btnBaseIFrame = document.createElement("iframe");
-    btnBaseIFrame.style.position = "absolute";
-    btnBaseIFrame.style.left = 0;
-    btnBaseIFrame.style.top = 0;
-    btnBaseIFrame.style.zIndex = 1;
-    btnBaseIFrame.style.borderStyle = "none";
-    btnBaseIFrame.style.width = this.maxBtnTbl_.btnSize.width + "px";
-    btnBaseIFrame.style.height = this.maxBtnTbl_.btnSize.height + "px";
-    btnBaseIFrame.src = '';
-    btnBaseIFrame.frameborder = 0;
-    this.visibleContainer_.appendChild(btnBaseIFrame);
-  }
-  this.maximizeBtn_.style.zIndex = 2;
-  this.maximizeBtn_.style.cursor = "pointer";
-  this.visibleContainer_.appendChild(this.maximizeBtn_);
-  this.maximizeBtn_.firstChild.style.top = this.maxBtnTbl_.images[0].top + "px";
-  this.maximizeBtn_.firstChild.style.left = this.maxBtnTbl_.images[0].left + "px";
-  
-  //create marker
-  var this_ = this;
+  GEvent.bindDom(window, "resize", this, function () {
+
+    if (this_.mapStatus_ === "IN_THE_WINDOW") {
+      this_.swapFlashContainer_.style.width = this_.swapMapContainer_.clientWidth + "px";
+      this_.swapFlashContainer_.style.height = this_.swapMapContainer_.clientHeight + "px";
+      this_.stObj_.checkResize();
+    }
+    
+  });
+
+  GEvent.bind(map, "moveend", this, this.mapMove_);
+
+
+  //==============================================
+  //  create a marker
+  //==============================================
+  /**
+  * @private
+  */
   var PegmanMarker = function (latlng, opt_opts) {
     this.icon_ = new GIcon(opt_opts.icon);
     opt_opts.icon.image = null;
     GMarker.apply(this, arguments);
   };
   
+  /**
+  * @private
+  */
   PegmanMarker.prototype = new GMarker(new GLatLng(0, 0));
   
+  /**
+  * @private
+  */
   PegmanMarker.prototype.initialize = function (map) {
     GMarker.prototype.initialize.apply(this, arguments);
     this.map_ = map;
     
-    this.iconContainer_ = ExtStreetviewControl.prototype.makeImgDiv_(this.icon_.image, this.icon_.iconSize);
+    this.iconContainer_ = this_.makeImgDiv_(this.icon_.image, this.icon_.iconSize);
     
     map.getPane(G_MAP_MARKER_PANE).appendChild(this.iconContainer_);
   };
 
+  /**
+  * @private
+  */
   PegmanMarker.prototype.redraw = function (force) {
     GMarker.prototype.redraw.apply(this, arguments);
     
@@ -236,71 +233,52 @@ ExtStreetviewControl.prototype.initialize = function (map) {
     this.iconContainer_.style.left = (pxPos.x - this.icon_.iconAnchor.x) + "px";
     this.iconContainer_.style.top = (pxPos.y - this.icon_.iconAnchor.y) + "px";
   };
+  
+  /**
+  * @private
+  */
   PegmanMarker.prototype.getIcon = function () {
     return this.icon_;
   };
+  
+  /**
+  * @private
+  */
   PegmanMarker.prototype.getIconContainer_ = function () {
     return this.iconContainer_;
   };
-  this.marker_ = new PegmanMarker(this.latlng_, {"draggable" : true, "icon" : this_.markerTbl_.icon});
-  this.marker_.isFirst_ = true;
   
+  this.marker_ = new PegmanMarker(this.latlng_, {"draggable" : true, "icon" : this.markerTbl_.icon});
+  this.map_.addOverlay(this.marker_);
+  this.setMarkerIcon_(0);
+
   GEvent.bind(this.marker_, "dragstart", this, this.markerDragStart_);
   GEvent.bind(this.marker_, "drag", this, this.markerDrag_);
   GEvent.bind(this.marker_, "dragend", this, this.markerDragEnd_);
-  map.addOverlay(this.marker_);
-  this.setMarkerIcon_(0);
-  
+
+
+  //==============================================
+  //  initialize streetview
+  //==============================================
   
   //streetview panorama
-  this.stObj_ = null;
+  this.flashContainer_ = this.mainWindow_;
   this.stClient_ = new GStreetviewClient();
-  this.createStreetviewPanorama_();
+  this.createStreetviewPanorama_(this.latlng_, this.pov_);
   
-/*
-  //MyGOverviewMapControl
-  var MyGOverviewMapControl = function () {
-    GOverviewMapControl.apply(this, arguments);
-  };
-  
-  MyGOverviewMapControl.prototype = new GOverviewMapControl();
-  
-  MyGOverviewMapControl.prototype.initialize = function (map) {
-    this.ctrlDiv_ = GOverviewMapControl.prototype.initialize.apply(this, arguments);
-    if (this.ctrlDiv_.childNodes.length) {
-      this.ctrlDiv_.lastChild.style.display = "none";
-    }
-    return this.ctrlDiv_;
-  };
-  
-  MyGOverviewMapControl.prototype.hide = function () {
-    GOverviewMapControl.prototype.hide.apply(this, arguments);
-    if (!ExtStreetviewControl.prototype.isNull(this.ctrlDiv_)) {
-      this.ctrlDiv_.style.visibility = "hidden";
-    }
-  };
-  
-  MyGOverviewMapControl.prototype.show = function () {
-    GOverviewMapControl.prototype.show.apply(this, arguments);
-    if (!ExtStreetviewControl.prototype.isNull(this.ctrlDiv_)) {
-      this.ctrlDiv_.style.visibility = "visible";
-    }
-  };
-  
-  this.overviewMapControl_ = new MyGOverviewMapControl();
-  map.addControl(this.overviewMapControl_);
-  this.overviewMapControl_.hide();
-*/
-  //events
-  GEvent.bindDom(this.minmizeBtn_, "click", this, this.toggleMinimize_);
-  GEvent.bindDom(this.maximizeBtn_, "click", this, this.toggleMaximize_);
-  GEvent.bindDom(window, "resize", this,  this.windowResize_);
-  GEvent.bind(map, "moveend", this, this.mapMove_);
-  this.removeControlOrg_ = GMap2.prototype.removeControl;
-  
-  this.setLocationAndPOV(this.latlng_, this.pov_);
-  
-  return this.container_;
+
+  //return dummy div element to map.
+  var dummyDiv = this.createEle_({"width" : 0, "height" : 0});
+  dummyDiv.style.display = "none";
+  return dummyDiv;
+};
+
+/**
+ * @private
+ * @desc map move
+ */
+ExtStreetviewControl.prototype.mapMove_ = function () {
+  this.bounds_ = this.map_.getBounds();
 };
 
 /**
@@ -344,228 +322,9 @@ ExtStreetviewControl.prototype.markerDragEnd_ = function () {
   var img = this.marker_.getIconContainer_().firstChild;
   img.style.left = this.saveMarkerPosition_.left;
   img.style.top = this.saveMarkerPosition_.top;
-  this.map_.panTo(latlng);
+  this.map_.panTo(latlng);  
   this.setLocationAndPOV(latlng);
 };
-
-
-/**
- * @private
- * @desc yawchanged on streetview
- */
-ExtStreetviewControl.prototype.yawChanged_ = function (yaw) {
-  this.pov_.yaw = yaw;
-
-  var imgIdx = Math.floor(yaw / this.markerTbl_.angle);
-  this.setMarkerIcon_(imgIdx);
-};
-
-/**
- * @private
- * @desc pitchchanged on streetview
- */
-ExtStreetviewControl.prototype.pitChchanged_ = function (pitch) {
-  this.pov_.pitch = pitch;
-};
-
-/**
- * @private
- * @desc window resize
- */
-ExtStreetviewControl.prototype.windowResize_ = function () {
-  if (!this.isNull(this.maximize_)) {
-    var mapSize = this.map_.getSize();
-    mapSize.height = Math.floor(mapSize.height);
-    this.container_.style.left = null;
-    this.container_.style.top = null;
-    this.container_.style.width = mapSize.width + "px";
-    this.container_.style.height = mapSize.height + "px";
-    
-    this.visibleContainer_.style.width = mapSize.width + "px";
-    this.visibleContainer_.style.height = mapSize.height + "px";
-    
-    this.flashContainer_.style.width = (mapSize.width - 5) + "px";
-    this.flashContainer_.style.height = (mapSize.height - 5) + "px";
-    
-    this.stObj_.checkResize();
-  }
-};
-
-
-/**
- * @private
- * @desc click maximize button
- */
-ExtStreetviewControl.prototype.toggleMaximize_ = function () {
-  var mapSize = this.map_.getSize();
-  var param = {};
-  param.x = this.container_.offsetLeft;
-  param.y = this.container_.offsetTop;
-  param.width = this.container_.offsetWidth;
-  param.height = this.container_.offsetHeight;
-  param.maxWidth = mapSize.width;
-  param.maxHeight = mapSize.height;
-  param.xStep = (param.maxWidth - this.ctrlSize_.width)  / 10;
-  param.yStep = (param.maxHeight - this.ctrlSize_.height) / 10;
-  
-  param.cnt = 0;
-  var callback = null;
-  var this_ = this;
-
-  if (!this.isNull(this.maximize_)) {
-    this.maximize_ = false;
-    param.aniPosDirection = 1;
-    param.aniSizeDirection = -1;
-    param.maximizeImgPos = this.maxBtnTbl_.images[0];
-    this.container_.style.width = this.ctrlSize_.width + "px";
-    this.container_.style.height = this.ctrlSize_.height + "px";
-    param.maxWidth = this.ctrlSize_.width;
-    param.maxHeight = this.ctrlSize_.height;
-    this.minmizeBtn_.style.visibility = "visible";
-    
-    callback = function () {
-      //this_.overviewMapControl_.hide();
-    };
-  } else {
-    this.maximize_ = true;
-    param.aniPosDirection = -1;
-    param.aniSizeDirection = 1;
-    param.maximizeImgPos = this.maxBtnTbl_.images[1];
-    this.container_.style.width = mapSize.width + "px";
-    this.container_.style.height = mapSize.height + "px";
-    
-    this.minmizeBtn_.style.visibility = "hidden";
-    
-    callback = function () {
-      //this_.overviewMapControl_.show();
-    };
-  }
-  
-  this.flashContainer_.style.visibility = "hidden";
-
-  var max_resizeAnimation = function (param) {
-    param.x = param.x + param.aniPosDirection * param.xStep;
-    param.x = param.x < 0  ? 0 : param.x;
-    param.y = param.y + param.aniPosDirection * param.yStep;
-    param.y = param.y < 0  ? 0 : param.y;
-    param.width = param.width + param.aniSizeDirection * param.xStep;
-    param.height = param.height + param.aniSizeDirection * param.yStep;
-    
-    this_.container_.style.left = param.x + "px";
-    this_.container_.style.top = param.y + "px";
-    this_.container_.style.width = param.width + "px";
-    this_.container_.style.height = param.height + "px";
-    
-    this_.visibleContainer_.style.width = param.width + "px";
-    this_.visibleContainer_.style.height = param.height + "px";
-    
-    this_.flashContainer_.style.width = (param.width - 5) + "px";
-    this_.flashContainer_.style.height = (param.height - 5) + "px";
-    
-    param.cnt++;
-    if (param.cnt < 10) {
-      var arg = arguments;
-      setTimeout(function () {
-        arg.callee.apply(null, arg);
-      }, 10);
-      
-    } else {
-      this_.container_.style.width = param.maxWidth + "px";
-      this_.container_.style.height = param.maxHeight + "px";
-      this_.container_.style.left = null;
-      this_.container_.style.top = null;
-      this_.maximizeBtn_.firstChild.style.top = param.maximizeImgPos.top + "px";
-      this_.maximizeBtn_.firstChild.style.left = param.maximizeImgPos.left + "px";
-      
-      this_.flashContainer_.style.visibility = "visible";
-      this_.stObj_.checkResize();
-      callback();
-    }
-  };
-  max_resizeAnimation(param);
-};
-
-/**
- * @private
- * @desc click minimize button
- */
-ExtStreetviewControl.prototype.toggleMinimize_ = function () {
-  var param = {};
-  param.x = this.container_.offsetLeft;
-  param.y = this.container_.offsetTop;
-  param.width = this.container_.offsetWidth;
-  param.height = this.container_.offsetHeight;
-  param.xStep = (this.ctrlSize_.width - 15) / 10;
-  param.yStep = (this.ctrlSize_.height - 15) / 10;
-  param.cnt = 0;
-  if (this.minimize_) {
-    this.minimize_ = false;
-    param.aniPosDirection = -1;
-    param.aniSizeDirection = 1;
-    param.minimizeImgPos = this.minBtnTbl_.images[0];
-    
-    param.maxWidth = this.ctrlSize_.width;
-    param.maxHeight = this.ctrlSize_.height;
-    
-  } else {
-    this.minimize_ = true;
-    param.aniPosDirection = 1;
-    param.aniSizeDirection = -1;
-    param.minimizeImgPos = this.minBtnTbl_.images[1];
-    param.maxWidth = this.minBtnTbl_.btnSize.width;
-    param.maxHeight = this.minBtnTbl_.btnSize.height;
-  }
-  
-  this.flashContainer_.style.visibility = "hidden";
-  
-  var this_ = this;
-  var min_resizeAnimation = function (param) {
-    param.x = param.x + param.aniPosDirection * param.xStep;
-    param.x = param.x < 0  ? 0 : param.x;
-    param.y = param.y + param.aniPosDirection * param.yStep;
-    param.y = param.y < 0  ? 0 : param.y;
-    param.width = param.width + param.aniSizeDirection * param.xStep;
-    param.height = param.height + param.aniSizeDirection * param.yStep;
-    
-    this_.container_.style.left = param.x + "px";
-    this_.container_.style.top = param.y + "px";
-    this_.container_.style.width = param.width + "px";
-    this_.container_.style.height = param.height + "px";
-    
-    param.cnt++;
-    if (param.cnt < 10) {
-      var arg = arguments;
-      setTimeout(function () {
-        arg.callee.apply(null, arg);
-      }, 10);
-      
-    } else {
-      this_.minmizeBtn_.firstChild.style.top = param.minimizeImgPos.top + "px";
-      this_.minmizeBtn_.firstChild.style.left = param.minimizeImgPos.left + "px";
-      this_.container_.style.width = param.maxWidth + "px";
-      this_.container_.style.height = param.maxHeight + "px";
-      this_.container_.style.left = null;
-      this_.container_.style.top = null;
-      this_.container_.style.right = 0;
-      this_.container_.style.bottom = 0;
-      
-      if (!this_.minimize_) {
-        this_.flashContainer_.style.visibility = "visible";
-      }
-    }
-  };
-  min_resizeAnimation(param);
-};
-
-
-/**
- * @private
- * @desc map move
- */
-ExtStreetviewControl.prototype.mapMove_ = function () {
-  this.bounds_ = this.map_.getBounds();
-};
-
 
 /**
  * @desc Get current Panorama View
@@ -576,6 +335,17 @@ ExtStreetviewControl.prototype.getPov = function () {
     return this.stObj_.getPOV();
   } else {
     return null;
+  }
+};
+
+/**
+ * @desc Set current Panorama View
+ * @param {GPov} View of panorama
+ */
+ExtStreetviewControl.prototype.setPov = function (pov) {
+  if (!this.isNull(pov)) {
+    this.pov_ = pov;
+    this.stObj_.setPOV(pov);
   }
 };
 
@@ -593,13 +363,15 @@ ExtStreetviewControl.prototype.getMarker = function () {
  * @param {GPov} [pov] View of panorama
  */
 ExtStreetviewControl.prototype.setLocationAndPOV = function (latlng, pov) {
-  if (!this.isNull(pov)) {
+  if (this.isNull(pov)) {
     this.pov_ = this.stObj_.getPOV();
+  } else {
+    this.pov_ = pov;
   }
   this.marker_.setLatLng(latlng);
   var this_ = this;
   this.stClient_.getNearestPanorama(latlng, function () {
-    this_.stClientEnum_(this_, arguments[0]);
+    this_.stClientEnum_(this_, arguments[0], this_.pov_);
   });
 };
 
@@ -633,58 +405,100 @@ ExtStreetviewControl.prototype.printable = function () {
  */
 ExtStreetviewControl.prototype.removeControl_ = function () {
   this.stObj_.remove();
+  GEvent.clearInstanceListeners(this.stObj_);
 };
 
 /**
  * @private
- * @desc      changed the position on streetview
+ * @desc changed the position on streetview
  */
-ExtStreetviewControl.prototype.stInitialized_ = function (location, force) {
+ExtStreetviewControl.prototype.stInitialized_ = function (location) {
   if (this.isNull(location.pov)) {
     return;
   }
-  
+
   if (!this.isNull(location.pov.yaw) || this.isNull(this.pov_.yaw)) {
     this.pov_ = location.pov;
   }
   
+  if (this.isNull(location.latlng)) {
+    return;
+  }
   this.latlng_ = location.latlng;
   this.marker_.setLatLng(location.latlng);
   if (!this.bounds_.containsLatLng(location.latlng)) {
     this.map_.panTo(location.latlng);
   }
-  
-  this.stViewCnt_++;
-  if (this.stViewCnt_ > 10) {
-    this.removeControl_();
-    this.map_.panTo(location.latlng);
-    var this_ = this;
-    setTimeout(function () {
-      this_.createStreetviewPanorama_();
-    }, 10);
-    return;
-  }
-
-  if (force === true) {
-    this.stObj_.setLocationAndPOV(location.latlng, this.pov_);
-  }
 };
 
+/**
+ * @private
+ * @desc      create new Streetview Panorama
+ *            leak memory to avoid.
+ */
+ExtStreetviewControl.prototype.createStreetviewPanorama_ = function (latlng, pov) {
+  var flag = false;
+  if (!this.isNull(this.stObj_)) {
+    GEvent.clearInstanceListeners(this.stObj_);
+    this.stObj_.remove();
+    flag = true;
+  }
+  
+  var opts = {};
+  if (latlng) {
+    opts.latlng = latlng;
+  }
+  if (pov) {
+    opts.pov = pov;
+  }
+  
+  this.stObj_ = new GStreetviewPanorama(this.flashContainer_, opts);
+  this.stViewCnt_ = 0;
+  
+  GEvent.bind(this.stObj_, "initialized", this, this.stInitialized_);
+  GEvent.bindDom(this.stObj_, "yawchanged", this, this.yawChanged_);
+  GEvent.bindDom(this.stObj_, "pitchchanged", this,  this.pitChchanged_);
+  
+};
 
 /**
  * @private
  * @desc      callback for GStreetviewClient
  */
-ExtStreetviewControl.prototype.stClientEnum_ = function (this_, gstreetviewdata) {
+ExtStreetviewControl.prototype.stClientEnum_ = function (this_, gstreetviewdata, pov) {
   if (gstreetviewdata.code !== 200) {
     this_.setMarkerIcon_(0);
     return;
   }
+  if (!this_.isNull(pov)) {
+    gstreetviewdata.location.pov = pov;
+  }
   
-  this_.stInitialized_(gstreetviewdata.location, true);
+  this_.stObj_.setLocationAndPOV(gstreetviewdata.location.latlng, gstreetviewdata.location.pov);
   this_.marker_.isFirst_ = false;
 
 };
+
+
+/**
+ * @private
+ * @desc yawchanged on streetview
+ */
+ExtStreetviewControl.prototype.yawChanged_ = function (yaw) {
+  this.pov_.yaw = yaw;
+
+  var imgIdx = Math.floor(yaw / this.markerTbl_.angle);
+  this.setMarkerIcon_(imgIdx);
+};
+
+/**
+ * @private
+ * @desc pitchchanged on streetview
+ */
+ExtStreetviewControl.prototype.pitChchanged_ = function (pitch) {
+  this.pov_.pitch = pitch;
+};
+
 
 /**
  * @private
@@ -696,53 +510,193 @@ ExtStreetviewControl.prototype.setMarkerIcon_ = function (imgIdx) {
   markerImg.style.top = this.markerTbl_.images[imgIdx].top + "px";
 };
 
-
 /**
  * @private
- * @desc      detect null,null string and undefined
- * @param     value
- * @return    true  :  value is nothing
- *            false :  value is not nothing
+ * @desc make container for ExtStreetviewControl
+ * @ignore
  */
-ExtStreetviewControl.prototype.isNull = function (value) {
-  if (!value && value !== 0 ||
-     value === undefined ||
-     value === "" ||
-     value === null ||
-     typeof value === "undefined") {
-    return true;
-  }
-  return false;
+ExtStreetviewControl.prototype.createContainer_ = function (ctrlPosSize) {
+  var x, y, w, h;
+
+  //make container
+  var container = this.createEle_(ctrlPosSize);
+  var containerIframe = this.createEle_(ctrlPosSize, "iframe");
+  containerIframe.style.bottom = 0;
+  containerIframe.style.right = 0;
+  containerIframe.style.borderStyle = "none";
+  containerIframe.src = "";
+  containerIframe.frameborder = 0;
+  containerIframe.style.visibility = "hidden";
+  container.appendChild(containerIframe);
+
+  //make container for overview map.
+  var mainContainerFrameSize = {};
+  mainContainerFrameSize.left = this.padding_;
+  mainContainerFrameSize.top = this.padding_;
+  mainContainerFrameSize.width = ctrlPosSize.width - this.padding_ - (this._is_ie ? 2 : 0);
+  mainContainerFrameSize.height = ctrlPosSize.height - this.padding_ - (this._is_ie ? 2 : 0);
+  
+  var mainFrame = this.createEle_(mainContainerFrameSize);
+  mainFrame.style.borderStyle = "solid";
+  mainFrame.style.borderColor = "#888";
+  mainFrame.style.borderWidth = "1px 0 0 1px";
+  mainFrame.style.backgroundColor = "#e8ecf8";
+  container.appendChild(mainFrame);
+  
+  var mainContainerSize = {};
+  mainContainerSize.left = 0;
+  mainContainerSize.top = 0;
+  mainContainerSize.width = ctrlPosSize.width - this.padding_ - (this._is_ie ? 2 : 0);
+  mainContainerSize.height = ctrlPosSize.height - this.padding_ - (this._is_ie ? 2 : 0);
+  var mainWindow = this.createEle_(mainContainerSize);
+  mainFrame.appendChild(mainWindow);
+
+
+
+  //Down arrow button
+  x = ctrlPosSize.width - (this._is_ie ? 1 : 0) - this.arrowBtnTbl_.downArrow.width;
+  y = ctrlPosSize.height -  (this._is_ie ? 1 : 0) - this.arrowBtnTbl_.downArrow.height;
+  
+  var btnBase1 = this.createEle_(this.arrowBtnTbl_.downArrow, "iframe");
+  btnBase1.style.left = x + "px";
+  btnBase1.style.top = y + "px";
+  btnBase1.style.borderStyle = "none";
+  btnBase1.src = "";
+  btnBase1.frameborder = 0;
+  btnBase1.border = 0;
+  btnBase1.allowtransparency = true;
+  container.appendChild(btnBase1);
+  
+  var downArrowBtn = this.makeImgDiv_(this.arrowBtnTbl_.src, this.arrowBtnTbl_.downArrow);
+  downArrowBtn.style.cursor = "pointer";
+  downArrowBtn.style.left = x + "px";
+  downArrowBtn.style.top = y + "px";
+  container.appendChild(downArrowBtn);
+
+  //Up arrow button
+  x = 0;
+  y = 0;
+  var btnBase2 = this.createEle_(this.arrowBtnTbl_.upArrow, "iframe");
+  btnBase2.style.top = x + "px";
+  btnBase2.style.left = y + "px";
+  btnBase2.style.borderStyle = "none";
+  btnBase2.src = "";
+  btnBase2.frameborder = 0;
+  btnBase2.border = 0;
+  btnBase2.allowtransparency = true;
+  container.appendChild(btnBase2);
+  
+  var upArrowBtn = this.makeImgDiv_(this.arrowBtnTbl_.src, this.arrowBtnTbl_.upArrow);
+  upArrowBtn.style.cursor = "pointer";
+  upArrowBtn.style.left = x + "px";
+  upArrowBtn.style.top = y + "px";
+  container.appendChild(upArrowBtn);
+
+  return {container : container,
+          containerIframe : containerIframe,
+          downArrowBtn : downArrowBtn,
+          upArrowBtn : upArrowBtn,
+          mainWindow : mainWindow};
 };
 
 /**
  * @private
- * @desc      create new Streetview Panorama
- *            leak memory to avoid.
  */
-ExtStreetviewControl.prototype.createStreetviewPanorama_ = function () {
-  var flag = false;
-  if (!this.isNull(this.stObj_)) {
-    GEvent.clearInstanceListeners(this.stObj_);
-    this.stObj_.remove();
-    flag = true;
+
+ExtStreetviewControl.prototype.swapMap2CornerWindow_ = function () {
+  //var pov = this.getPov();
+  this.removeControl_();
+  
+  if (this.mapStatus_ === "MAP") {
+
+    this.mapContainer_.removeChild(this.container_);
+    this.swapMapContainer_.removeChild(this.mapContainer_);
+    
+    this.swapFlashContainer_.style.width =  this.swapMapContainer_.clientWidth + "px";
+    this.swapFlashContainer_.style.height = this.swapMapContainer_.clientHeight + "px";
+    
+    this.flashContainer_ = this.swapFlashContainer_;
+
+    this.mainWindow_.parentNode.replaceChild(this.swapMainWindow_, this.mainWindow_);
+    this.swapMapContainer_.appendChild(this.container_);
+    this.swapMainWindow_.appendChild(this.mapContainer_);
+    this.mapStatus_ = "IN_THE_WINDOW";
+
+
+  } else {
+
+    this.swapMainWindow_.removeChild(this.mapContainer_);
+    this.swapMapContainer_.removeChild(this.container_);
+    this.swapMainWindow_.parentNode.replaceChild(this.mainWindow_, this.swapMainWindow_);
+
+    this.flashContainer_ = this.mainWindow_;
+
+    this.swapMapContainer_.appendChild(this.mapContainer_);
+    this.mapContainer_.appendChild(this.container_);
+    this.mapStatus_ = "MAP";
   }
-  
-  var stObj = new GStreetviewPanorama(this.flashContainer_);
-  this.stViewCnt_ = 0;
-  this.stObj_ = stObj;
-  
-  GEvent.bind(stObj, "initialized", this, this.stInitialized_);
-  GEvent.bindDom(stObj, "yawchanged", this, this.yawChanged_);
-  GEvent.bindDom(stObj, "pitchchanged", this,  this.pitChchanged_);
+  var this_ = this;
+  this.createStreetviewPanorama_(this.latlng_, this.pov_);
+
+  this.map_.checkResize();
+  this.map_.setCenter(this.latlng_);
+
+  GEvent.trigger(this, "onSwapWindow", this.mapStatus_);
+
 };
+
+/**
+ * @private
+ */
+ExtStreetviewControl.prototype.resizeCornerWindow_ = function (param, finishStatus) {
+  param.width = this.container_.offsetWidth;
+  param.height = this.container_.offsetHeight;
+  
+  param.xStep = Math.abs((param.endSize.width - param.width) / 5);
+  param.yStep = Math.abs((param.endSize.height - param.height) / 5);
+  param.cnt = 0;
+  
+  var this_ = this;
+  var resizeAnimation = function (param) {
+    param.width = param.width + param.xStep * param.sizeDirection;
+    param.width = param.width < 0  ? 0 : param.width;
+    param.height = param.height + param.yStep * param.sizeDirection;
+    param.height = param.height < 0  ? 0 : param.height;
+    
+    this_.container_.style.width = param.width + "px";
+    this_.container_.style.height = param.height + "px";
+    
+    this_.cornerInfo_.containerIframe.style.width = param.width + "px";
+    this_.cornerInfo_.containerIframe.style.height = param.height + "px";
+    
+    param.cnt++;
+    if (param.cnt < 5) {
+      var arg = arguments;
+      setTimeout(function () {
+        arg.callee.apply(null, arg);
+      }, 10);
+      
+    } else {
+      this_.container_.style.width = param.endSize.width + "px";
+      this_.container_.style.height = param.endSize.height + "px";
+
+      this_.cornerInfo_.containerIframe.style.width = param.endSize.width + "px";
+      this_.cornerInfo_.containerIframe.style.height = param.endSize.height + "px";
+
+      this_.windowStatus_ = finishStatus;
+    }
+  };
+  resizeAnimation(param);
+};
+
+
 
 /**
  * @private
  * @desc      create div element with PNG image
  */
 ExtStreetviewControl.prototype.makeImgDiv_ = function (imgSrc, params) {
-  ExtStreetviewControl.prototype.checkBrowserAgent();
+  this.checkBrowserAgent();
   
   var imgDiv = document.createElement("div");
   imgDiv.style.position = "absolute";
@@ -780,50 +734,139 @@ ExtStreetviewControl.prototype.makeImgDiv_ = function (imgSrc, params) {
   return imgDiv;
 };
 
-/**
- * @desc Return this control's name
- * @return {String}
- */
-ExtStreetviewControl.prototype.toString = function () {
-  return "extstreetviewcontrol";
-};
+
 
 /**
  * @private
  * @desc      create div element
  */
-ExtStreetviewControl.prototype.createDiv_ = function (params, specifyTagName) {
+ExtStreetviewControl.prototype.createEle_ = function (params, specifyTagName) {
 
-  var divEle = document.createElement(this.isNull(specifyTagName) ? "div" : specifyTagName);
+  var element = document.createElement(this.isNull(specifyTagName) ? "div" : specifyTagName);
   
+  if (!this.isNull(params)) {
+    for (var s in params.style) {
+      if (s in element.style) {
+        element.style[s] = params.style[s];
+      }
+    }
+    if (!this.isNull(params.left)) {
+      element.style.left = params.left + "px";
+    }
+    if (!this.isNull(params.right)) {
+      element.style.right = params.right + "px";
+    }
+    if (!this.isNull(params.top)) {
+      element.style.top = params.top + "px";
+    }
+    if (!this.isNull(params.bottom)) {
+      element.style.bottom = params.bottom + "px";
+    }
+    if (!this.isNull(params.width)) {
+      element.style.width = params.width + "px";
+    }
+    if (!this.isNull(params.height)) {
+      element.style.height = params.height + "px";
+    }    
+    element.style.position = "absolute";
+    element.style.overflow = "hidden";
+  }
+  return element;
+};
+
+/**
+ * @desc Check browser agent
+ * @private
+ */
+ExtStreetviewControl.prototype.checkBrowserAgent = function () {
+  var agt = navigator.userAgent.toLowerCase();
+  this._is_ie    = ((agt.indexOf("msie") !== -1) && (agt.indexOf("opera") === -1));
+  this._is_ie67  = (agt.indexOf("msie 6") !== -1 || agt.indexOf("msie 7") !== -1);
+  this._is_ie8   = (this._is_ie === true && this._is_ie67 === false);
+  this._is_gecko = (agt.indexOf("gecko") !== -1);
+  this._is_opera = (agt.indexOf("opera") !== -1);
+  this._is_chrome = (agt.indexOf("chrome") !== -1);
+  this._is_safari = (agt.indexOf("safari") !== -1);
+};
+
+/**
+ * @private
+ * @desc      detect null,null string and undefined
+ * @param     value
+ * @return    true  :  value is nothing
+ *            false :  value is not nothing
+ */
+ExtStreetviewControl.prototype.isNull = function (value) {
+  if (!value && value !== 0 ||
+     value === undefined ||
+     value === "" ||
+     value === null ||
+     typeof value === "undefined") {
+    return true;
+  }
+  return false;
+};
+
+/**
+ * @private
+ * @desc      calculate dom position
+ * @param     targetEle : target DOM element
+ * @return    GPoint
+ */
+ExtStreetviewControl.prototype.getOffsetPosition_ = function (targetEle) {
   
-  for (var s in params.style) {
-    if (s in divEle.style) {
-      divEle.style[s] = params.style[s];
+  var pos = new GPoint(0, 0);
+  while (targetEle) {
+    pos.x += targetEle.offsetLeft; 
+    pos.y += targetEle.offsetTop; 
+    targetEle = targetEle.offsetParent;
+
+    if (targetEle && this._is_ie) {
+      pos.x += (parseInt(this.getElementStyle_(targetEle, "border-left-width"), 10) || 0);
+      pos.y += (parseInt(this.getElementStyle_(targetEle, "border-top-width"), 10) || 0);
     }
   }
-  
-  divEle.style.position = "absolute";
-  divEle.style.fontSize = 0;
-  divEle.style.lineHeight = 0;
-  divEle.style.overflow = "hidden";
-  if (!this.isNull(params.left)) {
-    divEle.style.left = params.left + "px";
+
+  if (this._is_gecko) {
+    var bodyEle = document.getElementsByTagName("body")[0];
+    pos.x += 2 * (parseInt(this.getElementStyle_(bodyEle, "border-left-width"), 10) || 0);
+    pos.y += 2 * (parseInt(this.getElementStyle_(bodyEle, "border-top-width"), 10) || 0);
   }
-  if (!this.isNull(params.right)) {
-    divEle.style.right = params.right + "px";
+  return pos;
+};
+
+/**
+ * @private
+ * @desc      calculate dom position
+ * @param     targetEle : target DOM element
+ * @return    GPoint
+ */
+ExtStreetviewControl.prototype.getElementStyle_ = function (ele, cssProperty) {
+  if (this._is_ie) {
+    return ele.currentStyle[cssProperty];
   }
-  if (!this.isNull(params.top)) {
-    divEle.style.top = params.top + "px";
+  cssProperty = cssProperty.replace('/-([a-z])/ig', function () {
+    var tmp = RegExp.$1.toUpperCase();
+    return tmp;
+  });
+  var view = window;
+  if (this._is_safari) {
+    view = document.defaultView;
   }
-  if (!this.isNull(params.bottom)) {
-    divEle.style.bottom = params.bottom + "px";
+  var eleStyle = view.getComputedStyle(ele, "");
+  return eleStyle.getPropertyCSSValue(cssProperty);
+};
+
+/**
+ * @private
+ * @desc      calculate dom position
+ * @param     targetEle : target DOM element
+ * @return    GPoint
+ */
+ExtStreetviewControl.prototype.setElementStyle_ = function (ele, cssProperty, value, priority) {
+  if (this._is_ie) {
+    ele.style[cssProperty] = value;
+  } else {
+    ele.style.setProperty(cssProperty, value, priority);
   }
-  if (!this.isNull(params.width)) {
-    divEle.style.width = params.width + "px";
-  }
-  if (!this.isNull(params.height)) {
-    divEle.style.height = params.height + "px";
-  }
-  return divEle;
 };

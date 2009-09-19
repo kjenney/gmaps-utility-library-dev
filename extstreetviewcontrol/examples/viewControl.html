@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <title>Google Maps JavaScript API Example: ExtStreetviewControl</title>
+    <title>Change location and point of view - ExtStreetviewControl</title>
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q" type="text/javascript"></script>
     <script type="text/javascript">
     document.write('<script type="text/javascript" src="../src/extstreetviewcontrol'+(document.location.search.indexOf('packed')>-1?'_packed':'')+'.js"><'+'/script>');
@@ -11,11 +11,11 @@
     <script type="text/javascript">
 
     var extStreetviewControl = null;
-    var ctrlMarker = null;
     var svTable = [];
     svTable["La tour Eiffel"] = {lat: 48.859862, lng:2.292024, pov:{yaw:500,pitch:-10}};
     svTable["Arc de triomphe de l'Etoile"] = {lat: 48.874165, lng:2.294003, pov:{yaw:118.55260681118132,pitch:-10}};
     svTable["Parvis Notre Dame"] = {lat:48.853563, lng:2.348562, pov:{yaw:495.7697545746159, pitch:-10}};
+
     function initialize () {
       if (GBrowserIsCompatible()) {
         var map = new GMap2(document.getElementById("map_canvas"));
@@ -28,19 +28,7 @@
                     };
         extStreetviewControl = new ExtStreetviewControl(opts_);
         map.addControl(extStreetviewControl);
-        
-        ctrlMarker = extStreetviewControl.getMarker();
-        GEvent.addListener(ctrlMarker, "click", onCtrlMarkerClick)
       }
-    }
-    
-    function onCtrlMarkerClick (latlng) {
-      var txt = ctrlMarker.getLatLng() + "<br>";
-      var pov = extStreetviewControl.getPov();
-      txt += "yaw:" + pov.yaw + "<br>";
-      txt += "pitch:" + pov.pitch + "<br>";
-      txt += "zoom:" + pov.zoom;
-      ctrlMarker.openInfoWindowHtml(txt);
     }
     
     function changeLocationAndPOV (locationName) {
@@ -51,9 +39,14 @@
   </head>
   <body onload="initialize()" onunload="GUnload()">
     <div id="map_canvas" style="width: 500px; height: 500px"></div>
+    <h4>Change location and point of view</h4>
+    <p>
+    You can control the view of streetview.
+    </p>
     <input type="button" onclick="changeLocationAndPOV(this.value);" value="La tour Eiffel"><br>
     <input type="button" onclick="changeLocationAndPOV(this.value);" value="Arc de triomphe de l'Etoile"><br>
-    <input type="button" onclick="changeLocationAndPOV(this.value);" value="Parvis Notre Dame">
+    <input type="button" onclick="changeLocationAndPOV(this.value);" value="Parvis Notre Dame"><br>
+
   </body>
 </html>
 

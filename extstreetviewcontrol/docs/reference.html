@@ -9,10 +9,7 @@
   <body>
     <h1>ExtStreetviewControl</h1>
     <p>
-This library creates a collapsible StreetView display in the corner of the main map.
-And the ExtStreetviewControl adds a marker for reference location on the main map.
-You can draggble it and change location main map and StreetView display location.
-Note: Unlike other controls, you can only place this control in the bottom right corner of the map (G_ANCHOR_BOTTOM_RIGHT).</p>
+This library creates a collapsible StreetView display in the corner of the main map.And the ExtStreetviewControl adds a marker for reference location on the main map.You can draggble it and change location main map and StreetView display location.Note: Unlike other controls, you can only place this control in the bottom right corner of the map (G_ANCHOR_BOTTOM_RIGHT).</p>
     <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
     
       <h2><a name="ExtStreetviewControl"></a>class ExtStreetviewControl</h2>
@@ -82,13 +79,13 @@ Note: Unlike other controls, you can only place this control in the bottom right
               </tr>
             
               <tr class="even">
-                <td><code>toString()</code></td>
+                <td><code>setPov(<span class="type">View:GPov</span>)</code></td>
                 
                   
-                    <td><code>String</code></td>
+                    <td><code>None</code></td>
                   
                 
-                <td>Return this control's name</td>
+                <td>Set current Panorama View</td>
               </tr>
             
           </tbody>
@@ -96,8 +93,7 @@ Note: Unlike other controls, you can only place this control in the bottom right
       
     
       <h2><a name="ExtStreetviewOptions"></a>class ExtStreetviewOptions</h2>
-      <p>This class represents optional arguments to <code><a href="reference.html#ExtStreetviewControl">ExtStreetviewControl</a></code>. 
-  It has no constructor, but is instantiated as an object literal.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
+      <p>This class represents optional arguments to <code><a href="reference.html#ExtStreetviewControl">ExtStreetviewControl</a></code>.   It has no constructor, but is instantiated as an object literal.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
       
         <h3>Properties</h3>
         <table summary="class ExtStreetviewOptions - Properties" width="90%">
@@ -120,8 +116,7 @@ Note: Unlike other controls, you can only place this control in the bottom right
                     <td><code>GLatLng</code></td>
                   
                 
-                <td>Specifies latlng of panorama.
- If it is not set, then c gets center location of main map.  The default value is <code> null</code>.</td>
+                <td>Specifies latlng of panorama. If it is not set, then control gets center location of main map.  The default value is <code> null</code>.</td>
               </tr>
             
               <tr class="even">
@@ -131,7 +126,7 @@ Note: Unlike other controls, you can only place this control in the bottom right
                     <td><code>GPov</code></td>
                   
                 
-                <td>This property specifies  The default value is <code> {yaw : 0, pitch : 0, panoId : null}</code>.</td>
+                <td>Specifies initialize pov of panorama.  The default value is <code> {yaw : 0, pitch : 0, panoId : null}</code>.</td>
               </tr>
             
               <tr class="odd">
