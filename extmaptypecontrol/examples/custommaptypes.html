@@ -8,13 +8,8 @@
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q&amp;sensor=false" type="text/javascript"></script>
 
 <script type="text/javascript">
-
 // Load packed or unpacked version of library script
-var useScript = document.getElementsByTagName("head")[0].appendChild(document.createElement("script"));
-var toSearch = (window.location.search.indexOf("packed") != -1) ? "_packed.js" : ".js";
-useScript.type = "text/javascript";
-useScript.src = "../src/extmaptypecontrol" + toSearch;
-
+  document.write('<' + 'script type="text/javascript" src="../src/extmaptypecontrol' + (document.location.search.indexOf('packed')>-1?'_packed':'') +'.js"><'+'/script>');
 </script>
 
 
