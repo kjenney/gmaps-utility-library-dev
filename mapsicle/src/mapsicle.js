@@ -64,6 +64,24 @@ SVOverlay.prototype = {
         e.returnValue = false;
       });
     }
+    /* adds an iframe shim if using Chrome */
+    if (/chrome/.test(navigator.userAgent.toLowerCase())){
+      this.iframe = document.createElement("iframe");
+      this.iframe.setAttribute("allowtransparency","true");
+      this.iframe.src = "http://mapsicle.projectx.co.nz/trans_background.html";
+      this.iframe.frameborder = "0";
+      this.iframe.scrolling = "false";
+      this.iframe.style.display = "block";
+      this.iframe.style.width = "100%";
+      this.iframe.style.height = "100%";
+      this.iframe.style.zIndex = "-1";
+      this.iframe.style.filter = "mask()";
+      this.iframe.style.position = "absolute";
+      this.iframe.style.top = "0px";
+      this.iframe.style.left = "0px";
+      this.iframe.style.border = "none";
+      this.elem.appendChild(this.iframe,this.elem.firstChild);
+    }
   },
 
   /** @private */
@@ -1298,7 +1316,7 @@ Mapsicle.prototype.onPositionChangeComplete = function (loc) {
     this.overlayMgr.setAllOpacities(0.0);
   }
 
-  this.elems.doUtterlyTerrifyingBrowserHacks();    
+  //this.elems.doUtterlyTerrifyingBrowserHacks();    
 
   this.triggerEvent("mapsicle_position_changed", loc);
 };
@@ -2124,7 +2142,7 @@ Mapsicle.Startup.start = function () {
 Mapsicle.Startup.addStyleSheet = function () {
   // TODO: just add styles via javascript
   var cssLink = document.createElement("link");
-  cssLink.href = "../src/mapsicle.css";
+  cssLink.href = "/mapsicle/mapsicle.css";
   cssLink.media = "screen";
   cssLink.rel = "stylesheet";
   cssLink.type = "text/css";
