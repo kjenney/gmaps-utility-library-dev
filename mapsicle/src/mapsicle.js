@@ -2142,7 +2142,7 @@ Mapsicle.Startup.start = function () {
 Mapsicle.Startup.addStyleSheet = function () {
   // TODO: just add styles via javascript
   var cssLink = document.createElement("link");
-  cssLink.href = "/mapsicle/mapsicle.css";
+  cssLink.href = "http://gmaps-utility-library-dev.googlecode.com/svn/trunk/mapsicle/src/mapsicle.css";
   cssLink.media = "screen";
   cssLink.rel = "stylesheet";
   cssLink.type = "text/css";
