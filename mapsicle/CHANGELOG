@@ -1,5 +1,7 @@
 Next version...
 
+* Mapsicle#endStreetView renamed to close
+* SVTrackingOverlay#tracking renamed to getLocation
 * MapsicleConfig renamed to MapsicleParams
 * fix height and width setting in Custom Info Windows, so example should now work in IE
 * ugly partial fix for markers not showing up in Chrome

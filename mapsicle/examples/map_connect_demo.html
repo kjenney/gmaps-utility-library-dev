@@ -21,7 +21,7 @@
                 map.setCenter(home_point,17);
 
                 var sv_map_icon = new GIcon();
-                sv_map_icon.image = "http://maps.google.com/intl/en_us/mapfiles/cb/man_arrow-0.png";
+                sv_map_icon.image = "http://maps.gstatic.com/mapfiles/cb/man_arrow-0.png";
                 sv_map_icon.iconSize = new GSize(49,52);
                 sv_map_icon.iconAnchor = new GPoint(26,32);
                 var sv_map_location = new GMarker(home_point,{icon:sv_map_icon});
@@ -30,7 +30,7 @@
                 mapsicle.registerCallback("yawchanged", function(e,yaw){
                     var angle = parseInt((yaw/22.5)+0.5);
                     if (angle == 16) angle = 0;
-                    sv_map_location.setImage("http://maps.google.com/intl/en_us/mapfiles/cb/man_arrow-" + angle + ".png");
+                    sv_map_location.setImage("http://maps.gstatic.com/mapfiles/cb/man_arrow-" + angle + ".png");
                 });
                 mapsicle.registerCallback("mapsicle_position_changed", function(e,location){
                     sv_map_location.setLatLng(location.latlng);
