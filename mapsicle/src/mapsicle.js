@@ -785,7 +785,7 @@ var SVLocation = function (params) {
  * @property {number} lat Latitude
  * @property {number} lng Longitude
  * @property {String} name The location's name
- * @property {SVMarker} marker (optional)
+ * @property {SVMarker} marker (optional) A marker to be displayed hovering at this location
  * @property {SVTrackingOverlay} info (optional) An info window: SVCustomInfoWindow or SVMiniInfoBox.
  * @property {number} cutoff (optional) Distance, in metres, beyond which markers and info windows
  *     are not displayed. Defaults to infinite.
