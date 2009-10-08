@@ -13,13 +13,15 @@
  */
 /**
  * @name Streetview Mapsicle
- * @version 0.9.5
+ * @version 0.9.7
  * @author Stephen Davis &lt;stephen@projectx.co.nz&gt;.
  * @author Cameron Prebble &lt;cameron@projectx.co.nz&gt;.
  * @copyright (c) 2008-2009 ProjectX Technology Ltd.
  * @fileOverview A library to put overlays - images, text or HTML content - 
  * on top of a panorama in Street View. They can follow a location (given by
  * lat/lng) or be at a fixed position on screen (coming soon).
+ * 
+ * For now, Mapsicle doesn't work in full-screen mode.
  */
 /*global
 GEvent,
@@ -927,7 +929,7 @@ var Mapsicle = function (name, glatlng, custom) {
   this.sizeX = Math.max(MapsicleParams.MIN_PANORAMA_SIZE_X, elems.svc.clientWidth, elems.container.clientWidth);
   this.sizeY = Math.max(MapsicleParams.MIN_PANORAMA_SIZE_Y, elems.svc.clientHeight, elems.container.clientHeight);
 
-  elems.listenForResize();
+  elems.listenForResize(this);
 
   var startLoc;
   if (glatlng) {
@@ -1939,7 +1941,7 @@ Mapsicle.PageElements.prototype = {
     this.panelY = streetPanelXY[1];
   },
 
-  listenForResize: function () {
+  listenForResize: function (theMapsicle) {
     this.svc.onresize = function (e) {
       theMapsicle.panoramaResized();
     };

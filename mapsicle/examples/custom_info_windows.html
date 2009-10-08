@@ -29,7 +29,9 @@
 			margin-right:5px;
 		}
 	</style>
-        <script type="text/javascript" src="../src/mapsicle.js"></script>
+        <script type="text/javascript">
+          document.write('<script type="text/javascript" src="../src/mapsicle' + (document.location.search.indexOf('packed') > -1 ? '_packed' : '') + '.js"><' + '/script>');
+        </script>     
         <script type="text/javascript">
             var mapsicle;
             function init(){
@@ -53,6 +55,7 @@
         </script>
     </head>
     <body onload="init();" onunload="GUnload()">
-        <div id="mapsicle_div" style="width:850px;height:400px;"></div>
+      <p><a href="?packed">Packed</a>&nbsp;|&nbsp;<a href="?">Unpacked</a> version of the script.</p>
+      <div id="mapsicle_div" style="width:850px;height:400px;"></div>
     </body>
 </html>

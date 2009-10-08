@@ -1,4 +1,5 @@
-Next version...
+Mapsicle API v0.9.7 - 8 October 2009
+====================================
 
 * Mapsicle#endStreetView renamed to close
 * SVTrackingOverlay#tracking renamed to getLocation
