@@ -307,7 +307,7 @@ SVTrackingOverlay.prototype.registerLocation = function (loc) {
  * Get the location being tracked by this overlay.
  * @returns {SVLocation} the location being tracked by this overlay
  */
-SVTrackingOverlay.prototype.tracking = function () {
+SVTrackingOverlay.prototype.getLocation = function () {
   return this.location;
 };
 
