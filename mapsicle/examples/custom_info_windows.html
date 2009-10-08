@@ -8,7 +8,7 @@
             google.load("maps","2");
         </script>
 	<style type="text/css">
-		.info_window{
+		.my_funky_demo_window{
 			border: 1px solid #004879;
 			width: 200px;
 			height:100px;
@@ -17,14 +17,14 @@
 			text-align:center;
 			font-family: Helvetica,Arial,sans-serif;
 		}
-		.info_window h3{
+		.my_funky_demo_window h3{
 			margin:0;
 			font-size:11pt;
 		}
-		.info_window span{
+		.my_funky_demo_window span{
 			font-size:9pt;
 		}
-		.info_window img{
+		.my_funky_demo_window img{
 			vertical-align:middle;
 			margin-right:5px;
 		}
@@ -37,11 +37,11 @@
             function init(){
                 mapsicle = new Mapsicle("mapsicle_div", new GLatLng(40.756634, -73.986271));
                 var custom_box = document.createElement('div');
-		custom_box.className = "info_window";
+		custom_box.className = "my_funky_demo_window";
                 custom_box.innerHTML = "<h3><img src='images/mapsicle_marker_sm.png' />Streetview Mapsicle</h3><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum aliquam.</span>";
                 var info =  new SVCustomInfoWindow({
-	            inner: custom_box,
-                    width: 200,
+	            inner: custom_box, 
+                   width: 200,
                     height:100
                 });
                 var location = new SVLocation({
