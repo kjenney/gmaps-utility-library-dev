@@ -28,7 +28,7 @@ GStreetviewClient,
 GStreetviewPanorama,
 GUnload,
 Mapsicle,
-MapsicleConfig,
+MapsicleParams,
 google,
 window
 */
@@ -223,7 +223,7 @@ SVOverlay.prototype = {
   setTopLeftCorner: function (xTopLeft, yTopLeft, leftArrow, rightArrow) {
     if (this.setArrows) {
       if (rightArrow) {
-        xTopLeft = xTopLeft - MapsicleConfig.ARROW_WIDTH;
+        xTopLeft = xTopLeft - MapsicleParams.ARROW_WIDTH;
       }
       this.setArrows(leftArrow, rightArrow);
     }
@@ -486,8 +486,8 @@ SVMiniInfoBox.prototype.generateHTML = function (params) {
   var targetURL = this.targetURL || '#sv_info_window_targetURL';
 
   var label = Mapsicle.Utils.createDiv("mapsicle-overlays");
-  label.className += " " + MapsicleConfig.INFO_WINDOW_GENERIC_CLASS;
-  label.className += " " + MapsicleConfig.INFO_WINDOW_COLOURISED_CLASS;
+  label.className += " " + MapsicleParams.INFO_WINDOW_GENERIC_CLASS;
+  label.className += " " + MapsicleParams.INFO_WINDOW_COLOURISED_CLASS;
 
   var left = Mapsicle.Utils.createDiv("left");
   var middle = Mapsicle.Utils.createDiv("middle");
@@ -625,7 +625,7 @@ SVCustomInfoWindow.prototype.generateHTML = function (width, height) {
 /*global SVMarker*/
 var SVMarker = function (params) {
   this.scale = params.scale;
-  this.iconURL = params.iconURL || MapsicleConfig.DEFAULT_ICON_URL;
+  this.iconURL = params.iconURL || MapsicleParams.DEFAULT_ICON_URL;
   this.callback = params.callback instanceof Function ? params.callback : function () {};
   this.generateHTML();
 
@@ -686,12 +686,12 @@ SVMarker.prototype.generateHTML = function () {
 
   var leftBox = Mapsicle.Utils.createSpan("mapsicle-svmarker-left-side");
   this.leftArrow = document.createElement("img");
-  doImageBoxAttrs(this.leftArrow, MapsicleConfig.LEFT_ARROW);
+  doImageBoxAttrs(this.leftArrow, MapsicleParams.LEFT_ARROW);
   leftBox.appendChild(this.leftArrow);
 
   var rightBox = Mapsicle.Utils.createSpan("mapsicle-svmarker-right-side");
   this.rightArrow = document.createElement("img");
-  doImageBoxAttrs(this.rightArrow, MapsicleConfig.RIGHT_ARROW);
+  doImageBoxAttrs(this.rightArrow, MapsicleParams.RIGHT_ARROW);
   rightBox.appendChild(this.rightArrow);
 
   var bottomBox = Mapsicle.Utils.createDiv("clear");
@@ -716,7 +716,7 @@ SVMarker.prototype.setArrows = function (left, right) {
   var marker = this;
 
   var setArrowVisible = function (elem, show) {
-    var newWidth = show ? MapsicleConfig.ARROW_WIDTH : 0;
+    var newWidth = show ? MapsicleParams.ARROW_WIDTH : 0;
     extraWidth += newWidth;
     elem.width = newWidth;
     //elem.height = marker.displayHeight();
@@ -905,13 +905,13 @@ SVLocation.prototype.infoWindowClicked = function (mouseEvent) {
  * @constructor
  * @param {string} name The HTML id of the container in which to put Mapsicle
  * @param {GLatLng} glatlng The starting location for Street View
- * @param {MapsicleConfig} custom (Optional) Any custom configuration parameters
+ * @param {MapsicleParams} custom (Optional) Any custom configuration parameters
  */
 /*global Mapsicle*/
 var Mapsicle = function (name, glatlng, custom) {
   this.mapsicleId = (Mapsicle.numMapsicles++);
 
-  this.config = new MapsicleConfig();
+  this.config = new MapsicleParams();
   for (var v in custom) {
     if (custom.hasOwnProperty(v)) {
       this.config[v] = custom[v];
@@ -922,8 +922,8 @@ var Mapsicle = function (name, glatlng, custom) {
   this.elems = elems;
 
   // TODO: allow sizeX, sizeY as MapsicleParams
-  this.sizeX = Math.max(MapsicleConfig.MIN_PANORAMA_SIZE_X, elems.svc.clientWidth, elems.container.clientWidth);
-  this.sizeY = Math.max(MapsicleConfig.MIN_PANORAMA_SIZE_Y, elems.svc.clientHeight, elems.container.clientHeight);
+  this.sizeX = Math.max(MapsicleParams.MIN_PANORAMA_SIZE_X, elems.svc.clientWidth, elems.container.clientWidth);
+  this.sizeY = Math.max(MapsicleParams.MIN_PANORAMA_SIZE_Y, elems.svc.clientHeight, elems.container.clientHeight);
 
   elems.listenForResize();
 
@@ -1274,8 +1274,8 @@ Mapsicle.prototype.bounds = null;
  * @param {number} y
  */
 Mapsicle.prototype.setPanoramaSize = function (x, y) {
-  this.sizeX = Math.max(MapsicleConfig.MIN_PANORAMA_SIZE_X, x);
-  this.sizeY = Math.max(MapsicleConfig.MIN_PANORAMA_SIZE_Y, y);
+  this.sizeX = Math.max(MapsicleParams.MIN_PANORAMA_SIZE_X, x);
+  this.sizeY = Math.max(MapsicleParams.MIN_PANORAMA_SIZE_Y, y);
 
   this.bounds = new Mapsicle.Bounds(0, y, 0, x);
 
@@ -1661,10 +1661,10 @@ Mapsicle.ZIndices = {
  * @property {boolean} avoidOverlaps Whether to push tracking markers away from each other so they don't cover each other up.
  * @property {number} normalDistance At this distance (in metres), and any closer, a scaled marker will be displayed at full size
  */
-/*global MapsicleConfig*/
-var MapsicleConfig = function () {};
+/*global MapsicleParams*/
+var MapsicleParams = function () {};
 
-MapsicleConfig.prototype = {
+MapsicleParams.prototype = {
   avoidOverlaps: false,
   defaultOpacity: 0.5,
   fadeTime: 4000,
@@ -1683,17 +1683,17 @@ MapsicleConfig.prototype = {
 /*
  * Guesses at Google constants
  */
-MapsicleConfig.MIN_PANORAMA_SIZE_X = 300;
-MapsicleConfig.MIN_PANORAMA_SIZE_Y = 200;
+MapsicleParams.MIN_PANORAMA_SIZE_X = 300;
+MapsicleParams.MIN_PANORAMA_SIZE_Y = 200;
 
-MapsicleConfig.DEFAULT_ICON_URL = "images/crosshair2.png";
+MapsicleParams.DEFAULT_ICON_URL = "images/crosshair2.png";
 
-MapsicleConfig.INFO_WINDOW_GENERIC_CLASS = "mapsicle-svinfowindow";
-MapsicleConfig.INFO_WINDOW_COLOURISED_CLASS = "mapsicle-svinfowindow_black";
+MapsicleParams.INFO_WINDOW_GENERIC_CLASS = "mapsicle-svinfowindow";
+MapsicleParams.INFO_WINDOW_COLOURISED_CLASS = "mapsicle-svinfowindow_black";
 
-MapsicleConfig.LEFT_ARROW = "images/marker_left_arrow.png";
-MapsicleConfig.RIGHT_ARROW = "images/marker_right_arrow.png";
-MapsicleConfig.ARROW_WIDTH = 50;
+MapsicleParams.LEFT_ARROW = "images/marker_left_arrow.png";
+MapsicleParams.RIGHT_ARROW = "images/marker_right_arrow.png";
+MapsicleParams.ARROW_WIDTH = 50;
 
 /**
  * @private
@@ -1701,7 +1701,7 @@ MapsicleConfig.ARROW_WIDTH = 50;
  * When putting markers offscreen, needs to be larger or smaller than edge (as appropriate).
  * Only needs to be out by one pixel, but magic number makes it easier to debug.
  */
-MapsicleConfig.WELL_OFFSCREEN = 577;
+MapsicleParams.WELL_OFFSCREEN = 577;
 
 /** @private */
 Mapsicle.Bounds = function (top, bottom, left, right, subBounds, name) {
