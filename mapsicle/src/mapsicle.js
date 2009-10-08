@@ -1250,7 +1250,7 @@ Mapsicle.prototype.triggerEvent = function (event, arg) {
 /**
  * Close down this instance of Mapsicle
  */
-Mapsicle.prototype.endStreetView = function () {
+Mapsicle.prototype.close = function () {
   this.clearAllOverlays();
   if (this.panorama) {
     this.panorama.remove();
