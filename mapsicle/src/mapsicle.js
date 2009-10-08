@@ -17,7 +17,9 @@
  * @author Stephen Davis &lt;stephen@projectx.co.nz&gt;.
  * @author Cameron Prebble &lt;cameron@projectx.co.nz&gt;.
  * @copyright (c) 2008-2009 ProjectX Technology Ltd.
- * @fileOverview An API for putting overlays on top of Street View
+ * @fileOverview A library to put overlays - images, text or HTML content - 
+ * on top of a panorama in Street View. They can follow a location (given by
+ * lat/lng) or be at a fixed position on screen (coming soon).
  */
 /*global
 GEvent,
@@ -786,7 +788,7 @@ var SVLocation = function (params) {
  * @property {number} lng Longitude
  * @property {String} name The location's name
  * @property {SVMarker} marker (optional) A marker to be displayed hovering at this location
- * @property {SVTrackingOverlay} info (optional) An info window: SVCustomInfoWindow or SVMiniInfoBox.
+ * @property {SVCustomInfoWindow/SVMiniInfoBox} info (optional) An info window: SVCustomInfoWindow or SVMiniInfoBox.
  * @property {number} cutoff (optional) Distance, in metres, beyond which markers and info windows
  *     are not displayed. Defaults to infinite.
  * @property {boolean} goal (optional) Whether the location is a goal. If so markers and info windows

@@ -9,7 +9,9 @@
   <body>
     <h1>Streetview Mapsicle</h1>
     <p>
-An API for putting overlays on top of Street View</p>
+A library to put overlays - images, text or HTML content - 
+on top of a panorama in Street View. They can follow a location (given by
+lat/lng) or be at a fixed position on screen (coming soon).</p>
     <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
     
       <h2><a name="Mapsicle"></a>class Mapsicle</h2>
@@ -26,7 +28,7 @@ An API for putting overlays on top of Street View</p>
             </tr>
             
               <tr class="odd">
-                <td><code>Mapsicle(<span class="type">name:string</span>, <span class="type">glatlng:GLatLng</span>, <span class="type">custom:MapsicleConfig</span>)</code></td>
+                <td><code>Mapsicle(<span class="type">name:string</span>, <span class="type">glatlng:GLatLng</span>, <span class="type">custom:MapsicleParams</span>)</code></td>
                 
                 <td>Creates a new Street View Mapsicle: a street view panorama which you can overlay with markers.</td>
               </tr>
@@ -420,14 +422,14 @@ This works exactly the same as GStreetviewPanorama#followLink.</td>
         </table>
       
     
-      <h2><a name="MapsicleConfig"></a>class MapsicleConfig</h2>
+      <h2><a name="MapsicleParams"></a>class MapsicleParams</h2>
       <p>Configuration options when initializing Mapsicle.
 
 Do not use the constructor for this class, instead, instantiate it as an object literal.
 All of the properties (and the object itself) are optional.</p>
       
         <h3>Properties</h3>
-        <table summary="class MapsicleConfig - Properties" width="90%">
+        <table summary="class MapsicleParams - Properties" width="90%">
           
           <tbody>
             <tr>
@@ -700,7 +702,7 @@ literal containing all the necessary properties.</p>
                     <td><code>SVMarker</code></td>
                   
                 
-                <td>(optional)</td>
+                <td>(optional) A marker to be displayed hovering at this location</td>
               </tr>
             
               <tr class="odd">
@@ -895,7 +897,7 @@ one with an object literal containing all the necessary properties.</p>
             </tr>
             
               <tr class="odd">
-                <td><code>tracking()</code></td>
+                <td><code>getLocation()</code></td>
                 
                   
                     <td><code>SVLocation</code></td>

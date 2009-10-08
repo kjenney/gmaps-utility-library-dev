@@ -1,5 +1,6 @@
 Next version...
 
+* MapsicleConfig renamed to MapsicleParams
 * fix height and width setting in Custom Info Windows, so example should now work in IE
 * ugly partial fix for markers not showing up in Chrome
 * fixed everything-is-broken-in-Internet-Explorer issue
