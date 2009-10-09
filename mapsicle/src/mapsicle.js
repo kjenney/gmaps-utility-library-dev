@@ -13,7 +13,7 @@
  */
 /**
  * @name Streetview Mapsicle
- * @version 0.9.7
+ * @version 0.9.8
  * @author Stephen Davis &lt;stephen@projectx.co.nz&gt;.
  * @author Cameron Prebble &lt;cameron@projectx.co.nz&gt;.
  * @copyright (c) 2008-2009 ProjectX Technology Ltd.
@@ -22,6 +22,9 @@
  * lat/lng) or be at a fixed position on screen (coming soon).
  * 
  * For now, Mapsicle doesn't work in full-screen mode.
+ * 
+ * To register callbacks for events, use the GEvent interface and register for
+ * events on the Mapsicle object that you create.
  */
 /*global
 GEvent,
@@ -1194,42 +1197,6 @@ Mapsicle.prototype.handleClick = function (e) {
  * @event
  * @param {Mapsicle} mapsicle
  */
-
-/**
- * Register a callback to fire when a particular event occurs.
- *
- * @see Mapsicle#event:yawchanged
- * @see Mapsicle#event:pitchchanged
- * @see Mapsicle#event:zoomchanged
- * @see Mapsicle#event:error
- * @see Mapsicle#event:initialized
- *
- * @see Mapsicle#event:mapsicle_end
- * @see Mapsicle#event:mapsicle_resized
- * @see Mapsicle#event:mapsicle_position_changed
- * @see Mapsicle#event:mapsicle_ready
- * @see Mapsicle#event:mapsicle_set_position_failed
- * @see Mapsicle#event:mapsicle_set_position_success
- * @see Mapsicle#event:mapsicle_set_position_panned
- * @see Mapsicle#event:mapsicle_set_position_jumped
- * @see Mapsicle#event:mapsicle_set_position_launched
- * @see Mapsicle#event:mapsicle_click
- * @see Mapsicle#event:mapsicle_pov_changed
- *
- * @param {String} event The name of the event
- * @param {Function} callback Function to execute when the event is fired
- * 
- * You can also register events with GEvent.addListener, passing a Mapsicle as the object.
- */
-Mapsicle.prototype.registerCallback = function (event, callback) {
-  // FIXME: delete this method
-  GEvent.addListener(this, event, callback);
-};
-
-/** @private */
-Mapsicle.prototype.triggerEvent = function (event, arg) {
-  GEvent.trigger(this, event, arg);
-};
 
 /**
  * Close down this instance of Mapsicle

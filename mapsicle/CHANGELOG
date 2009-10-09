@@ -1,3 +1,8 @@
+Mapsicle API v0.9.8 - 9 October 2009
+====================================
+
+* removed Mapsicle#registerCallback. You should use GEvent.addListener to register callbacks for events.
+
 Mapsicle API v0.9.7 - 8 October 2009
 ====================================
 

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Streetview Mapsicle v0.9.7 Reference</title>
+    <title>Streetview Mapsicle v0.9.8 Reference</title>
     <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
     <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
   </head>
@@ -13,7 +13,10 @@ A library to put overlays - images, text or HTML content -
 on top of a panorama in Street View. They can follow a location (given by
 lat/lng) or be at a fixed position on screen (coming soon).
 
-For now, Mapsicle doesn't work in full-screen mode.</p>
+For now, Mapsicle doesn't work in full-screen mode.
+
+To register callbacks for events, use the GEvent interface and register for
+events on the Mapsicle object that you create.</p>
     <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
     
       <h2><a name="Mapsicle"></a>class Mapsicle</h2>
@@ -73,16 +76,6 @@ For now, Mapsicle doesn't work in full-screen mode.</p>
               </tr>
             
               <tr class="odd">
-                <td><code>clearCallbacks(<span class="type">event:String</span>)</code></td>
-                
-                  
-                    <td><code>None</code></td>
-                  
-                
-                <td>Remove all registered callbacks on a given event</td>
-              </tr>
-            
-              <tr class="even">
                 <td><code>clearLocations()</code></td>
                 
                   
@@ -92,7 +85,7 @@ For now, Mapsicle doesn't work in full-screen mode.</p>
                 <td>Remove all locations</td>
               </tr>
             
-              <tr class="odd">
+              <tr class="even">
                 <td><code>clearStaticOverlays()</code></td>
                 
                   
@@ -102,7 +95,7 @@ For now, Mapsicle doesn't work in full-screen mode.</p>
                 <td>Remove all the static overlays</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>close()</code></td>
                 
                   
@@ -112,7 +105,7 @@ For now, Mapsicle doesn't work in full-screen mode.</p>
                 <td>Close down this instance of Mapsicle</td>
               </tr>
             
-              <tr class="odd">
+              <tr class="even">
                 <td><code>followLink(<span class="type">yaw:number</span>)</code></td>
                 
                   
@@ -123,7 +116,7 @@ For now, Mapsicle doesn't work in full-screen mode.</p>
 This works exactly the same as GStreetviewPanorama#followLink.</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>getLocations()</code></td>
                 
                   
@@ -133,7 +126,7 @@ This works exactly the same as GStreetviewPanorama#followLink.</td>
                 <td>Get all current locations</td>
               </tr>
             
-              <tr class="odd">
+              <tr class="even">
                 <td><code>getPosition()</code></td>
                 
                   
@@ -143,7 +136,7 @@ This works exactly the same as GStreetviewPanorama#followLink.</td>
                 <td>Get the current position of the Panorama</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>getPOV()</code></td>
                 
                   
@@ -153,7 +146,7 @@ This works exactly the same as GStreetviewPanorama#followLink.</td>
                 <td>Get either the current POV of the panorama, or what the POV will be initialized to.</td>
               </tr>
             
-              <tr class="odd">
+              <tr class="even">
                 <td><code>panoramaResized()</code></td>
                 
                   
@@ -163,7 +156,7 @@ This works exactly the same as GStreetviewPanorama#followLink.</td>
                 <td>Automatically resize the panorama to fit the container</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>panTo(<span class="type">target:GPov</span>)</code></td>
                 
                   
@@ -171,16 +164,6 @@ This works exactly the same as GStreetviewPanorama#followLink.</td>
                   
                 
                 <td>Pan the Street View panorama around to a particlar point of view.</td>
-              </tr>
-            
-              <tr class="odd">
-                <td><code>registerCallback(<span class="type">event:String</span>, <span class="type">callback:Function</span>)</code></td>
-                
-                  
-                    <td><code>None</code></td>
-                  
-                
-                <td>Register a callback to fire when a particular event occurs.</td>
               </tr>
             
               <tr class="even">
