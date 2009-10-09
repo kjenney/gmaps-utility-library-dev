@@ -1019,23 +1019,23 @@ Mapsicle.prototype.upStreetView = function () {
       theMapsicle.setCannedMessage(errorCode);
     }
 
-    theMapsicle.triggerEvent("error", errorCode);
+    GEvent.trigger(theMapsicle, "error", errorCode);
   });
 
   var overlayMgr = this.overlayMgr;
 
   GEvent.addListener(this.panorama, "yawchanged", function (yaw) {
     overlayMgr.onPOVChange();
-    theMapsicle.triggerEvent("yawchanged", yaw);
+    GEvent.trigger(theMapsicle, "yawchanged", yaw);
   });
   GEvent.addListener(this.panorama, "pitchchanged", function (pitch) {
     overlayMgr.onPOVChange();
-    theMapsicle.triggerEvent("pitchchanged", pitch);
+    GEvent.trigger(theMapsicle, "pitchchanged", pitch);
   });
   GEvent.addListener(this.panorama, "zoomchanged", function (zoom) {
     // TODO: change apparent size of markers
     overlayMgr.onPOVZoomChange();
-    theMapsicle.triggerEvent("zoomchanged", zoom);
+    GEvent.trigger(theMapsicle, "zoomchanged", zoom);
   });
   GEvent.addListener(this.panorama, "initialized", function (loc) {
     /* Note that this is called whenever the USER goes to a NEW location,
@@ -1044,7 +1044,7 @@ Mapsicle.prototype.upStreetView = function () {
        (changed in Maps API v2.170 so called when the panorama is first loaded)
      */
     theMapsicle.onPositionChangeComplete(loc);
-    theMapsicle.triggerEvent("initialized", loc);
+    GEvent.trigger(theMapsicle, "initialized", loc);
   });
 
   var mouseHeld = false;
@@ -1091,7 +1091,7 @@ Mapsicle.prototype.upStreetView = function () {
 
   this.setPanoramaSize(this.sizeX, this.sizeY);
 
-  this.triggerEvent("mapsicle_ready", this);
+  GEvent.trigger(this, "mapsicle_ready", this);
   return true;
 };
 
@@ -1108,7 +1108,7 @@ Mapsicle.prototype.handleClick = function (e) {
   //var screenPoint = new GScreenPoint(panoX, panoY);
   //var pov = this.panorama.getPOV(screenPoint);
 
-  this.triggerEvent("mapsicle_click", /*pov*/ null);
+  GEvent.trigger(this, "mapsicle_click", /*pov*/ null);
 };
 
 /*
@@ -1238,7 +1238,7 @@ Mapsicle.prototype.close = function () {
   if (this.panorama) {
     this.panorama.remove();
   }
-  this.triggerEvent("mapsicle_end", null);
+  GEvent.trigger(this, "mapsicle_end", null);
 };
 
 /**
@@ -1273,7 +1273,7 @@ Mapsicle.prototype.setPanoramaSize = function (x, y) {
   if (this.up) {
     this.overlayMgr.stopMotion();
   }
-  this.triggerEvent("mapsicle_resized", new GScreenSize(x, y));
+  GEvent.trigger(this, "mapsicle_resized", new GScreenSize(x, y));
 };
 
 /**
@@ -1303,7 +1303,7 @@ Mapsicle.prototype.onPositionChangeComplete = function (loc) {
 
   //this.elems.doUtterlyTerrifyingBrowserHacks();    
 
-  this.triggerEvent("mapsicle_position_changed", loc);
+  GEvent.trigger(this, "mapsicle_position_changed", loc);
 };
 
 /** @private */
@@ -1487,7 +1487,7 @@ Mapsicle.prototype.setPosition = function (targetLatLng, pov, errorCallback) {
         if (!Mapsicle.Utils.nonexistent(errorCallback)) {
           errorCallback.call(null, streetViewData.code);
         }
-        theMapsicle.triggerEvent("mapsicle_set_position_failed", streetViewData.code);
+        GEvent.trigger(theMapsicle, "mapsicle_set_position_failed", streetViewData.code);
       } else {
         var errorMsg = "getNearestPanorama(): streetViewData.code had an unrecognised value";
         throw new Error(errorMsg);
@@ -1505,14 +1505,14 @@ Mapsicle.prototype.switchToPano = function (panoLocation, target) {
 
     if (panoLocation.panoId === this.position.panoId) {
       this.panToTarget();
-      this.triggerEvent("mapsicle_set_position_panned", this.getPOV());
+      GEvent.trigger(this, "mapsicle_set_position_panned", this.getPOV());
     } else {
       this.jumping = true;
 
       // TODO: error handling. Shouldn't ever fail, as the client just said there was a pano here, but still...
       this.panorama.setLocationAndPOV(panoLocation.latlng, this.target);
       this.onPositionChangeComplete(panoLocation);
-      this.triggerEvent("mapsicle_set_position_jumped", panoLocation);
+      GEvent.trigger(this, "mapsicle_set_position_jumped", panoLocation);
     }
 
     this.overlayMgr.stopMotion();
@@ -1520,10 +1520,10 @@ Mapsicle.prototype.switchToPano = function (panoLocation, target) {
   } else {
     this.elems.svc.innerHTML = "<h2>Launching the Panorama Viewer...</h2>";
     this.onPositionChangeComplete(panoLocation);
-    this.triggerEvent("mapsicle_set_position_launched", panoLocation);
+    GEvent.trigger(this, "mapsicle_set_position_launched", panoLocation);
   }
 
-  this.triggerEvent("mapsicle_set_position_success", panoLocation);
+  GEvent.trigger(this, "mapsicle_set_position_success", panoLocation);
 };
 
 /** @private */
@@ -2034,7 +2034,7 @@ Mapsicle.OverlayDisplayManager.prototype = {
     if (this.mapsicle.up) {
       this.displayMode(Mapsicle.OverlayDisplayMode.HIDDEN);
       this.refreshTrackingOverlays();
-      this.mapsicle.triggerEvent("mapsicle_pov_changed", this.mapsicle);
+      GEvent.trigger(this.mapsicle, "mapsicle_pov_changed", this.mapsicle);
       this.displayMode(mode);
     }
   },
