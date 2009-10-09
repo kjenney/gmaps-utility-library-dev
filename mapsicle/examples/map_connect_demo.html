@@ -32,12 +32,12 @@
                 var sv_map_location = new GMarker(home_point,{icon:sv_map_icon});
                 map.addOverlay(sv_map_location);
 
-                mapsicle.registerCallback("yawchanged", function(yaw){
+                GEvent.addListener(mapsicle, "yawchanged", function(yaw){
                     var angle = parseInt((yaw/22.5)+0.5);
                     if (angle == 16) angle = 0;
                     sv_map_location.setImage("http://maps.gstatic.com/mapfiles/cb/man_arrow-" + angle + ".png");
                 });
-                mapsicle.registerCallback("mapsicle_position_changed", function(location){
+                GEvent.addListener(mapsicle, "mapsicle_position_changed", function(location){
                     sv_map_location.setLatLng(location.latlng);
                 });
 		var marker_point = new GLatLng(-41.27810318260378,174.77673053741455);

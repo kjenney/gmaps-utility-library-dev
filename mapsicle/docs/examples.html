@@ -120,7 +120,7 @@ function init(){
             google.load(&quot;maps&quot;,&quot;2&quot;);
         &lt;/script&gt;
 	&lt;style type=&quot;text/css&quot;&gt;
-		.info_window{
+		.my_funky_demo_window{
 			border: 1px solid #004879;
 			width: 200px;
 			height:100px;
@@ -129,14 +129,14 @@ function init(){
 			text-align:center;
 			font-family: Helvetica,Arial,sans-serif;
 		}
-		.info_window h3{
+		.my_funky_demo_window h3{
 			margin:0;
 			font-size:12pt;
 		}
-		.info_window span{
+		.my_funky_demo_window span{
 			font-size:9pt;
 		}
-		.info_window img{
+		.my_funky_demo_window img{
 			vertical-align:middle;
 			margin-right:5px;
 		}
@@ -147,7 +147,7 @@ function init(){
             function init(){
                 mapsicle = new Mapsicle(&quot;mapsicle_div&quot;, new GLatLng(-41.292579, 174.779075));
                 var custom_box = document.createElement('div');
-		custom_box.className = &quot;info_window&quot;;
+		custom_box.className = &quot;my_funky_demo_window&quot;;
                 custom_box.innerHTML = &quot;&lt;h3&gt;&lt;img src='images/mapsicle_marker_sm.png' /&gt;Streetview Mapsicle&lt;/h3&gt;&lt;span&gt;Lorem ipsum dolor ....&lt;/span&gt;&quot;;
                 var info =  new SVCustomInfoWindow({
 	            inner: custom_box,
@@ -203,12 +203,12 @@ function init(){
                 var pegman_marker = new GMarker(home_point,{icon:pegman_icon});
                 map.addOverlay(pegman_marker);
 
-                mapsicle.registerCallback(&quot;yawchanged&quot;, function(e,yaw){
+                GEvent.addListener(mapsicle, &quot;yawchanged&quot;, function(yaw){
                     var angle = parseInt((yaw/22.5)+0.5);
                     if (angle == 16) angle = 0;
                     pegman_marker.setImage(&quot;http://maps.google.com/intl/en_us/mapfiles/cb/man_arrow-&quot; + angle + &quot;.png&quot;);
                 });
-                mapsicle.registerCallback(&quot;mapsicle_position_changed&quot;, function(e,location){
+                GEvent.addListener(mapsicle, &quot;mapsicle_position_changed&quot;, function(location){
                     pegman_marker.setLatLng(location.latlng);
                 });
 

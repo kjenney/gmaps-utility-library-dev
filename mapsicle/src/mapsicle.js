@@ -1222,6 +1222,7 @@ Mapsicle.prototype.handleClick = function (e) {
  * You can also register events with GEvent.addListener, passing a Mapsicle as the object.
  */
 Mapsicle.prototype.registerCallback = function (event, callback) {
+  // FIXME: delete this method
   GEvent.addListener(this, event, callback);
 };
 
