@@ -1114,11 +1114,6 @@ Mapsicle.prototype.handleClick = function (e) {
 /*
  * EVENTS
  */
-/**
- * @private
- * map of lists of event callbacks
- */
-Mapsicle.prototype.callbacks = {};
 
 /**
  * @name Mapsicle#yawchanged
@@ -1223,30 +1218,16 @@ Mapsicle.prototype.callbacks = {};
  *
  * @param {String} event The name of the event
  * @param {Function} callback Function to execute when the event is fired
+ * 
+ * You can also register events with GEvent.addListener, passing a Mapsicle as the object.
  */
 Mapsicle.prototype.registerCallback = function (event, callback) {
-  if (!this.callbacks[event]) {
-    this.callbacks[event] = [callback];
-  } else {
-    this.callbacks[event].push(callback);
-  }
-};
-
-/**
- * Remove all registered callbacks on a given event
- */
-Mapsicle.prototype.clearCallbacks = function (/** String */ event) {
-  this.callbacks[event] = [];
+  GEvent.addListener(this, event, callback);
 };
 
 /** @private */
 Mapsicle.prototype.triggerEvent = function (event, arg) {
-  var i = 0;
-  var fnlist = this.callbacks[event] || [];
-
-  for (i = 0; i < fnlist.length; ++i) {
-    fnlist[i].call(this, event, arg);
-  }
+  GEvent.trigger(this, event, arg);
 };
 
 /**

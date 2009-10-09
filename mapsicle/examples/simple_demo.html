@@ -8,9 +8,12 @@
             google.load("maps","2");
         </script>
         <script type="text/javascript">
+          //<![CDATA[
           document.write('<script type="text/javascript" src="../src/mapsicle' + (document.location.search.indexOf('packed') > -1 ? '_packed' : '') + '.js"><' + '/script>');
+          //]]>
         </script>
         <script type="text/javascript">
+          //<![CDATA[
             var mapsicle;
             function init(){
                 mapsicle = new Mapsicle("mapsicle_div", new GLatLng(-41.292579, 174.779075));
@@ -28,6 +31,7 @@
                 });
                 mapsicle.addLocation(location);
             }
+          //]]>
         </script>
     </head>
     <body onload="init();" onunload="GUnload()">
