@@ -245,35 +245,6 @@ SVOverlay.prototype = {
   }
 };
 
-// FIXME: static overlays
-/**
- * @class An overlay that appears at a fixed pixel position, regardless of motion.
- *
- * @extends SVOverlay
- * @ignore
- */
-/*global SVDecal*/
-var SVDecal = function (params) {
-  this.overlayInit(params);
-
-  this.content = params.content;
-  this.visible = params.visible ? true : false;
-};
-
-SVDecal.prototype = new SVOverlay();
-
-/**
- * Get the point the decal covers
- *
- * @returns {GScreenPoint}
- */
-SVDecal.prototype.pos = function () {
-  return {
-    x: this.x,
-    y: this.y
-  };
-};
-
 /**
  * @class Parent class of overlays that track an SVLocation.
  *
@@ -1352,35 +1323,11 @@ Mapsicle.prototype.clearLocations = function () {
   this.locations = [];
 };
 
-/**
- * Add a static overlay
- *
- * @param {SVOverlay} newOverlay the overlay to add
- */
-Mapsicle.prototype.addStaticOverlay = function (newOverlay) {
-  this.overlayMgr.staticOverlays.push(newOverlay);
-  newOverlay.onAddToMapsicle(this);
-};
-
 /** @private */
 Mapsicle.prototype.addTrackingOverlay = function (newOverlay) {
   this.overlayMgr.trackingOverlays.push(newOverlay);
   newOverlay.onAddToMapsicle(this);
   this.overlayMgr.updateAll();
-};
-
-/**
- * Remove a static overlay
- *
- * @param {SVLocation} doomedOverlay
- */
-Mapsicle.prototype.removeStaticOverlay = function (doomedOverlay) {
-  var theMapsicle = this;
-
-  Mapsicle.Utils.deleteFromArray(doomedOverlay, this.overlayMgr.staticOverlays, function (obj) {
-    obj.selfTerminate(theMapsicle);
-  });
-
 };
 
 /** @private */
@@ -1401,21 +1348,10 @@ Mapsicle.prototype.clearTrackingOverlays = function () {
   this.overlayMgr.trackingOverlays = [];
 };
 
-/**
- * Remove all the static overlays
- */
-Mapsicle.prototype.clearStaticOverlays = function () {
-  var theMapsicle = this;
-  Mapsicle.Utils.each(this.overlayMgr.staticOverlays, function (s) {
-    s.selfTerminate(theMapsicle);
-  });
-  this.overlayMgr.staticOverlays = [];
-};
-
 /** @private */
 Mapsicle.prototype.clearAllOverlays = function () {
   this.clearTrackingOverlays();
-  this.clearStaticOverlays();
+  //this.clearStaticOverlays();
 };
 
 /**
