@@ -1442,7 +1442,14 @@ Mapsicle.prototype.setCannedMessage = function (code, replace) {
     show("You need to install <a href='http://get.adobe.com/flashplayer/'>Flash</a> to use Street View.");
     break;
   case Mapsicle.SVErrorCodes.NO_NEARBY_PANO:
-    show("We're sorry, but there is no Street View of that location");
+    if(this.config.noPano instanceof Function) {
+      console.log("noPano!");
+      this.elems.updatePanelXY();
+      this.setPanoramaSize(this.sizeX, this.sizeY);
+      this.config.noPano.call();
+    } else {
+      show("We're sorry, but there is no Street View of that location");  
+    }
     break;
   case Mapsicle.SVErrorCodes.SERVER_ERROR:
     show("We're sorry, but the server is not responding. Try refreshing the page.");
@@ -1453,6 +1460,24 @@ Mapsicle.prototype.setCannedMessage = function (code, replace) {
   default:
     show("Unknown error " + code.toString());
     break;
+  }
+};
+
+/**
+ * Set the contents of the "curtain", an overlay the covers the whole of street view
+ */
+Mapsicle.prototype.setCurtainContents = function(html) {
+  this.elems.curtain.innerHTML = html;
+};
+
+/**
+ * Set whether the "curtain" is shown.
+ */
+Mapsicle.prototype.showCurtain = function(show) {
+  if(show) {
+    this.elems.curtain.style.visibility = 'visible';
+  } else {
+    this.elems.curtain.style.visibility = 'hidden';
   }
 };
 
@@ -1558,6 +1583,7 @@ MapsicleParams.prototype = {
   defaultOpacity: 0.5,
   fadeTime: 4000,
   fadeSpeed: "normal",
+  noPano: null,
   normalDistance: 30,
   proximityDivisor: 120000,
   proximityYScale: 1.5,
@@ -1787,6 +1813,7 @@ Mapsicle.PageElements = function (theMapsicle, name, uid) {
   this.panelId = prefix + '-panel';
   this.svcId = prefix + '-streetview';
   this.labelsId = prefix + '-labels';
+  this.curtainId = prefix + "-curtain";
 
   this.container = document.getElementById(name);
   this.panel = document.createElement('div');
@@ -1796,10 +1823,22 @@ Mapsicle.PageElements = function (theMapsicle, name, uid) {
 
   this.svc = document.createElement('div');
   this.svc.setAttribute('id', this.svcId);
-
   this.svc.innerHTML = "<h2>Googling...</h2>";
   this.svc.className += " mapsicle-streetview";
   this.panel.appendChild(this.svc);
+
+  this.curtain = document.createElement('div');
+  this.curtain.setAttribute('id', this.curtainId);
+  this.curtain.className += " mapsicle-curtain";
+  this.curtain.style.position = 'absolute';
+  this.curtain.style.top = '0px';
+  this.curtain.style.left = '0px';
+  this.curtain.style.right = '0px';
+  this.curtain.style.bottom = '0px';
+  this.curtain.style.backgroundColor = 'white';
+  this.curtain.style.zIndex = Mapsicle.ZIndices.MESSAGE.toString();
+  this.curtain.style.visibility = 'hidden';
+  this.panel.appendChild(this.curtain);
 
   this.labels = document.createElement('div');
   this.labels.setAttribute('id', this.labelsId);
@@ -1855,6 +1894,7 @@ Mapsicle.PageElements.prototype = {
 
     setContainerSizes(this.panel, x, y);
     setContainerSizes(this.svc, x, y);
+    setContainerSizes(this.curtain, x, y);
   },
 
   /**
