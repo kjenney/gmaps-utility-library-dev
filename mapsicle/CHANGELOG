@@ -1,3 +1,5 @@
+* removed Mapsicle#addStaticOverlay, Mapsicle#clearStaticOverlays, Mapsicle#removeStaticOverlay and SVDecal
+
 Mapsicle API v0.9.8 - 9 October 2009
 ====================================
 

@@ -918,7 +918,7 @@ var Mapsicle = function (name, glatlng, custom) {
 
   var theMapsicle = this;
 
-  this.setPosition(startLoc, function (code) {
+  this.setPosition(startLoc, null, function (code) {
     theMapsicle.setCannedMessage(code);
   });
 };
