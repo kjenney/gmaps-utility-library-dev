@@ -903,8 +903,6 @@ var Mapsicle = function (name, glatlng, custom) {
   this.sizeX = Math.max(MapsicleParams.MIN_PANORAMA_SIZE_X, elems.svc.clientWidth, elems.container.clientWidth);
   this.sizeY = Math.max(MapsicleParams.MIN_PANORAMA_SIZE_Y, elems.svc.clientHeight, elems.container.clientHeight);
 
-  elems.listenForResize(this);
-
   var startLoc;
   if (glatlng) {
     startLoc = glatlng;
@@ -1062,9 +1060,10 @@ Mapsicle.prototype.upStreetView = function () {
   };
 
   this.elems.updatePanelXY();
-
   this.setPanoramaSize(this.sizeX, this.sizeY);
 
+  this.elems.listenForResize(this);
+  
   GEvent.trigger(this, "mapsicle_ready", this);
   return true;
 };
@@ -1443,7 +1442,6 @@ Mapsicle.prototype.setCannedMessage = function (code, replace) {
     break;
   case Mapsicle.SVErrorCodes.NO_NEARBY_PANO:
     if(this.config.noPano instanceof Function) {
-      console.log("noPano!");
       this.elems.updatePanelXY();
       this.setPanoramaSize(this.sizeX, this.sizeY);
       this.config.noPano.call();
