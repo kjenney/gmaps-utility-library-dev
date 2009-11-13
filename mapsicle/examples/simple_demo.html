@@ -16,7 +16,7 @@
           //<![CDATA[
             var mapsicle;
             function init(){
-                mapsicle = new Mapsicle("mapsicle_div", new GLatLng(-41.292579, 174.779075));
+              mapsicle = new Mapsicle(document.getElementById("mapsicle_div"), new GLatLng(-41.292579, 174.779075));
                 var marker =  new SVMarker({
 	            iconURL:"images/mapsicle_marker.png",
                     width:150,

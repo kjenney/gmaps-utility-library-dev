@@ -13,7 +13,7 @@
  */
 /**
  * @name Streetview Mapsicle
- * @version 0.9.8
+ * @version 1.0
  * @author Stephen Davis &lt;stephen@projectx.co.nz&gt;.
  * @author Cameron Prebble &lt;cameron@projectx.co.nz&gt;.
  * @copyright (c) 2008-2009 ProjectX Technology Ltd.
@@ -72,9 +72,9 @@ SVOverlay.prototype = {
       });
     }
     /* adds an iframe shim if using Chrome */
-    if (/chrome/.test(navigator.userAgent.toLowerCase())){
+    if (/chrome/.test(navigator.userAgent.toLowerCase())) {
       this.iframe = document.createElement("iframe");
-      this.iframe.setAttribute("allowtransparency","true");
+      this.iframe.setAttribute("allowtransparency", "true");
       this.iframe.src = "http://mapsicle.projectx.co.nz/trans_background.html";
       this.iframe.frameborder = "0";
       this.iframe.scrolling = "false";
@@ -87,7 +87,7 @@ SVOverlay.prototype = {
       this.iframe.style.top = "0px";
       this.iframe.style.left = "0px";
       this.iframe.style.border = "none";
-      this.elem.appendChild(this.iframe,this.elem.firstChild);
+      this.elem.appendChild(this.iframe, this.elem.firstChild);
     }
   },
 
@@ -881,12 +881,12 @@ SVLocation.prototype.infoWindowClicked = function (mouseEvent) {
  * Creates a new Street View Mapsicle: a street view panorama which you can overlay with markers.
  *
  * @constructor
- * @param {string} name The HTML id of the container in which to put Mapsicle
+ * @param {Element} container The container in which to put Mapsicle
  * @param {GLatLng} glatlng The starting location for Street View
  * @param {MapsicleParams} custom (Optional) Any custom configuration parameters
  */
 /*global Mapsicle*/
-var Mapsicle = function (name, glatlng, custom) {
+var Mapsicle = function (container, glatlng, custom) {
   this.mapsicleId = (Mapsicle.numMapsicles++);
 
   this.config = new MapsicleParams();
@@ -896,7 +896,10 @@ var Mapsicle = function (name, glatlng, custom) {
     }
   }
 
-  var container = document.getElementById(name);
+  if (container instanceof String || typeof container === "string") {
+    container = document.getElementById(container);  
+  }
+  
   var elems = new Mapsicle.PageElements(this, container, this.mapsicleId);
   this.elems = elems;
 
@@ -1442,7 +1445,7 @@ Mapsicle.prototype.setCannedMessage = function (code, replace) {
     show("You need to install <a href='http://get.adobe.com/flashplayer/'>Flash</a> to use Street View.");
     break;
   case Mapsicle.SVErrorCodes.NO_NEARBY_PANO:
-    if(this.config.noPano instanceof Function) {
+    if (this.config.noPano instanceof Function) {
       this.elems.updatePanelXY();
       this.setPanoramaSize(this.sizeX, this.sizeY);
       this.config.noPano.call();
@@ -1465,15 +1468,15 @@ Mapsicle.prototype.setCannedMessage = function (code, replace) {
 /**
  * Set the contents of the "curtain", an overlay the covers the whole of street view
  */
-Mapsicle.prototype.setCurtainContents = function(html) {
+Mapsicle.prototype.setCurtainContents = function (html) {
   this.elems.curtain.innerHTML = html;
 };
 
 /**
  * Set whether the "curtain" is shown.
  */
-Mapsicle.prototype.showCurtain = function(show) {
-  if(show) {
+Mapsicle.prototype.showCurtain = function (show) {
+  if (show) {
     this.elems.curtain.style.visibility = 'visible';
   } else {
     this.elems.curtain.style.visibility = 'hidden';

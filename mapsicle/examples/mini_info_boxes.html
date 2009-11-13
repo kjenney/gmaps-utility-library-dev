@@ -16,7 +16,7 @@
           //<![CDATA[
             var mapsicle;
             function init(){
-                mapsicle = new Mapsicle("mapsicle_div", new GLatLng(37.42084, -122.084233));
+              mapsicle = new Mapsicle(document.getElementById("mapsicle_div"), new GLatLng(37.42084, -122.084233));
                 var info =  new SVMiniInfoBox({
 	            inner: "STREETVIEW MAPSICLE",
                     width: 200

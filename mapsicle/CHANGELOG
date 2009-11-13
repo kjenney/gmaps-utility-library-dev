@@ -1,3 +1,7 @@
+Mapsicle API v1.0 - 13 November 2009
+====================================
+
+* altered Mapsicle constructor: first paramter is now "container", a DOM element, rather than an ID.
 * removed Mapsicle#addStaticOverlay, Mapsicle#clearStaticOverlays, Mapsicle#removeStaticOverlay and SVDecal
 
 Mapsicle API v0.9.8 - 9 October 2009
