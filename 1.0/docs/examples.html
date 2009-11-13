@@ -1,0 +1,246 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <title>Mapsicle Documentation: Examples</title>
+        <link href="http://code.google.com/css/codesite.css" type="text/css" rel="stylesheet nofollow"/>
+        <link href="http://gmaps-utility-library.googlecode.com/svn/trunk/util/docs/template/local_extensions.css" type="text/css" rel="stylesheet nofollow"/>
+        <script type="text/javascript" src="http://code.google.com/apis/maps/include/prettify.js"></script>
+    </head>
+
+    <body onload="prettyPrint()">
+        <h1><a></a>Mapsicle Examples</h1>
+        <h2><a name="TOC"></a>Table of Contents</h2>
+        <ul>
+            <li><a href="#HowTo">How-To</a></li>
+            <li><a href="#Simple">Simple Example</a></li>
+            <li><a href="#MiniInfo">Mini InfoBoxes</a></li>
+            <li><a href="#CustomInfo">Custom InfoWindows</a></li>
+            <li><a href="#MapConnect">Connect to a Google Map</a></li>
+        </ul>
+        <h2><a name="HowTo"></a>How-To</h2>
+        <p>To add Mapsicle to any page simply:</p>
+        <ol>
+            <li>Include the mapsicle.js in the document header</li>
+            <pre class="prettyprint">&lt;script src=&quot;mapsicle.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</pre>
+            <li>Define a 'div' element on your page to contain the Mapsicle object</li>
+            <pre class="prettyprint">&lt;div id=&quot;mapsicle_div&quot; style=&quot;width:600px;height:400px;&quot;&gt;&lt;/div&gt;</pre>
+            <li>On the page load event, create a new Mapsicle object, with the first param being the container 'div' element,
+            and the second being the init a GLatLng object for the inital location.</li>
+            <pre class="prettyprint">
+function init(){
+    var mapsicle = new Mapsicle(document.getElementById(&quot;mapsicle_div&quot;), new GLatLng(-41.292579, 174.779075));
+}           </pre>
+        </ol>
+        <h2><a name="Simple"></a>Simple Example</h2>
+        <p>This example shows the basics of adding a marker and location to the Mapsicle view.</p>
+        <pre class="prettyprint">
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xml:lang=&quot;en&quot; lang=&quot;en&quot;&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html;charset=UTF-8&quot; /&gt;
+        &lt;title&gt;Mapsicle&lt;/title&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;http://www.google.com/jsapi?key=YOUR_API_KEY&quot;&gt;&lt;/script&gt;
+        &lt;script type=&quot;text/javascript&quot;&gt;
+            google.load(&quot;maps&quot;,&quot;2&quot;);
+        &lt;/script&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;mapsicle.js&quot;&gt;&lt;/script&gt;
+        &lt;script type=&quot;text/javascript&quot;&gt;
+            function init(){
+                var mapsicle = new Mapsicle(document.getElementById(&quot;mapsicle_div&quot;), new GLatLng(-41.292579, 174.779075));
+                var marker =  new SVMarker({
+                    showOffscreen:true,
+                    iconURL:&quot;images/mapsicle_marker.png&quot;,
+                    width:150,
+                    height:150,
+                    scale:0.2
+                });
+                var location = new SVLocation({
+                    lat:-41.29249,
+                    lng:174.778889,
+                    marker:marker
+                });
+                mapsicle.addLocation(location);
+            }
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body onload=&quot;init();&quot; onunload=&quot;GUnload()&quot;&gt;
+        &lt;div id=&quot;mapsicle_div&quot; style=&quot;width:850px;height:400px;&quot;&gt;&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+        </pre>
+        <p><a href="../examples/simple_demo.html">View example (simple_demo.html).</a></p>
+	<h2><a name="MiniInfo"></a>Mini InfoBoxes</h2>
+	<p>Mini InfoBoxes are designed to provide a simple way to display a single line of text to accompany any marker.</p>
+	<pre class="prettyprint">
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xml:lang=&quot;en&quot; lang=&quot;en&quot;&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html;charset=UTF-8&quot; /&gt;
+         &lt;title&gt;Streetview Mapsicle&lt;/title&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;http://www.google.com/jsapi?key=ABQIAAAA5zA5E-OCPShXfBE6gUw8hBQazInCDZ0HN2WWjWf2XWRlss09RBTJW2Yfd0zQtGF7syQieeo8Soh0Bg&quot;&gt;&lt;/script&gt;
+        &lt;script type=&quot;text/javascript&quot;&gt;
+            google.load(&quot;maps&quot;,&quot;2&quot;);
+        &lt;/script&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;../src/mapsicle.js&quot;&gt;&lt;/script&gt;
+        &lt;script type=&quot;text/javascript&quot;&gt;
+            var mapsicle;
+            function init(){
+                mapsicle = new Mapsicle(document.getElementById(&quot;mapsicle_div&quot;), new GLatLng(37.42084, -122.084233));
+                var info =  new SVMiniInfoBox({
+	            inner: &quot;STREETVIEW MAPSICLE&quot;,
+                    width: 200
+                });
+                var location = new SVLocation({
+		    name:&quot;STREETVIEW MAPSICLE&quot;,
+                    lat:37.423071,
+                    lng:-122.084254,
+                    info:info
+                });
+                mapsicle.addLocation(location);
+            }
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body onload=&quot;init();&quot; onunload=&quot;GUnload()&quot;&gt;
+        &lt;div id=&quot;mapsicle_div&quot; style=&quot;width:850px;height:400px;&quot;&gt;&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+	</pre>
+	<p><a href="../examples/mini_info_boxes.html">View example (mini_info_boxes.html).</a></p>
+
+	<h2><a name="CustomInfo"></a>Custom InfoWindows</h2>
+	<p>Custom InfoWindows provide greater flexibility, by allowing HTML and CSS to be defined customly.</p>
+	<pre class="prettyprint">
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xml:lang=&quot;en&quot; lang=&quot;en&quot;&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html;charset=UTF-8&quot; /&gt;
+        &lt;title&gt;Mapsicle&lt;/title&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;http://www.google.com/jsapi?key=YOUR_API_KEY&quot;&gt;&lt;/script&gt;
+        &lt;script type=&quot;text/javascript&quot;&gt;
+            google.load(&quot;maps&quot;,&quot;2&quot;);
+        &lt;/script&gt;
+	&lt;style type=&quot;text/css&quot;&gt;
+		.my_funky_demo_window{
+			border: 1px solid #004879;
+			width: 200px;
+			height:100px;
+			background-color: #ccc;
+			padding:5px;
+			text-align:center;
+			font-family: Helvetica,Arial,sans-serif;
+		}
+		.my_funky_demo_window h3{
+			margin:0;
+			font-size:12pt;
+		}
+		.my_funky_demo_window span{
+			font-size:9pt;
+		}
+		.my_funky_demo_window img{
+			vertical-align:middle;
+			margin-right:5px;
+		}
+	&lt;/style&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;../src/mapsicle.js&quot;&gt;&lt;/script&gt;
+        &lt;script type=&quot;text/javascript&quot;&gt;
+            var mapsicle;
+            function init(){
+                mapsicle = new Mapsicle(document.getElementById(&quot;mapsicle_div&quot;), new GLatLng(-41.292579, 174.779075));
+                var custom_box = document.createElement('div');
+		custom_box.className = &quot;my_funky_demo_window&quot;;
+                custom_box.innerHTML = &quot;&lt;h3&gt;&lt;img src='images/mapsicle_marker_sm.png' /&gt;Streetview Mapsicle&lt;/h3&gt;&lt;span&gt;Lorem ipsum dolor ....&lt;/span&gt;&quot;;
+                var info =  new SVCustomInfoWindow({
+	            inner: custom_box,
+                    width: 200,
+                    height:100
+                });
+                var location = new SVLocation({
+		    name:&quot;MAPSICLE&quot;,
+                    lat:-41.29249,
+                    lng:174.778889,
+                    info:info
+                });
+                mapsicle.addLocation(location);
+            }
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body onload=&quot;init();&quot; onunload=&quot;GUnload()&quot;&gt;
+        &lt;div id=&quot;mapsicle_div&quot; style=&quot;width:850px;height:400px;&quot;&gt;&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+	</pre>
+	<p><a href="../examples/custom_info_windows.html">View example (custom_info_windows.html).</a></p>
+
+        <h2><a name="MapConnect"></a>Connect to a Google Map</h2>
+        <p>This example shows how to use Mapsicle's event callbacks to connect Mapsicle with a Google Map</p>
+        <pre class="prettyprint">
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xml:lang=&quot;en&quot; lang=&quot;en&quot;&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html;charset=UTF-8&quot; /&gt;
+        &lt;title&gt;Mapsicle&lt;/title&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;http://www.google.com/jsapi?key=YOUR_API_KEY&quot;&gt;&lt;/script&gt;
+        &lt;script type=&quot;text/javascript&quot;&gt;
+            google.load(&quot;maps&quot;,&quot;2&quot;);
+        &lt;/script&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;mapsicle.js&quot;&gt;&lt;/script&gt;
+        &lt;script type=&quot;text/javascript&quot;&gt;
+            function init(){
+
+                var home_point = new GLatLng(-41.292579, 174.779075);
+
+                var mapsicle = new Mapsicle(document.getElementById(&quot;mapsicle_panel&quot;), home_point);
+
+                var map = new GMap2(document.getElementById(&quot;map_panel&quot;));
+
+                map.setUIToDefault();
+                map.setCenter(home_point,17);
+
+                var pegman_icon = new GIcon();
+                pegman_icon.image = &quot;http://maps.google.com/intl/en_us/mapfiles/cb/man_arrow-0.png&quot;;
+                pegman_icon.iconSize = new GSize(49,52);
+                pegman_icon.iconAnchor = new GPoint(26,32);
+                var pegman_marker = new GMarker(home_point,{icon:pegman_icon});
+                map.addOverlay(pegman_marker);
+
+                GEvent.addListener(mapsicle, &quot;yawchanged&quot;, function(yaw){
+                    var angle = parseInt((yaw/22.5)+0.5);
+                    if (angle == 16) angle = 0;
+                    pegman_marker.setImage(&quot;http://maps.google.com/intl/en_us/mapfiles/cb/man_arrow-&quot; + angle + &quot;.png&quot;);
+                });
+                GEvent.addListener(mapsicle, &quot;mapsicle_position_changed&quot;, function(location){
+                    pegman_marker.setLatLng(location.latlng);
+                });
+
+                var sv_marker =  new SVMarker({
+                    iconURL:&quot;images/mapsicle_marker.png&quot;,
+                    width:150,
+                    height:150,
+                    scale:0.2
+                });
+                var location = new SVLocation({
+                    lat:-41.29249,
+                    lng:174.778889,
+                    marker:sv_marker
+                });
+                mapsicle.addLocation(location);
+                var map_icon = new GIcon();
+                map_icon.image = &quot;images/mapsicle_marker_sm.png&quot;;
+                map_icon.iconSize = new GSize(35,35);
+                map_icon.iconAnchor = new GPoint(17.5,17.5);
+                var map_marker = new GMarker(new GLatLng(-41.29249,174.778889),{icon:map_icon});
+                map.addOverlay(map_marker);
+
+            }
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body onload=&quot;init();&quot; onunload=&quot;GUnload()&quot;&gt;
+        &lt;div id=&quot;mapsicle_panel&quot; style=&quot;width:850px;height:400px;&quot;&gt;&lt;/div&gt;
+        &lt;div id=&quot;map_panel&quot; style=&quot;width:850px;height:200px;&quot;&gt;&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+        </pre>
+        <p><a href="../examples/map_connect_demo.html">View example (map_connect_demo.html).</a></p>
+    </body>
+</html>
+
