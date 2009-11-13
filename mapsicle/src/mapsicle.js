@@ -896,7 +896,8 @@ var Mapsicle = function (name, glatlng, custom) {
     }
   }
 
-  var elems = new Mapsicle.PageElements(this, name, this.mapsicleId);
+  var container = document.getElementById(name);
+  var elems = new Mapsicle.PageElements(this, container, this.mapsicleId);
   this.elems = elems;
 
   // TODO: allow sizeX, sizeY as MapsicleParams
@@ -1804,16 +1805,14 @@ Mapsicle.OffsetSequence.sign = function (number) {
  *
  * @private
  */
-Mapsicle.PageElements = function (theMapsicle, name, uid) {
-  this.containerId = name;
-
+Mapsicle.PageElements = function (theMapsicle, container, uid) {
   var prefix = 'mapsicle-' + uid.toString();
   this.panelId = prefix + '-panel';
   this.svcId = prefix + '-streetview';
   this.labelsId = prefix + '-labels';
   this.curtainId = prefix + "-curtain";
 
-  this.container = document.getElementById(name);
+  this.container = container;
   this.panel = document.createElement('div');
   this.panel.id = this.panelId;
   this.panel.className += " mapsicle-panel";
