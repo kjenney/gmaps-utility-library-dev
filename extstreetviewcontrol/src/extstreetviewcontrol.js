@@ -17,6 +17,8 @@
  *  If it is not set, then control gets center location of main map.
  * @property {GSize} [size = GSize(300, 210)] Specifies control's size. 
  * @property {GPov} [pov = {yaw : 0, pitch : 0, panoId : null}] Specifies initialize pov of panorama.
+ * @property {Boolean} [hidden = false] Specify visibility when control is
+ *  added to the map. If it is set to true, the button is hidden.
  */
 
 /**
@@ -61,8 +63,10 @@ function ExtStreetviewControl(opt_opts) {
   this.markerTbl_.images.push({"left" : 0,   "top" : -849});
   this.markerTbl_.angle = 360 / this.markerTbl_.images.length;
   this.markerTbl_.drgImages = [];
-  this.markerTbl_.drgImages.push({"left" : 0, "top" : -313});  //enable-left
+  this.markerTbl_.drgImages.push({"left" : 0, "top" : -313});    //enable-left
   this.markerTbl_.drgImages.push({"left" : -49, "top" : -797});  //enable-right
+  this.markerTbl_.drgImages.push({"left" : -56, "top" : -184});  //disable-left
+  this.markerTbl_.drgImages.push({"left" : 0, "top" : -797});    //disable-right
   
   //============================
   // Parse options
@@ -75,13 +79,13 @@ function ExtStreetviewControl(opt_opts) {
   this.ctrlSize_ = opt_opts.size || new GSize(300, 210);
   this.pov_ = opt_opts.pov || {"yaw" : 0, "pitch" : 0, "panoId" : null};
   this.marker_ = null;
-  this.frameColor_ = "#6784C7";
-
-
+  this.isHidden_ = opt_opts.hidden || false;
+  
   this.windowStatus_ = "NORMAL";
   this.mapStatus_ = "MAP";
-  
   this.padding_ = 5;
+  this.frameColor_ = "#6784C7";
+  
 }
 
 ExtStreetviewControl.prototype = new GControl();
@@ -165,13 +169,13 @@ ExtStreetviewControl.prototype.initialize = function (map) {
   GEvent.bindDom(result.downArrowBtn, "click", this, function () {
     if (this_.windowStatus_ === "NORMAL") {
       //normal -> mini
-      this_.resizeCornerWindow_({endSize : this_.arrowBtnTbl_.downArrow, sizeDirection : -1}, "MINI");
+      this_.setCtrlStauts("MINI");
     }
   });
   GEvent.bindDom(result.upArrowBtn, "click", this, function () {
     if (this_.windowStatus_ === "MINI") {
       //mini -> normal
-      this_.resizeCornerWindow_({endSize : this_.ctrlSize_, sizeDirection : 1}, "NORMAL");
+      this_.setCtrlStauts("NORMAL");
     } else {
       //swap container map and streetview
       this_.swapMap2CornerWindow_();
@@ -270,7 +274,29 @@ ExtStreetviewControl.prototype.initialize = function (map) {
   //return dummy div element to map.
   var dummyDiv = this.createEle_({"width" : 0, "height" : 0});
   dummyDiv.style.display = "none";
+  
   return dummyDiv;
+};
+
+/**
+ * @desc Sets control status
+ * @param {status} "MINI" : The control is minimized.<br>
+ * "NORMAL" : The control is normal size.<br>
+ */
+ExtStreetviewControl.prototype.setCtrlStauts = function (status) {
+  switch (status) {
+  case "MINI":
+    //normal -> mini
+    this.resizeCornerWindow_({endSize : this.arrowBtnTbl_.downArrow, sizeDirection : -1}, "MINI");
+    break;
+    
+  case "NORMAL":
+    //mini - > normal 
+    if (this.windowStatus_ === "MINI") {
+      this.resizeCornerWindow_({endSize : this.ctrlSize_, sizeDirection : 1}, "NORMAL");
+    }
+    break;
+  }
 };
 
 /**
@@ -295,9 +321,9 @@ ExtStreetviewControl.prototype.markerDragStart_ = function () {
  * @private
  * @desc pegman-marker dragging
  */
-ExtStreetviewControl.prototype.markerDrag_ = function () {
+ExtStreetviewControl.prototype.markerDrag_ = function (latlng) {
   var beforeLng = this.lng_;
-  var currentLng = this.marker_.getLatLng().lng();
+  var currentLng = latlng.lng();
   this.lng_ = currentLng;
   
   var dragDirection = beforeLng - currentLng;
@@ -308,8 +334,16 @@ ExtStreetviewControl.prototype.markerDrag_ = function () {
     imgIdx = 1;
   }
   var img = this.marker_.getIconContainer_().firstChild;
-  img.style.left = this.markerTbl_.drgImages[imgIdx].left + "px";
-  img.style.top = this.markerTbl_.drgImages[imgIdx].top + "px";
+  var isDisable = 0;
+  var this_ = this;
+  //
+  this.stClient_.getNearestPanorama(latlng, function (panoData) {
+    if (panoData.code !== 200) {
+      isDisable += 2;
+    }
+    img.style.left = this_.markerTbl_.drgImages[imgIdx + isDisable].left + "px";
+    img.style.top = this_.markerTbl_.drgImages[imgIdx + isDisable].top + "px";
+  });
   
 };
 
@@ -317,8 +351,7 @@ ExtStreetviewControl.prototype.markerDrag_ = function () {
  * @private
  * @desc pegman-marker drag end
  */
-ExtStreetviewControl.prototype.markerDragEnd_ = function () {
-  var latlng = this.marker_.getLatLng();
+ExtStreetviewControl.prototype.markerDragEnd_ = function (latlng) {
   var img = this.marker_.getIconContainer_().firstChild;
   img.style.left = this.saveMarkerPosition_.left;
   img.style.top = this.saveMarkerPosition_.top;
@@ -357,6 +390,7 @@ ExtStreetviewControl.prototype.getMarker = function () {
   return this.marker_;
 };
 
+
 /**
  * @desc Set location of panorama and marker, and view of panorama.
  * @param {GLatLng} latlng location
@@ -370,9 +404,39 @@ ExtStreetviewControl.prototype.setLocationAndPOV = function (latlng, pov) {
   }
   this.marker_.setLatLng(latlng);
   var this_ = this;
-  this.stClient_.getNearestPanorama(latlng, function () {
-    this_.stClientEnum_(this_, arguments[0], this_.pov_);
+  this.stClient_.getNearestPanorama(latlng, function (panoData) {
+    if (panoData.code === 200) {
+      if (this_.isNull(pov)) {
+        this_.pov_.yaw = this_.computeAngle_(latlng, panoData.location.latlng);
+      }
+      this_.setCtrlStauts("NORMAL");
+    } else {
+      this_.setCtrlStauts("MINI");
+    }
+    this_.stClientEnum_(this_, panoData, this_.pov_);
   });
+};
+
+/**
+ * @desc Compute the yaw between 2 points.
+ * taken from http://gmaps-samples.googlecode.com/svn/trunk/streetview/angletowardsbuilding.html
+ * @param {GLatLng} [endLatLng] end location
+ * @param {GLatLng} [startLatLng] start location
+ */
+ExtStreetviewControl.prototype.computeAngle_ = function (endLatLng, startLatLng) {
+  var DEGREE_PER_RADIAN = 57.2957795;
+  var RADIAN_PER_DEGREE = 0.017453;
+  var dlat = endLatLng.lat() - startLatLng.lat();
+  var dlng = endLatLng.lng() - startLatLng.lng();
+  // We multiply dlng with cos(endLat), since the two points are very closeby,
+  // so we assume their cos values are approximately equal.
+  var yaw = Math.atan2(dlng * Math.cos(endLatLng.lat() * RADIAN_PER_DEGREE), dlat) * DEGREE_PER_RADIAN;
+  if (yaw >= 360) {
+    yaw -= 360;
+  } else if (yaw < 0) {
+    yaw += 360;
+  }
+  return yaw;
 };
 
 
@@ -734,6 +798,30 @@ ExtStreetviewControl.prototype.makeImgDiv_ = function (imgSrc, params) {
   return imgDiv;
 };
 
+
+/**
+ * @desc Change visibility of the control to hidden.
+ */
+ExtStreetviewControl.prototype.hide = function () {
+  this.container_.style.visibility = "hidden";
+  this.isHidden_ = true;
+};
+
+/**
+ * @desc Change visibility of the control to visible.
+ */
+ExtStreetviewControl.prototype.show = function () {
+  this.container_.style.visibility = "visible";
+  this.isHidden_ = false;
+};
+
+/**
+ * @desc Returns true when the control is hidden.
+ * @return {Boolean}
+ */
+ExtStreetviewControl.prototype.isHidden = function () {
+  return this.isHidden_;
+};
 
 
 /**

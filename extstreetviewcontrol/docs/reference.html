@@ -69,6 +69,36 @@ This library creates a collapsible StreetView display in the corner of the main 
               </tr>
             
               <tr class="odd">
+                <td><code>hide()</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Change visibility of the control to hidden.</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>isHidden()</code></td>
+                
+                  
+                    <td><code>Boolean</code></td>
+                  
+                
+                <td>Returns true when the control is hidden.</td>
+              </tr>
+            
+              <tr class="odd">
+                <td><code>setCtrlStauts(<span class="type">"MINI":status</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Sets control status</td>
+              </tr>
+            
+              <tr class="even">
                 <td><code>setLocationAndPOV(<span class="type">latlng:GLatLng</span>, <span class="type">pov?:GPov</span>)</code></td>
                 
                   
@@ -78,7 +108,7 @@ This library creates a collapsible StreetView display in the corner of the main 
                 <td>Set location of panorama and marker, and view of panorama.</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>setPov(<span class="type">View:GPov</span>)</code></td>
                 
                   
@@ -86,6 +116,16 @@ This library creates a collapsible StreetView display in the corner of the main 
                   
                 
                 <td>Set current Panorama View</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>show()</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Change visibility of the control to visible.</td>
               </tr>
             
           </tbody>
@@ -110,6 +150,16 @@ This library creates a collapsible StreetView display in the corner of the main 
             </tr>
             
               <tr class="odd">
+                <td><code>hidden</code></td>
+                
+                  
+                    <td><code>Boolean</code></td>
+                  
+                
+                <td>Specify visibility when control is added to the map. If it is set to true, the button is hidden.  The default value is <code> false</code>.</td>
+              </tr>
+            
+              <tr class="even">
                 <td><code>latlng</code></td>
                 
                   
@@ -119,7 +169,7 @@ This library creates a collapsible StreetView display in the corner of the main 
                 <td>Specifies latlng of panorama. If it is not set, then control gets center location of main map.  The default value is <code> null</code>.</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>pov</code></td>
                 
                   
@@ -129,7 +179,7 @@ This library creates a collapsible StreetView display in the corner of the main 
                 <td>Specifies initialize pov of panorama.  The default value is <code> {yaw : 0, pitch : 0, panoId : null}</code>.</td>
               </tr>
             
-              <tr class="odd">
+              <tr class="even">
                 <td><code>size</code></td>
                 
                   

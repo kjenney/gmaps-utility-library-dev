@@ -1,6 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     <title>Get default marker - ExtStreetviewControl</title>
@@ -24,6 +22,7 @@
         
         //get default marker's handle
         ctrlMarker = extStreetviewControl.getMarker();
+        ctrlMarker.openInfoWindow("Click me!");
         GEvent.addListener(ctrlMarker, "click", onCtrlMarkerClick)
       }
     }
@@ -39,7 +38,7 @@
     </script>
   </head>
   <body onload="initialize()" onunload="GUnload()">
-    <div id="map_canvas" style="width: 500px; height: 500px"></div>
+    <div id="map_canvas" style="width: 100%; height: 500px"></div>
     <h4>Get default marker - ExtStreetviewControl</h4>
     <p>
     You can get a handle of default marker using by the "getMarker" method.
