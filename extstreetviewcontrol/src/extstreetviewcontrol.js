@@ -16,10 +16,19 @@
  * @property {GLatLng} [latlng = null] Specifies latlng of panorama.
  *  If it is not set, then control gets center location of main map.
  * @property {GSize} [size = GSize(300, 210)] Specifies control's size. 
+ * @property {GMarker} [marker = PegmanMarker] Specifies a marker for user handling.
+ *  See a PegmanMarker into extstreetviewcontrol.js
  * @property {GPov} [pov = {yaw : 0, pitch : 0, panoId : null}] Specifies initialize pov of panorama.
  * @property {Boolean} [hidden = false] Specify visibility when control is
- *  added to the map. If it is set to true, the button is hidden.
+ *  added to the map. If it is set to true, the control is hidden.
+ * @property {String} [mainContent = "MAP"] Specify main content into the map div.
+ *  You can select strings; "MAP" or "STREETVIEW".
+ * @property {String} [controlStatus = "NORMAL"] Specify control status.
+ *  You can select string; "NORMAL" or "MINI".
  */
+
+/*global PegmanMarker */
+
 
 /**
  * @desc
@@ -27,7 +36,6 @@
  * @param {ExtStreetviewOptions} [opt_opts] Optional arguments.
  * @constructor
  */
-
 function ExtStreetviewControl(opt_opts) {
   //============================
   // Image and clip rect table
@@ -38,35 +46,6 @@ function ExtStreetviewControl(opt_opts) {
   this.arrowBtnTbl_.upArrow = {"left" : -1, "top" : -86, "width" : 15, "height" : 15};
   this.arrowBtnTbl_.downArrow = {"left" : -1, "top" : -69, "width" : 15, "height" : 15};
   
-  this.markerTbl_ = {};
-  this.markerTbl_.icon = new GIcon();
-  this.markerTbl_.icon.image = "http://maps.gstatic.com/mapfiles/cb/mod_cb_scout/cb_scout_sprite_003.png";
-  this.markerTbl_.icon.iconSize = new GSize(49, 52);
-  this.markerTbl_.icon.iconAnchor = new GPoint(24, 34);
-  this.markerTbl_.icon.infoWindowAnchor = new GPoint(18, 11);
-  this.markerTbl_.images = [];
-  this.markerTbl_.images.push({"left" : -49, "top" : -711});
-  this.markerTbl_.images.push({"left" : 0,   "top" : -34});
-  this.markerTbl_.images.push({"left" : -98, "top" : -711});
-  this.markerTbl_.images.push({"left" : -98, "top" : -365});
-  this.markerTbl_.images.push({"left" : 0,   "top" : -365});
-  this.markerTbl_.images.push({"left" : -98, "top" : -417});
-  this.markerTbl_.images.push({"left" : -98, "top" : -313});
-  this.markerTbl_.images.push({"left" : -98, "top" : -797});
-  this.markerTbl_.images.push({"left" : -98, "top" : -150});
-  this.markerTbl_.images.push({"left" : 0,   "top" : -711});
-  this.markerTbl_.images.push({"left" : 0,   "top" : -417});
-  this.markerTbl_.images.push({"left" : -98,   "top" : 0});
-  this.markerTbl_.images.push({"left" : -49, "top" : -365});
-  this.markerTbl_.images.push({"left" : -49, "top" : -417});
-  this.markerTbl_.images.push({"left" : -49, "top" : -849});
-  this.markerTbl_.images.push({"left" : 0,   "top" : -849});
-  this.markerTbl_.angle = 360 / this.markerTbl_.images.length;
-  this.markerTbl_.drgImages = [];
-  this.markerTbl_.drgImages.push({"left" : 0, "top" : -313});    //enable-left
-  this.markerTbl_.drgImages.push({"left" : -49, "top" : -797});  //enable-right
-  this.markerTbl_.drgImages.push({"left" : -56, "top" : -184});  //disable-left
-  this.markerTbl_.drgImages.push({"left" : 0, "top" : -797});    //disable-right
   
   //============================
   // Parse options
@@ -78,16 +57,21 @@ function ExtStreetviewControl(opt_opts) {
   this.latlng_ = opt_opts.latlng || null;
   this.ctrlSize_ = opt_opts.size || new GSize(300, 210);
   this.pov_ = opt_opts.pov || {"yaw" : 0, "pitch" : 0, "panoId" : null};
-  this.marker_ = null;
+  this.marker_ = opt_opts.marker || null;
   this.isHidden_ = opt_opts.hidden || false;
+  this.initStatus_ = opt_opts.controlStatus || "NORMAL";
+  this.initContent_ = opt_opts.mainContent || "MAP";
   
-  this.windowStatus_ = "NORMAL";
-  this.mapStatus_ = "MAP";
+  this.controlStatus_ = "NORMAL";
+  this.mainContent_ = "MAP";
   this.padding_ = 5;
   this.frameColor_ = "#6784C7";
-  
+
 }
 
+/**
+ * @private
+ */
 ExtStreetviewControl.prototype = new GControl();
 
 /**
@@ -122,7 +106,6 @@ ExtStreetviewControl.prototype.initialize = function (map) {
   this.swapFlashContainer_.style.bottom = 0;
   this.swapMapContainer_.appendChild(this.swapFlashContainer_);
 
-
   this.swapiframeBase_ = this.createEle_(this.ctrlSize_, "iframe");
   this.swapiframeBase_.style.bottom = 0;
   this.swapiframeBase_.style.right = 0;
@@ -130,8 +113,6 @@ ExtStreetviewControl.prototype.initialize = function (map) {
   this.swapiframeBase_.src = "";
   this.swapiframeBase_.frameborder = 0;
   this.swapMapContainer_.appendChild(this.swapiframeBase_);
-
-
 
   this.mapContainer_.parentNode.replaceChild(this.swapMapContainer_, this.mapContainer_);
   this.mapContainer_.setAttribute("id", null);
@@ -162,18 +143,22 @@ ExtStreetviewControl.prototype.initialize = function (map) {
   if (this.isNull(mapParentEle)) {
     mapParentEle = document.getElementsByTagName("body")[0];
   }
+  
+  if (this.isHidden_ === true) {
+    this.hide();
+  }
   map.getContainer().appendChild(this.container_);
 
 
   //Listening buttons click event
   GEvent.bindDom(result.downArrowBtn, "click", this, function () {
-    if (this_.windowStatus_ === "NORMAL") {
+    if (this_.controlStatus_ === "NORMAL") {
       //normal -> mini
       this_.setCtrlStauts("MINI");
     }
   });
   GEvent.bindDom(result.upArrowBtn, "click", this, function () {
-    if (this_.windowStatus_ === "MINI") {
+    if (this_.controlStatus_ === "MINI") {
       //mini -> normal
       this_.setCtrlStauts("NORMAL");
     } else {
@@ -183,78 +168,20 @@ ExtStreetviewControl.prototype.initialize = function (map) {
   });
   
   GEvent.bindDom(window, "resize", this, function () {
-
-    if (this_.mapStatus_ === "IN_THE_WINDOW") {
+    if (this_.mainContent_ === "STREETVIEW") {
       this_.swapFlashContainer_.style.width = this_.swapMapContainer_.clientWidth + "px";
       this_.swapFlashContainer_.style.height = this_.swapMapContainer_.clientHeight + "px";
       this_.stObj_.checkResize();
     }
-    
   });
 
   GEvent.bind(map, "moveend", this, this.mapMove_);
 
-
-  //==============================================
-  //  create a marker
-  //==============================================
-  /**
-  * @private
-  */
-  var PegmanMarker = function (latlng, opt_opts) {
-    this.icon_ = new GIcon(opt_opts.icon);
-    opt_opts.icon.image = null;
-    GMarker.apply(this, arguments);
-  };
-  
-  /**
-  * @private
-  */
-  PegmanMarker.prototype = new GMarker(new GLatLng(0, 0));
-  
-  /**
-  * @private
-  */
-  PegmanMarker.prototype.initialize = function (map) {
-    GMarker.prototype.initialize.apply(this, arguments);
-    this.map_ = map;
-    
-    this.iconContainer_ = this_.makeImgDiv_(this.icon_.image, this.icon_.iconSize);
-    
-    map.getPane(G_MAP_MARKER_PANE).appendChild(this.iconContainer_);
-  };
-
-  /**
-  * @private
-  */
-  PegmanMarker.prototype.redraw = function (force) {
-    GMarker.prototype.redraw.apply(this, arguments);
-    
-    this.latlng_ = this.getLatLng();
-    this.iconContainer_.style.zIndex = GOverlay.getZIndex(this.latlng_.lat() + 1);
-    
-    var pxPos = this.map_.fromLatLngToDivPixel(this.latlng_);
-    this.iconContainer_.style.left = (pxPos.x - this.icon_.iconAnchor.x) + "px";
-    this.iconContainer_.style.top = (pxPos.y - this.icon_.iconAnchor.y) + "px";
-  };
-  
-  /**
-  * @private
-  */
-  PegmanMarker.prototype.getIcon = function () {
-    return this.icon_;
-  };
-  
-  /**
-  * @private
-  */
-  PegmanMarker.prototype.getIconContainer_ = function () {
-    return this.iconContainer_;
-  };
-  
-  this.marker_ = new PegmanMarker(this.latlng_, {"draggable" : true, "icon" : this.markerTbl_.icon});
+  if (this.isNull(this.marker_)) {
+    this.marker_ = new PegmanMarker(this.latlng_, {"draggable" : true});
+  }
   this.map_.addOverlay(this.marker_);
-  this.setMarkerIcon_(0);
+  this.marker_.redraw(false, "ANGLE", 0);
 
   GEvent.bind(this.marker_, "dragstart", this, this.markerDragStart_);
   GEvent.bind(this.marker_, "drag", this, this.markerDrag_);
@@ -271,10 +198,15 @@ ExtStreetviewControl.prototype.initialize = function (map) {
   this.createStreetviewPanorama_(this.latlng_, this.pov_);
   
 
+  //==============================================
+  //  initialize main content and window status
+  //==============================================
+  this.setCtrlStauts(this.initStatus_);
+  this.setMainContent(this.initContent_);
+
   //return dummy div element to map.
   var dummyDiv = this.createEle_({"width" : 0, "height" : 0});
   dummyDiv.style.display = "none";
-  
   return dummyDiv;
 };
 
@@ -292,7 +224,7 @@ ExtStreetviewControl.prototype.setCtrlStauts = function (status) {
     
   case "NORMAL":
     //mini - > normal 
-    if (this.windowStatus_ === "MINI") {
+    if (this.controlStatus_ === "MINI") {
       this.resizeCornerWindow_({endSize : this.ctrlSize_, sizeDirection : 1}, "NORMAL");
     }
     break;
@@ -312,8 +244,8 @@ ExtStreetviewControl.prototype.mapMove_ = function () {
  * @desc pegman-marker drag start
  */
 ExtStreetviewControl.prototype.markerDragStart_ = function () {
-  var img = this.marker_.getIconContainer_().firstChild;
-  this.saveMarkerPosition_ = {"left" : img.style.left, "top" : img.style.top};
+  this.map_.closeInfoWindow();
+  this.isDragging_ = true;
   this.lng_ = this.latlng_.lng();
 };
 
@@ -329,20 +261,19 @@ ExtStreetviewControl.prototype.markerDrag_ = function (latlng) {
   var dragDirection = beforeLng - currentLng;
   var imgIdx;
   if (dragDirection > 0) {
-    imgIdx = 0;
+    imgIdx = "LEFT";
   } else {
-    imgIdx = 1;
+    imgIdx = "RIGHT";
   }
-  var img = this.marker_.getIconContainer_().firstChild;
-  var isDisable = 0;
+  var prefix = "ENABLE";
   var this_ = this;
-  //
   this.stClient_.getNearestPanorama(latlng, function (panoData) {
     if (panoData.code !== 200) {
-      isDisable += 2;
+      prefix = "DISABLE";
     }
-    img.style.left = this_.markerTbl_.drgImages[imgIdx + isDisable].left + "px";
-    img.style.top = this_.markerTbl_.drgImages[imgIdx + isDisable].top + "px";
+    if (this_.isDragging_ === true) {
+      this_.marker_.redraw(false, "DRAG", prefix + "_" + imgIdx);
+    }
   });
   
 };
@@ -352,9 +283,7 @@ ExtStreetviewControl.prototype.markerDrag_ = function (latlng) {
  * @desc pegman-marker drag end
  */
 ExtStreetviewControl.prototype.markerDragEnd_ = function (latlng) {
-  var img = this.marker_.getIconContainer_().firstChild;
-  img.style.left = this.saveMarkerPosition_.left;
-  img.style.top = this.saveMarkerPosition_.top;
+  this.isDragging_ = false;
   this.map_.panTo(latlng);  
   this.setLocationAndPOV(latlng);
 };
@@ -373,8 +302,7 @@ ExtStreetviewControl.prototype.getPov = function () {
 
 /**
  * @desc Set current Panorama View
- * @param {GPov} View of panorama
- */
+c */
 ExtStreetviewControl.prototype.setPov = function (pov) {
   if (!this.isNull(pov)) {
     this.pov_ = pov;
@@ -402,16 +330,22 @@ ExtStreetviewControl.prototype.setLocationAndPOV = function (latlng, pov) {
   } else {
     this.pov_ = pov;
   }
+  
+
   this.marker_.setLatLng(latlng);
   var this_ = this;
   this.stClient_.getNearestPanorama(latlng, function (panoData) {
     if (panoData.code === 200) {
       if (this_.isNull(pov)) {
         this_.pov_.yaw = this_.computeAngle_(latlng, panoData.location.latlng);
+        this_.marker_.redraw(false, "ANGLE", this_.pov_.yaw);
+      } else {
+        this_.marker_.redraw(false, "ANGLE", 0);
       }
       this_.setCtrlStauts("NORMAL");
     } else {
       this_.setCtrlStauts("MINI");
+      this_.marker_.redraw(false, "ANGLE", 0);
     }
     this_.stClientEnum_(this_, panoData, this_.pov_);
   });
@@ -531,7 +465,7 @@ ExtStreetviewControl.prototype.createStreetviewPanorama_ = function (latlng, pov
  */
 ExtStreetviewControl.prototype.stClientEnum_ = function (this_, gstreetviewdata, pov) {
   if (gstreetviewdata.code !== 200) {
-    this_.setMarkerIcon_(0);
+    this_.marker_.redraw(false, "ANGLE", 0);
     return;
   }
   if (!this_.isNull(pov)) {
@@ -551,8 +485,7 @@ ExtStreetviewControl.prototype.stClientEnum_ = function (this_, gstreetviewdata,
 ExtStreetviewControl.prototype.yawChanged_ = function (yaw) {
   this.pov_.yaw = yaw;
 
-  var imgIdx = Math.floor(yaw / this.markerTbl_.angle);
-  this.setMarkerIcon_(imgIdx);
+  this.marker_.redraw(false, "ANGLE", yaw);
 };
 
 /**
@@ -564,15 +497,6 @@ ExtStreetviewControl.prototype.pitChchanged_ = function (pitch) {
 };
 
 
-/**
- * @private
- * @desc      set marker's icon
- */
-ExtStreetviewControl.prototype.setMarkerIcon_ = function (imgIdx) {
-  var markerImg = this.marker_.getIconContainer_().firstChild;
-  markerImg.style.left = this.markerTbl_.images[imgIdx].left + "px";
-  markerImg.style.top = this.markerTbl_.images[imgIdx].top + "px";
-};
 
 /**
  * @private
@@ -664,15 +588,17 @@ ExtStreetviewControl.prototype.createContainer_ = function (ctrlPosSize) {
 };
 
 /**
- * @private
+ * @desc Specify main content into the map div.
+ *  You can select strings; "MAP" or "STREETVIEW".
+ * @param {String} contentType
  */
-
-ExtStreetviewControl.prototype.swapMap2CornerWindow_ = function () {
-  //var pov = this.getPov();
-  this.removeControl_();
+ExtStreetviewControl.prototype.setMainContent = function (contentType) {
+  var refreshStreetview = false;
   
-  if (this.mapStatus_ === "MAP") {
-
+  if (contentType === "STREETVIEW" && this.mainContent_ === "MAP") {
+    // map -> streetview
+    this.removeControl_();
+    
     this.mapContainer_.removeChild(this.container_);
     this.swapMapContainer_.removeChild(this.mapContainer_);
     
@@ -684,11 +610,14 @@ ExtStreetviewControl.prototype.swapMap2CornerWindow_ = function () {
     this.mainWindow_.parentNode.replaceChild(this.swapMainWindow_, this.mainWindow_);
     this.swapMapContainer_.appendChild(this.container_);
     this.swapMainWindow_.appendChild(this.mapContainer_);
-    this.mapStatus_ = "IN_THE_WINDOW";
-
-
-  } else {
-
+    this.mainContent_ = "STREETVIEW";
+    
+    refreshStreetview = true;
+    
+  } else if (contentType === "MAP" && this.mainContent_ === "STREETVIEW") {
+    // streetview -> map
+    this.removeControl_();
+    
     this.swapMainWindow_.removeChild(this.mapContainer_);
     this.swapMapContainer_.removeChild(this.container_);
     this.swapMainWindow_.parentNode.replaceChild(this.mainWindow_, this.swapMainWindow_);
@@ -697,16 +626,29 @@ ExtStreetviewControl.prototype.swapMap2CornerWindow_ = function () {
 
     this.swapMapContainer_.appendChild(this.mapContainer_);
     this.mapContainer_.appendChild(this.container_);
-    this.mapStatus_ = "MAP";
+    this.mainContent_ = "MAP";
+    
+    refreshStreetview = true;
   }
-  var this_ = this;
-  this.createStreetviewPanorama_(this.latlng_, this.pov_);
+  
+  if (refreshStreetview === true) {
+    this.createStreetviewPanorama_(this.latlng_, this.pov_);
 
-  this.map_.checkResize();
-  this.map_.setCenter(this.latlng_);
+    this.map_.checkResize();
+    this.map_.setCenter(this.latlng_);
+  }
+};
 
-  GEvent.trigger(this, "onSwapWindow", this.mapStatus_);
-
+/**
+ * @private
+ */
+ExtStreetviewControl.prototype.swapMap2CornerWindow_ = function () {
+  if (this.mainContent_ === "MAP") {
+    this.setMainContent("STREETVIEW");
+  } else {
+    this.setMainContent("MAP");
+  }
+  GEvent.trigger(this, "onSwapWindow", this.mainContent_);
 };
 
 /**
@@ -747,7 +689,7 @@ ExtStreetviewControl.prototype.resizeCornerWindow_ = function (param, finishStat
       this_.cornerInfo_.containerIframe.style.width = param.endSize.width + "px";
       this_.cornerInfo_.containerIframe.style.height = param.endSize.height + "px";
 
-      this_.windowStatus_ = finishStatus;
+      this_.controlStatus_ = finishStatus;
     }
   };
   resizeAnimation(param);
@@ -804,6 +746,7 @@ ExtStreetviewControl.prototype.makeImgDiv_ = function (imgSrc, params) {
  */
 ExtStreetviewControl.prototype.hide = function () {
   this.container_.style.visibility = "hidden";
+  //this.swapMapContainer_.style.visibility = "hidden";
   this.isHidden_ = true;
 };
 
@@ -812,6 +755,7 @@ ExtStreetviewControl.prototype.hide = function () {
  */
 ExtStreetviewControl.prototype.show = function () {
   this.container_.style.visibility = "visible";
+  //this.swapMapContainer_.style.visibility = "visible";
   this.isHidden_ = false;
 };
 
@@ -908,3 +852,122 @@ ExtStreetviewControl.prototype.setElementStyle_ = function (ele, cssProperty, va
     ele.style.setProperty(cssProperty, value, priority);
   }
 };
+
+
+/**************************************************
+ * @desc Creates a pegman marker.
+ *
+ * @param {MarkerOptions} [opts] Named optional arguments.
+ * @constructor
+ **************************************************/
+function PegmanMarker(latlng, opt_opts) {
+
+  if (ExtStreetviewControl.prototype.isNull(opt_opts)) {
+    opt_opts = {};
+  }
+  this.map_ = null;
+
+  this.icon_ = new GIcon();
+  this.icon_.image = "http://maps.gstatic.com/mapfiles/cb/mod_cb_scout/cb_scout_sprite_003.png";
+  this.icon_.iconSize = new GSize(49, 52);
+  this.icon_.iconAnchor = new GPoint(24, 34);
+  this.icon_.infoWindowAnchor = new GPoint(18, 11);
+
+  this.markerTbl_ = {};
+  this.markerTbl_.images = [];
+  this.markerTbl_.images.push({"left" : -49, "top" : -711});
+  this.markerTbl_.images.push({"left" : 0,   "top" : -34});
+  this.markerTbl_.images.push({"left" : -98, "top" : -711});
+  this.markerTbl_.images.push({"left" : -98, "top" : -365});
+  this.markerTbl_.images.push({"left" : 0,   "top" : -365});
+  this.markerTbl_.images.push({"left" : -98, "top" : -417});
+  this.markerTbl_.images.push({"left" : -98, "top" : -313});
+  this.markerTbl_.images.push({"left" : -98, "top" : -797});
+  this.markerTbl_.images.push({"left" : -98, "top" : -150});
+  this.markerTbl_.images.push({"left" : 0,   "top" : -711});
+  this.markerTbl_.images.push({"left" : 0,   "top" : -417});
+  this.markerTbl_.images.push({"left" : -98,   "top" : 0});
+  this.markerTbl_.images.push({"left" : -49, "top" : -365});
+  this.markerTbl_.images.push({"left" : -49, "top" : -417});
+  this.markerTbl_.images.push({"left" : -49, "top" : -849});
+  this.markerTbl_.images.push({"left" : 0,   "top" : -849});
+  this.markerTbl_.angle = 360 / this.markerTbl_.images.length;
+
+  this.markerTbl_.drgImages = {};
+  this.markerTbl_.drgImages.ENABLE_LEFT = {"left" : 0, "top" : -313};
+  this.markerTbl_.drgImages.ENABLE_RIGHT = {"left" : -49, "top" : -797};
+  this.markerTbl_.drgImages.DISABLE_LEFT = {"left" : -56, "top" : -184};
+  this.markerTbl_.drgImages.DISABLE_RIGHT = {"left" : 0, "top" : -797};
+
+
+  opt_opts.icon = new GIcon(this.icon_);
+  opt_opts.icon.image = null;
+  GMarker.apply(this, arguments);
+}
+
+/**
+ * @private
+*/
+PegmanMarker.prototype = new GMarker(new GLatLng(0, 0));
+
+/**
+ * @private
+*/
+PegmanMarker.prototype.initialize = function (map) {
+  GMarker.prototype.initialize.apply(this, arguments);
+  this.map_ = map;
+  
+  this.iconContainer_ = ExtStreetviewControl.prototype.makeImgDiv_(this.icon_.image, this.icon_.iconSize);
+  this.iconContainer_.unselectable = "on";
+  this.iconContainer_.style.MozUserSelect = "none";
+  this.iconContainer_.style.KhtmlUserSelect = "none";
+  this.iconContainer_.style.WebkitUserSelect = "none";
+  this.iconContainer_.style.userSelect = "none";
+  
+  map.getPane(G_MAP_MARKER_PANE).appendChild(this.iconContainer_);
+};
+
+/**
+ * @desc Redraw marker.
+ * This method is extended GMarker.redraw() method.
+ * This method will be called from ExtStreetviewControl with angle parameter.
+ * The icon should be change the icon image.
+*/
+PegmanMarker.prototype.redraw = function (force, type, value) {
+  if (force === true) {
+    GMarker.prototype.redraw.apply(this, arguments);
+  }
+  
+  var pxPos = this.map_.fromLatLngToDivPixel(this.getLatLng());
+  this.iconContainer_.style.left = (pxPos.x - this.icon_.iconAnchor.x) + "px";
+  this.iconContainer_.style.top = (pxPos.y - this.icon_.iconAnchor.y) + "px";
+  
+  if (type === undefined) {
+    return;
+  }
+  
+  var iconPos, imgIdx;
+  var img = this.iconContainer_.firstChild;
+  if (type === "DRAG") {
+    iconPos = this.markerTbl_.drgImages[value];
+  } else {
+    //ANGLE
+    imgIdx = Math.floor(value / this.markerTbl_.angle);
+    iconPos = this.markerTbl_.images[imgIdx];
+  }
+
+  img.style.left = iconPos.left + "px";
+  img.style.top = iconPos.top + "px";
+
+  this.iconContainer_.style.zIndex = GOverlay.getZIndex(this.getLatLng().lat() + 1);
+  
+};
+
+/**
+ * @desc   Returns the icon
+ * @return {GIcon}
+*/
+PegmanMarker.prototype.getIcon = function () {
+  return this.icon_;
+};
+

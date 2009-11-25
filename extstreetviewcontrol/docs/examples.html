@@ -24,23 +24,141 @@ map.addControl(extStreetviewControl);
 </pre>
 <p><a href="../examples/basic.html">View example (basic.html)</a></p>
 
+<h2>Set control size</h2>
+
+<p>You can set the control size which it specify into ExtStreetviewOptions.size.
+</p>
+<pre class="prettyprint">
+var opts = {
+  size : new GSize(400, 400)
+};
+var extStreetviewControl = new ExtStreetviewControl(opts);
+map.addControl(extStreetviewControl);
+</pre>
+
+<p><a href="../examples/setSize.html">View example (setSize.html)</a></p>
+
+<h2>Change location and point of view</h2>
+
+<p>You can control the view of streetview.</p>
+<pre class="prettyprint">
+var extStreetviewControl = null;
+
+function initialize () {
+  if (GBrowserIsCompatible()) {
+    var map = new GMap2(document.getElementById("map_canvas"));
+    map.setCenter(new GLatLng(48.859862, 2.292024), 17);
+
+    var opts_ = {
+                  pov : {yaw:500, pitch:-10, panoId:null}
+                };
+    extStreetviewControl = new ExtStreetviewControl(opts_);
+    map.addControl(extStreetviewControl);
+  }
+}
+
+function show_La_tour_Eiffel() {
+  var pos = new GLatLng(48.859862, 2.292024);
+  var pov = {
+    yaw : 500,
+    pitch : -10
+  };
+  extStreetviewControl.setLocationAndPOV(pos, pov);
+}
+</pre>
+<p><a href="../examples/panoramaViewControl.html">View example (panoramaViewControl.html)</a></p>
+
+<h2>Control</h2>
+
+<p>Control the controller's visibility, stauts and main content.</p>
+
+<pre class="prettyprint">
+var extStreetviewControl;
+function initialize () {
+  if (GBrowserIsCompatible()) {
+    var map = new GMap2(document.getElementById("map_canvas"));
+    map.setCenter(new GLatLng(48.859862, 2.292024), 17);
+    
+    //add zoom controller
+    zoomCtrl = new GLargeMapControl();
+    map.addControl(zoomCtrl);
+    
+    var opts = {
+      mainContent : "STREETVIEW",
+      controlStatus : "MINI"
+    };
+    extStreetviewControl = new ExtStreetviewControl(opts);
+    map.addControl(extStreetviewControl);
+    
+    map.addOverlay(new GStreetviewOverlay());
+  }
+}
+function showMap() {
+  extStreetviewControl.setMainContent("MAP");
+}
+function swapMapAndStreetview() {
+  extStreetviewControl.setMainContent("MAP");
+}
+function minimizeControl() {
+  extStreetviewControl.setCtrlStauts("MINI");
+}
+function normalyControl() {
+  extStreetviewControl.setCtrlStauts("NORMAL");
+}
+
+function showControl() {
+  extStreetviewControl.show();
+}
+
+function hideControl() {
+  extStreetviewControl.hide();
+}
+</pre>
+
+<p><a href="../examples/changeControl.html">View example (control.html)</a></p>
+
 
 <h2>Get default marker</h2>
 
 <p>You can get a handle of default marker using by the "getMarker" method.
 </p>
+<pre class="prettyprint">
+var extStreetviewControl = null;
+var ctrlMarker = null;
+
+function initialize () {
+  if (GBrowserIsCompatible()) {
+    var map = new GMap2(document.getElementById("map_canvas"));
+    map.setCenter(new GLatLng(38.892096,-77.03651), 17);
+    
+    //add the ExtStreetviewControl
+    var opts = {
+      size : new GSize(300, 300),
+      mainContent : "STREETVIEW"
+    };
+    extStreetviewControl = new ExtStreetviewControl(opts);
+    map.addControl(extStreetviewControl);
+    
+    //get default marker's handle
+    ctrlMarker = extStreetviewControl.getMarker();
+    ctrlMarker.openInfoWindow("Near the White House in US");
+    GEvent.addListener(ctrlMarker, "click", onCtrlMarkerClick);
+
+    map.addOverlay(new GStreetviewOverlay());
+  }
+}
+
+function onCtrlMarkerClick (latlng) {
+  var txt = ctrlMarker.getLatLng() + "<br>";
+  var pov = extStreetviewControl.getPov();
+  txt += "yaw:" + pov.yaw + "<br>";
+  txt += "pitch:" + pov.pitch + "<br>";
+  txt += "zoom:" + pov.zoom;
+  ctrlMarker.openInfoWindowHtml(txt);
+}
+</pre>
 <p><a href="../examples/markerClick.html">View example (markerClick.html)</a></p>
 
-<h2>Change location and point of view</h2>
-
-<p>You can control the view of streetview.</p>
-<p><a href="../examples/viewControl.html">View example (viewControl.html)</a></p>
-
-<h2>Change zoom control on the map</h2>
-
-<p>You can catch an event when user click on the swap button(change map - flash).</p>
-
-<p><a href="../examples/changeControl.html">View example (changeControl.html)</a></p>
 
 
 </body>

@@ -18,16 +18,7 @@
         var extStreetviewControl = new ExtStreetviewControl();
         map.addControl(extStreetviewControl);
         
-        var client = new GStreetviewClient();
-        var overlay = new GStreetviewOverlay();
-/*
-        GEvent.addListener(map, "mousemove", function(pos) {
-          client.getNearestPanorama(pos, function (panoData) {
-            GLog.write(pos + " : " + panoData.code);
-          });
-        });
-*/
-        map.addOverlay(overlay);
+        map.addOverlay(new GStreetviewOverlay());
       }
     }
 

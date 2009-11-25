@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Control - ExtStreetviewControl</title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q" type="text/javascript"></script>
+    <script type="text/javascript">
+    document.write('<script type="text/javascript" src="../src/extstreetviewcontrol'+(document.location.search.indexOf('packed')>-1?'_packed':'')+'.js"><'+'/script>');
+  </script>
+    <script type="text/javascript">
+    
+    var extStreetviewControl;
+    function initialize () {
+      if (GBrowserIsCompatible()) {
+        var map = new GMap2(document.getElementById("map_canvas"));
+        map.setCenter(new GLatLng(48.859862, 2.292024), 17);
+        
+        //add zoom controller
+        zoomCtrl = new GLargeMapControl();
+        map.addControl(zoomCtrl);
+        
+        var opts = {
+          mainContent : "STREETVIEW",
+          controlStatus : "MINI"
+        };
+        extStreetviewControl = new ExtStreetviewControl(opts);
+        map.addControl(extStreetviewControl);
+        
+        map.addOverlay(new GStreetviewOverlay());
+      }
+    }
+    function showMap() {
+      extStreetviewControl.setMainContent("MAP");
+    }
+    function swapMapAndStreetview() {
+      extStreetviewControl.setMainContent("MAP");
+    }
+    function minimizeControl() {
+      extStreetviewControl.setCtrlStauts("MINI");
+    }
+    function normalyControl() {
+      extStreetviewControl.setCtrlStauts("NORMAL");
+    }
+    
+    function showControl() {
+      extStreetviewControl.show();
+    }
+    
+    function hideControl() {
+      extStreetviewControl.hide();
+    }
+    
+    </script>
+  </head>
+  <body onload="initialize()" onunload="GUnload()">
+    <div id="map_canvas" style="width: 100%; height: 60%"></div>
+    <h4>Initialize control with Streetview into map_canvas.</h4>
+    <p>
+    You can control the content of view.
+    </p>
+    <b>Choose main content</b><br>
+    <input type="button" onclick="showStreetview();" value="Show street view"><br>
+    <input type="button" onclick="showMap();" value="Show map"><br><br>
+    <b>Choose control stauts</b><br>
+    <input type="button" onclick="minimizeControl();" value="Minimize control"><br>
+    <input type="button" onclick="normalyControl();" value="Normaly control"><br><br>
+    <b>Choose control visibility</b><br>
+    <input type="button" onclick="showControl();" value="Shown the control"><br>
+    <input type="button" onclick="hideControl();" value="Hides the control"><br>
+
+  </body>
+</html>
+

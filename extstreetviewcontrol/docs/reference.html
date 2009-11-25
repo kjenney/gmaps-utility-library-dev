@@ -109,16 +109,27 @@ This library creates a collapsible StreetView display in the corner of the main 
               </tr>
             
               <tr class="odd">
-                <td><code>setPov(<span class="type">View:GPov</span>)</code></td>
+                <td><code>setMainContent(<span class="type">contentType:String</span>)</code></td>
                 
                   
                     <td><code>None</code></td>
                   
                 
-                <td>Set current Panorama View</td>
+                <td>Specify main content into the map div. You can select strings; "MAP" or "STREETVIEW".</td>
               </tr>
             
               <tr class="even">
+                <td><code>setPov(<span class="type">pov:</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Set current Panorama View
+c</td>
+              </tr>
+            
+              <tr class="odd">
                 <td><code>show()</code></td>
                 
                   
@@ -150,16 +161,26 @@ This library creates a collapsible StreetView display in the corner of the main 
             </tr>
             
               <tr class="odd">
+                <td><code>controlStatus</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>Specify control status. You can select string; "NORMAL" or "MINI".  The default value is <code> "NORMAL"</code>.</td>
+              </tr>
+            
+              <tr class="even">
                 <td><code>hidden</code></td>
                 
                   
                     <td><code>Boolean</code></td>
                   
                 
-                <td>Specify visibility when control is added to the map. If it is set to true, the button is hidden.  The default value is <code> false</code>.</td>
+                <td>Specify visibility when control is added to the map. If it is set to true, the control is hidden.  The default value is <code> false</code>.</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>latlng</code></td>
                 
                   
@@ -169,7 +190,27 @@ This library creates a collapsible StreetView display in the corner of the main 
                 <td>Specifies latlng of panorama. If it is not set, then control gets center location of main map.  The default value is <code> null</code>.</td>
               </tr>
             
+              <tr class="even">
+                <td><code>mainContent</code></td>
+                
+                  
+                    <td><code>String</code></td>
+                  
+                
+                <td>Specify main content into the map div. You can select strings; "MAP" or "STREETVIEW".  The default value is <code> "MAP"</code>.</td>
+              </tr>
+            
               <tr class="odd">
+                <td><code>marker</code></td>
+                
+                  
+                    <td><code>GMarker</code></td>
+                  
+                
+                <td>Specifies a marker for user handling. See a PegmanMarker into extstreetviewcontrol.js  The default value is <code> PegmanMarker</code>.</td>
+              </tr>
+            
+              <tr class="even">
                 <td><code>pov</code></td>
                 
                   
@@ -179,7 +220,7 @@ This library creates a collapsible StreetView display in the corner of the main 
                 <td>Specifies initialize pov of panorama.  The default value is <code> {yaw : 0, pitch : 0, panoId : null}</code>.</td>
               </tr>
             
-              <tr class="even">
+              <tr class="odd">
                 <td><code>size</code></td>
                 
                   
@@ -187,6 +228,67 @@ This library creates a collapsible StreetView display in the corner of the main 
                   
                 
                 <td>Specifies control's size.  The default value is <code> GSize(300, 210)</code>.</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+    
+      <h2><a name="PegmanMarker"></a>class PegmanMarker</h2>
+      <p></p>
+      
+        <h3>Constructor</h3>
+        <table summary="class PegmanMarker - Constructor" width="90%">
+          
+          <tbody>
+            <tr>
+              <th>Constructor</th>
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>PegmanMarker(<span class="type">opts?:MarkerOptions</span>, <span class="type">opt_opts:</span>)</code></td>
+                
+                <td>***********************************************
+Creates a pegman marker.</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+        <h3>Methods</h3>
+        <table summary="class PegmanMarker - Methods" width="90%">
+          
+          <tbody>
+            <tr>
+              <th>Methods</th>
+              
+                
+                  <th>Return&nbsp;Value</th>
+                
+              
+              <th>Description</th>
+            </tr>
+            
+              <tr class="odd">
+                <td><code>getIcon()</code></td>
+                
+                  
+                    <td><code>GIcon</code></td>
+                  
+                
+                <td>Returns the icon</td>
+              </tr>
+            
+              <tr class="even">
+                <td><code>redraw(<span class="type">force:</span>, <span class="type">type:</span>, <span class="type">value:</span>)</code></td>
+                
+                  
+                    <td><code>None</code></td>
+                  
+                
+                <td>Redraw marker.This method is extended GMarker.redraw() method.This method will be called from ExtStreetviewControl with angle parameter.The icon should be change the icon image.</td>
               </tr>
             
           </tbody>
