@@ -1301,7 +1301,7 @@ Mapsicle.prototype.addLocation = function (newLocation) {
  * @returns {Array[SVLocation]}
  */
 Mapsicle.prototype.getLocations = function () {
-  return this.locations();
+  return this.locations;
 };
 
 /**
