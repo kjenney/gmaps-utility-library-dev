@@ -25,6 +25,12 @@
  * 
  * To register callbacks for events, use the GEvent interface and register for
  * events on the Mapsicle object that you create.
+ * 
+ * You can use mapsicle from the development branch 
+ * (http://gmaps-utility-library-dev.googlecode.com/svn/trunk/mapsicle/src/mapsicle.js)
+ * or a tagged stable release
+ * (http://gmaps-utility-library-dev.googlecode.com/svn/tags/mapsicle/[version]/src/mapsicle.js)
+ * or copy it and serve locally. Make sure that mapsicle.css is in the same directory as the JavaScript file.
  */
 /*global
 GEvent,
@@ -2064,14 +2070,29 @@ Mapsicle.OverlayDisplayManager.prototype = {
 Mapsicle.Startup = {};
 
 Mapsicle.Startup.start = function () {
-  Mapsicle.Startup.addStyleSheet();
+  var findScriptPath = function () {
+    var scripts = document.getElementsByTagName('script');
+    
+    for (var i = 0; i < scripts.length; ++i) {
+      var path = scripts[i].getAttribute('src');
+      if (path) {
+        if (path.match(/mapsicle.js/)) {
+          return path.split("mapsicle.js")[0];
+        }
+      }
+    }
+      
+    throw new Error("Couldn't find the mapsicle script within the page: you need to include Mapsicle in a file called 'mapsicle.js'");
+  };
+  
+  Mapsicle.Startup.addStyleSheet(findScriptPath());
   Mapsicle.Startup.addUnloadHandler();
 };
 
-Mapsicle.Startup.addStyleSheet = function () {
+Mapsicle.Startup.addStyleSheet = function (path) {
   // TODO: just add styles via javascript
   var cssLink = document.createElement("link");
-  cssLink.href = "http://gmaps-utility-library-dev.googlecode.com/svn/trunk/mapsicle/src/mapsicle.css";
+  cssLink.href = path + "mapsicle.css";
   cssLink.media = "screen";
   cssLink.rel = "stylesheet";
   cssLink.type = "text/css";
