@@ -1,3 +1,4 @@
+* Mapsicle now automatically loads stylesheet from the same path as mapsicle.js is loaded from
 * fixed Mapsicle#getLocations()
 
 Mapsicle API v1.0 - 13 November 2009
