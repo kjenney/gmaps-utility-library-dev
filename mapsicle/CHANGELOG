@@ -1,3 +1,4 @@
+* overlayAnchor for all SVOverlays gives a position on overlay to be anchored to Street View (defaults to original behaviour: the centre)
 * Mapsicle now automatically loads stylesheet from the same path as mapsicle.js is loaded from
 * fixed Mapsicle#getLocations()
 
