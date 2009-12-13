@@ -1064,6 +1064,7 @@ Mapsicle.prototype.upStreetView = function () {
       overlayMgr.startMotion();
     }
   };
+  // FIXME: This is the jQuery version. Hopefully the non-jQuery version will someday emulate it.
   /*$(this.elems.svc).bind("mouseenter", function (e) {
     if (mouseHeld) {
       //console.log("mouse enters street view container: held");
@@ -1260,8 +1261,6 @@ Mapsicle.prototype.onPositionChangeComplete = function (loc) {
     this.overlayMgr.setAllOpacities(0.0);
   }
 
-  //this.elems.doUtterlyTerrifyingBrowserHacks();    
-
   GEvent.trigger(this, "mapsicle_position_changed", loc);
 };
 
@@ -1371,7 +1370,6 @@ Mapsicle.prototype.clearTrackingOverlays = function () {
 /** @private */
 Mapsicle.prototype.clearAllOverlays = function () {
   this.clearTrackingOverlays();
-  //this.clearStaticOverlays();
 };
 
 /**
@@ -1912,37 +1910,6 @@ Mapsicle.PageElements.prototype = {
     setContainerSizes(this.panel, x, y);
     setContainerSizes(this.svc, x, y);
     setContainerSizes(this.curtain, x, y);
-  },
-
-  /**
-   * @private
-   *
-   * Runs straight before we create the first label. Use to fix various shortcomings
-   * in the Google Street View API's code for embedding flash in browsers with names
-   * starting with "C" and ending in "hrome".
-   *
-   * FIXME: Still doesn't work on the very first set of labels ?
-   * FIXME: is this still needed in modern versions of Chrome and Street View?
-   */
-  doUtterlyTerrifyingBrowserHacks: function () {
-    var flashObj = this.svc.getElementsByTagName("object")[0];
-    if (flashObj) {  /* Internet Explorer or Chrome */
-      var params = flashObj.getElementsByTagName("param");
-      var done = false;
-      for (var i = params.length - 1; i >= 0; --i) {
-        if (params[i].attributes.name.localName === "wmode") {
-          params[i].setAttribute('value', 'opaque');
-          done = true;
-          break;
-        }
-      }
-      if (!done) {
-        var wmode = document.createElement('param');
-        wmode.setAttribute('name', 'wmode');
-        wmode.setAttribute('value', 'opaque');
-        flashObj.appendChild(wmode);
-      }
-    }
   }
 };
 
@@ -1972,12 +1939,10 @@ Mapsicle.OverlayDisplayManager.prototype = {
   pauseMode: Mapsicle.OverlayDisplayMode.SOLID,
 
   hideAllOverlays: function () {
-    //this.mapsicle.elems.labels.style.display = "none";
     this.mapsicle.elems.labels.style.visibility = "hidden";
   },
 
   unHideAllOverlays: function () {
-    //this.mapsicle.elems.labels.style.display = "block";
     this.mapsicle.elems.labels.style.visibility = "visible";
   },
 
