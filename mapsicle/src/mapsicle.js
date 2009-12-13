@@ -65,9 +65,14 @@ SVOverlay.prototype = {
     this.scalingFactor = 1;
     this.showOffscreen = params.showOffscreen;
 
-    this.widthOffset = (this.width / 2);
-    this.heightOffset = (this.height / 2);
-
+    if (params.overlayAnchor) {
+      this.widthOffset = params.overlayAnchor.x;
+      this.heightOffset = params.overlayAnchor.y;
+    } else {
+      this.widthOffset = (this.width / 2);
+      this.heightOffset = (this.height / 2);
+    }
+    
     if (this.elem.addEventListener) {
       this.elem.addEventListener("mousedown", function (e) {
         e.preventDefault();
@@ -446,12 +451,14 @@ var SVMiniInfoBox = function (params) {
  * one with an object literal containing all the necessary properties.
  * @property {String} inner The text to display inside the info window
  * @property {number} width The width of the marker, in pixels. Note that you cannot set the height.
+ * @property {GPoint} overlayAnchor (optional) Position on the image, relative to the top-left corner, measured in pixels on the original, unscaled image, to "anchor" the overlay to Street View. Defaults to the centre of the image.
  */
 /*global SVMiniInfoBoxParams*/
 var SVMiniInfoBoxParams = {
   prototype: {
     inner: null,
     width: null,
+    overlayAnchor: null,
     /** @ignore callback if mouse is pressed down on marker. */
     callback: null,
     /** @ignore link for text within window */
@@ -573,6 +580,7 @@ var SVCustomInfoWindow = function (params) {
  * @property {element} inner A DOM element to display inside the info window
  * @property {number} width The width of the info window, in pixels
  * @property {number} height The height of the info window, in pixels
+ * @property {GPoint} overlayAnchor (optional) Position on the image, relative to the top-left corner, measured in pixels on the original, unscaled image, to "anchor" the overlay to Street View.
  */
 /*global SVCustomInfoWindowParams*/
 var SVCustomInfoWindowParams = {
@@ -580,6 +588,7 @@ var SVCustomInfoWindowParams = {
     inner: null,
     width: null,
     height: null,
+    overlayAnchor: null,
     /** @ignore callback if mouse is pressed down on marker. */
     callback: null
   }
@@ -627,6 +636,7 @@ var SVMarker = function (params) {
  * @property {number} width The width of the info window, in pixels
  * @property {number} height The height of the info window, in pixels
  * @property {number} scale (optional) If 1 or undefined, the marker will always be the same size. If less than 1, the marker will be downscaled as it gets further away until it is the given fraction of its normal size.
+ * @property {GPoint} overlayAnchor (optional) Position on the image, relative to the top-left corner, measured in pixels on the original, unscaled image, to "anchor" the overlay to Street View.
  */
 /*global SVMarkerParams*/
 var SVMarkerParams = {
@@ -635,6 +645,7 @@ var SVMarkerParams = {
     iconURL: null,
     width: null,
     height: null,
+    overlayAnchor: null,
     /** @ignore callback if mouse is pressed down on marker. */
     callback: null,
     scale: null
