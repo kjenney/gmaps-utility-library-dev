@@ -714,7 +714,6 @@ SVMarker.prototype.setArrows = function (left, right) {
     var newWidth = show ? MapsicleParams.ARROW_WIDTH : 0;
     extraWidth += newWidth;
     elem.width = newWidth;
-    //elem.height = marker.displayHeight();
   };
 
   setArrowVisible(this.leftArrow, left);
@@ -928,8 +927,8 @@ var Mapsicle = function (container, glatlng, custom) {
   if (glatlng) {
     startLoc = glatlng;
   } else {
-    // Courtenay Place
-    startLoc = new GLatLng(-41.29262445386786, 174.77911233901978);
+    // Courtenay Place, just east of the intersection with Taranaki Street, Wellington, New Zealand.
+    startLoc = new GLatLng(-41.292624, 174.779112);
   }
 
   this.overlayMgr = new Mapsicle.OverlayDisplayManager(this);
