@@ -669,7 +669,6 @@ SVMarker.prototype.generateHTML = function () {
     div.src = url;
     div.alt =  "an arrow pointing left to show you that the marker indicates a place offscreen";
     div.width = "0";
-    //div.height = this.height;
   };
 
   var elem = Mapsicle.Utils.createDiv("mapsicle-overlays");
