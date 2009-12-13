@@ -150,7 +150,6 @@ SVOverlay.prototype = {
 
   /** @private */
   selfTerminate: function (mapsicle) {
-    //$(this.elem).unbind(); // Internet Explorer can just go leak memory.
     mapsicle.elems.labels.removeChild(this.elem);
   },
 
@@ -349,7 +348,7 @@ SVTrackingOverlay.prototype.updatePos = function (mapsicle) {
 
   var xTopLeft, yTopLeft;
 
-  // FIXME if we ever get info windows working, there will be more than one tracking overlay per location.
+  // FIXME someday, someone might want more than one tracking overlay per location, by using the clickable info-window feature.
   this.location.visInfo = bounded;
 
   switch (bounded) {
