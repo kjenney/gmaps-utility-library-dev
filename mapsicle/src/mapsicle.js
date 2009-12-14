@@ -896,13 +896,14 @@ SVLocation.prototype.infoWindowClicked = function (mouseEvent) {
  *
  * @constructor
  * @param {Element} container The container in which to put Mapsicle
- * @param {GLatLng} glatlng The starting location for Street View
+ * @param {GLatLng} glatlng (Optional) The starting location for Street View. If not given, Street View won't launch until the position is set with Mapsicle#setPosition.
  * @param {MapsicleParams} custom (Optional) Any custom configuration parameters
  */
 /*global Mapsicle*/
 var Mapsicle = function (container, glatlng, custom) {
   this.mapsicleId = (Mapsicle.numMapsicles++);
-
+  Mapsicle.instances[this.mapsicleId] = this;
+  
   this.config = new MapsicleParams();
   for (var v in custom) {
     if (custom.hasOwnProperty(v)) {
@@ -921,26 +922,24 @@ var Mapsicle = function (container, glatlng, custom) {
   this.sizeX = Math.max(MapsicleParams.MIN_PANORAMA_SIZE_X, elems.svc.clientWidth, elems.container.clientWidth);
   this.sizeY = Math.max(MapsicleParams.MIN_PANORAMA_SIZE_Y, elems.svc.clientHeight, elems.container.clientHeight);
 
-  var startLoc;
-  if (glatlng) {
-    startLoc = glatlng;
-  } else {
-    // Courtenay Place, just east of the intersection with Taranaki Street, Wellington, New Zealand.
-    startLoc = new GLatLng(-41.292624, 174.779112);
-  }
-
   this.overlayMgr = new Mapsicle.OverlayDisplayManager(this);
   this.client = new GStreetviewClient();
 
   var theMapsicle = this;
 
-  this.setPosition(startLoc, null, function (code) {
-    theMapsicle.setCannedMessage(code);
-  });
+  if (glatlng) {
+    this.setPosition(glatlng, null, function (code) {
+      theMapsicle.setCannedMessage(code);
+    });
+  } else {
+    this.elems.svc.innerHTML = "<h2>Waiting for position to be set.</h2>";
+  }
+  // Otherwise, the user will need to call setPosition to start Mapsicle.
 };
 
 Mapsicle.numMapsicles = 0;
-
+Mapsicle.instances = [];
+  
 Mapsicle.prototype = {
   config: null,
   elems: null,
@@ -1195,6 +1194,7 @@ Mapsicle.prototype.close = function () {
   if (this.panorama) {
     this.panorama.remove();
   }
+  Mapsicle.instances[this.mapsicleId] = null;
   GEvent.trigger(this, "mapsicle_end", null);
 };
 
@@ -1835,7 +1835,7 @@ Mapsicle.PageElements = function (theMapsicle, container, uid) {
 
   this.svc = document.createElement('div');
   this.svc.setAttribute('id', this.svcId);
-  this.svc.innerHTML = "<h2>Googling...</h2>";
+  this.svc.innerHTML = "<h2>Setting up...</h2>";
   this.svc.className += " mapsicle-streetview";
   this.panel.appendChild(this.svc);
 
