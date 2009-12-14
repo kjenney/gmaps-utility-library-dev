@@ -28,12 +28,16 @@
                     info:info
                 });
                 mapsicle.addLocation(location);
+                GEvent.addListener(mapsicle, "zoomchanged", function(z){
+                  alert("Zoom changed");
+                });
             }
             function canyonize(){
               mapsicle.setPosition(new GLatLng(36.056393,-112.144318), { yaw: 2 }, function () { alert("Failed!"); });
               var start_link = document.getElementById('start_link');
               start_link.parentNode.removeChild(start_link);
             }
+              
           //]]>
         </script>
     </head>

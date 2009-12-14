@@ -278,6 +278,10 @@ function init(){
                     info:info
                 });
                 mapsicle.addLocation(location);
+                GEvent.addListener(mapsicle, &quot;zoomchanged&quot;, function(z){
+                  alert(&quot;Zoom changed&quot;);
+                });
+
             }
             function canyonize(){
               mapsicle.setPosition(new GLatLng(36.056393,-112.144318), { yaw: 2 }, function () { alert(&quot;Failed!&quot;); });
