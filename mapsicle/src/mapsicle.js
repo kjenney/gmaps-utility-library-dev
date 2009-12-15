@@ -73,15 +73,10 @@ SVOverlay.prototype = {
       this.heightOffset = (this.height / 2);
     }
     
-    if (this.elem.addEventListener) {
-      this.elem.addEventListener("mousedown", function (e) {
-        e.preventDefault();
-      }, false);
-    } else if (this.elem.attachEvent) {
-      this.elem.attachEvent("onmousedown", function (e) {
-        e.returnValue = false;
-      });
-    }
+    Mapsicle.Utils.registerEvent(this.elem, "mousedown", function (e) {
+      e.preventDefault();
+    });
+    
     /* adds an iframe shim if using Chrome */
     if (/chrome/.test(navigator.userAgent.toLowerCase())) {
       this.iframe = document.createElement("iframe");
@@ -966,7 +961,7 @@ Mapsicle.prototype = {
   currentRequest: false,
 
   labelIdCount: 0,
-  mapsicleId: 0
+  mapsicleId: 0  
 };
 
 /**
@@ -1230,14 +1225,14 @@ Mapsicle.prototype.setPanoramaSize = function (x, y) {
   if (this.up) {
     this.overlayMgr.stopMotion();
   }
-  GEvent.trigger(this, "mapsicle_resized", new GScreenSize(x, y));
+  GEvent.trigger(this, "mapsicle_resized", new GScreenSize(this.sizeX, this.sizeY));
 };
 
 /**
  * Automatically resize the panorama to fit the container
  */
 Mapsicle.prototype.panoramaResized = function () {
-  this.setPanoramaSize(this.elems.svc.offsetWidth, this.elems.svc.offsetHeight);
+  this.setPanoramaSize(this.elems.container.clientWidth, this.elems.container.clientHeight);
 };
 
 /** @private */
@@ -1685,6 +1680,16 @@ Mapsicle.Utils.createDiv = function (className) {
   return div;
 };
 
+Mapsicle.Utils.registerEvent = function (element, event, func) {
+  if (element.addEventListener) {
+    element.addEventListener(event, func, false);
+  } else if (element.attachEvent) {
+    element.attachEvent('on' + event, func);    
+  } else {
+    throw "No way to register events!";
+  }
+};
+  
 Mapsicle.Utils.createSpan = function (className) {
   var span = document.createElement('span');
   span.className = className;
@@ -1878,9 +1883,13 @@ Mapsicle.PageElements.prototype = {
   },
 
   listenForResize: function (theMapsicle) {
-    this.svc.onresize = function (e) {
+    var onResize = function (e) {
       theMapsicle.panoramaResized();
     };
+
+    Mapsicle.Utils.registerEvent(window, 'resize', onResize);
+    Mapsicle.Utils.registerEvent(document, 'resize', onResize);
+    Mapsicle.Utils.registerEvent(this.svc, 'resize', onResize);
   },
 
   // Thanks to http://www.quirksmode.org/js/findpos.html
