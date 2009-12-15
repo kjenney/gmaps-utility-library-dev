@@ -13,7 +13,7 @@
  */
 /**
  * @name Streetview Mapsicle
- * @version 1.0
+ * @version 1.1-pre1
  * @author Stephen Davis &lt;stephen@projectx.co.nz&gt;.
  * @author Cameron Prebble &lt;cameron@projectx.co.nz&gt;.
  * @copyright (c) 2008-2009 ProjectX Technology Ltd.
@@ -31,6 +31,7 @@
  * or a tagged stable release
  * (http://gmaps-utility-library-dev.googlecode.com/svn/tags/mapsicle/[version]/src/mapsicle.js)
  * or copy it and serve locally. Make sure that mapsicle.css is in the same directory as the JavaScript file.
+ * You can also use the packed version: use mapsicle_packed.js instead of mapsicle.js
  */
 /*global
 GEvent,
@@ -2058,13 +2059,14 @@ Mapsicle.Startup.start = function () {
     for (var i = 0; i < scripts.length; ++i) {
       var path = scripts[i].getAttribute('src');
       if (path) {
-        if (path.match(/mapsicle.js/)) {
-          return path.split("mapsicle.js")[0];
+        var matchData = path.match(/mapsicle(_packed)?.js/);
+        if (matchData) {
+          return path.split(matchData[0])[0];
         }
       }
     }
       
-    throw new Error("Couldn't find the mapsicle script within the page: you need to include Mapsicle in a file called 'mapsicle.js'");
+    throw new Error("Couldn't find the mapsicle script within the page: you need to include Mapsicle in a file called 'mapsicle.js' or 'mapsicle_packed.js'");
   };
   
   Mapsicle.Startup.addStyleSheet(findScriptPath());
