@@ -1,0 +1,192 @@
+Mapsicle API v1.1 - 18 December 2009
+====================================
+
+* fix stylesheet autoloading for packed version of Mapsicle
+* update auto-resizing for cases where outer container is not set to an explicit pixel size
+* account for borders on outer container when resizing panorama
+* make latlng in Mapsicle constructor optional: waits for you to call setPosition if no latlng given
+* overlayAnchor for all SVOverlays gives a position on overlay to be anchored to Street View (defaults to original behaviour: the centre)
+* Mapsicle now automatically loads stylesheet from the same path as mapsicle.js is loaded from
+* fixed Mapsicle#getLocations()
+
+Mapsicle API v1.0 - 13 November 2009
+====================================
+
+* altered Mapsicle constructor: first paramter is now "container", a DOM element, rather than an ID.
+* removed Mapsicle#addStaticOverlay, Mapsicle#clearStaticOverlays, Mapsicle#removeStaticOverlay and SVDecal
+
+Mapsicle API v0.9.8 - 9 October 2009
+====================================
+
+* removed Mapsicle#registerCallback. You should use GEvent.addListener to register callbacks for events.
+
+Mapsicle API v0.9.7 - 8 October 2009
+====================================
+
+* Mapsicle#endStreetView renamed to close
+* SVTrackingOverlay#tracking renamed to getLocation
+* MapsicleConfig renamed to MapsicleParams
+* fix height and width setting in Custom Info Windows, so example should now work in IE
+* ugly partial fix for markers not showing up in Chrome
+* fixed everything-is-broken-in-Internet-Explorer issue
+* use visibility: hidden rather than display: none to hide overlays during drag to fix issue with YouTube player being reloaded
+
+Mapsicle API v0.9.1 - 14 September 2009       
+=======================================
+
+* fixed z-index for SVCustomInfoWindow so it shows up over the top of markers, as SVMiniInfoBox does
+
+Mapsicle API v0.9.0 - 14 September 2009
+=======================================
+
+* restyled to Google coding conventions
+* first public release
+
+Mapsicle API v0.6.1 - 10 September 2009
+=======================================
+
+* fixed a few minor mistakes in documentation
+* changed under_scored variables to camelCased: this affects configuration parameters but not event names.
+* offscreen arrows are no longer scaled to the height of the marker
+
+Mapsicle API v0.6.0 - 10 September 2009
+=======================================
+
+* removed dependency on jQuery: this (for now) changes behaviour when the mouse moves over elements inside the panorama.
+* new SVCustomInfoWindow which displays a completely custom DOM element as an info window
+* renamed SVInfoWindow to SVMiniInfoBox
+
+Mapsicle API v0.5.4 - 10 August 2009
+====================================
+
+* new SVInfoWindows to display text
+* SVInfoWindow.params has parameters: width, inner, callback
+* SVLocation.Params now has an info: if present with no marker, displays the info window instead. If both marker and info, user can toggle between by clicking.
+
+Mapsicle API v0.5.3 - 3 August 2009
+===================================
+
+* fixed SVLocation#inFOV
+* changed SVLocation#whereOffscreen - now returns "within" if in FOV, or "left", "right", "up" or "down" if not in FOV, or "unknown" on errors
+
+Mapsicle API v0.5.2 - 29 July 2009
+==================================
+
+* the callback parameter to markers is now fired on click
+
+Mapsicle API v0.5.1 - 27 July 2009
+==================================
+
+* fixed issue #292 with markers hiding the google logo and fixed street view controls. Markers will still cover up the clickable arrows to follow paths that appear in the middle of the panorama.
+
+Mapsicle API v0.5.0 - 24 July 2009
+==================================
+
+* fixed issue #311 with markers being hidden while still within the panorama
+
+Mapsicle API v0.4.7 - 24 July 2009
+==================================
+
+* mapsicle is now merged with the mapsicle_demo_app. Static content is in public/mapsicle, and the tests have been added as the "test" views and controller, with a route to suit
+
+Mapsicle API v0.4.6 - 24 July 2009
+==================================
+
+* new method SVLocation#inFOV() - is the location currently within our field of view?
+* new method SVLocation#whereOffscreen() - where is the location relative to our field of view?
+* new event: mapsicle_pov_changed -> Mapsicle
+
+Mapsicle API v0.4.5 - 23 July 2009
+==================================
+
+* new SVMarker parameter: showOffscreen. The marker will be displayed at the left or right of the panorama with an arrow if it appears offscreen, and at the extreme top or bottom of the panorama without decoration if up or down.
+
+Mapsicle API v0.4.4 - 23 July 2009
+==================================
+
+* fix direction of off-screen prominent markers
+
+Mapsicle API v0.4.3 - 22 July 2009
+==================================
+
+* fix "sticking" markers when SV still being dragged but Mapsicle thinks dragging has finished
+* prevent marker dragging in Firefox
+
+Mapsicle API v0.4.2 - 22 July 2009
+==================================
+
+* implemented removeLocation, removeTrackingOverlay
+* fixed crash upon adding info window
+* removed a lot of private objects from global namespace
+* prominent marker now display arrows when at edges of screen
+
+Mapsicle API v0.4.0 - 20 July 2009
+==================================
+
+* event names are now valid JavaScript identifiers: all hyphens (-) are now underscores (_)
+* event mapsicle_panorama_resized now returns a GScreenSize
+* new SVLocation parameters: goal, cutoff. Recommend NOT using scaled markers with a goal.
+* event documentation
+
+Mapsicle API v0.3.22 - 17 July 2009
+===================================
+
+* the MapsicleConfig parameter given to Mapsicle now MUST be an object literal. MapsicleConfig no longer has a constructor.
+* new MapsicleConfig property: "normalDistance". This represents the distance (in metres) at which a scaled marker is displayed full-size.
+
+Mapsicle API v0.3.20 - 17 July 2009
+===================================
+
+* Part of #251 - If a location has no marker, it can display an SVInfoWindow given as the info parameter instead
+* SVMarker now has an optional "callback" parameter when constructed (BROKEN)
+* SVMarker now has an optional "scale" parameter that enables downscaling the marker as it gets further away.
+
+Mapsicle API v0.3.18 - 16 July 2009
+===================================
+
+* changed order of parameters to setPosition: is now latlng, pov, errorCallback
+
+Mapsicle API v0.3.16 - 16 July 2009
+===================================
+
+* new event: mapsicle-click -> GPov (BROKEN)
+* SVLocation now has an optional "info" (SVInfoWindow) parameter when constructed (Unused)
+* new method: Mapsicle#setPOV
+* setPosition now pans when a position change is not required, but goes straight to new POV when changing position.
+* setPosition now has an optional third parameter pov (GPov), which specifies a POV to use in the new position. If not set, the old behaviour continues: setting POV to look toward the requested lat/lng.
+
+Mapsicle API v0.3.14 - 16 July 2009
+===================================
+
+* Feature #283 - follow link
+* Should fix problem where locations do not have vectors to targets set until next position change
+
+Mapsicle API v0.3.12 - 15 July 2009
+===================================
+
+* SVMarker parameters width and height are now optional, and if present the marker will be scaled to that size. If absent, the marker will appear at its natural size, with the top-left corner positioned at the target.
+
+Mapsicle API v0.3.10 - 15 July 2009
+===================================
+
+* Removed SVUpdateSource
+* new public method: Mapsicle#getPosition() -> GStreetviewLocation
+* new public method: Mapsicle#setPosition(GLatLng)
+* merged similar jumpToLL and updatePanoUnlaunched methods
+* new event: mapsicle-set-position-failed -> SVErrorCodes
+* new event: mapsicle-set-position-success -> GStreetviewLocation
+* new event: mapsicle-set-position-panned -> GPov
+* new event: mapsicle-set-position-jumped -> GStreetviewLocation
+* new event: mapsicle-set-position-launched -> GStreetviewLocation
+
+Mapsicle API v0.3.8 - 15 July 2009
+==================================
+
+* Fix bug #267: overlays not cropped at edge of panorama
+* Fix bug #268: targetYaws are sometimes null on startup
+* Overlays are now hidden during motion
+
+Mapsicle API v0.3.6 - 14 July 2009
+==================================
+
+* First release with documentation
