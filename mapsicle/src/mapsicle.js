@@ -13,7 +13,7 @@
  */
 /**
  * @name Streetview Mapsicle
- * @version 1.1-pre1
+ * @version 1.1
  * @author Stephen Davis &lt;stephen@projectx.co.nz&gt;.
  * @author Cameron Prebble &lt;cameron@projectx.co.nz&gt;.
  * @copyright (c) 2008-2009 ProjectX Technology Ltd.
