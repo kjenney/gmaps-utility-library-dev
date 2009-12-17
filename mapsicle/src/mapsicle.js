@@ -2066,7 +2066,9 @@ Mapsicle.Startup.start = function () {
       }
     }
       
-    throw new Error("Couldn't find the mapsicle script within the page: you need to include Mapsicle in a file called 'mapsicle.js' or 'mapsicle_packed.js'");
+    var msg = "Couldn't find the mapsicle script within the page: you need to include Mapsicle in a file called 'mapsicle.js' or 'mapsicle_packed.js'";
+    GLog.write(msg);
+    throw new Error(msg);
   };
   
   Mapsicle.Startup.addStyleSheet(findScriptPath());
