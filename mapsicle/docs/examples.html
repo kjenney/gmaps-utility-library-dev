@@ -279,7 +279,7 @@ function init(){
                 });
                 mapsicle.addLocation(location);
                 GEvent.addListener(mapsicle, &quot;zoomchanged&quot;, function(z){
-                  alert(&quot;Zoom changed&quot;);
+                  GLog.write(&quot;Zoom changed at &quot; + new Date());
                 });
 
             }
