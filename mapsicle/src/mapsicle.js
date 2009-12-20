@@ -13,7 +13,7 @@
  */
 /**
  * @name Streetview Mapsicle
- * @version 1.1
+ * @version 1.2-dev
  * @author Stephen Davis &lt;stephen@projectx.co.nz&gt;.
  * @author Cameron Prebble &lt;cameron@projectx.co.nz&gt;.
  * @copyright (c) 2008-2009 ProjectX Technology Ltd.
@@ -990,7 +990,10 @@ Mapsicle.prototype.upStreetView = function () {
 
   this.panorama = new GStreetviewPanorama(this.elems.svc, {
     latlng: this.position.latlng,
-    pov: this.target
+    pov: this.target,
+    enableFullScreen: this.config.enableFullScreen,
+    features: this.config.features,
+    userPhotosOptions: this.config.userPhotosOptions
   });
 
   var theMapsicle = this;
@@ -1365,6 +1368,12 @@ Mapsicle.prototype.clearAllOverlays = function () {
   this.clearTrackingOverlays();
 };
 
+// TODO: how should this work?
+/** @ignore */
+Mapsicle.prototype.setUserPhoto = function (photoSpec) {
+  this.panorama.setUserPhoto(photoSpec);
+};  
+  
 /**
  * Follow a link from the current position. This will fire the initialized event.
  * This works exactly the same as GStreetviewPanorama#followLink.
@@ -1557,6 +1566,8 @@ Mapsicle.SVErrorCodes = {
   SERVER_ERROR: 500,
   /** there is no street view imagery nearby */
   NO_NEARBY_PANO: 600,
+  /** the photo could not be found */
+  NO_PHOTO: 601,
   /** the user's browser does not have Flash */
   NO_FLASH: 603
 };
@@ -1583,7 +1594,10 @@ Mapsicle.ZIndices = {
  * Do not use the constructor for this class, instead, instantiate it as an object literal.
  * All of the properties (and the object itself) are optional.
  * @property {boolean} avoidOverlaps Whether to push tracking markers away from each other so they don't cover each other up.
+ * @property {boolean} enableFullScreen Whether to allow fullscreen mode. Mapsicle overlays don't work in fullscreen mode, so defult to false.
+ * @property {GStreetviewFeatures} features Which viewing modes to show in Street View.
  * @property {number} normalDistance At this distance (in metres), and any closer, a scaled marker will be displayed at full size
+ * @property {GStreetviewUserPhotosOptions} userPhotosOptions ignored unless "userPhotos" is enabled in GStreetviewFeatures. 
  */
 /*global MapsicleParams*/
 var MapsicleParams = function () {};
@@ -1591,12 +1605,15 @@ var MapsicleParams = function () {};
 MapsicleParams.prototype = {
   avoidOverlaps: false,
   defaultOpacity: 0.5,
+  enableFullScreen: false,
   fadeTime: 4000,
   fadeSpeed: "normal",
+  features: undefined,
   noPano: null,
   normalDistance: 30,
   proximityDivisor: 120000,
   proximityYScale: 1.5,
+  userPhotosOptions: undefined,
   /**
    * how many pixels to move markers up or down if they overlap
    * @type number

@@ -1,4 +1,9 @@
-Mapsicle API v1.1 - 18 December 2009
+since last release
+==================
+
+* added enableFullScreen, userPhotosOptions and features paramters to MapsicleParams, work the same way as for plain GStreetviewPanorama, except that fullscreen defaults to off.
+
+MAPSICLE API v1.1 - 18 December 2009
 ====================================
 
 * fix stylesheet autoloading for packed version of Mapsicle
