@@ -1,7 +1,8 @@
 since last release
 ==================
 
-* added enableFullScreen, userPhotosOptions and features paramters to MapsicleParams, work the same way as for plain GStreetviewPanorama, except that fullscreen defaults to off.
+* fixed documentation of width and height parameters, where info-windows and markers were mixed up.
+* added enableFullScreen, userPhotosOptions and features paramters to MapsicleParams, which work the same way as for plain GStreetviewPanorama, except that fullscreen defaults to off.
 
 MAPSICLE API v1.1 - 18 December 2009
 ====================================

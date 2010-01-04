@@ -444,9 +444,9 @@ var SVMiniInfoBox = function (params) {
 /**
  * @class The parameters when constructing an SVMiniInfoBox. SVMiniInfoBoxParams are not constructed: create
  * one with an object literal containing all the necessary properties.
- * @property {String} inner The text to display inside the info window
- * @property {number} width The width of the marker, in pixels. Note that you cannot set the height.
- * @property {GPoint} overlayAnchor (optional) Position on the image, relative to the top-left corner, measured in pixels on the original, unscaled image, to "anchor" the overlay to Street View. Defaults to the centre of the image.
+ * @property {String} inner The text to display inside the mini info box.
+ * @property {number} width The width of the mini info box, in pixels. Note that you cannot set the height.
+ * @property {GPoint} overlayAnchor (optional) Position on the overlay, relative to the top-left corner, measured in pixels on the original, unscaled overlay, to "anchor" the overlay to Street View. Defaults to the centre of the overlay.
  */
 /*global SVMiniInfoBoxParams*/
 var SVMiniInfoBoxParams = {
@@ -628,8 +628,8 @@ var SVMarker = function (params) {
  * literal containing all the necessary properties.
  * @property {boolean} showOffscreen (optional) For non-goal markers, whether to show their direction while offscreen.
  * @property {String} iconURL The URL of the image to use as the marker
- * @property {number} width The width of the info window, in pixels
- * @property {number} height The height of the info window, in pixels
+ * @property {number} width The width of the marker, in pixels
+ * @property {number} height The height of the marker, in pixels
  * @property {number} scale (optional) If 1 or undefined, the marker will always be the same size. If less than 1, the marker will be downscaled as it gets further away until it is the given fraction of its normal size.
  * @property {GPoint} overlayAnchor (optional) Position on the image, relative to the top-left corner, measured in pixels on the original, unscaled image, to "anchor" the overlay to Street View.
  */
