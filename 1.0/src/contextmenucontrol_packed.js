@@ -1,1 +1,922 @@
-eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('6 D(a){4(a){7.U={23:a.23,2v:a.2v,1o:a.1o,1I:a.1I,2l:a.2l,2g:a.2g}}w{7.U={}}7.R=[];7.Z=[];7.1R=-1}D.F=H 5h(G,K);D.F.4H=6(o){3 n=7;n.C=o;3 m=o.21();4(m.2A){m.2A("3R",6(e){e.3I();e.3H()},G)}w 4(m.3a){m.3a("5O",6(){3 e=29.1E;e.5q=K;e.3g=G})}n.2f();I.P(o,"4S",6(f,k,g){4(g!=1h){n.2r=g.L();3 d=n.R;N(3 i=0;i<d.z;i++){4(n.2r.2G(d[i].L())){n.1t("1Z");1U}w{n.1t("1m")}}}w 4(n.R.z>0){n.1t("1m")}w 4(n.v.1V){n.1t()}n.18=o.6x(f);3 j=u.2s?(f.x-40):f.x;3 l=u.2s?(f.y+10):f.y;3 c=o.3t().Y;3 e=o.3t().3p;3 a=n.v.5s;3 h=n.v.5m;4(c-a<j){j=j-a}4(e-h<l){l=l-h-20}n.v.8.3e="1C";n.v.1C=K;3 b=H 50(4X,H 1s(j,l));b.4R(n.v)});I.15(m,"31",6(e){4(n.v.1C){4(!e){3 e=29.1E}4(n.3E(m,e)){n.1f()}}});I.P(o,"13",6(){n.1f()});I.P(o,"3C",6(){n.1f()});M m};D.F.28=6(c){3 d=7;d.17(c);3 h=d.18;3 f;4(d.J){3 a=[h,d.J.L()];d.1c(a)}w{3 b="4j"+c+".1l";3 e=d.1w(b);f=d.2h(c);3 g=H 1z(h,{26:e,2O:K,2m:\'25\',2L:G,2K:K});d.J=g;d.C.1q(g);g.16(f);I.P(g,"13",6(){f=d.2h(c);g.16(f)});I.P(g,"2F",6(){d.C.1x()})}};D.F.2f=6(b){3 a=7;a.v=u.E("46");a.v.8.1Y="1d 44";a.v.8.42="3W";a.v.8.1W="#3S";a.v.8.1u="#2x";a.v.8.3Q="2C";a.v.8.3M="2w";a.v.8.Y="6n";a.v.8.3K="2t 6i #6g";4(a.U.23!==G&&!b){a.v.t(a.V("3F 1r O","1r"))}4(a.U.2v!==G&&!b){a.v.t(a.V("3F 14 O","14"))}4(b=="1m"){a.v.t(a.V("5X a 5U","1m"))}4(b=="1Z"){a.v.t(a.V("5R 7 3y","3x"))}a.v.t(a.2o());4(a.U.1o!==G){a.v.t(a.V("2n 38","1D"))}4(a.U.1I!==G){a.v.t(a.V("2n 5C","33"))}4(a.U.2l!==G){a.v.t(a.V("5y 5v O","2j"))}4(a.U.2g!==G){a.v.t(a.2o());a.v.t(a.V("5r\\\'s O?","O"))}a.1f();a.C.21().t(a.v);M a.v};D.F.3E=6(b,a){4(b.3k&&a.3i){M!b.3k(a.3i)}w 4(a.3h){M!7.3f(b,a.3h)}};D.F.3f=6(a,b){3 c=G;5e{4((c=a==b)){1U}b=b.5b}5a(b!=1h);M c};D.F.V=6(b,e){3 c=7;3 d=u.E("59");d.8.3M="2w 3O";d.8.56="1.55";d.t(u.12(b));I.15(d,"53",6(){d.8.2c="4Y";d.8.1u="#4W"});I.15(d,"31",6(){d.8.2c="3c";d.8.1u="#2x"});I.15(d,"13",6(){4(e=="1r"){c.28("A")}w 4(e=="14"){c.28("B")}w 4(e=="1m"){c.36()}w 4(e=="3x"){c.3r()}w 4(e=="1D"){c.C.1o()}w 4(e=="33"){c.C.1I()}w 4(e=="2j"){3 a=c.18;c.C.4N(a)}w 4(e=="O"){c.3z()}c.1f()});M d};D.F.3r=6(){3 b=7;3 d=b.R;3 a=[];N(3 i=0;i<d.z;i++){4(b.2r.2G(d[i].L())){b.C.11(d[i]);d.2a(i,1);1U}}4(d.z==0){b.1p()}w 4(d.z==1){b.C.1x();b.C.11(b.1B)}w 4(d.z>1){N(3 j=0;j<d.z;j++){a[j]=d[j].L()}b.1c(a)}};D.F.36=6(){3 b=7;3 d=b.R;3 a=[];4(d.z==1){4(d[0].2Z=="A"){b.17("B")}w{b.17("A")}a[0]=b.18;a[1]=d[0].L()}w 4(d.z>1){b.17();N(3 i=0;i<d.z;i++){a[i]=d[i].L()}a.Q(b.18)}b.1c(a)};D.F.2o=6(){3 a=u.E("4E");a.8.3p="2t";a.8.3K="2t";a.8.1W="#3B";a.8.1u="#3B";4(u.2s){a.8.4B="4y";a.8.1N="-3O"}w{a.8.1N="2w"}M a};D.F.1f=6(){7.v.8.3e="4v";7.v.1C=G};D.F.1t=6(a){7.C.21().4u(7.v);7.2f(a);4(a){7.v.1V=K}w{7.v.1V=G}};D.F.17=6(a){4(a=="A"){7.1e={A:K,B:G}}w 4(a=="B"){7.1e={A:G,B:K}}w{7.1e={A:G,B:G}}};D.F.2u=6(){7.1R++;M 4r.4p(7.1R+65)};D.F.1w=6(a){3 b=H 4l();3 c="4k://4i.4f.4e/4d/";4(a=="27"){b.2S=c+"27.1l";b.2R=c+"4c.1l";b.2Q=H 1s(39,34);b.2P=H 1s(39,34);b.2N=H 1S(20,34);b.2M=H 1S(20,0)}w{b.2S=c+a;b.2R=c+"4b.1l";b.2Q=H 1s(20,34);b.2P=H 1s(37,34);b.2N=H 1S(9,34);b.2M=H 1S(19,2)}M b};D.F.24=6(b,k){3 e=7;3 d=e.R;3 r=e.1y;3 h;3 f=[];3 j="4a"+k+".1l";3 c=e.1w(j);3 g=H 1z(b,{26:c,2O:K,2m:\'25 14 2I 2H\',2L:G,2K:K});g.2Z=k;e.C.1q(g);d.Q(g);4(k=="A"){h=r.X[0]}w{h=r.X[(r.X.z-1)]}I.P(g,"13",6(){4(d.z>1){e.C.16(b,h)}});I.P(g,"2F",6(){e.C.1x();e.J=g;4(d.z<=2){e.17(k)}});I.P(g,"3C",6(){4(d.z==2){3 a=e.1e.A?d[d.z-1].L():d[0].L();f.2a(0,0,e.J.L(),a)}w 4(d.z>2){d.2a((k.48()-65),1,e.J);N(3 i=0;i<d.z;i++){f[i]=d[i].L()}}4(d.z>=2){e.1c(f)}})};D.F.2E=6(){3 b=7.S.47().22;3 a=[];a[45]="A 1O 2D 1Q 1v 1M 2B 43.";a[3Y]="A 3X, 1O 1b 3V 3U 3T 2D 1Q 1v 1M 2B 3Z.";a[41]="2y 1X 2z 2J 1D T 1T.";a[3P]="2y 49 6v 6u 1Q 1M 6r N 6q 6m T 2J 6l.";a[6k]="1P 6j N T 1n 1j 1b T 2H N T 1n 1O 1X 6h 1M 6f 6e 14 6d 1b 6c 6b.";a[6a]="1P 3G 67 1Q 1v 64 1O 63 T 62 61 1D T 1X.";a[5Y]="1P 1n 3D 5W 5V 5T 1b 5S 1v 5Q T 5P N 5N 5M 2z 1n.";a[5L]="1P 1n 3D 5K 5J 5I T 5G 3w 5F 1b 32 5E 3w 5D 5B 32 5A.";4(a[b]){3q(a[b]+"\\5z 22: "+b)}w{3q("5x 5w 3o 5t.")}};D.F.3n=6(){3 f=7;f.1y={W:[],X:[],2b:0};3 r=f.1y;4(f.Z.z>0){f.1p("O")}4(f.J){f.C.11(f.J);f.J=1h}4(f.R.z>0){f.1p()}f.1B=f.S.3m();f.C.1q(f.1B);3 e=f.S.5p();r.2b=e;N(3 m=0;m<e;m++){3 b=f.S.5o(m);3 d=b.5n();4(m==0){3 j=b.3j(0).L();3 g=b.5l().1j;r.W.Q(j);r.X.Q(f.1H(g,0));f.24(j,f.2u())}N(3 n=0;n<d;n++){3 h=r.W.z;3 i=b.3j(n);r.W.Q(i.L());r.X.Q(f.1H(i.5j(),h))}3 c=b.5i();3 a=b.5g().1j;r.W.Q(c);r.X.Q(f.1H(a,(h+1),(m+1)));f.24(c,f.2u())}};D.F.1H=6(g,c,i){3 e=6(a){a.8.1W="#5f";a.8.5d="2C";a.5c("1k");a.8.2c="3c"};3 d=7;3 r=d.1y;3 f=u.E("1a");f.8.Y="2e";f.1J=g;3 p=u.E("p");p.8.58="1d";p.8.57="2j";p.8.5k="2d";3 j=u.E("a");j.1i("1k","1G:1K(0)");j.1J="2n 38";j.8.3d="2d";3 h=u.E("a");h.1i("1k","1G:1K(0)");h.1J="&54; 52";h.8.3d="2d";4(c==0){e(h)}3 b=u.E("a");b.1i("1k","1G:1K(0)");b.1J="51 &4Z;";4(i==r.2b){e(b)}p.t(h);p.t(j);p.t(b);f.t(p);j.2i=6(){d.C.1o(r.W[c],{5u:K})};h.2i=6(){4(c>0){d.C.16(r.W[(c-1)],r.X[(c-1)])}};b.2i=6(){4(c<(r.W.z-1)){d.C.16(r.W[(c+1)],r.X[(c+1)])}};M f};D.F.1c=6(e,a){3 c=7;c.S=H 3G();I.3l(c.S,"3o",c,c.2E);I.3l(c.S,"2k",c,c.3n);3 d={3m:K,4V:K};4(c.1F){d.1L=c.1F.1L}4(e){4(c.1e.B){e=e.4U()}c.S.4T(e,d)}w{3 f=c.J.L();3 b=f.3b()+","+f.3v();4(c.1e.A){c.S.2k("1r: "+b+" 14: "+a,d)}w{c.S.2k("1r: "+a+" 14: "+b,d)}}};D.F.2h=6(p){3 k=7;3 b=(p=="A")?["4Q O","4P 1j:"]:["4O O","5H 1j:"];3 m=u.E("1a");m.t(u.12("35: "));3 l=u.E("b");l.t(u.12(b[0]));m.t(l);m.t(u.E("3u"));3 o=u.E("1d");o.t(u.12(b[1]));m.t(o);m.t(u.E("3u"));3 i=u.E("1T");i.3s="4M";i.1g="";i.8.Y="4L";m.t(i);3 c=u.E("p");3 j=u.E("4K");j.2p="1";j.8.Y="30";3 d=u.E("3N");d.t(u.12("4J 4I"));d.1i("1g","");j.t(d);3 f=u.E("3N");f.t(u.12("4G 4F"));f.1i("1g","2Y");j.t(f);3 n=u.E("1T");n.3s="3A";n.1g="4D 35";n.8.Y="30";n.8.5Z="4C";c.t(j);c.t(n);m.t(c);3 g=u.E("p");3 q=u.E("1d");q.t(u.12("25 1b "));3 h=u.E("a");h.1i("1k","1G:1K(0)");h.t(u.12("1Z 7 3y"));q.t(h);g.t(q);m.t(g);3 r=u.E("4A");r.t(m);4z(6(){3 a=m.66[5];4(a.4x=="4w"){a.68()}},69);I.15(h,"13",6(){4(k.J){k.C.11(k.J);k.J=1h}});k.1F={1L:G};I.15(j,"2I",6(){4(j.U[j.4t].1g=="2Y"){k.1F.1L=K}});I.15(r,"3A",6(e){k.1c(1h,i.1g);4(29.1E){1E.3g=G}w 4(e){e.3I();e.3H()}});M r};D.F.1p=6(a){4(a=="O"){N(3 i=0;i<7.Z.z;i++){7.C.11(7.Z[i])}7.Z.z=0}w{7.C.1x();7.C.11(7.1B);N(3 j=0;j<7.R.z;j++){7.C.11(7.R[j])}7.R.z=0;7.1R=-1;4(7.J){7.C.11(7.J);7.J=1h}}};D.F.3z=6(){3 k=6(a){3 e=(a>0)?"+":"";3 b=2X(a,10);a=2q.2W(a-b);3 d=2X((a*60),10);a=(a*60)%1;3 c=2q.4s(2q.2W(a*60)*2V)/2V;M e+b+"&4q; "+d+"&4o; "+c+"&4n;"};3 j=7;4(j.Z.z>0){j.1p("O")}3 g=j.18;3 f=g.4m();3 h="<1a 8=\'Y:2e;\'>"+"<1A>"+f+"<\\/1A>"+"<p 8=\'1N-2U:3J;1Y-2p:1d;\'>"+k(g.3b())+", "+k(g.3v())+"<\\/p><\\/1a>";3 i=j.1w("27");3 l=H 1z(g,{26:i,2m:f});j.Z.Q(l);j.C.1q(l);I.P(l,"13",6(){l.16(h)});3 m=H 6o();m.6p(g,6(d){4(d.4h.22==4g){3 e=d.6s[0];3 a=H 6t(e.2T.3L[1],e.2T.3L[0]);3 c=H 1z(a);j.Z.Q(c);j.C.1q(c);3 b="<1a 8=\'Y:2e;\'>"+"<1A>6w:<\\/1A><p 8=\'1N-2U:3J;1Y-2p:1d;\'>"+e.1j+"<\\/p><\\/1a>";I.P(c,"13",6(){c.16(b)})}w{M}})};',62,406,'|||var|if||function|this|style|||||||||||||||||||||appendChild|document|menuList|else|||length|||map_|ContextMenuControl|createElement|prototype|false|new|GEvent|actual|true|getLatLng|return|for|here|addListener|push|dirmarks_|gdir|the|options|createListItem_|sections|iws|width|heremarks_||removeOverlay|createTextNode|click|to|addDomListener|openInfoWindowHtml|setChosen_|clickedPoint_||div|or|getDirs_|small|chosen|hideMenu_|value|null|setAttribute|address|href|png|add|given|zoomIn|removeOld_|addOverlay|from|GSize|rebuildMenu_|backgroundColor|not|createIcon_|closeInfoWindow|routes_|GMarker|big|poly_|visible|in|event|opts_|javascript|createRouteInfo|zoomOut|innerHTML|void|avoidHighways|be|margin|directions|The|could|letterindex_|GPoint|input|break|changed|color|query|font|remove||getContainer|code|dirsFrom|makeDirMarker_|Drag|icon|arrow|searchDirs_|window|splice|num|cursor|20px|240px|createContextMenu_|whatsHere|makeForm_|onclick|center|load|centerMap|title|Zoom|createRuler_|size|Math|rej_|all|1px|makeLetter_|dirsTo|0px|fff|No|was|addEventListener|successfully|none|request|handleErrors_|dragstart|equals|route|change|specified|dragCrossMove|bouncy|infoWindowAnchor|iconAnchor|draggable|shadowSize|iconSize|shadow|image|Point|top|100|abs|parseInt|nohighways|letter|15ex|mouseout|too|out||Direction|addDest_||In||attachEvent|lat|default|marginRight|visibility|containsDOM_|returnValue|relatedTarget|toElement|getStep|contains|bind|getPolyline|dirsLoad_|error|height|alert|removeDest_|type|getSize|br|lng|requests|rem|point|getReverseGeocode_|submit|e2e2e2|dragend|key|checkMouseLeave_|Directions|GDirections|preventDefault|stopPropagation|7px|border|coordinates|padding|option|6px|G_GEO_UNKNOWN_ADDRESS|listStyle|contextmenu|0000cd|level|zoom|maximum|nowrap|geocoding|G_GEO_SERVER_ERROR|processed||G_GEO_MISSING_QUERY|whiteSpace|parsed|Arial|G_GEO_BAD_REQUEST|ul|getStatus|charCodeAt|corresponding|marker_green|shadow50|arrowshadow|mapfiles|com|google|200|Status|maps|marker|http|GIcon|toUrlValue|Prime|prime|fromCharCode|deg|String|round|selectedIndex|removeChild|hidden|INPUT|nodeName|block|setTimeout|form|display|16px|Get|hr|highways|Avoid|initialize|car|By|select|32ex|text|panTo|To|End|From|apply|singlerightclick|loadFromWaypoints|reverse|getSteps|00ddff|G_ANCHOR_TOP_LEFT|pointer|raquo|GControlPosition|Next|Previous|mouseover|laquo|6em|lineHeight|textAlign|fontSize|li|while|parentNode|removeAttribute|textDecoration|do|a5a5a5|getEndGeocode|GControl|getEndLatLng|getDescriptionHtml|marginTop|getStartGeocode|offsetHeight|getNumSteps|getRoute|getNumRoutes|cancelBubble|What|offsetWidth|occurred|doCenter|Map|unknown|An|Center|nError|fast|submitted|Out|were|many|limit|daily|Start|over|gone|has|G_GEO_TOO_MANY_QUERIES|it|which|oncontextmenu|domain|match|Remove|does|invalid|destination|either|is|Add|G_GEO_BAD_KEY|marginLeft||mentioned|points|between|compute||childNodes|object|focus|1000|G_GEO_UNKNOWN_DIRECTIONS|reasons|contractual|legal|due|returned|666|cannot|solid|geocode|G_GEO_UNAVAILABLE_ADDRESS|addresses|of|21ex|GClientGeocoder|getLocations|one|found|Placemark|GLatLng|location|geographic|Address|fromContainerPixelToLatLng'.split('|'),0,{}))
+/**
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @name ContextMenuControl
+ * @version 1.0
+ * @copyright 2009 Wolfgang Pichler
+ * @author Wolfgang Pichler (Pil), www.wolfpil.de
+ * @fileoverview
+ * <p>This class lets you add a control to the map which mimics
+ * the context menu of Google Maps. The control supports all of the six
+ * items supported by Google Maps: finding directions to/from a location,
+ * zooming in/out, centering the map, and finding the address at the clicked
+ * location. Any of these items may be suppressed by passing options into
+ * the constructor. This control extends the 
+ * <a href="http://www.google.com/apis/maps/documentation/reference.html#GControl">
+ * GControl</a> interface.</p>
+ * <p>Note: ContextMenuControl doesn't work in Opera because Opera doesn't 
+ * support the oncontextmenu event and doesn't give access to right mouse clicks.
+ * </p>
+ */
+
+/**
+ * @name ContextMenuControlOptions
+ * @class This class represents optional arguments to {@link ContextMenuControl}.
+ * @property {Boolean} [dirsFrom = true] Shows "Directions from here" item.
+ * @property {Boolean} [dirsTo = true] Shows "Directions to here" item.
+ * @property {Boolean} [zoomIn = true] Shows "Zoom in" item.
+ * @property {Boolean} [zoomOut = true] Shows "Zoom out" item.
+ * @property {Boolean} [centerMap = true] "Shows "Center map here" item.
+ * @property {Boolean} [whatsHere = true] "Shows "What's here?" item.
+ */
+
+/**
+ * @desc Creates a control with options specified in {@link ContextMenuControlOptions}.
+ * @param {ContextMenuControlOptions} [opt_opts] Named optional arguments.
+ * @constructor
+ */
+function ContextMenuControl(opt_opts) {
+  if (opt_opts) {
+    this.options = {
+      dirsFrom: opt_opts.dirsFrom,
+      dirsTo: opt_opts.dirsTo,
+      zoomIn: opt_opts.zoomIn,
+      zoomOut: opt_opts.zoomOut,
+      centerMap: opt_opts.centerMap,
+      whatsHere: opt_opts.whatsHere
+    };
+  } else {
+    this.options = {};
+  }
+  this.dirmarks_ = [];
+  this.heremarks_ = [];
+  this.letterindex_ = -1;
+}
+
+/**
+ * Extends GOverlay class from the Google Maps API.
+ *  Second param (selectable) should be set to true
+ * @private
+ */
+ContextMenuControl.prototype = new GControl(false, true);
+
+/**
+ * @desc Initialize the control on the map.
+ * @param {GMap2} map The map that has had this control added to
+ * @return {Element} mapdiv Div that holds the map
+ * @private
+ */
+ContextMenuControl.prototype.initialize = function (map) {
+  var me = this;
+  me.map_ = map;
+  var mapdiv = map.getContainer();
+
+  // Prevents the browser's own context menu to appear.
+  if (mapdiv.addEventListener) {
+    mapdiv.addEventListener("contextmenu", function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      }, false);
+  } else if (mapdiv.attachEvent) {
+    mapdiv.attachEvent("oncontextmenu", function () {
+      var e = window.event;
+      e.cancelBubble = true;
+      e.returnValue = false;
+    });
+  }
+  me.createContextMenu_();
+
+  // Displays our context menu on single right mouse click
+  GEvent.addListener(map, "singlerightclick", function (pixelPoint, src, ov) {
+   // Right click on a dir marker
+    if (ov != null) {
+      me.rej_ = ov.getLatLng();
+      var d = me.dirmarks_;
+      for (var i = 0; i < d.length; i++) {
+        if (me.rej_.equals(d[i].getLatLng())) {
+          me.rebuildMenu_("remove");
+          break;
+        } else {
+          me.rebuildMenu_("add");
+        }
+      }
+    } else if (me.dirmarks_.length > 0) {
+      me.rebuildMenu_("add");
+    } else if (me.menuList.changed) {
+      // Right click on the map after all dir markers were removed
+      me.rebuildMenu_();
+    }
+    me.clickedPoint_ = map.fromContainerPixelToLatLng(pixelPoint);
+
+    // Correction of IE bug
+    var posX = document.all ? (pixelPoint.x - 40) : pixelPoint.x;
+    var posY = document.all ? (pixelPoint.y + 10) : pixelPoint.y;
+
+    var mapwidth = map.getSize().width;
+    var mapheight = map.getSize().height;
+    var menuwidth = me.menuList.offsetWidth;
+    var menuheight = me.menuList.offsetHeight;
+
+    // Adjusts the position of the context menu
+    if (mapwidth - menuwidth < posX) {
+      posX = posX - menuwidth;
+    }
+    if (mapheight - menuheight < posY) {
+      posY = posY - menuheight - 20;
+    }
+    me.menuList.style.visibility = "visible";
+    me.menuList.visible = true;
+    var pos = new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(posX, posY));
+    pos.apply(me.menuList);
+  });
+
+  // Closes context menu when the cursor is being moved out of the map.
+  // This DomListener is a workaround for Internet Explorer because
+  //  the 'normal' GEvent Listener doesn't work correctly in IE.
+  GEvent.addDomListener(mapdiv, "mouseout", function (e) {
+    if (me.menuList.visible) {
+      if (!e) {
+        var e = window.event;
+      }
+      if (me.checkMouseLeave_(mapdiv, e)) {
+        me.hideMenu_();
+      }
+    }
+  });
+
+  // Closes context menu in case of a left click on the map
+  GEvent.addListener(map, "click", function () {
+    me.hideMenu_();
+  });
+
+  // Closes context menu after dragging the map
+  GEvent.addListener(map, "dragend", function () {
+    me.hideMenu_();
+  });
+  // Return a dummy element to keep the API happy
+  return document.createElement("b");
+};
+
+/**
+ * Creates a draggable marker for searching directions.
+ * @param {String} letter Used to decide which icon to display.
+ * @private
+ */
+ContextMenuControl.prototype.searchDirs_ = function (letter) {
+  var me = this;
+  me.setChosen_(letter);
+  var point = me.clickedPoint_;
+  var html;
+
+  if (me.actual) {
+    var waypoints = [point, me.actual.getLatLng()];
+    me.getDirs_(waypoints);
+  } else {
+    var image = "marker" + letter + ".png";
+    var icon = me.createIcon_(image);
+    html = me.makeForm_(letter);
+    var marker = new GMarker(point, {icon: icon, draggable: true, title: 'Drag', bouncy: false, dragCrossMove: true});
+    me.actual = marker;
+    me.map_.addOverlay(marker);
+    marker.openInfoWindowHtml(html);
+
+    GEvent.addListener(marker, "click", function () {
+      html = me.makeForm_(letter);
+      marker.openInfoWindowHtml(html);
+    });
+
+    GEvent.addListener(marker, "dragstart", function () {
+      me.map_.closeInfoWindow();
+    });
+  }
+};
+
+/**
+ * Creates an initially hidden unordered menu list.
+ * @param {String} change Used to decide which item to replace.
+ * @return {Element} ul that holds the list entries of the context menu.
+ * @private
+ */
+ContextMenuControl.prototype.createContextMenu_ = function (change) {
+  var me = this;
+  me.menuList = document.createElement("ul");
+  me.menuList.style.font = "small Arial";
+  me.menuList.style.whiteSpace = "nowrap";
+  me.menuList.style.color = "#0000cd";
+  me.menuList.style.backgroundColor = "#fff";
+  me.menuList.style.listStyle = "none";
+  me.menuList.style.padding = "0px";
+  me.menuList.style.width = "21ex";
+  me.menuList.style.border = "1px solid #666";
+
+  if (me.options.dirsFrom !== false && !change) {
+    me.menuList.appendChild(me.createListItem_("Directions from here", "from"));
+  }
+  if (me.options.dirsTo !== false && !change) {
+    me.menuList.appendChild(me.createListItem_("Directions to here", "to"));
+  }
+  if (change == "add") {
+    me.menuList.appendChild(me.createListItem_("Add a destination", "add"));
+  }
+  if (change == "remove") {
+    me.menuList.appendChild(me.createListItem_("Remove this point", "rem"));
+  }
+  me.menuList.appendChild(me.createRuler_());
+  if (me.options.zoomIn !== false) {
+    me.menuList.appendChild(me.createListItem_("Zoom In", "in"));
+  }
+  if (me.options.zoomOut !== false) {
+    me.menuList.appendChild(me.createListItem_("Zoom Out", "out"));
+  }
+  if (me.options.centerMap !== false) {
+    me.menuList.appendChild(me.createListItem_("Center Map here", "center"));
+  }
+  if (me.options.whatsHere !== false) {
+    me.menuList.appendChild(me.createListItem_("What\'s here?", "here"));
+  }
+  me.hideMenu_();
+  // Adds context menu to the map container
+  me.map_.getContainer().appendChild(me.menuList);
+  return me.menuList;
+};
+
+/**
+ * Avoids firing a mouseout event when the mouse moves over a child element.
+ * This will be caused by event bubbling.
+ * Borrowed from: http://www.faqts.com/knowledge_base/view.phtml/aid/1606/fid/145
+ * @param {Element} element Parent div
+ * @param {Event} evt The passed mouse event
+ * @return {Boolean}
+ * @private
+ */
+ContextMenuControl.prototype.checkMouseLeave_ = function (element, evt) {
+  if (element.contains && evt.toElement) {
+    return !element.contains(evt.toElement);
+  } else if (evt.relatedTarget) {
+    return !this.containsDOM_(element, evt.relatedTarget);
+  }
+};
+
+/**
+ * Checks if the mouse leaves the parent element.
+ * @param {Element} container Parent div
+ * @param {Event} containee Event of node that the mouse entered when leaving the target
+ * @return {Boolean}
+ * @private
+ */
+ContextMenuControl.prototype.containsDOM_ = function (container, containee) {
+  var isParent = false;
+  do {
+    if ((isParent = container == containee)) {
+      break;
+    }
+    containee = containee.parentNode;
+  } while(containee != null);
+  return isParent;
+};
+
+/**
+ * Creates clickable context menu list items.
+ * @param {String} text Text to display in list item.
+ * @param {String} arg Used to identify the clicked entry.
+ * @return {Element} List item that holds the entry.
+ * @private
+ */
+ContextMenuControl.prototype.createListItem_ = function (text, arg) {
+  var me = this;
+  var entry = document.createElement("li");
+  entry.style.padding = "0px 6px";
+  entry.style.lineHeight = "1.6em";
+  entry.appendChild(document.createTextNode(text));
+
+  GEvent.addDomListener(entry, "mouseover", function () {
+    entry.style.cursor = "pointer";
+    entry.style.backgroundColor = "#00ddff";
+  });
+
+  GEvent.addDomListener(entry, "mouseout", function () {
+    entry.style.cursor = "default";
+    entry.style.backgroundColor = "#fff";
+  });
+
+  GEvent.addDomListener(entry, "click", function () {
+    if (arg == "from") {
+      me.searchDirs_("A");
+    } else if (arg == "to") {
+      me.searchDirs_("B");
+    } else if (arg == "add") {
+      me.addDest_();
+    } else if (arg == "rem") {
+      me.removeDest_();
+    } else if (arg == "in") {
+      me.map_.zoomIn();
+    } else if (arg == "out") {
+      me.map_.zoomOut();
+    } else if (arg == "center") {
+      var point = me.clickedPoint_;
+      me.map_.panTo(point);
+    } else if (arg == "here") {
+      me.getReverseGeocode_(); 
+    }
+    // Hides the menu after it's been used
+    me.hideMenu_();
+  });
+  return entry;
+};
+
+/**
+ * Removes direction markers on contextual click.
+ * Creates a new route when there are still more than
+ * two markers on the map after removing a marker.
+ * @private
+ */
+ContextMenuControl.prototype.removeDest_ = function () {
+  var me = this;
+  var d = me.dirmarks_;
+  var waypoints = [];
+
+  for (var i = 0; i < d.length; i++) {
+    if (me.rej_.equals(d[i].getLatLng())) {
+      me.map_.removeOverlay(d[i]);
+      d.splice(i, 1); break;
+    }
+  }
+  if (d.length == 0) {
+    me.removeOld_();
+  } else if (d.length == 1) {
+    me.map_.closeInfoWindow();
+    me.map_.removeOverlay(me.poly_);
+  } else if (d.length > 1) {
+    for (var j = 0; j < d.length; j++) {
+      waypoints[j] = d[j].getLatLng();
+    }
+    me.getDirs_(waypoints);
+  }
+};
+
+/**
+ * Adds previously removed and further destinations.
+ * @private
+ */
+ContextMenuControl.prototype.addDest_ = function () {
+  var me = this;
+  var d = me.dirmarks_;
+  var waypoints = [];
+
+  // Re-adds removed A or B when only A and B are shown
+  if (d.length == 1) {
+    if (d[0].letter == "A") {
+      me.setChosen_("B");
+    } else {
+      me.setChosen_("A");
+    }
+    waypoints[0] = me.clickedPoint_;
+    waypoints[1] = d[0].getLatLng();
+  } else if (d.length > 1) {
+    // Adds further destinations
+    me.setChosen_();
+    for (var i = 0; i < d.length; i++) {
+      waypoints[i] = d[i].getLatLng();
+    }
+    waypoints.push(me.clickedPoint_);
+  }
+  me.getDirs_(waypoints);
+};
+
+/**
+ * Creates a styled horizontal ruler between the list entries.
+ * @return {Element} hr as separator.
+ * @private
+ */
+ContextMenuControl.prototype.createRuler_ = function () {
+  var hr = document.createElement("hr");
+  hr.style.height = "1px";
+  hr.style.border = "1px";
+  hr.style.color = "#e2e2e2";
+  hr.style.backgroundColor = "#e2e2e2";
+  // Further IE bug
+  if (document.all) {
+    hr.style.display = "block";
+    hr.style.margin = "-6px";
+  } else {
+    hr.style.margin = "0px";
+  }
+  return hr;
+};
+
+/**
+ * Hides the context menu and sets its property visible to false.
+ * @private
+ */
+ContextMenuControl.prototype.hideMenu_ = function () {
+  this.menuList.style.visibility = "hidden";
+  this.menuList.visible = false;
+};
+
+/**
+ * Removes the context menu from the map container and adds a changed one.
+ * @param {String} arg Used to decide which item to replace.
+ * @private
+ */
+ContextMenuControl.prototype.rebuildMenu_ = function (arg) {
+  this.map_.getContainer().removeChild(this.menuList);
+  this.createContextMenu_(arg);
+  if (arg) {
+    this.menuList.changed = true;
+  } else {
+    this.menuList.changed = false;
+  }
+};
+
+/**
+ * Checks the finally touched marker to request the appropriate route.
+ * @param {String} opt_letter
+ * @private
+ */
+ContextMenuControl.prototype.setChosen_ = function (letter) {
+  if (letter == "A") {
+    this.chosen = {A: true, B: false};
+  } else if (letter == "B") {
+    this.chosen = {A: false, B: true};
+  } else {
+    this.chosen = {A: false, B: false};
+  }
+};
+
+/**
+ * Creates alphabetically arranged capital letters for direction markers.
+ * @return {String} letter
+ * @private
+ */
+ContextMenuControl.prototype.makeLetter_ = function () {
+  this.letterindex_++;
+  return String.fromCharCode(this.letterindex_ + 65);
+};
+
+/**
+ * Creates required properties for icons.
+ * @param {GIcon} icon
+ * @private
+ */
+ContextMenuControl.prototype.createIcon_ = function (image) {
+  var icon = new GIcon();
+  var url = "http://maps.google.com/mapfiles/";
+  if (image == "arrow") {
+    icon.image = url + "arrow.png";
+    icon.shadow = url + "arrowshadow.png";
+    icon.iconSize = new GSize(39, 34);
+    icon.shadowSize = new GSize(39, 34);
+    icon.iconAnchor = new GPoint(20, 34);
+    icon.infoWindowAnchor = new GPoint(20, 0);
+  } else {
+    icon.image = url + image;
+    icon.shadow = url + "shadow50.png";
+    icon.iconSize = new GSize(20, 34);
+    icon.shadowSize = new GSize(37, 34);
+    icon.iconAnchor = new GPoint(9, 34);
+    icon.infoWindowAnchor = new GPoint(19, 2);
+  }
+  return icon;
+};
+
+
+/**
+ * Creates and adds direction markers to the map.
+ * @param {GLatLng) point The GLatLng for the marker.
+ * @param {String) letter The markers letter.
+ * @private
+ */
+ContextMenuControl.prototype.makeDirMarker_ = function (point, letter) {
+  var me = this;
+  var d = me.dirmarks_;
+  var r = me.routes_;
+  var iw;
+  var waypoints = [];
+  var image = "marker_green" + letter + ".png";
+  var icon = me.createIcon_(image);
+  var marker = new GMarker(point, {icon: icon, draggable: true, title: 'Drag to change route', bouncy: false, dragCrossMove: true});
+
+  marker.letter = letter;
+  me.map_.addOverlay(marker);
+  d.push(marker);
+
+  if (letter == "A") {
+    iw = r.iws[0];
+  } else {
+    iw = r.iws[(r.iws.length - 1)];
+  }
+
+  GEvent.addListener(marker, "click", function () {
+    if (d.length > 1) {
+      me.map_.openInfoWindowHtml(point, iw);
+    }
+  });
+
+  // Finds out dragged marker and closes infowindow
+  GEvent.addListener(marker, "dragstart", function () {
+    me.map_.closeInfoWindow();
+    me.actual = marker;
+    if (d.length <= 2) {
+      me.setChosen_(letter);
+    }
+  });
+
+  // Creates a new route when two or more markers are shown
+  GEvent.addListener(marker, "dragend", function () {
+    if (d.length == 2) {
+      var sticky = me.chosen.A ? d[d.length - 1].getLatLng() : d[0].getLatLng();
+      waypoints.splice(0, 0, me.actual.getLatLng(), sticky);
+    } else if (d.length > 2) {
+      d.splice((letter.charCodeAt() - 65), 1, me.actual);
+      for (var i = 0; i < d.length; i++) {
+        waypoints[i] = d[i].getLatLng();
+      }
+    }
+    if (d.length >= 2) {
+      me.getDirs_(waypoints);
+    }
+  });
+};
+
+/**
+ * Error alerts for failed direction queries.
+ * @private
+ */
+ContextMenuControl.prototype.handleErrors_ = function () {
+  var status = this.gdir.getStatus().code;
+  var reason = [];
+  // 400
+  reason[G_GEO_BAD_REQUEST] = "A directions request could not be successfully parsed.";
+  // 500
+  reason[G_GEO_SERVER_ERROR] = "A geocoding, directions or maximum zoom level request could not be successfully processed.";
+  // 601
+  reason[G_GEO_MISSING_QUERY] = "No query was specified in the input.";
+  // 602
+  reason[G_GEO_UNKNOWN_ADDRESS] = "No corresponding geographic location could be found for one of the specified addresses.";
+  // 603
+  reason[G_GEO_UNAVAILABLE_ADDRESS] = "The geocode for the given address or the route for the given directions query cannot be returned due to legal or contractual reasons.";
+  // 604
+  reason[G_GEO_UNKNOWN_DIRECTIONS] = "The GDirections object could not compute directions between the points mentioned in the query.";
+  // 610
+  reason[G_GEO_BAD_KEY] = "The given key is either invalid or does not match the domain for which it was given.";
+  // 620
+  reason[G_GEO_TOO_MANY_QUERIES] = "The given key has gone over the daily requests limit or too many requests were submitted too fast.";
+
+  if (reason[status]) {
+    alert(reason[status] + "\nError code: " + status);
+  } else {
+    alert("An unknown error occurred.");
+  }
+};
+
+/**
+ * Callback function for direction queries.
+ * @private
+ */
+ContextMenuControl.prototype.dirsLoad_ = function () {
+  var me = this;
+  me.routes_ = {sections: [], iws: [], num: 0};
+  var r = me.routes_;
+
+  // Removes possible 'What's here' marker
+  if (me.heremarks_.length > 0) {
+    me.removeOld_("here");
+  }
+  // Removes existing search marker
+  if (me.actual) {
+    me.map_.removeOverlay(me.actual);
+    me.actual = null;
+  }
+  // Removes previous
+  if (me.dirmarks_.length > 0) {
+    me.removeOld_();
+  }
+  // Draws polyline for all routes
+  me.poly_ = me.gdir.getPolyline();
+  me.map_.addOverlay(me.poly_);
+  var numRoutes = me.gdir.getNumRoutes();
+  r.num = numRoutes;
+
+  // Stores items of every route
+  for (var m = 0; m < numRoutes; m++) {
+    var route = me.gdir.getRoute(m);
+    var numSteps = route.getNumSteps();
+
+    if (m == 0) {
+      var spoint = route.getStep(0).getLatLng();
+      var saddr = route.getStartGeocode().address;
+      r.sections.push(spoint);
+      r.iws.push(me.createRouteInfo(saddr, 0));
+      me.makeDirMarker_(spoint, me.makeLetter_());
+    }
+
+    for (var n = 0; n < numSteps; n++) {
+      var count = r.sections.length;
+      var step = route.getStep(n);
+      r.sections.push(step.getLatLng());
+      r.iws.push(me.createRouteInfo(step.getDescriptionHtml(), count));
+    }
+    var epoint = route.getEndLatLng();
+    var eaddr = route.getEndGeocode().address;
+    r.sections.push(epoint);
+    r.iws.push(me.createRouteInfo(eaddr, (count + 1), (m + 1)));
+    me.makeDirMarker_(epoint, me.makeLetter_());
+  }
+};
+
+/**
+ * Creates info windows for direction steps.
+ * @param {String} info The returned description for each step.
+ * @param {Number} nr counter to identify the appropriate info.
+ * @param {Number} i counter to identify the last route.
+ * @return {Element} The styled info window.
+ * @private
+ */
+ContextMenuControl.prototype.createRouteInfo = function (info, nr, i) {
+  var disabled = function (io) {
+    io.style.color = "#a5a5a5";
+    io.style.textDecoration = "none";
+    io.removeAttribute("href");
+    io.style.cursor = "default";
+  };
+  var me = this;
+  var r = me.routes_;
+  var iw = document.createElement("div");
+  iw.style.width = "240px";
+  iw.innerHTML = info;
+  var p = document.createElement("p");
+  p.style.fontSize = "small";
+  p.style.textAlign = "center";
+  p.style.marginTop = "20px";
+
+  var zlink = document.createElement("a");
+  zlink.setAttribute("href", "javascript:void(0)");
+  zlink.innerHTML = "Zoom In";
+  zlink.style.marginRight = "20px";
+
+  var blink = document.createElement("a");
+  blink.setAttribute("href", "javascript:void(0)");
+  blink.innerHTML = "&laquo; Previous";
+  blink.style.marginRight = "20px";
+  if (nr == 0) {
+    disabled(blink);
+  }
+
+  var flink = document.createElement("a");
+  flink.setAttribute("href", "javascript:void(0)");
+  flink.innerHTML = "Next &raquo;";
+  if (i == r.num) {
+    disabled(flink);
+  }
+
+  p.appendChild(blink);
+  p.appendChild(zlink);
+  p.appendChild(flink);
+  iw.appendChild(p);
+
+  // Due to an API bug we do not use addDomListeners here
+  // Zoom in link
+  zlink.onclick = function () {
+    me.map_.zoomIn(r.sections[nr], {doCenter: true});
+  };
+  // Back link
+  blink.onclick = function () {
+    if (nr > 0) {
+      me.map_.openInfoWindowHtml(r.sections[(nr - 1)], r.iws[(nr - 1)]);
+    }
+  };
+  // Forward link
+  flink.onclick = function () {
+    if (nr < (r.sections.length - 1)) {
+      me.map_.openInfoWindowHtml(r.sections[(nr + 1)], r.iws[(nr + 1)]);
+    }
+  };
+  return iw;
+};
+
+/**
+ * Handles direction queries.
+ * Either first or second param must be passed in.
+ * @param {GLatLng[]} [points] Array of GLatLngs to load direction from waypoints.
+ * @param {String} [addr] The form input value.
+ * @private
+ */
+ContextMenuControl.prototype.getDirs_ = function (points, addr) {
+  var me = this;
+  me.gdir = new GDirections();
+  GEvent.bind(me.gdir, "error", me, me.handleErrors_);
+  GEvent.bind(me.gdir, "load", me, me.dirsLoad_);
+  var opts = {getPolyline: true, getSteps: true };
+  if (me.opts_) {
+    opts.avoidHighways = me.opts_.avoidHighways;
+  }
+  if (points) {
+    if (me.chosen.B) {
+      points = points.reverse();
+    }
+    me.gdir.loadFromWaypoints(points, opts);
+  } else {
+    var point = me.actual.getLatLng();
+    var latlng = point.lat() + "," + point.lng();
+
+    if (me.chosen.A) {
+      me.gdir.load("from: " + latlng + " to: " + addr, opts);
+    } else {
+      me.gdir.load("from: " + addr + " to: " + latlng, opts);
+    }
+  }
+};
+
+/**
+ * Creates the form for searching directions displayed in infowindow.
+ * @param {String} letter Used to decide which form to load.
+ * @return {Element} Nested elements in outer form.
+ * @private
+ */
+ContextMenuControl.prototype.makeForm_ = function (letter) {
+  var me = this;
+  var text = (letter == "A") ?["From here", "End address:"]: ["To here", "Start address:"];
+  var html = document.createElement("div");
+
+  // Header
+  html.appendChild(document.createTextNode("Direction: "));
+  var bold = document.createElement("b");
+  bold.appendChild(document.createTextNode(text[0]));
+  html.appendChild(bold);
+  html.appendChild(document.createElement("br"));
+  var small = document.createElement("small");
+  small.appendChild(document.createTextNode(text[1]));
+  html.appendChild(small);
+  html.appendChild(document.createElement("br"));
+
+  // Input field
+  var input = document.createElement("input");
+  input.type = "text";
+  input.value = "";
+  input.style.width = "32ex";
+  html.appendChild(input);
+
+  // Dropdown box and submit button
+  var p1 = document.createElement("p");
+  var select = document.createElement("select");
+  select.size = "1";
+  select.style.width = "15ex";
+  var opt1 = document.createElement("option");
+  opt1.appendChild(document.createTextNode("By car"));
+  opt1.setAttribute("value", "");
+  select.appendChild(opt1);
+  var opt2 = document.createElement("option");
+  opt2.appendChild(document.createTextNode("Avoid highways"));
+  opt2.setAttribute("value", "nohighways");
+  select.appendChild(opt2);
+  var button = document.createElement("input");
+  button.type = "submit";
+  button.value = "Get Direction";
+  button.style.width = "15ex";
+  button.style.marginLeft = "16px";
+  p1.appendChild(select);
+  p1.appendChild(button);
+  html.appendChild(p1);
+
+  // Link for removing the marker
+  var p2 = document.createElement("p");
+  var small2 = document.createElement("small");
+  small2.appendChild(document.createTextNode("Drag or "));
+  var rlink = document.createElement("a");
+  rlink.setAttribute("href", "javascript:void(0)"); 
+  rlink.appendChild(document.createTextNode("remove this point"));
+  small2.appendChild(rlink);
+  p2.appendChild(small2);
+  html.appendChild(p2);
+
+  var form = document.createElement("form");
+  form.appendChild(html);
+
+  setTimeout(function () {
+    var inputfield = html.childNodes[5];
+    if (inputfield.nodeName == "INPUT") {
+      inputfield.focus();
+    }
+  }, 1000);
+
+  GEvent.addDomListener(rlink, "click", function () {
+    if (me.actual) {
+      me.map_.removeOverlay(me.actual);
+      me.actual = null;
+    }
+  });
+
+  me.opts_ = {avoidHighways: false};
+  GEvent.addDomListener(select, "change", function () {
+    // This option should be 'session consistent'.
+    // So it won't be passed to the function.
+    if (select.options[select.selectedIndex].value == "nohighways") {
+      me.opts_.avoidHighways = true;
+    }
+  });
+
+  GEvent.addDomListener(form, "submit", function (e) {
+    me.getDirs_(null, input.value);
+    if (window.event) {
+      event.returnValue = false;
+    } else if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  });
+  return form;
+};
+
+/**
+ * Removes markers and polylines from the map and resets globals.
+ * @param {String} what Used to decide what to remove
+ * @private
+ */
+ContextMenuControl.prototype.removeOld_ = function (what) {
+  if (what == "here") {
+    for (var i = 0; i < this.heremarks_.length; i++) {
+      this.map_.removeOverlay(this.heremarks_[i]);
+    }
+    this.heremarks_.length = 0;
+  } else {
+    this.map_.closeInfoWindow();
+    this.map_.removeOverlay(this.poly_);
+    for (var j = 0; j < this.dirmarks_.length; j++) {
+      this.map_.removeOverlay(this.dirmarks_[j]);
+    }
+    this.dirmarks_.length = 0;
+    this.letterindex_ = -1;
+    if (this.actual) {
+      this.map_.removeOverlay(this.actual);
+      this.actual = null;
+    }
+  }
+};
+
+/**
+ * Tries to reverse geocode the clicked point and
+ * creates two markers to show 'What's here'.
+ * @private
+ */
+ContextMenuControl.prototype.getReverseGeocode_ = function () {
+  var dec2deg = function (dec) {
+    var sign = (dec > 0) ? "+" : "";
+    var deg = parseInt(dec, 10);
+    dec = Math.abs(dec - deg);
+    var min = parseInt((dec * 60), 10);
+    dec = (dec * 60) % 1;
+    var sec = Math.round(Math.abs(dec * 60) * 100) / 100;
+    return sign + deg + "&deg; " + min + "&prime; " + sec + "&Prime;";
+  };
+  var me = this;
+  if (me.heremarks_.length > 0) {
+    me.removeOld_("here");
+  }
+  var point = me.clickedPoint_;
+  var p_string = point.toUrlValue();
+  var coords = "<div style='width:240px;'>" +
+   "<big>" + p_string + "<\/big>" +
+   "<p style='margin-top:7px;font-size:small;'>" +
+   dec2deg(point.lat()) + ", " + dec2deg(point.lng()) + "<\/p><\/div>";
+  var icon = me.createIcon_("arrow");
+  var arrow_mark = new GMarker(point, {icon: icon, title: p_string });
+  me.heremarks_.push(arrow_mark);
+  me.map_.addOverlay(arrow_mark);
+
+  GEvent.addListener(arrow_mark, "click", function () {
+    arrow_mark.openInfoWindowHtml(coords);
+  });
+
+  var geo = new GClientGeocoder();
+  geo.getLocations(point, function (response) {
+    if (response.Status.code == 200) {
+      var place = response.Placemark[0];
+      var latlng = new GLatLng(place.Point.coordinates[1], place.Point.coordinates[0]);
+      var red_mark = new GMarker(latlng);
+      me.heremarks_.push(red_mark);
+      me.map_.addOverlay(red_mark);
+      var addr = "<div style='width:240px;'>" +
+        "<big>Address:<\/big><p style='margin-top:7px;font-size:small;'>" +
+      place.address + "<\/p><\/div>";
+
+      GEvent.addListener(red_mark, "click", function () {
+        red_mark.openInfoWindowHtml(addr);
+      });
+    } else {
+      // No more error handling needed since the coords are already shown.
+      return;
+    }
+  });
+};

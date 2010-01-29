@@ -165,8 +165,8 @@ ContextMenuControl.prototype.initialize = function (map) {
   GEvent.addListener(map, "dragend", function () {
     me.hideMenu_();
   });
-
-  return mapdiv;
+  // Return a dummy element to keep the API happy
+  return document.createElement("b");
 };
 
 /**
@@ -244,7 +244,6 @@ ContextMenuControl.prototype.createContextMenu_ = function (change) {
     me.menuList.appendChild(me.createListItem_("Center Map here", "center"));
   }
   if (me.options.whatsHere !== false) {
-    me.menuList.appendChild(me.createRuler_());
     me.menuList.appendChild(me.createListItem_("What\'s here?", "here"));
   }
   me.hideMenu_();
