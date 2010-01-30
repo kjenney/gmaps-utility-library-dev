@@ -101,7 +101,7 @@ ContextMenuControl.prototype.initialize = function (map) {
   // Displays our context menu on single right mouse click
   GEvent.addListener(map, "singlerightclick", function (pixelPoint, src, ov) {
    // Right click on a dir marker
-    if (ov != null) {
+    if (ov instanceof GMarker) {
       me.rej_ = ov.getLatLng();
       var d = me.dirmarks_;
       for (var i = 0; i < d.length; i++) {
@@ -220,6 +220,7 @@ ContextMenuControl.prototype.createContextMenu_ = function (change) {
   me.menuList.style.padding = "0px";
   me.menuList.style.width = "21ex";
   me.menuList.style.border = "1px solid #666";
+  me.menuList.style.position = "absolute";
 
   if (me.options.dirsFrom !== false && !change) {
     me.menuList.appendChild(me.createListItem_("Directions from here", "from"));
