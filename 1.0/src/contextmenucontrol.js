@@ -100,24 +100,27 @@ ContextMenuControl.prototype.initialize = function (map) {
 
   // Displays our context menu on single right mouse click
   GEvent.addListener(map, "singlerightclick", function (pixelPoint, src, ov) {
-   // Right click on a dir marker
-    if (ov instanceof GMarker) {
-      me.rej_ = ov.getLatLng();
-      var d = me.dirmarks_;
+   var d = me.dirmarks_;
+   if (d.length > 0) {
+     // Right click on a marker
+     if (ov instanceof GMarker) {
       for (var i = 0; i < d.length; i++) {
-        if (me.rej_.equals(d[i].getLatLng())) {
+        // If it's a dir marker it should be removable
+        if (ov.getLatLng().equals(d[i].getLatLng())) {
+          me.rej_ = ov.getLatLng();
           me.rebuildMenu_("remove");
           break;
         } else {
           me.rebuildMenu_("add");
         }
       }
-    } else if (me.dirmarks_.length > 0) {
+     } else  {
       me.rebuildMenu_("add");
-    } else if (me.menuList.changed) {
-      // Right click on the map after all dir markers were removed
+     } 
+   } else {
       me.rebuildMenu_();
-    }
+   }
+
     me.clickedPoint_ = map.fromContainerPixelToLatLng(pixelPoint);
 
     // Correction of IE bug
@@ -434,11 +437,6 @@ ContextMenuControl.prototype.hideMenu_ = function () {
 ContextMenuControl.prototype.rebuildMenu_ = function (arg) {
   this.map_.getContainer().removeChild(this.menuList);
   this.createContextMenu_(arg);
-  if (arg) {
-    this.menuList.changed = true;
-  } else {
-    this.menuList.changed = false;
-  }
 };
 
 /**
