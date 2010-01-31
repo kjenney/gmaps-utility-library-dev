@@ -1,5 +1,5 @@
 /*
-* ExtInfoWindow Class, v1.0 
+* ExtInfoWindow Class, v1.1 
 *  Copyright (c) 2007, Joe Monahan (http://www.seejoecode.com)
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,7 +46,8 @@ function ExtInfoWindow(marker, windowId, html, opt_opts) {
   this.marker_ = marker;
   this.infoWindowId_ = windowId;
 
-  this.options_ = opt_opts === null ? {} : opt_opts;
+  this.options_ = (typeof opt_opts == 'undefined' || opt_opts === null) ? {} : opt_opts;
+
   this.ajaxUrl_ = this.options_.ajaxUrl == null ? null : this.options_.ajaxUrl;
   this.callback_ = this.options_.ajaxCallback == null ? null : this.options_.ajaxCallback;
   
@@ -217,9 +218,22 @@ ExtInfoWindow.prototype.initialize = function(map) {
     
   }
 
-  var stealEvents = ['mousedown', 'dblclick', 'DOMMouseScroll'];
+
+  // handle events before they get to the map
+  var stealEvents = ['mousedown', 'dblclick', 'DOMMouseScroll', 'onmousewheel'];
   for( i=0; i < stealEvents.length; i++ ){
     GEvent.bindDom(this.container_, stealEvents[i], this, this.onClick_);
+  }
+  
+  // handle mouse wheel scroll for IE/Opera
+  if( (navigator.userAgent.toLowerCase().indexOf('msie') != -1	&& document.all) || 
+					navigator.userAgent.indexOf('Opera') > -1)  {
+    this.container_.attachEvent('onmousewheel', this.onClick_);
+  }
+
+  // handle mouse wheel scroll for safari
+  if ( navigator.userAgent.indexOf('AppleWebKit/') > -1)  {
+    this.container_.onmousewheel = this.onClick_;
   }
 
   GEvent.trigger(this.map_, 'extinfowindowopen');
@@ -249,7 +263,7 @@ ExtInfoWindow.prototype.onClick_ = function(e) {
  * Remove the extInfoWindow container from the map pane. 
  */
 ExtInfoWindow.prototype.remove = function() {
-  if (this.map_.getExtInfoWindow() != null) {
+  if (this.map_.getExtInfoWindow() != null  && this.container_ != null) {
     GEvent.trigger(this.map_, 'extinfowindowbeforeclose');
     
     GEvent.clearInstanceListeners(this.container_);
@@ -478,10 +492,10 @@ ExtInfoWindow.prototype.repositionMap_ = function(){
   if (offsetTop < mapNE.y) {
     panY = mapNE.y - offsetTop;
   } else {
-    //test bottom of screen
+    //test bottom of screen (but don't go past top boundary)
     var offsetBottom = markerPosition.y + this.paddingY_;
     if (offsetBottom >= mapSW.y) {
-      panY = -(offsetBottom - mapSW.y);
+		 panY = Math.max( -(offsetBottom - mapSW.y), mapNE.y - offsetTop);
     }
   }
 
@@ -497,7 +511,7 @@ ExtInfoWindow.prototype.repositionMap_ = function(){
     }
   }
 
-  if (panX != 0 || panY != 0 && this.map_.getExtInfoWindow() != null ) {
+  if ((panX != 0 || panY != 0 ) && this.map_.getExtInfoWindow() != null ) {
       if ((panY < 0 - this.maxPanning_ || panY > this.maxPanning_) && (panX < 0 - this.maxPanning_ || panX > this.maxPanning_)) {
         this.map_.setCenter(this.marker_.getPoint());
       }else {
