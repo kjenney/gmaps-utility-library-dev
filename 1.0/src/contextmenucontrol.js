@@ -101,6 +101,7 @@ ContextMenuControl.prototype.initialize = function (map) {
   // Displays our context menu on single right mouse click
   GEvent.addListener(map, "singlerightclick", function (pixelPoint, src, ov) {
    var d = me.dirmarks_;
+   me.rej_ = null;
    if (d.length > 0) {
      // Right click on a marker
      if (ov instanceof GMarker) {
@@ -108,17 +109,19 @@ ContextMenuControl.prototype.initialize = function (map) {
         // If it's a dir marker it should be removable
         if (ov.getLatLng().equals(d[i].getLatLng())) {
           me.rej_ = ov.getLatLng();
-          me.rebuildMenu_("remove");
           break;
-        } else {
-          me.rebuildMenu_("add");
         }
+      }
+      if (me.rej_) {
+        me.rebuildMenu_("remove");
+      } else {
+       me.rebuildMenu_("add");
       }
      } else  {
       me.rebuildMenu_("add");
-     } 
+     }
    } else {
-      me.rebuildMenu_();
+     me.rebuildMenu_();
    }
 
     me.clickedPoint_ = map.fromContainerPixelToLatLng(pixelPoint);
