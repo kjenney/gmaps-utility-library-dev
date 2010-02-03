@@ -298,8 +298,12 @@ ExtInfoWindow.prototype.redraw = function(force) {
   if (!force || this.container_ == null) return;
   
   //set the content section's height, needed so  browser font resizing does not affect the window's dimensions
-  var contentHeight = this.contentDiv_.offsetHeight;
-  this.contentDiv_.style.height = contentHeight + 'px';
+  // don't include borders in height (if clientHeight is available)
+  if (typeof this.clientHeight != 'undefined')
+    var contentHeight = this.contentDiv_.clientHeight;
+  else
+    var contentHeight = this.contentDiv_.offsetHeight;
+  
   
   this.contentWidth = this.getDimensions_(this.container_).width;
   this.contentDiv_.style.width = this.container_.style.width;
