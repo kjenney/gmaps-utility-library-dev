@@ -333,7 +333,7 @@ ExtInfoWindow.prototype.redraw = function(force) {
   this.wrapperParts.b.h = this.wrapperParts.bl.h;
   this.wrapperParts.br.l = this.wrapperParts.b.w + this.wrapperParts.bl.w;
   this.wrapperParts.br.t = contentHeight + this.wrapperParts.tr.h;
-  this.wrapperParts.beak.l = this.borderSize_ + (this.contentWidth / 2) - (this.wrapperParts.beak.w / 2);
+  this.wrapperParts.beak.l = (this.wrapperParts.l.w + this.wrapperParts.r.w + this.contentWidth) / 2  - (this.wrapperParts.beak.w / 2);
   this.wrapperParts.beak.t = this.wrapperParts.bl.t + this.wrapperParts.bl.h - this.borderSize_;
   this.wrapperParts.close.l = this.wrapperParts.tr.l +this.wrapperParts.tr.w - this.wrapperParts.close.w - this.borderSize_;
   this.wrapperParts.close.t = this.borderSize_;
@@ -384,6 +384,7 @@ ExtInfoWindow.prototype.redraw = function(force) {
   var markerIcon = this.marker_.getIcon();
   this.container_.style.left = (pixelLocation.x 
     - (this.contentWidth / 2) 
+    - this.wrapperParts.l.w
     - markerIcon.iconAnchor.x 
     + markerIcon.infoWindowAnchor.x
   ) + 'px';

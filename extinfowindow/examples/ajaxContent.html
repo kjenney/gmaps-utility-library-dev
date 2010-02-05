@@ -43,8 +43,6 @@
 
           //marker with ext info window with a red skin and ajax content
           var redIcon1 = new GIcon(G_DEFAULT_ICON);
-          //redIcon1.iconAnchor = new GPoint(0, 0);
-          redIcon1.infoWindowAnchor = new GPoint(10, 0 );
 
           marker = new GMarker( new GLatLng(36, -100), redIcon1);
           GEvent.addListener(marker, 'click', function(){ 

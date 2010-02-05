@@ -41,6 +41,8 @@
           //marker with ext info window with a red skin
           var redIcon1 = new GIcon(G_DEFAULT_ICON);
           redIcon1.image = "http://gmaps-samples.googlecode.com/svn/trunk/markers/red/marker1.png";
+          redIcon1.infoWindowAnchor = new GPoint(15, 0);
+
           marker = new GMarker( new GLatLng(42, -120), redIcon1);
           GEvent.addListener(marker, 'click', function(){ 
             marker.openExtInfoWindow(
