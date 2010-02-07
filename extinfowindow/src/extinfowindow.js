@@ -40,6 +40,14 @@
  *    {Number} maxPanning The maximum panning distance when the marker is not 
  *                    in screen. This is used to make sure the map will not pan to
  *                     much when opening a marker outside the viewport
+ *    {Boolean} noCloseOnClick Indicates whether or not the info window should
+ *    					close for a click on the map that was not on a marker.
+ *    					If set to true, the info window will not close when the 
+ *    					map is clicked. The default value is false. 
+ *
+ *
+ *
+ *
  */
 function ExtInfoWindow(marker, windowId, html, opt_opts) {
   this.html_ = html;
@@ -60,6 +68,8 @@ function ExtInfoWindow(marker, windowId, html, opt_opts) {
   this.paddingY_ = this.options_.paddingY == null ? 0 + this.borderSize_ : this.options_.paddingY + this.borderSize_;
   
   this.maxPanning_ = this.options_.maxPanning == null ? 500 : this.options_.maxPanning;
+
+  this.maxPanning_ = this.options_.noCloseOnClick == null ? false : this.options_.noCloseOnClick;
 
   this.map_ = null;
 
@@ -461,6 +471,14 @@ ExtInfoWindow.prototype.resize = function(){
   this.repositionMap_();
 };
 
+
+/**
+ * Get the options properties for this ExtInfoWindow
+ */
+ExtInfoWindow.prototype.getOptions = function() {
+	return this.options_;
+}
+
 /**
  * Check to see if the displayed extInfoWindow is positioned off the viewable 
  * map region and by how much.  Use that information to pan the map so that 
@@ -689,7 +707,7 @@ GMarker.prototype.openExtInfoWindow = function(map, cssId, html, opt_opts) {
       //listen for map click, close ExtInfoWindow if open
       map.ClickListener_ = GEvent.addListener(map, 'click',
       function(event) {
-          if( !event && map.getExtInfoWindow() != null ){
+          if( !event && map.getExtInfoWindow() != null && !map.getExtInfoWindow().getOptions().noCloseOnClick){
             map.closeExtInfoWindow();
           }
         }
