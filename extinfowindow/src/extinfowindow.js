@@ -84,6 +84,9 @@ function ExtInfoWindow(marker, windowId, html, opt_opts) {
   this.contentDiv_.style.visibility = 'hidden';
 
   this.wrapperDiv_ = document.createElement('div');
+
+  this.isRepositioning = false;
+  this.triggerWindowOpenEvent = false;
 };
 
 //use the GOverlay class
@@ -246,10 +249,12 @@ ExtInfoWindow.prototype.initialize = function(map) {
     this.container_.onmousewheel = this.onClick_;
   }
 
-  GEvent.trigger(this.map_, 'extinfowindowopen');
+  this.triggerWindowOpenEvent = true;
+
   if (this.ajaxUrl_ != null ) {
     this.ajaxRequest_(this.ajaxUrl_);
   }
+  
 };
 
 /**
@@ -411,8 +416,14 @@ ExtInfoWindow.prototype.redraw = function(force) {
 
   this.container_.style.display = 'block';
 
-  if(this.map_.getExtInfoWindow() != null) {
+  if (this.triggerWindowOpenEvent) {
+    GEvent.trigger(this.map_, 'extinfowindowopen');
+  }
+
+  if(this.map_.getExtInfoWindow() != null && !this.isRepositioning) {
+    this.isRepositioning = true; // stop infinite recursion
     this.repositionMap_();
+    this.isRepositioning = false;
   }
 };
 
