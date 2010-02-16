@@ -835,7 +835,7 @@ SVLocation.prototype.latlng = function () {
 };
 
 /**
- * Find the distance in metres between this location and another position
+ * Find the distance in metres between this location and some position (a GLatLng)
  *
  * @param {GLatLng} position The other position
  * @returns {number} The distance in metres
