@@ -69,7 +69,7 @@ function ExtInfoWindow(marker, windowId, html, opt_opts) {
   
   this.maxPanning_ = this.options_.maxPanning == null ? 500 : this.options_.maxPanning;
 
-  this.maxPanning_ = this.options_.noCloseOnClick == null ? false : this.options_.noCloseOnClick;
+  this.noCloseOnClick_ = this.options_.noCloseOnClick == null ? false : this.options_.noCloseOnClick;
 
   this.map_ = null;
 
