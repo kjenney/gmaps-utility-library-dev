@@ -175,7 +175,6 @@ ExtInfoWindow.prototype.initialize = function(map) {
   
   if( this.maximizeEnabled_ ){
     this.minWidth_ = this.getDimensions_(this.container_).width;
-    console.log(this.minWidth_);
   }
   
   if (this.maximizeEnabled_) {
@@ -394,7 +393,7 @@ ExtInfoWindow.prototype.redraw = function(force) {
   
   
   //position the container on the map, over the marker
-  var pixelLocation = this.map_.fromLatLngToDivPixel(this.marker_.getPoint());
+  var pixelLocation = this.map_.fromLatLngToDivPixel(this.marker_.getLatLng());
   this.container_.style.position = 'absolute';
   var markerIcon = this.marker_.getIcon();
   this.container_.style.left = (pixelLocation.x 
@@ -498,15 +497,20 @@ ExtInfoWindow.prototype.getOptions = function() {
  */
 ExtInfoWindow.prototype.repositionMap_ = function(){
   //pan if necessary so it shows on the screen
-  var mapNE = this.map_.fromLatLngToDivPixel(
-    this.map_.getBounds().getNorthEast()
-  );
-  var mapSW = this.map_.fromLatLngToDivPixel(
-    this.map_.getBounds().getSouthWest()
-  );
+  
+  // figure out where map is inside draggable map div
+  var mapPoint = this.map_.fromLatLngToContainerPixel(this.map_.getCenter());
+  var divPoint = this.map_.fromLatLngToDivPixel(this.map_.getCenter());
+  var mapPosition = new GPoint(divPoint.x - mapPoint.x, divPoint.y- mapPoint.y);
+
+  // figure out SW and NE pixels
+  var mapSize = this.map_.getSize();
+  var mapSW = new GPoint(mapPosition.x,  mapPosition.y+mapSize.height);
+  var mapNE = new GPoint(mapPosition.x+mapSize.width,  mapPosition.y);
+
   var markerPosition = this.map_.fromLatLngToDivPixel(
     this.marker_.getPoint()
-  );
+   );
 
   var panX = 0;
   var panY = 0;
@@ -521,6 +525,7 @@ ExtInfoWindow.prototype.repositionMap_ = function(){
   var windowB = this.wrapperParts.b.domElement;
   var windowR = this.wrapperParts.r.domElement;
   var windowBeak = this.wrapperParts.beak.domElement;
+
 
   var offsetTop = markerPosition.y - ( -infoWindowAnchor.y + iconAnchor.y +  this.getDimensions_(windowBeak).height + this.getDimensions_(windowB).height + this.getDimensions_(windowL).height + this.getDimensions_(windowT).height + this.paddingY_);
   if (offsetTop < mapNE.y) {
