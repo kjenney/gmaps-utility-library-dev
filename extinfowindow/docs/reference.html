@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>ExtInfoWindow v1.1 Reference</title>
+    <title>ExtInfoWindow v1.2 Reference</title>
     <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
     <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
   </head>
@@ -14,7 +14,7 @@ This class lets you add an info window to the map which mimics
     Additionally it has options to pull in HTML content from an ajax request,
     triggered when a user clicks on the associated marker.</p>
     
-      <h2><a name="ExtInfoWindow"></a>namespace ExtInfoWindow</h2>
+      <h2><a name="ExtInfoWindow"></a>class ExtInfoWindow</h2>
       <p>
 This class is used to create a custom info window that will mimic the
     behavior of the standard <code>GInfoWindow</code>.  Additionally this class
@@ -22,7 +22,7 @@ This class is used to create a custom info window that will mimic the
     and even asynchronously pull content from a supplied url in the
     constructor options, giving the user a more control over every aspect of
     the <code>GInfoWindow</code>.  <code><a href="reference.html#ExtInfoWindow">ExtInfoWindow</a></code> has no constructor. It is
-    created by <code>GMarker.openExtInfoWindow</code>.</p>
+    created by <code>GMarker.openExtInfoWindow</code> and <code>GMap2.openExtInfoWindow</code>.</p>
       
         <h3>Methods</h3>
         <table summary="namespace ExtInfoWindow - Methods" width="90%">
@@ -184,7 +184,20 @@ This class is used to create a custom info window that will mimic the
                 <td>Returns the instance <code><a href="reference.html#ExtInfoWindow">ExtInfoWindow</a></code> currently open on the map, or
     <code>null</code> if none exists.</td>
               </tr>
-            
+              <tr class="odd">
+                <td><code>openExtInfoWindow(point, cssId, html, opt_opts?)</code></td>
+                
+                  
+                    <td><code>ExtInfoWindow</code></td>
+                  
+                
+                <td>
+					 
+					 
+					 Opens an <a href="reference.html#ExtInfoWindow">ExtInfoWindow</a> at the given point. Pans the map such that the opened info window is fully visible. The content of the info window is given as a string that contains HTML text.
+					 
+				</td>
+              </tr>           
           </tbody>
         </table>
       
@@ -286,7 +299,7 @@ This class is used to create a custom info window that will mimic the
                 
                 <td>Opens the <code><a href="reference.html#ExtInfoWindow">ExtInfoWindow</a></code> over the icon of the marker. The content of
     the info window is given as a string that contains HTML text.
-    Additionally, if an optional ajax url is passed, process that request to
+    Additionally, if an optional ajaxUrl is passed (as one of the options), process that request to
     get the new contents of info window.</td>
               </tr>
             

@@ -1,5 +1,5 @@
 /*
-* ExtInfoWindow Class, v1.1 
+* ExtInfoWindow Class, v1.2
 *  Copyright (c) 2007, Joe Monahan (http://www.seejoecode.com)
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -498,7 +498,7 @@ ExtInfoWindow.prototype.getOptions = function() {
 ExtInfoWindow.prototype.repositionMap_ = function(){
   //pan if necessary so it shows on the screen
   
-  // figure out where map is inside draggable map div
+  // figure out where viewport is inside draggable map div
   var mapPoint = this.map_.fromLatLngToContainerPixel(this.map_.getCenter());
   var divPoint = this.map_.fromLatLngToDivPixel(this.map_.getCenter());
   var mapPosition = new GPoint(divPoint.x - mapPoint.x, divPoint.y- mapPoint.y);
@@ -683,7 +683,7 @@ GMap.prototype.InfoWindowListener_ = null;
  * Creates a new instance of ExtInfoWindow for the GMarker.  Register the newly created 
  * instance with the map, ensuring only one window is open at a time. If this is the first
  * ExtInfoWindow ever opened, add event listeners to the map to close the ExtInfoWindow on 
- * zoom and click, to mimic the default GInfoWindow behavior.
+ * click, to mimic the default GInfoWindow behavior.
  *
  * @param {GMap} map The GMap2 object where the ExtInfoWindow will open
  * @param {String} cssId The id we will use to reference the info window
@@ -697,6 +697,11 @@ GMap.prototype.InfoWindowListener_ = null;
  *    {Number} beakOffset The repositioning offset for when aligning the beak element. 
  *                    This is used to make sure the beak lines up correcting if the 
  *                    info window styling containers a border.
+ *    {Boolean} noCloseOnClick Indicates whether or not the info window should
+ *    					close for a click on the map that was not on a marker.
+ *    					If set to true, the info window will not close when the 
+ *    					map is clicked. The default value is false. 
+ *
  */
 GMarker.prototype.openExtInfoWindow = function(map, cssId, html, opt_opts) {
   if (map == null) {
@@ -742,6 +747,94 @@ GMarker.prototype.openExtInfoWindow = function(map, cssId, html, opt_opts) {
     map.addOverlay(map.getExtInfoWindow());
   }
 };
+/**
+ * Creates a new instance of ExtInfoWindow.  Register the newly created 
+ * instance with the map, ensuring only one window is open at a time. If this is the first
+ * ExtInfoWindow ever opened, add event listeners to the map to close the ExtInfoWindow on 
+ * click to mimic the default GInfoWindow behavior.
+ *
+ * @param {GMap} map The GMap2 object where the ExtInfoWindow will open
+ * @param {String} cssId The id we will use to reference the info window
+ * @param {String} html The HTML contents
+ * @param {Object} opt_opts A contianer for optional arguments:
+ *    {String} ajaxUrl The Url to hit on the server to request some contents 
+ *    {Number} paddingX The padding size in pixels that the info window will leave on 
+ *                    the left and right sides of the map when panning is involved.
+ *    {Number} paddingX The padding size in pixels that the info window will leave on 
+ *                    the top and bottom sides of the map when panning is involved.
+ *    {Number} beakOffset The repositioning offset for when aligning the beak element. 
+ *                    This is used to make sure the beak lines up correcting if the 
+ *                    info window styling containers a border.
+ *    {Boolean} noCloseOnClick Indicates whether or not the info window should
+ *    					close for a click on the map that was not on a marker.
+ *    					If set to true, the info window will not close when the 
+ *    					map is clicked. The default value is false. 
+ *
+ */
+GMap2.prototype.openExtInfoWindow = function(point, cssId, html, opt_opts){
+	if (point == null) {
+		throw 'Error in GMap2.openExtInfoWindow: point cannot be null';
+		return false;
+	}
+	if (cssId == null || cssId == '') {
+		throw 'Error in GMap2.openExtInfoWindow: must specify a cssId';
+		return false;
+	}
+	
+	this.closeInfoWindow();
+	if (this.getExtInfoWindow() != null) {
+		this.closeExtInfoWindow();
+	}
+	if (this.getExtInfoWindow() == null) {
+		
+		var icon =  new GIcon(G_DEFAULT_ICON);
+		
+		icon.iconSize = new GSize(0, 0);
+		icon.shadowSize = new GSize(0, 0);
+		icon.iconAnchor = new GPoint(0, 0);
+		icon.infoWindowAnchor = new GPoint(0,0);
+		
+		var marker = new GMarker(
+			point,
+			{hide:true, icon: icon}
+		);
+		
+		this.addOverlay(marker);
+		
+		this.setExtInfoWindow_( new ExtInfoWindow(
+				marker,
+				cssId,
+				html,
+				opt_opts
+			)
+		);
+		if (this.ClickListener_ == null) {
+			//listen for map click, close ExtInfoWindow if open
+			this.ClickListener_ = GEvent.addListener(this, 'click',
+				function(event) {
+					if( !event && this.getExtInfoWindow() != null && !map.getExtInfoWindow().getOptions().noCloseOnClick){
+						this.closeExtInfoWindow();
+						this.removeOverlay(marker);
+					}
+				}
+			);
+		}
+		if (this.InfoWindowListener_ == null) {
+			//listen for default info window open, close ExtInfoWindow if open
+			this.InfoWindowListener_ = GEvent.addListener(this, 'infowindowopen', 
+				function(event) {
+					if (this.getExtInfoWindow() != null) {
+						this.closeExtInfoWindow();
+						this.removeOverlay(marker);
+					}
+				}
+			);
+		}
+		this.addOverlay(this.getExtInfoWindow());
+	}
+};
+
+
 
 /**
  * Remove the ExtInfoWindow instance
