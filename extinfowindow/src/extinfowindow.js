@@ -487,7 +487,7 @@ ExtInfoWindow.prototype.resize = function(){
  */
 ExtInfoWindow.prototype.getOptions = function() {
 	return this.options_;
-}
+};
 
 /**
  * Check to see if the displayed extInfoWindow is positioned off the viewable 
