@@ -290,6 +290,10 @@ ExtInfoWindow.prototype.remove = function() {
     this.container_ = null;
     GEvent.trigger(this.map_, 'extinfowindowclose');
     this.map_.setExtInfoWindow_(null);
+
+	 if (this.options_.removeMarkerOnClose_) {
+		this.map_.removeOverlay(this.marker_);
+	 }
   }
 };
 
@@ -799,6 +803,12 @@ GMap2.prototype.openExtInfoWindow = function(point, cssId, html, opt_opts){
 			{hide:true, icon: icon}
 		);
 		
+		if (typeof opt_opts == 'undefined') {
+			opt_opts = {};
+		}
+
+		opt_opts.removeMarkerOnClose_ = true;
+
 		this.addOverlay(marker);
 		
 		this.setExtInfoWindow_( new ExtInfoWindow(
@@ -814,7 +824,6 @@ GMap2.prototype.openExtInfoWindow = function(point, cssId, html, opt_opts){
 				function(event) {
 					if( !event && this.getExtInfoWindow() != null && !map.getExtInfoWindow().getOptions().noCloseOnClick){
 						this.closeExtInfoWindow();
-						this.removeOverlay(marker);
 					}
 				}
 			);
@@ -825,7 +834,6 @@ GMap2.prototype.openExtInfoWindow = function(point, cssId, html, opt_opts){
 				function(event) {
 					if (this.getExtInfoWindow() != null) {
 						this.closeExtInfoWindow();
-						this.removeOverlay(marker);
 					}
 				}
 			);
