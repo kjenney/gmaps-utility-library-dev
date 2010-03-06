@@ -421,6 +421,7 @@ ExtInfoWindow.prototype.redraw = function(force) {
 
   if (this.triggerWindowOpenEvent) {
     GEvent.trigger(this.map_, 'extinfowindowopen');
+    this.triggerWindowOpenEvent = false;
   }
 
   if(this.map_.getExtInfoWindow() != null && !this.isRepositioning) {
@@ -800,7 +801,7 @@ GMap2.prototype.openExtInfoWindow = function(point, cssId, html, opt_opts){
 		
 		var marker = new GMarker(
 			point,
-			{hide:true, icon: icon}
+			{hide:true, icon: icon, clickable:false}
 		);
 		
 		if (typeof opt_opts == 'undefined') {
