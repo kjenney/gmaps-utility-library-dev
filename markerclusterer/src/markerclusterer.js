@@ -100,6 +100,15 @@ function MarkerClusterer(map, opt_markers, opt_opts) {
   var mcfn_ = null;
   var zoomOnClick_ = true;
 
+  // Support for lazy loading setups:
+  if (ClusterMarker_.instanceOfGOverlay !== true) {
+    var prot = ClusterMarker_.prototype; 
+    ClusterMarker_.prototype = new GOverlay(); 
+    for (var p in prot)
+      ClusterMarker_.prototype[p] = prot[p];
+    ClusterMarker_.instanceOfGOverlay = true; 
+  }
+
   // default calculator function
   var calculator_ = function (markers) {
     var index = 0;
@@ -746,20 +755,10 @@ function ClusterMarker_(latlng, sums, styles, padding, cluster) {
   this.cluster_ = cluster;
 }
 
-
-/**
- * Support for lazy loading setups:
- * 
- * Use this code after Google Maps is innitialized before creating a new MarkerClusterer:
- *
- * var prot = ClusterMarker_.prototype; 
- * ClusterMarker_.prototype = new GOverlay(); 
- * for (var p in prot) {
- *   ClusterMarker_.prototype[p] = prot[p];
- * }
- */
-ClusterMarker_.prototype = typeof window['GOverlay'] === 'function' ? new GOverlay() : new Object();
-
+if (typeof window['GOverlay'] === 'function') {
+  ClusterMarker_.prototype = new GOverlay();
+  ClusterMarker_.instanceOfGOverlay = true; 
+}
 
 /**
  * Populates style dependant fields given a particular style.
