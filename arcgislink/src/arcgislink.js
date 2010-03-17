@@ -1173,12 +1173,20 @@
       central_meridian: 0,
       unit: 1
     });
+    var WEB_MERCATOR_AUX = new ArcGISSphereMercator({
+      wkid: 102100,
+      semi_major: 6378137.0,
+      central_meridian: 0,
+      unit: 1
+    });
+	
     
     // declared early but assign here to avoid dependency error by jslint
     ArcGISSpatialReferences = {
       '4326': WGS84,
       '4269': NAD83,
-      '102113': WEB_MERCATOR
+      '102113': WEB_MERCATOR,
+      '102100': WEB_MERCATOR_AUX
     };
     /**
      * Add A Spatial Reference to the collection of Spatial References.
