@@ -3,7 +3,37 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
         <title>Map Click</title>
-        
+        <style type="text/css">
+            .ags-infowindow
+            {
+                background-color: #99CCFF;
+            }
+            .ags-layername
+            {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 12pt;
+                color: #0000FF;
+                font-weight: bold;
+            }
+            .ags-fieldvalue
+            {
+                color: #008080;
+                font-style: italic;
+            }
+            .ags-fieldname
+            {
+                font-weight: bold;
+            }
+            .ags-row-odd
+            {
+                background-color: #CCFFFF;
+            }
+            .ags-row-even
+            {
+                background-color: #FFFFCC;
+            }
+        </style>
+
         <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxQGj0PqsCtxKvarsoS-iqLdqZSKfxRdmoPmGl7Y9335WLC36wIGYa6o5Q" type="text/javascript">
         </script>
         <script type="text/javascript">
@@ -12,7 +42,7 @@
         <script type="text/javascript">
         var map;
         function init(){
-          var url = 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Portland/Portland_ESRI_Neighborhoods_AGO/MapServer';//Portland_ESRI_LandBase_AGO
+            var url = 'http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Portland/Portland_ESRI_Neighborhoods_AGO/MapServer'; //Portland_ESRI_LandBase_AGO
           var agsType = new ArcGISMapType([new ArcGISTileLayer(url)]);
           GEvent.addListener(agsType,'load', function(){
             map = new GMap2(document.getElementById("map"), {
@@ -31,7 +61,7 @@
         }
         </script>
     </head>
-    <body onload="init()" class="identify-fieldValue">
+    <body onload="init()" >
        <a href='../docs/examples.html'>More examples</a> | Use
        <a href='?packed'>Packed </a> | 
        <a href='?'> Unpacked</a> Version of the script.
@@ -42,5 +72,12 @@ Any place on the map can be clicked to retrieve information on that location. </
        <button onclick='map.disableArcGISClick()'>Disable MapClick</button>
         <div id="map" style="width:700px; height:600px; border:1px solid #000;">
         </div>
+    <div class="ags-infowindow" ><div><table><tbody><tr>
+        <td class="ags-layername">AGOL_Neighborhoods_WGS84</td></tr><tr><td><table><tbody>
+            <tr class="ags-row-even" ><td class="ags-fieldname">OBJECTID_1</td><td class="ags-fieldvalue">5</td></tr>
+            <tr class="ags-row-odd"><td class="ags-fieldname">Shape</td><td class="ags-fieldvalue">Polygon</td></tr><tr class="ags-row-even"><td class="ags-fieldname">OBJECTID</td><td class="ags-fieldvalue">53</td></tr><tr class="ags-row-odd"><td class="ags-fieldname">AREA</td>
+            <td class="ags-fieldvalue" >342079749.059</td></tr><tr class="ags-row-even"><td class="ags-fieldname">NAME</td><td class="ags-fieldvalue">FOREST PARK</td></tr><tr class="ags-row-odd"><td class="ags-fieldname">Shape_Leng</td><td class="ags-fieldvalue">188903.450626</td></tr><tr class="ags-row-even">
+            <td class="ags-fieldname" >RuleID</td><td class="ags-fieldvalue">98</td></tr><tr class="ags-row-odd"><td class="ags-fieldname">Shape_Length</td><td class="ags-fieldvalue">0.634771</td></tr><tr class="ags-row-even"><td class="ags-fieldname">Shape_Area</td><td class="ags-fieldvalue">0.003663</td></tr></tbody></table></td></tr></tbody></table></div></div>
     </body>
+    
 </html>
