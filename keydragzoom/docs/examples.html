@@ -63,7 +63,7 @@ the zoom box is half transparent with yellow with a 3 pixel thick blue border</p
                 }
           });
         }
-    </pre>
+</pre>
 
 <p>
 <a href="../examples/stylebox.html">View example </a> |
@@ -83,13 +83,38 @@ In the following example, you can drag zoom by hold the CTRL key</p>
             key: 'ctrl'
           });
         }
-    </pre>
+</pre>
 
 <p>
 <a href="../examples/ctrlkey.html">View example </a> |
 <a href="../examples/ctrlkey.html?packed">Packed </a> |
 </p>
 </div>
+
+<div><h2><span lang="en-us">Visual Drag Zoom Control</span></h2> 
+<p>You can also use a visible control to turn the drag zoom on and off. In this
+example it is placed below the zoom control.</p>
+
+<pre class="prettyprint">
+        function init(){
+          var map = new GMap2(document.getElementById("map"));
+          map.setCenter(new GLatLng(45.5, -122.7), 14);
+          //...
+          map.enableKeyDragZoom({
+            imagePosn: new GSize(27, 285),
+            imageOn: "dragzoom-on.png",
+            imageOff: "dragzoom-off.png",
+            imageHot: "dragzoom-hot.png"
+          });
+        }
+</pre>
+
+<p>
+<a href="../examples/visual.html">View example </a> |
+<a href="../examples/visual.html?packed">Packed </a> |
+</p>
+</div>
+
 <div><h2><span lang="en-us">Multiple Map</span></h2> 
 <p>Each map has its own drag zoom tool.</p>
 

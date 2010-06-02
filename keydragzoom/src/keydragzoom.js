@@ -1,11 +1,12 @@
 /**
  * @name Key Drag Zoom
- * @version 1.0.4
+ * @version 1.1
  * @author: Nianwei Liu [nianwei at gmail dot com] & Gary Little [gary at luxcentral dot com]
  * @fileoverview This library adds a drag zoom capability to a Google map.
  *  When drag zoom is enabled, holding down a user-defined hot key <code>(shift | ctrl | alt)</code>
- *  while dragging a box around an area of interest will zoom the map
- *  to that area when the hot key is released. 
+ *  while dragging a box around an area of interest will zoom the map to that area when
+ *  the hot key is released. Optionally, a visual control can also be used to turn the
+ *  drag zoom on and off.
  *  Only one line of code is needed: <code>GMap2.enableKeyDragZoom();</code>
  *  <p>
  *  Note that if the map's container has a border around it, the border widths must be specified
@@ -90,7 +91,6 @@
     bw.right = parseInt(h.style["border-right-width"], 10) || 0;
     return bw;
   };
-
   /**
    * Get the position of the mouse relative to the document.
    * @param {Object} e  Mouse event
@@ -113,7 +113,6 @@
       top: posY
     };
   };
-
   /**
    * Get the position of an HTML element relative to the document.
    * @param {Object} h  HTML element
@@ -177,12 +176,18 @@
    * @name KeyDragZoomOptions
    * @class This class represents the optional parameter passed into <code>GMap2.enableDragBoxZoom</code>.
    * @property {String} [key] the hot key to hold down to activate a drag zoom, <code>shift | ctrl | alt</code>.
-   * The default is <code>shift</code>.
+   *  The default is <code>shift</code>.
    * @property {Object} [boxStyle] the css style of the zoom box.
-   * The default is <code>{border: 'thin solid #FF0000'}</code>.
+   *  The default is <code>{border: 'thin solid #FF0000'}</code>.
    * Border widths must be specified in pixel units (or as thin, medium, or thick).
    * @property {Object} [paneStyle] the css style of the pane which overlays the map when a drag zoom is activated.
-   * The default is <code>{backgroundColor: 'white', opacity: 0.0, cursor: 'crosshair'}</code>.
+   *  The default is <code>{backgroundColor: 'white', opacity: 0.0, cursor: 'crosshair'}</code>.
+   * @property {Size} [imagePosn] the position (relative to top left) of the visual control.
+   *  The default is <code>null</code> (i.e., don't use a visual control). Google puts its
+   *  standard <code>maps.google.com</code> zoom control at (27, 285).
+   * @property {String} [imageOn] the URL of the picture to show when drag zoom is on.
+   * @property {String} [imageOff] the URL of the picture to show when drag zoom is off.
+   * @property {String} [imageHot] the URL of the picture to show when the mouse is over the drag zoom control.
    */
   /**
    * @name DragZoom
@@ -193,6 +198,7 @@
    * @param {KeyDragZoomOptions} opt_zoomOpts
    */
   function DragZoom(map, opt_zoomOpts) {
+    var me = this;
     this.map_ = map;
     opt_zoomOpts = opt_zoomOpts || {};
     this.key_ = opt_zoomOpts.key || 'shift';
@@ -202,6 +208,38 @@
     this.paneDiv_.onselectstart = function () {
       return false;
     };
+    this.imagePosn_ = opt_zoomOpts.imagePosn || null;
+    this.imageOn_ = opt_zoomOpts.imageOn;
+    this.imageOff_ = opt_zoomOpts.imageOff;
+    this.imageHot_ = opt_zoomOpts.imageHot;
+    if (this.imagePosn_ !== null) {
+      this.buttonImg_ = document.createElement("img");
+      this.buttonImg_.src = this.imageOff_;
+      this.buttonImg_.onclick = function () {
+        if (!me.isHotKeyDown_()) {
+          me.hotKeyDown_ = !me.hotKeyDown_;
+          me.buttonImg_.src = (me.hotKeyDown_ ? me.imageOn_ : me.imageOff_);
+        }
+      };
+      this.buttonImg_.onmouseover = function () {
+        me.buttonImg_.src = me.imageHot_;
+      };
+      this.buttonImg_.onmouseout = function () {
+        if (me.hotKeyDown_) {
+          me.buttonImg_.src = me.imageOn_;
+        } else {
+          me.buttonImg_.src = me.imageOff_;
+        }
+      };
+      setVals(this.buttonImg_.style, {
+        position: 'absolute',
+        top: this.imagePosn_.height + "px",
+        left: this.imagePosn_.width + "px",
+        zIndex: 102,
+        cursor: 'pointer'
+      });
+    this.map_.getContainer().appendChild(this.buttonImg_);
+    }
     // default style
     setVals(this.paneDiv_.style, {
       backgroundColor: 'white',
@@ -257,7 +295,6 @@
     this.mapPosn_ = getElementPosition(this.map_.getContainer());
     this.mouseDown_ = false;
   }
- 
   /**
    * Returns true if the hot key is being pressed when an event occurs.
    * @param {Event} e
@@ -294,7 +331,6 @@
     }
     return isHot;
   };
-  
   /**
    * Checks if the mouse is on top of the map. The position is captured 
    * in onMouseMove_.
@@ -312,7 +348,6 @@
       return false;
     }
   };
-  
   /**
    * Show or hide the overlay pane, depending on whether the mouse is over the map.
    */
@@ -344,6 +379,11 @@
        * @event
        */
       GEvent.trigger(this, 'activate');
+    }
+    if (this.imagePosn_ !== null) {
+      if (this.hotKeyDown_ && this.buttonImg_.src != this.imageOn_) {
+        this.buttonImg_.src = this.imageOn_;
+      }
     }
   };
   /**
@@ -412,12 +452,12 @@
        * relative to the map container. Note: the event listener is responsible 
        * for converting Pixel to LatLng, if necessary, using
        * <code>GMap2.fromContainerPixelToLatLng</code>.
-       * @name DragZoom#drag 
+       * @name DragZoom#drag
        * @param {GPoint} southwestPixel
        * @param {GPoint} northeastPixel
        * @event
        */
-      GEvent.trigger(this, 'drag', new GPoint(left, top + height), new GPoint(left + width, top)); 
+      GEvent.trigger(this, 'drag', new GPoint(left, top + height), new GPoint(left + width, top));
     } else if (!this.mouseDown_) {
       this.setPaneVisibility_();
     }
@@ -440,6 +480,10 @@
       this.map_.setCenter(bnds.getCenter(), level);
       this.dragging_ = false;
       this.boxDiv_.style.display = 'none';
+      if (!this.isHotKeyDown_()) {
+        this.hotKeyDown_ = false;
+        this.buttonImg_.src = this.imageOff_;
+      }
       /**
        * This event is fired when the drag operation ends. 
        * Note that the event is not fired if the hot key is released before the drag operation ends.
@@ -450,7 +494,6 @@
       GEvent.trigger(this, 'dragend', bnds);
     }
   };
- 
   /**
    * Handle key up.
    * @param {Event} e
@@ -466,10 +509,14 @@
        * @name DragZoom#deactivate 
        * @event
        */
-      GEvent.trigger(this, 'deactivate'); 
+      GEvent.trigger(this, 'deactivate');
+    }
+    if (this.imagePosn_ !== null) {
+      if (this.buttonImg_.src != this.imageOff_) {
+        this.buttonImg_.src = this.imageOff_;
+      }
     }
   };
-  
   /**
    * @name GMap2
    * @class These are new methods added to the Google Maps API's
