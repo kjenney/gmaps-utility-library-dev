@@ -238,7 +238,7 @@
         zIndex: 102,
         cursor: 'pointer'
       });
-    this.map_.getContainer().appendChild(this.buttonImg_);
+      this.map_.getContainer().appendChild(this.buttonImg_);
     }
     // default style
     setVals(this.paneDiv_.style, {
@@ -381,7 +381,7 @@
       GEvent.trigger(this, 'activate');
     }
     if (this.imagePosn_ !== null) {
-      if (this.hotKeyDown_ && this.buttonImg_.src != this.imageOn_) {
+      if (this.hotKeyDown_ && this.buttonImg_.src !== this.imageOn_) {
         this.buttonImg_.src = this.imageOn_;
       }
     }
@@ -512,7 +512,7 @@
       GEvent.trigger(this, 'deactivate');
     }
     if (this.imagePosn_ !== null) {
-      if (this.buttonImg_.src != this.imageOff_) {
+      if (this.buttonImg_.src !== this.imageOff_) {
         this.buttonImg_.src = this.imageOff_;
       }
     }
