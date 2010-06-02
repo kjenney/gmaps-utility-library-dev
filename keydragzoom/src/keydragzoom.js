@@ -1,12 +1,12 @@
 /**
- * @name Key Drag Zoom
+ * @name KeyDragZoom
  * @version 1.1
  * @author: Nianwei Liu [nianwei at gmail dot com] & Gary Little [gary at luxcentral dot com]
- * @fileoverview This library adds a drag zoom capability to a Google map.
+ * @fileoverview This library adds a drag zoom capability to a v2 Google map.
  *  When drag zoom is enabled, holding down a user-defined hot key <code>(shift | ctrl | alt)</code>
- *  while dragging a box around an area of interest will zoom the map to that area when
- *  the hot key is released. Optionally, a visual control can also be used to turn the
- *  drag zoom on and off.
+ *  while dragging a box around an area of interest will zoom the map in to that area when
+ *  the hot key is released. Optionally, a visual control can also be supplied for turning
+ *  the drag zoom on and off.
  *  Only one line of code is needed: <code>GMap2.enableKeyDragZoom();</code>
  *  <p>
  *  Note that if the map's container has a border around it, the border widths must be specified
@@ -191,7 +191,8 @@
    */
   /**
    * @name DragZoom
-   * @class This class represents a drag zoom object for a map. The object is activated by holding down the hot key.
+   * @class This class represents a drag zoom object for a map. The object is activated by holding down the hot key
+   * or by clicking the visual control.
    * This object is created when <code>GMap2.enableKeyDragZoom</code> is called; it cannot be created directly.
    * Use <code>GMap2.getDragZoomObject</code> to gain access to this object in order to attach event listeners.
    * @param {GMap2} map
@@ -218,7 +219,13 @@
       this.buttonImg_.onclick = function () {
         if (!me.isHotKeyDown_()) {
           me.hotKeyDown_ = !me.hotKeyDown_;
-          me.buttonImg_.src = (me.hotKeyDown_ ? me.imageOn_ : me.imageOff_);
+          if (me.hotKeyDown_) {
+            me.buttonImg_.src = me.ImageOn_;
+            GEvent.trigger(me, 'activate');;
+          } else {
+            me.buttonImg_.src = me.ImageOff_;
+            GEvent.trigger(me, 'deactivate');;
+          }
         }
       };
       this.buttonImg_.onmouseover = function () {
@@ -467,6 +474,7 @@
    * @param {Event} e
    */
   DragZoom.prototype.onMouseUp_ = function (e) {
+    var me = this;
     this.mouseDown_ = false;
     if (this.dragging_) {
       var left = Math.min(this.startPt_.x, this.endPt_.x);
@@ -478,12 +486,16 @@
       var bnds = new GLatLngBounds(sw, ne);
       var level = this.map_.getBoundsZoomLevel(bnds);
       this.map_.setCenter(bnds.getCenter(), level);
+      // Redraw box after zoom:
+      var swPt = this.map_.fromLatLngToContainerPixel(sw);
+      var nePt = this.map_.fromLatLngToContainerPixel(ne);
+      this.boxDiv_.style.left = swPt.x + 'px';
+      this.boxDiv_.style.top = nePt.y + 'px';
+      this.boxDiv_.style.width = Math.abs(nePt.x - swPt.x) + 'px';
+      this.boxDiv_.style.height = Math.abs(nePt.y - swPt.y) + 'px';
+      // Hide box asynchronously after 1 second:
+      setTimeout(function () {me.boxDiv_.style.display = 'none';}, 1000);
       this.dragging_ = false;
-      this.boxDiv_.style.display = 'none';
-      if (!this.isHotKeyDown_()) {
-        this.hotKeyDown_ = false;
-        this.buttonImg_.src = this.imageOff_;
-      }
       /**
        * This event is fired when the drag operation ends. 
        * Note that the event is not fired if the hot key is released before the drag operation ends.
@@ -492,6 +504,11 @@
        * @event
        */
       GEvent.trigger(this, 'dragend', bnds);
+      if (!this.isHotKeyDown_()) {
+        this.hotKeyDown_ = false;
+        this.buttonImg_.src = this.imageOff_;
+        GEvent.trigger(this, 'deactivate');
+      }
     }
   };
   /**
@@ -501,11 +518,13 @@
   DragZoom.prototype.onKeyUp_ = function (e) {
     if (this.map_ && this.hotKeyDown_) {
       this.hotKeyDown_ = false;
-      this.dragging_ = false;
-      this.boxDiv_.style.display = 'none';
+      if (this.dragging_) {
+        this.boxDiv_.style.display = 'none';
+      }
       this.paneDiv_.style.display = "none";
+      this.dragging_ = false;
       /**
-       * This event is fired while the user release the key
+       * This event is fired when the user releases the hot key
        * @name DragZoom#deactivate 
        * @event
        */
@@ -525,7 +544,8 @@
    */
   /**
    * Enable drag zoom. The user can zoom to an area of interest by holding down the hot key
-   * <code>(shift | ctrl | alt )</code> while dragging a box around the area. 
+   * <code>(shift | ctrl | alt )</code> while dragging a box around the area or by turning
+   * on the visual control then dragging a box around the area. 
    * @param {KeyDragZoomOptions} opt_zoomOpts
    */
   
