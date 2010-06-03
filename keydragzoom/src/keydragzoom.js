@@ -182,7 +182,7 @@
    * Border widths must be specified in pixel units (or as thin, medium, or thick).
    * @property {Object} [paneStyle] the css style of the pane which overlays the map when a drag zoom is activated.
    *  The default is <code>{backgroundColor: 'white', opacity: 0.0, cursor: 'crosshair'}</code>.
-   * @property {Size} [imagePosn] the position (relative to top left) of the visual control.
+   * @property {Point} [imagePosn] the position (relative to top left) of the visual control.
    *  The default is <code>null</code> (i.e., don't use a visual control). Google puts its
    *  standard <code>maps.google.com</code> zoom control at (27, 285).
    * @property {String} [imageOn] the URL of the picture to show when drag zoom is on.
@@ -240,8 +240,8 @@
       };
       setVals(this.buttonImg_.style, {
         position: 'absolute',
-        top: this.imagePosn_.height + "px",
-        left: this.imagePosn_.width + "px",
+        top: this.imagePosn_.y + "px",
+        left: this.imagePosn_.x + "px",
         zIndex: 102,
         cursor: 'pointer'
       });
