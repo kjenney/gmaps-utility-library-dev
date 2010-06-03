@@ -19,14 +19,18 @@
           map.enableDoubleClickZoom();
           map.enableContinuousZoom();
           map.enableScrollWheelZoom();
-			// simple drag zoom 
-			map.enableKeyDragZoom(
-          
-				{	key: "shift", 
-					boxStyle: {border: "thick dashed black", backgroundColor: "transparent", opacity: 1},
-					paneStyle: { backgroundColor: "gray", opacity: 0.1 }
-				}
-			);
+          // simple drag zoom 
+          map.enableKeyDragZoom(
+            {
+              key: "shift", 
+              boxStyle: {border: "thick dashed black", backgroundColor: "transparent", opacity: 1.0},
+              paneStyle: { backgroundColor: "gray", opacity: 0.25 },
+              imagePosn: new GPoint(27, 285),
+              imageOn: "dragzoom-on.png",
+              imageOff: "dragzoom-off.png",
+              imageHot: "dragzoom-hot.png"
+             }
+          );
           
         }
         </script>

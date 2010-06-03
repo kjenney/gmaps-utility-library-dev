@@ -199,20 +199,52 @@
    * @param {KeyDragZoomOptions} opt_zoomOpts
    */
   function DragZoom(map, opt_zoomOpts) {
+    var i;
     var me = this;
     this.map_ = map;
     opt_zoomOpts = opt_zoomOpts || {};
     this.key_ = opt_zoomOpts.key || 'shift';
     this.key_ = this.key_.toLowerCase();
     this.borderWidths_ = getBorderWidths(this.map_.getContainer());
-    this.paneDiv_ = document.createElement("div");
-    this.paneDiv_.onselectstart = function () {
-      return false;
-    };
+
+    this.veilDiv_ = [];
+    for (i = 0; i < 4; i++) {
+      this.veilDiv_[i] = document.createElement("div");
+      this.veilDiv_[i].onselectstart = function () {
+        return false;
+      };
+      // default style
+      setVals(this.veilDiv_[i].style, {
+        backgroundColor: 'white',
+        opacity: 0.0,
+        cursor: 'crosshair'
+      });
+      // allow overwrite
+      setVals(this.veilDiv_[i].style, opt_zoomOpts.paneStyle);
+      // stuff that cannot be overwritten
+      setVals(this.veilDiv_[i].style, {
+        position: 'absolute',
+        overflow: 'hidden',
+        zIndex: 101,
+        display: 'none'
+      });
+      if (this.key_ === 'shift') { // Workaround for Firefox Shift-Click problem
+        this.veilDiv_[i].style.MozUserSelect = "none";
+      }
+      setOpacity(this.veilDiv_[i]);
+      // An IE fix: if the background is transparent, it cannot capture mousedown events
+      if (this.veilDiv_[i].style.backgroundColor === 'transparent') {
+        this.veilDiv_[i].style.backgroundColor = 'white';
+        setOpacity(this.veilDiv_[i], 0);
+      }
+      this.map_.getContainer().appendChild(this.veilDiv_[i]);
+    }
+
     this.imagePosn_ = opt_zoomOpts.imagePosn || null;
     this.imageOn_ = opt_zoomOpts.imageOn;
     this.imageOff_ = opt_zoomOpts.imageOff;
     this.imageHot_ = opt_zoomOpts.imageHot;
+
     if (this.imagePosn_ !== null) {
       this.buttonImg_ = document.createElement("img");
       this.buttonImg_.src = this.imageOff_;
@@ -220,11 +252,11 @@
         if (!me.isHotKeyDown_()) {
           me.hotKeyDown_ = !me.hotKeyDown_;
           if (me.hotKeyDown_) {
-            me.buttonImg_.src = me.ImageOn_;
-            GEvent.trigger(me, 'activate');;
+            me.buttonImg_.src = me.imageOn_;
+            GEvent.trigger(me, 'activate');
           } else {
-            me.buttonImg_.src = me.ImageOff_;
-            GEvent.trigger(me, 'deactivate');;
+            me.buttonImg_.src = me.imageOff_;
+            GEvent.trigger(me, 'deactivate');
           }
         }
       };
@@ -247,31 +279,7 @@
       });
       this.map_.getContainer().appendChild(this.buttonImg_);
     }
-    // default style
-    setVals(this.paneDiv_.style, {
-      backgroundColor: 'white',
-      opacity: 0.0,
-      cursor: 'crosshair'
-    });
-    // allow overwrite 
-    setVals(this.paneDiv_.style, opt_zoomOpts.paneStyle);
-    // stuff that cannot be overwritten
-    setVals(this.paneDiv_.style, {
-      position: 'absolute',
-      overflow: 'hidden',
-      zIndex: 101,
-      display: 'none'
-    });
-    if (this.key_ === 'shift') { // Workaround for Firefox Shift-Click problem
-      this.paneDiv_.style.MozUserSelect = "none";
-    }
-    setOpacity(this.paneDiv_);
-    // An IE fix: if the background is transparent, it cannot capture mousedown events
-    if (this.paneDiv_.style.backgroundColor === 'transparent') {
-      this.paneDiv_.style.backgroundColor = 'white';
-      setOpacity(this.paneDiv_, 0);
-    }
-    this.map_.getContainer().appendChild(this.paneDiv_);
+
     this.boxDiv_ = document.createElement('div');
     setVals(this.boxDiv_.style, {
       border: 'thin solid #FF0000'
@@ -287,7 +295,7 @@
     this.boxBorderWidths_ = getBorderWidths(this.boxDiv_);
     this.keyDownListener_ = GEvent.bindDom(document, 'keydown',  this, this.onKeyDown_);
     this.keyUpListener_ = GEvent.bindDom(document, 'keyup', this, this.onKeyUp_);
-    this.mouseDownListener_ = GEvent.bindDom(this.paneDiv_, 'mousedown', this, this.onMouseDown_);
+    this.mouseDownListener_ = GEvent.bindDom(this.veilDiv_[0], 'mousedown', this, this.onMouseDown_);
     this.mouseDownListenerDocument_ = GEvent.bindDom(document, 'mousedown', this, this.onMouseDownDocument_);
     this.mouseMoveListener_ = GEvent.bindDom(document, 'mousemove', this, this.onMouseMove_);
     this.mouseUpListener_ = GEvent.bindDom(document, 'mouseup', this, this.onMouseUp_);
@@ -359,17 +367,26 @@
    * Show or hide the overlay pane, depending on whether the mouse is over the map.
    */
   DragZoom.prototype.setPaneVisibility_ = function () {
+    var i;
     if (this.map_ && this.hotKeyDown_ && this.isMouseOnMap_()) {
       var size = this.map_.getSize();
-      this.paneDiv_.style.left = 0 + 'px';
-      this.paneDiv_.style.top = 0 + 'px';
-      this.paneDiv_.style.width = size.width - (this.borderWidths_.left + this.borderWidths_.right) + 'px';
-      this.paneDiv_.style.height = size.height - (this.borderWidths_.top + this.borderWidths_.bottom) + 'px';
-      this.paneDiv_.style.display = 'block';
-      this.boxMaxX_ = parseInt(this.paneDiv_.style.width, 10) - (this.boxBorderWidths_.left + this.boxBorderWidths_.right);
-      this.boxMaxY_ = parseInt(this.paneDiv_.style.height, 10) - (this.boxBorderWidths_.top + this.boxBorderWidths_.bottom);
+      this.veilDiv_[0].style.left = 0 + 'px';
+      this.veilDiv_[0].style.top = 0 + 'px';
+      this.veilDiv_[0].style.width = size.width - (this.borderWidths_.left + this.borderWidths_.right) + 'px';
+      this.veilDiv_[0].style.height = size.height - (this.borderWidths_.top + this.borderWidths_.bottom) + 'px';
+      for (i = 1; i < this.veilDiv_.length; i++) {
+        this.veilDiv_[i].style.width = 0 + 'px';
+        this.veilDiv_[i].style.height = 0 + 'px';
+      }
+      for (i = 0; i < this.veilDiv_.length; i++) {
+        this.veilDiv_[i].style.display = 'block';
+      }
+      this.boxMaxX_ = parseInt(this.veilDiv_[0].style.width, 10) - (this.boxBorderWidths_.left + this.boxBorderWidths_.right);
+      this.boxMaxY_ = parseInt(this.veilDiv_[0].style.height, 10) - (this.boxBorderWidths_.top + this.boxBorderWidths_.bottom);
     } else {
-      this.paneDiv_.style.display = 'none';
+      for (i = 0; i < this.veilDiv_.length; i++) {
+        this.veilDiv_[i].style.display = 'none';
+      }
     }
   };
   /**
@@ -448,6 +465,22 @@
       var top = Math.min(this.startPt_.y, this.endPt_.y);
       var width = Math.abs(this.startPt_.x - this.endPt_.x);
       var height = Math.abs(this.startPt_.y - this.endPt_.y);
+      this.veilDiv_[0].style.top = "0px";
+      this.veilDiv_[0].style.left = "0px";
+      this.veilDiv_[0].style.width = left + "px";
+      this.veilDiv_[0].style.height = (this.map_.getSize().height - (this.borderWidths_.top + this.borderWidths_.bottom)) + "px";
+      this.veilDiv_[1].style.top = "0px";
+      this.veilDiv_[1].style.left = (left + width + this.boxBorderWidths_.left + this.boxBorderWidths_.right) + "px";
+      this.veilDiv_[1].style.width = (this.map_.getSize().width - (left + width) - (this.borderWidths_.left + this.borderWidths_.right) - (this.boxBorderWidths_.left + this.boxBorderWidths_.right)) + "px";
+      this.veilDiv_[1].style.height = (this.map_.getSize().height - (this.borderWidths_.top + this.borderWidths_.bottom)) + "px";
+      this.veilDiv_[2].style.top = "0px";
+      this.veilDiv_[2].style.left = left + "px";
+      this.veilDiv_[2].style.width = (width + this.boxBorderWidths_.left + this.boxBorderWidths_.right) + "px";
+      this.veilDiv_[2].style.height = top + "px";
+      this.veilDiv_[3].style.top = (top + height + this.boxBorderWidths_.top + this.boxBorderWidths_.bottom) + "px";
+      this.veilDiv_[3].style.left = left + "px";
+      this.veilDiv_[3].style.width = (width + this.boxBorderWidths_.left + this.boxBorderWidths_.right) + "px";
+      this.veilDiv_[3].style.height = (this.map_.getSize().height - (this.borderWidths_.top + this.borderWidths_.bottom)- (this.boxBorderWidths_.top + this.boxBorderWidths_.bottom) - (top + height)) + "px";
       this.boxDiv_.style.left = left + 'px';
       this.boxDiv_.style.top = top + 'px';
       this.boxDiv_.style.width = width + 'px';
@@ -516,12 +549,15 @@
    * @param {Event} e
    */
   DragZoom.prototype.onKeyUp_ = function (e) {
+    var i;
     if (this.map_ && this.hotKeyDown_) {
       this.hotKeyDown_ = false;
       if (this.dragging_) {
         this.boxDiv_.style.display = 'none';
       }
-      this.paneDiv_.style.display = "none";
+      for (i = 0; i < 4; i++ ) {
+        this.veilDiv_[i].style.display = "none";
+      }
       this.dragging_ = false;
       /**
        * This event is fired when the user releases the hot key
@@ -556,6 +592,7 @@
    * Disable drag zoom.
    */
   GMap2.prototype.disableKeyDragZoom = function () {
+    var i;
     var d = this.dragZoom_;
     if (d) {
       GEvent.removeListener(d.mouseDownListener_);
@@ -565,7 +602,9 @@
       GEvent.removeListener(d.keyUpListener_);
       GEvent.removeListener(d.keyDownListener_);
       this.getContainer().removeChild(d.boxDiv_);
-      this.getContainer().removeChild(d.paneDiv_);
+      for (i = 0; i < 4; i++) {
+        this.getContainer().removeChild(d.veilDiv_[i]);
+      }
       this.dragZoom_ = null;
     }
   };
