@@ -13,7 +13,7 @@
 <h1><a></a><span lang="en-us">KeyDragZoom</span> Examples</h1>
 </div>
 <div>
-<h2><a name="HowTo"></a>Include Scripts</h2>
+<h2><a name="HowTo"></a>Including Scripts</h2>
 <p>
 The first step is to include <code><span lang="en-us">keydragzoom</span>.js</code> or 
     <code><span lang="en-us">keydragzoom</span>_packed.js</code> 
@@ -24,7 +24,7 @@ in your document header after the Google Maps API v2 has been included. You can 
 </div>
 
 <div><h2><span lang="en-us">Enabling KeyDragZoom</span></h2> 
-<p><span lang="en-us">You simply call <code>GMap2.enableKeyDragZoom()</code> to enable KeyDragZoom, just like you would call <code>GMap2.enableScrollWheelZoom()</code> to enable scrollwheel zooming.</span></p>
+<p><span lang="en-us">You simply call <code>GMap2.enableKeyDragZoom()</code> to enable KeyDragZoom, just as you would call <code>GMap2.enableScrollWheelZoom()</code> to enable scrollwheel zooming.</span></p>
 
 <pre class="prettyprint">
         function init(){
@@ -33,7 +33,7 @@ in your document header after the Google Maps API v2 has been included. You can 
           //...
        <span lang="en-us">   map.enableKeyDragZoom();</span>  
         }
-    </pre>
+</pre>
 
 <p>
 <a href="../examples/dragzoom.html">View example </a> |
@@ -41,9 +41,9 @@ in your document header after the Google Maps API v2 has been included. You can 
 </p>
 </div>
 
-<div><h2><span lang="en-us">Styling the Zoom Box</span></h2> 
-<p>You can pass some css properties when you enable KeyDragZoom. They will be applied to the zoom box. In the following example, 
-the zoom box is half transparent red with a thick dashed black border.</p>
+<div>
+<h2><span lang="en-us">Styling the Zoom Box and the Veil</span></h2> 
+<p>You can pass some css properties when you enable KeyDragZoom. Those associated with <code>boxStyle</code> are applied to the zoom box the user drags across the area of interest and those associated with <code>veilStyle</code> are applied to the veil that covers the map when the hot key is down. In the following example, the zoom box is transparent with a 4-pixel dashed black border and the veil is gray with 25% opacity.</p>
 
 <pre class="prettyprint">
         function init(){
@@ -52,11 +52,11 @@ the zoom box is half transparent red with a thick dashed black border.</p>
           //...
           map.enableKeyDragZoom({
                 boxStyle: {
-                  border: "thick dashed black",
+                  border: "4px dashed black",
                   backgroundColor: "transparent",
                   opacity: 1.0
                 },
-                paneStyle: {
+                veilStyle: {
                   backgroundColor: "gray",
                   opacity: 0.25
                 }
@@ -70,9 +70,10 @@ the zoom box is half transparent red with a thick dashed black border.</p>
 </p>
 </div>
 
-<div><h2><span lang="en-us">Using a Different Hot Key</span></h2> 
-<p>If you do not want to use the SHIFT key as the hot key, you can pass one of the other two keys: ALT or CTRL.
-In the following example, you can start a drag zoom operation by holding down the CTRL key</p>
+<div>
+<h2><span lang="en-us">Using a Different Hot Key</span></h2> 
+<p>If you do not want to use the Shift key as the hot key, you can pass one of the other two keys: Alt or Ctrl.
+In the following example, you can start a drag zoom operation by holding down the Ctrl key.</p>
 
 <pre class="prettyprint">
         function init(){
@@ -91,8 +92,9 @@ In the following example, you can start a drag zoom operation by holding down th
 </p>
 </div>
 
-<div><h2><span lang="en-us">Visual Drag Zoom Control</span></h2> 
-<p>You can also use a visible control to turn KeyDragZoom on and off. Simply supply the position of the control as well as the URLs for the pictures to show when the control in the on, off, and hot states. In this example the control is placed below the zoom control.</p>
+<div>
+<h2><span lang="en-us">Visual Drag Zoom Control</span></h2> 
+<p>You can also use a visible control to turn KeyDragZoom on and off. Simply supply the position of the control as well as the URLs for the pictures to show when the control is in the on, off, and hot states. (The control is hot when the mouse moves over it.) In this example the control is placed below the standard zoom control.</p>
 
 <pre class="prettyprint">
         function init(){
@@ -114,17 +116,18 @@ In the following example, you can start a drag zoom operation by holding down th
 </p>
 </div>
 
-<div><h2><span lang="en-us">Multiple Maps Supported</span></h2> 
-<p>Each map can have its own independent KeyDragZoom tool.</p>
+<div>
+<h2><span lang="en-us">Multiple Maps Supported</span></h2> 
+<p>Each map on the same webpage can have its own independent KeyDragZoom tool.</p>
 
 <pre class="prettyprint">
         function init(){
           var map1 = new GMap2(document.getElementById("map1"));
           map1.enableKeyDragZoom();
-          var map2 = new GMap2(document.getElementById("map1"));
+          var map2 = new GMap2(document.getElementById("map2"));
           map2.enableKeyDragZoom();
         }
-    </pre>
+</pre>
 
 <p>
 <a href="../examples/multimap.html">View example </a> |
@@ -132,23 +135,29 @@ In the following example, you can start a drag zoom operation by holding down th
 </p>
 </div>
 
-<div><h2><span lang="en-us">KeyDragZoom Events</span></h2> 
-<p>The KeyDragZoom tool triggers different events at key moments of the drag zoom operation.</p>
+<div>
+<h2><span lang="en-us">KeyDragZoom Events</span></h2> 
+<p>Different events are triggered at key moments of a drag zoom operation.</p>
 
 <pre class="prettyprint">
        map.enableKeyDragZoom();
-          var dz = map.getDragZoomObject();
-          GEvent.addListener(dz, 'activate', function() {
-            GLog.write('DragZoom Activated');
-          });
-          GEvent.addListener(dz, 'dragstart', function() {
-            GLog.write('DragZoom Started');
-          });
-          GEvent.addListener(dz, 'drag', function() {
-            GLog.write('DragZoom Dragging...');
-          });
-        }
-    </pre>
+       var dz = map.getDragZoomObject();
+       GEvent.addListener(dz, 'activate', function() {
+         GLog.write('KeyDragZoom Activated');
+       });
+       GEvent.addListener(dz, 'deactivate', function() {
+         GLog.write('KeyDragZoom Deactivated');
+       });
+       GEvent.addListener(dz, 'dragstart', function(latlng) {
+         GLog.write('KeyDragZoom Started: ') + latlng;
+       });
+       GEvent.addListener(dz, 'drag', function(startPt, endPt) {
+         GLog.write('KeyDragZoom Dragging: ') + startPt + endPt;
+       });
+       GEvent.addListener(dz, 'dragend', function(bnds) {
+         GLog.write('KeyDragZoom Ended: ') + bnds;
+       });
+</pre>
 
 <p>
 <a href="../examples/events.html">View example </a> |

@@ -9,11 +9,11 @@
   <body>
     <h1>KeyDragZoom</h1>
     <p>
-This library adds a drag zoom capability to a v2 Google map. When drag zoom is enabled, holding down a user-defined hot key <code>(shift | ctrl | alt)</code> while dragging a box around an area of interest will zoom the map in to that area when the hot key is released. Optionally, a visual control can also be supplied for turning the drag zoom on and off. Only one line of code is needed: <code>GMap2.enableKeyDragZoom();</code> <p> Note that if the map's container has a border around it, the border widths must be specified in pixel units (or as thin, medium, or thick). This is required because of an MSIE limitation.</p>
+This library adds a drag zoom capability to a v2 Google map. When drag zoom is enabled, holding down a designated hot key <code>(shift | ctrl | alt)</code> while dragging a box around an area of interest will zoom the map in to that area when the mouse button is released. Optionally, a visual control can also be supplied for turning a drag zoom operation on and off. Only one line of code is needed: <code>GMap2.enableKeyDragZoom();</code> <p> Note that if the map's container has a border around it, the border widths must be specified in pixel units (or as thin, medium, or thick). This is required because of an MSIE limitation.</p>
     <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
     
       <h2><a name="DragZoom"></a>class DragZoom</h2>
-      <p>This class represents a drag zoom object for a map. The object is activated by holding down the hot keyor by clicking the visual control.This object is created when <code>GMap2.enableKeyDragZoom</code> is called; it cannot be created directly.Use <code>GMap2.getDragZoomObject</code> to gain access to this object in order to attach event listeners.</p>
+      <p>This class represents a drag zoom object for a map. The object is activated by holding down the hot keyor by turning on the visual control.This object is created when <code>GMap2.enableKeyDragZoom</code> is called; it cannot be created directly.Use <code>GMap2.getDragZoomObject</code> to gain access to this object in order to attach event listeners.</p>
       
         <h3>Events</h3>
         <table summary="class DragZoom - Events" width="90%">
@@ -46,7 +46,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
                     <td><code>None</code></td>
                   
                 
-                <td>This event is fired when the user releases the hot key</td>
+                <td>This event is fired when the hot key is released.</td>
               </tr>
             
               <tr class="odd">
@@ -56,7 +56,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
                     <td><code><span class="type">southwestPixel:GPoint</span>, <span class="type">northeastPixel:GPoint</span></code></td>
                   
                 
-                <td>This event is repeatedly fired while the user drags the box. The southwest and northeastpoint are passed as parameters of type <code>GPoint</code> (for performance reasons),relative to the map container. Note: the event listener is responsible for converting Pixel to LatLng, if necessary, using<code>GMap2.fromContainerPixelToLatLng</code>.</td>
+                <td>This event is repeatedly fired while the user drags a box across the area of interest.The southwest and northeast point are passed as parameters of type <code>GPoint</code>(for performance reasons), relative to the map container. Note: the event listener is responsible for converting pixel position to geographic coordinates, if necessary, using<code>GMap2.fromContainerPixelToLatLng</code>.</td>
               </tr>
             
               <tr class="even">
@@ -66,7 +66,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
                     <td><code><span class="type">newBounds:GLatLngBounds</span></code></td>
                   
                 
-                <td>This event is fired when the drag operation ends. Note that the event is not fired if the hot key is released before the drag operation ends.</td>
+                <td>This event is fired when the drag operation ends.The parameter passed is the geographic bounds of the selected area.Note that this event is <i>not</i> fired if the hot key is released before the drag operation ends.</td>
               </tr>
             
               <tr class="odd">
@@ -76,7 +76,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
                     <td><code><span class="type">startLatLng:GLatLng</span></code></td>
                   
                 
-                <td>This event is fired when the drag operation begins.</td>
+                <td>This event is fired when the drag operation begins.The parameter passed is the geographic position of the starting point.</td>
               </tr>
             
           </tbody>
@@ -107,7 +107,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
                     <td><code>None</code></td>
                   
                 
-                <td>Disable drag zoom.</td>
+                <td>Disables drag zoom.</td>
               </tr>
             
               <tr class="even">
@@ -117,7 +117,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
                     <td><code>None</code></td>
                   
                 
-                <td>Enable drag zoom. The user can zoom to an area of interest by holding down the hot key<code>(shift | ctrl | alt )</code> while dragging a box around the area or by turningon the visual control then dragging a box around the area.</td>
+                <td>Enables drag zoom. The user can zoom to an area of interest by holding down the hot key<code>(shift | ctrl | alt )</code> while dragging a box around the area or by turningon the visual control then dragging a box around the area.</td>
               </tr>
             
               <tr class="odd">
@@ -137,7 +137,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
                     <td><code>Boolean</code></td>
                   
                 
-                <td>Returns true if the drag zoom feature has been enabled.</td>
+                <td>Returns <code>true</code> if the drag zoom feature has been enabled.</td>
               </tr>
             
           </tbody>
@@ -145,7 +145,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
       
     
       <h2><a name="KeyDragZoomOptions"></a>class KeyDragZoomOptions</h2>
-      <p>This class represents the optional parameter passed into <code>GMap2.enableDragBoxZoom</code>.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
+      <p>This class represents the optional parameter passed into <code>GMap2.enableKeyDragZoom</code>.  There is no constructor for this class.  Instead, this class is instantiated as a javascript object literal.</p>
       
         <h3>Properties</h3>
         <table summary="class KeyDragZoomOptions - Properties" width="90%">
@@ -168,7 +168,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
                     <td><code>Object</code></td>
                   
                 
-                <td>the css style of the zoom box. The default is <code>{border: 'thin solid #FF0000'}</code>.Border widths must be specified in pixel units (or as thin, medium, or thick).</td>
+                <td>The css style of the zoom box. The default is <code>{border: '2px solid #FF0000'}</code>.Border widths must be specified in pixel units (or as thin, medium, or thick).</td>
               </tr>
             
               <tr class="even">
@@ -178,7 +178,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
                     <td><code>String</code></td>
                   
                 
-                <td>the URL of the picture to show when the mouse is over the drag zoom control.</td>
+                <td>The URL of the picture to show when the mouse is over the drag zoom control.</td>
               </tr>
             
               <tr class="odd">
@@ -188,7 +188,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
                     <td><code>String</code></td>
                   
                 
-                <td>the URL of the picture to show when drag zoom is off.</td>
+                <td>The URL of the picture to show when drag zoom is off.</td>
               </tr>
             
               <tr class="even">
@@ -198,7 +198,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
                     <td><code>String</code></td>
                   
                 
-                <td>the URL of the picture to show when drag zoom is on.</td>
+                <td>The URL of the picture to show when drag zoom is on.</td>
               </tr>
             
               <tr class="odd">
@@ -208,7 +208,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
                     <td><code>Point</code></td>
                   
                 
-                <td>the position (relative to top left) of the visual control. The default is <code>null</code> (i.e., don't use a visual control). Google puts its standard <code>maps.google.com</code> zoom control at (27, 285).</td>
+                <td>The position (relative to the top left of the map) of the visual control. The default is <code>null</code> (i.e., don't use a visual control).</td>
               </tr>
             
               <tr class="even">
@@ -218,7 +218,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
                     <td><code>String</code></td>
                   
                 
-                <td>the hot key to hold down to activate a drag zoom, <code>shift | ctrl | alt</code>. The default is <code>shift</code>.</td>
+                <td>The hot key to hold down to activate a drag zoom, <code>shift | ctrl | alt</code>. The default is <code>shift</code>.</td>
               </tr>
             
               <tr class="odd">
@@ -228,7 +228,7 @@ This library adds a drag zoom capability to a v2 Google map. When drag zoom is 
                     <td><code>Object</code></td>
                   
                 
-                <td>the css style of the veil pane which overlays the map when a drag zoom is activated. The previous name for this property was <code>paneStyle</code> but the use of this name is now deprecated. The default is <code>{backgroundColor: 'white', opacity: 0.0, cursor: 'crosshair'}</code>.</td>
+                <td>The css style of the veil pane which covers the map when a drag zoom is activated. The previous name for this property was <code>paneStyle</code> but the use of this name is now deprecated. The default is <code>{backgroundColor: 'white', opacity: 0.0, cursor: 'crosshair'}</code>.</td>
               </tr>
             
           </tbody>

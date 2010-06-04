@@ -31,19 +31,19 @@
 
           var dz = map.getDragZoomObject();
           GEvent.addListener(dz, 'activate', function() {
-            GLog.write('DragZoom Activated');
+            GLog.write('KeyDragZoom Activated');
           });
           GEvent.addListener(dz, 'dragstart', function(latlng) {
-            GLog.write('DragZoom Started: '+latlng);
+            GLog.write('KeyDragZoom Started: ' + latlng);
           });
-          GEvent.addListener(dz, 'drag', function(start, end) {
-            GLog.write('DragZoom Dragging...'+start+end);
+          GEvent.addListener(dz, 'drag', function(startPt, endPt) {
+            GLog.write('KeyDragZoom Dragging: ' + startPt + endPt);
           });
           GEvent.addListener(dz, 'dragend', function(bnds) {
-            GLog.write('DragZoom DragEnd :' +bnds);
+            GLog.write('KeyDragZoom Ended: ' + bnds);
           });
           GEvent.addListener(dz, 'deactivate', function() {
-            GLog.write('DragZoom Deactivated');
+            GLog.write('KeyDragZoom Deactivated');
           });
           
         }
