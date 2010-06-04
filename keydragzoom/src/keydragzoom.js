@@ -256,7 +256,6 @@
           me.hotKeyDown_ = !me.hotKeyDown_;
           if (me.hotKeyDown_) {
             me.buttonImg_.src = me.imageOn_;
-            me.mapPosn_ = getElementPosition(me.map_.getContainer());
             GEvent.trigger(me, 'activate');
           } else {
             me.buttonImg_.src = me.imageOff_;
@@ -533,7 +532,7 @@
       this.boxDiv_.style.width = Math.abs(nePt.x - swPt.x) + 'px';
       this.boxDiv_.style.height = Math.abs(nePt.y - swPt.y) + 'px';
       // Hide box asynchronously after 1 second:
-      setTimeout(function () {me.boxDiv_.style.display = 'none';}, 5000);
+      setTimeout(function () {me.boxDiv_.style.display = 'none';}, 1000);
       this.dragging_ = false;
       /**
        * This event is fired when the drag operation ends. 
