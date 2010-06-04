@@ -180,7 +180,9 @@
    * @property {Object} [boxStyle] the css style of the zoom box.
    *  The default is <code>{border: 'thin solid #FF0000'}</code>.
    * Border widths must be specified in pixel units (or as thin, medium, or thick).
-   * @property {Object} [paneStyle] the css style of the pane which overlays the map when a drag zoom is activated.
+   * @property {Object} [veilStyle] the css style of the veil pane which overlays the map when
+   *  a drag zoom is activated. The previous name for this property was <code>paneStyle</code>
+   *  but the use of this name is now deprecated.
    *  The default is <code>{backgroundColor: 'white', opacity: 0.0, cursor: 'crosshair'}</code>.
    * @property {Point} [imagePosn] the position (relative to top left) of the visual control.
    *  The default is <code>null</code> (i.e., don't use a visual control). Google puts its
@@ -220,7 +222,8 @@
         cursor: 'crosshair'
       });
       // allow overwrite
-      setVals(this.veilDiv_[i].style, opt_zoomOpts.paneStyle);
+      setVals(this.veilDiv_[i].style, opt_zoomOpts.paneStyle); // Old option name was "paneStyle"
+      setVals(this.veilDiv_[i].style, opt_zoomOpts.veilStyle); // New name is "veilStyle"
       // stuff that cannot be overwritten
       setVals(this.veilDiv_[i].style, {
         position: 'absolute',
@@ -253,6 +256,7 @@
           me.hotKeyDown_ = !me.hotKeyDown_;
           if (me.hotKeyDown_) {
             me.buttonImg_.src = me.imageOn_;
+            me.mapPosn_ = getElementPosition(me.map_.getContainer());
             GEvent.trigger(me, 'activate');
           } else {
             me.buttonImg_.src = me.imageOff_;
@@ -395,6 +399,7 @@
    */
   DragZoom.prototype.onKeyDown_ = function (e) {
     if (this.map_ && !this.hotKeyDown_ && this.isHotKeyDown_(e)) {
+      this.mapPosn_ = getElementPosition(this.map_.getContainer());
       this.hotKeyDown_ = true;
       this.setPaneVisibility_();
      /**
@@ -499,6 +504,7 @@
        */
       GEvent.trigger(this, 'drag', new GPoint(left, top + height), new GPoint(left + width, top));
     } else if (!this.mouseDown_) {
+      this.mapPosn_ = getElementPosition(this.map_.getContainer());
       this.setPaneVisibility_();
     }
   };
@@ -527,7 +533,7 @@
       this.boxDiv_.style.width = Math.abs(nePt.x - swPt.x) + 'px';
       this.boxDiv_.style.height = Math.abs(nePt.y - swPt.y) + 'px';
       // Hide box asynchronously after 1 second:
-      setTimeout(function () {me.boxDiv_.style.display = 'none';}, 1000);
+      setTimeout(function () {me.boxDiv_.style.display = 'none';}, 5000);
       this.dragging_ = false;
       /**
        * This event is fired when the drag operation ends. 
