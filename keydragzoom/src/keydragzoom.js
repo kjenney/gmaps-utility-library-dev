@@ -2,7 +2,7 @@
  * @name KeyDragZoom
  * @version 1.1
  * @author: Nianwei Liu [nianwei at gmail dot com] & Gary Little [gary at luxcentral dot com]
- * @fileoverview This library adds a drag zoom capability to a v2 Google map.
+ * @fileoverview This library adds a drag zoom capability to a V2 Google map.
  *  When drag zoom is enabled, holding down a designated hot key <code>(shift | ctrl | alt)</code>
  *  while dragging a box around an area of interest will zoom the map in to that area when
  *  the mouse button is released. Optionally, a visual control can also be supplied for turning
@@ -28,7 +28,7 @@
  */
 (function () {
   /*jslint browser:true */
-  /*global GMap2,GEvent,GLatLng,GLatLngBounds,GPoint */
+  /*global GMap2,GEvent,GLatLng,GLatLngBounds,GPoint,GControl,GControlPosition,GSize,G_ANCHOR_TOP_LEFT */
   /* Utility functions use "var funName=function()" syntax to allow use of the */
   /* Dean Edwards Packer compression tool (with Shrink variables, without Base62 encode). */
 
@@ -184,8 +184,10 @@
    *  a drag zoom is activated. The previous name for this property was <code>paneStyle</code>
    *  but the use of this name is now deprecated.
    *  The default is <code>{backgroundColor: 'white', opacity: 0.0, cursor: 'crosshair'}</code>.
-   * @property {Point} [imagePosn] The position (relative to the top left of the map) of the visual control.
-   *  The default is <code>null</code> (i.e., don't use a visual control).
+   * @property {Boolean} [visualEnabled] A flag indicating whether a visual control is to be used.
+   *  The default is <code>false</code>.
+   * @property {GControlPosition} [visualPosition] The position of the visual control.
+   *  The default position is (27,285) relative to the top left corner of the map.
    * @property {String} [imageOn] The URL of the picture to show when drag zoom is on.
    * @property {String} [imageOff] The URL of the picture to show when drag zoom is off.
    * @property {String} [imageHot] The URL of the picture to show when the mouse is over the drag zoom control.
@@ -201,7 +203,6 @@
    */
   function DragZoom(map, opt_zoomOpts) {
     var i;
-    var me = this;
     this.map_ = map;
     opt_zoomOpts = opt_zoomOpts || {};
     this.key_ = opt_zoomOpts.key || 'shift';
@@ -242,45 +243,11 @@
       this.map_.getContainer().appendChild(this.veilDiv_[i]);
     }
 
-    this.imagePosn_ = opt_zoomOpts.imagePosn || null;
+    this.visualEnabled_ = opt_zoomOpts.visualEnabled || false;
+    this.visualPosition_ = opt_zoomOpts.visualPosition || this.getDefaultPosition();
     this.imageOn_ = opt_zoomOpts.imageOn;
     this.imageOff_ = opt_zoomOpts.imageOff;
     this.imageHot_ = opt_zoomOpts.imageHot;
-
-    if (this.imagePosn_ !== null) {
-      this.buttonImg_ = document.createElement("img");
-      this.buttonImg_.src = this.imageOff_;
-      this.buttonImg_.onclick = function () {
-        if (!me.isHotKeyDown_()) {
-          me.hotKeyDown_ = !me.hotKeyDown_;
-          if (me.hotKeyDown_) {
-            me.buttonImg_.src = me.imageOn_;
-            GEvent.trigger(me, 'activate');
-          } else {
-            me.buttonImg_.src = me.imageOff_;
-            GEvent.trigger(me, 'deactivate');
-          }
-        }
-      };
-      this.buttonImg_.onmouseover = function () {
-        me.buttonImg_.src = me.imageHot_;
-      };
-      this.buttonImg_.onmouseout = function () {
-        if (me.hotKeyDown_) {
-          me.buttonImg_.src = me.imageOn_;
-        } else {
-          me.buttonImg_.src = me.imageOff_;
-        }
-      };
-      setVals(this.buttonImg_.style, {
-        position: 'absolute',
-        top: this.imagePosn_.y + "px",
-        left: this.imagePosn_.x + "px",
-        zIndex: 102,
-        cursor: 'pointer'
-      });
-      this.map_.getContainer().appendChild(this.buttonImg_);
-    }
 
     this.boxDiv_ = document.createElement('div');
     setVals(this.boxDiv_.style, {
@@ -311,7 +278,62 @@
     this.mousePosn_ = null;
     this.mapPosn_ = null;
     this.mouseDown_ = false;
+
+    if (this.visualEnabled_) {
+      map.addControl(this, this.visualPosition_);
+    }
   }
+  /**
+   * DragZoom is a subclass of <code>GControl</code>.
+   */
+  DragZoom.prototype = new GControl();
+  /**
+   * Returns the default position for the visual control.
+   * @return {GControlPosition} The default position.
+   * @private
+   */
+  DragZoom.prototype.getDefaultPosition = function () {
+    return new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(27, 285));
+  };
+  /**
+   * Initializes the visual control and returns its DOM element.
+   * @param {GMap2} map The map to which the control is to be added.
+   * @return {Node} The DOM element containing the visual control.
+   * @private
+   */
+  DragZoom.prototype.initialize = function (map) {
+    var me = this;
+    this.buttonImg_ = document.createElement("img");
+    this.buttonImg_.src = this.imageOff_;
+    this.buttonImg_.onclick = function () {
+      if (!me.isHotKeyDown_()) {
+        me.hotKeyDown_ = !me.hotKeyDown_;
+        if (me.hotKeyDown_) {
+          me.buttonImg_.src = me.imageOn_;
+          GEvent.trigger(me, 'activate');
+        } else {
+          me.buttonImg_.src = me.imageOff_;
+          GEvent.trigger(me, 'deactivate');
+        }
+      }
+    };
+    this.buttonImg_.onmouseover = function () {
+      me.buttonImg_.src = me.imageHot_;
+    };
+    this.buttonImg_.onmouseout = function () {
+      if (me.hotKeyDown_) {
+        me.buttonImg_.src = me.imageOn_;
+      } else {
+        me.buttonImg_.src = me.imageOff_;
+      }
+    };
+    setVals(this.buttonImg_.style, {
+      zIndex: 102,
+      cursor: 'pointer'
+    });
+    map.getContainer().appendChild(this.buttonImg_);
+    return this.buttonImg_;
+  };
   /**
    * Returns <code>true</code> if the hot key is being pressed when an event occurs.
    * @param {Event} e
@@ -366,9 +388,10 @@
     }
   };
   /**
-   * Show or hide the overlay pane, depending on whether the mouse is over the map.
+   * Show the veil if the hot key is down and the mouse is over the map,
+   * otherwise hide the veil.
    */
-  DragZoom.prototype.setPaneVisibility_ = function () {
+  DragZoom.prototype.setVeilVisibility_ = function () {
     var i;
     if (this.map_ && this.hotKeyDown_ && this.isMouseOnMap_()) {
       var size = this.map_.getSize();
@@ -392,14 +415,14 @@
     }
   };
   /**
-   * Handle key down. Activate the tool only if the mouse is on top of the map.
+   * Handle key down. Show the veil if the hot key has been pressed.
    * @param {Event} e
    */
   DragZoom.prototype.onKeyDown_ = function (e) {
     if (this.map_ && !this.hotKeyDown_ && this.isHotKeyDown_(e)) {
       this.mapPosn_ = getElementPosition(this.map_.getContainer());
       this.hotKeyDown_ = true;
-      this.setPaneVisibility_();
+      this.setVeilVisibility_();
      /**
        * This event is fired when the hot key is pressed.
        * @name DragZoom#activate
@@ -407,7 +430,7 @@
        */
       GEvent.trigger(this, 'activate');
     }
-    if (this.imagePosn_ !== null) {
+    if (this.visualEnabled_) {
       if (this.hotKeyDown_ && this.buttonImg_.src !== this.imageOn_) {
         this.buttonImg_.src = this.imageOn_;
       }
@@ -417,7 +440,6 @@
    * Get the <code>GPoint</code> of the mouse position.
    * @param {Object} e
    * @return {GPoint} point
-   * @private
    */
   DragZoom.prototype.getMousePoint_ = function (e) {
     var mousePosn = getMousePosition(e);
@@ -504,7 +526,7 @@
       GEvent.trigger(this, 'drag', new GPoint(left, top + height), new GPoint(left + width, top));
     } else if (!this.mouseDown_) {
       this.mapPosn_ = getElementPosition(this.map_.getContainer());
-      this.setPaneVisibility_();
+      this.setVeilVisibility_();
     }
   };
   /**
@@ -561,7 +583,7 @@
       if (this.dragging_) {
         this.boxDiv_.style.display = 'none';
       }
-      for (i = 0; i < 4; i++ ) {
+      for (i = 0; i < this.veilDiv_.length; i++ ) {
         this.veilDiv_[i].style.display = "none";
       }
       this.dragging_ = false;
@@ -572,7 +594,7 @@
        */
       GEvent.trigger(this, 'deactivate');
     }
-    if (this.imagePosn_ !== null) {
+    if (this.visualEnabled_) {
       if (this.buttonImg_.src !== this.imageOff_) {
         this.buttonImg_.src = this.imageOff_;
       }
@@ -580,8 +602,8 @@
   };
   /**
    * @name GMap2
-   * @class These are new methods added to the Google Maps API's
-   * <a href  = 'http://code.google.com/apis/maps/documentation/reference.html#GMap2'>GMap2</a>
+   * @class These are new methods added to the Google Maps JavaScript API V2's
+   * <a href="http://code.google.com/apis/maps/documentation/javascript/v2/reference.html#GMap2">GMap2</a>
    * class.
    */
   /**
@@ -607,8 +629,11 @@
       GEvent.removeListener(d.keyUpListener_);
       GEvent.removeListener(d.keyDownListener_);
       this.getContainer().removeChild(d.boxDiv_);
-      for (i = 0; i < 4; i++) {
+      for (i = 0; i < d.veilDiv_.length; i++) {
         this.getContainer().removeChild(d.veilDiv_[i]);
+      }
+      if (d.visualEnabled_) {
+        d.map_.removeControl(d);
       }
       this.dragZoom_ = null;
     }

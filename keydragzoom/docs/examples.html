@@ -94,7 +94,7 @@ In the following example, you can start a drag zoom operation by holding down th
 
 <div>
 <h2><span lang="en-us">Visual Drag Zoom Control</span></h2> 
-<p>You can also use a visible control to turn KeyDragZoom on and off. Simply supply the position of the control as well as the URLs for the pictures to show when the control is in the on, off, and hot states. (The control is hot when the mouse moves over it.) In this example the control is placed below the standard zoom control.</p>
+<p>You can also use a visual control to turn KeyDragZoom on and off. Simply set the <code>visualEnabled</code> parameter to <code>true</code>, indicate the position of the control, and provide the URLs for the pictures to show when the control is in the on, off, and hot states. (The control is hot when the mouse moves over it.) In this example the control is placed below the standard zoom control.</p>
 
 <pre class="prettyprint">
         function init(){
@@ -102,7 +102,8 @@ In the following example, you can start a drag zoom operation by holding down th
           map.setCenter(new GLatLng(45.5, -122.7), 14);
           //...
           map.enableKeyDragZoom({
-            imagePosn: new GPoint(27, 285),
+            visualEnabled: true,
+            visualPosition: new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(27, 285)),
             imageOn: "dragzoom-on.png",
             imageOff: "dragzoom-off.png",
             imageHot: "dragzoom-hot.png"
