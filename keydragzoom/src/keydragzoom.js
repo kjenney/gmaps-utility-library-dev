@@ -28,7 +28,7 @@
  */
 (function () {
   /*jslint browser:true */
-  /*global GMap2,GEvent,GLatLng,GLatLngBounds,GPoint,GControl,GControlPosition,GSize,G_ANCHOR_TOP_LEFT */
+  /*global window,GMap2,GEvent,GLatLng,GLatLngBounds,GPoint,GControl,GControlPosition,GSize,G_ANCHOR_TOP_LEFT */
   /* Utility functions use "var funName=function()" syntax to allow use of the */
   /* Dean Edwards Packer compression tool (with Shrink variables, without Base62 encode). */
 
@@ -270,6 +270,7 @@
     this.mouseUpListener_ = GEvent.bindDom(document, 'mouseup', this, this.onMouseUp_);
 
     this.hotKeyDown_ = false;
+    this.mouseDown_ = false;
     this.dragging_ = false;
     this.startPt_ = null;
     this.endPt_ = null;
@@ -277,10 +278,9 @@
     this.boxMaxY_ = null;
     this.mousePosn_ = null;
     this.mapPosn_ = null;
-    this.mouseDown_ = false;
 
     if (this.visualEnabled_) {
-      map.addControl(this, this.visualPosition_);
+      this.map_.addControl(this, this.visualPosition_);
     }
   }
   /**
@@ -326,6 +326,9 @@
       } else {
         me.buttonImg_.src = me.imageOff_;
       }
+    };
+    this.buttonImg_.ondragstart = function () {
+      return false;
     };
     setVals(this.buttonImg_.style, {
       zIndex: 102,
@@ -506,7 +509,7 @@
       this.veilDiv_[3].style.top = (top + height + this.boxBorderWidths_.top + this.boxBorderWidths_.bottom) + "px";
       this.veilDiv_[3].style.left = left + "px";
       this.veilDiv_[3].style.width = (width + this.boxBorderWidths_.left + this.boxBorderWidths_.right) + "px";
-      this.veilDiv_[3].style.height = (this.map_.getSize().height - (this.borderWidths_.top + this.borderWidths_.bottom)- (this.boxBorderWidths_.top + this.boxBorderWidths_.bottom) - (top + height)) + "px";
+      this.veilDiv_[3].style.height = (this.map_.getSize().height - (this.borderWidths_.top + this.borderWidths_.bottom) - (this.boxBorderWidths_.top + this.boxBorderWidths_.bottom) - (top + height)) + "px";
       this.boxDiv_.style.left = left + 'px';
       this.boxDiv_.style.top = top + 'px';
       this.boxDiv_.style.width = width + 'px';
@@ -554,7 +557,9 @@
       this.boxDiv_.style.width = Math.abs(nePt.x - swPt.x) + 'px';
       this.boxDiv_.style.height = Math.abs(nePt.y - swPt.y) + 'px';
       // Hide box asynchronously after 1 second:
-      setTimeout(function () {me.boxDiv_.style.display = 'none';}, 1000);
+      setTimeout(function () {
+        me.boxDiv_.style.display = 'none';
+      }, 1000);
       this.dragging_ = false;
       /**
        * This event is fired when the drag operation ends.
@@ -583,7 +588,7 @@
       if (this.dragging_) {
         this.boxDiv_.style.display = 'none';
       }
-      for (i = 0; i < this.veilDiv_.length; i++ ) {
+      for (i = 0; i < this.veilDiv_.length; i++) {
         this.veilDiv_[i].style.display = "none";
       }
       this.dragging_ = false;
