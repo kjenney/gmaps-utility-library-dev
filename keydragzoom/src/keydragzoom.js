@@ -188,9 +188,14 @@
    *  The default is <code>false</code>.
    * @property {GControlPosition} [visualPosition] The position of the visual control.
    *  The default position is (27,285) relative to the top left corner of the map.
-   * @property {String} [imageOn] The URL of the picture to show when drag zoom is on.
-   * @property {String} [imageOff] The URL of the picture to show when drag zoom is off.
-   * @property {String} [imageHot] The URL of the picture to show when the mouse is over the drag zoom control.
+   * @property {Object} [visualImages] An object literal defining the images to be shown when the
+   *  visual control is on, off, or hot (i.e., when the mouse is over the control). The three
+   *  parameters of the object literal are "on", "off", and "hot" and each contains the URL of
+   *  the image to be shown. If a visual control is being used, only the "off" image is required.
+   * @property {Object} [visualTips] An object literal defining the help tips that appear when
+   *  the mouse moves over the visual control. The "off" parameter is the tip to be shown when the
+   *  control is off and the "on" parameter is the tip to be shown when the control is on.
+   *  The default values are "Turn on drag zoom mode" and "Turn off drag zoom mode", respectively.
    */
   /**
    * @name DragZoom
@@ -249,9 +254,13 @@
 
     this.visualEnabled_ = opt_zoomOpts.visualEnabled || false;
     this.visualPosition_ = opt_zoomOpts.visualPosition || this.getDefaultPosition();
-    this.imageOn_ = opt_zoomOpts.imageOn || "";
-    this.imageOff_ = opt_zoomOpts.imageOff || "";
-    this.imageHot_ = opt_zoomOpts.imageHot || "";
+    this.visualTips_ = opt_zoomOpts.visualTips || {};
+    this.visualTips_.off =  this.visualTips_.off || "Turn on drag zoom mode";
+    this.visualTips_.on =  this.visualTips_.on || "Turn off drag zoom mode";
+    this.visualImages_ = opt_zoomOpts.visualImages || {};
+    this.visualImages_.on = this.visualImages_.on || "";
+    this.visualImages_.off = this.visualImages_.off || "";
+    this.visualImages_.hot = this.visualImages_.hot || "";
 
     this.boxDiv_ = document.createElement("div");
     // Apply default style values for the zoom box:
@@ -311,27 +320,32 @@
   DragZoom.prototype.initialize = function (map) {
     var me = this;
     this.buttonImg_ = document.createElement("img");
-    this.buttonImg_.src = this.imageOff_;
+    this.buttonImg_.src = this.visualImages_.off;
+    this.buttonImg_.title = this.visualTips_.off;
     this.buttonImg_.onclick = function (e) {
       if (!me.isHotKeyDown_(e)) {
         me.hotKeyDown_ = !me.hotKeyDown_;
         if (me.hotKeyDown_) {
-          me.buttonImg_.src = me.imageOn_;
+          me.buttonImg_.src = me.visualImages_.on;
+          me.buttonImg_.title = me.visualTips_.on;
           GEvent.trigger(me, "activate");
         } else {
-          me.buttonImg_.src = me.imageOff_;
+          me.buttonImg_.src = me.visualImages_.off;
+          me.buttonImg_.title = me.visualTips_.off;
           GEvent.trigger(me, "deactivate");
         }
       }
     };
     this.buttonImg_.onmouseover = function () {
-      me.buttonImg_.src = me.imageHot_;
+      me.buttonImg_.src = me.visualImages_.hot;
     };
     this.buttonImg_.onmouseout = function () {
       if (me.hotKeyDown_) {
-        me.buttonImg_.src = me.imageOn_;
+        me.buttonImg_.src = me.visualImages_.on;
+        me.buttonImg_.title = me.visualTips_.on;
       } else {
-        me.buttonImg_.src = me.imageOff_;
+        me.buttonImg_.src = me.visualImages_.off;
+        me.buttonImg_.title = me.visualTips_.off;
       }
     };
     this.buttonImg_.ondragstart = function () {
@@ -434,8 +448,9 @@
       this.hotKeyDown_ = true;
       this.setVeilVisibility_();
       if (this.visualEnabled_) {
-        if (this.hotKeyDown_ && this.buttonImg_.src !== this.imageOn_) {
-          this.buttonImg_.src = this.imageOn_;
+        if (this.hotKeyDown_ && this.buttonImg_.src !== this.visualImages_.on) {
+          this.buttonImg_.src = this.visualImages_.on;
+          this.buttonImg_.title = this.visualTips_.on;
         }
       }
      /**
@@ -614,8 +629,9 @@
         this.veilDiv_[i].style.display = "none";
       }
       if (this.visualEnabled_) {
-        if (this.buttonImg_.src !== this.imageOff_) {
-          this.buttonImg_.src = this.imageOff_;
+        if (this.buttonImg_.src !== this.visualImages_.off) {
+          this.buttonImg_.src = this.visualImages_.off;
+          this.buttonImg_.title = this.visualTips_.off;
         }
       }
       /**
