@@ -12,6 +12,12 @@
 <a name="Top"></a>  
 <h1><a></a><span lang="en-us">KeyDragZoom</span> Examples</h1>
 </div>
+
+<div>
+<h2><span lang="en-us">KeyDragZoom Reference</span></h2> 
+<p><span lang="en-us"><a href="reference.html">Click here</a> to view the KeyDragZoom Reference.</span></p>
+</div>
+
 <div>
 <h2><a name="HowTo"></a>Including Scripts</h2>
 <p>
@@ -23,7 +29,8 @@ in your document header after the Google Maps API v2 has been included. You can 
     </pre>
 </div>
 
-<div><h2><span lang="en-us">Enabling KeyDragZoom</span></h2> 
+<div>
+<h2><span lang="en-us">Enabling KeyDragZoom</span></h2> 
 <p><span lang="en-us">You simply call <code>GMap2.enableKeyDragZoom()</code> to enable KeyDragZoom, just as you would call <code>GMap2.enableScrollWheelZoom()</code> to enable scrollwheel zooming.</span></p>
 
 <pre class="prettyprint">
@@ -43,7 +50,7 @@ in your document header after the Google Maps API v2 has been included. You can 
 
 <div>
 <h2><span lang="en-us">Styling the Zoom Box and the Veil</span></h2> 
-<p>You can pass some css properties when you enable KeyDragZoom. Those associated with <code>boxStyle</code> are applied to the zoom box the user drags across the area of interest and those associated with <code>veilStyle</code> are applied to the veil that covers the map when the hot key is down. In the following example, the zoom box is transparent with a 4-pixel dashed black border and the veil is gray with 25% opacity.</p>
+<p>You can pass some css properties when you enable KeyDragZoom. Those associated with <code>boxStyle</code> are applied to the zoom box the user drags across the area of interest and those associated with <code>veilStyle</code> are applied to the veil that covers the map when the hot key is down. In the following example, the zoom box is transparent with a 4-pixel dashed black border and the veil is red with 25% opacity.</p>
 
 <pre class="prettyprint">
         function init(){
@@ -57,7 +64,7 @@ in your document header after the Google Maps API v2 has been included. You can 
                   opacity: 1.0
                 },
                 veilStyle: {
-                  backgroundColor: "gray",
+                  backgroundColor: "red",
                   opacity: 0.25
                 }
           });

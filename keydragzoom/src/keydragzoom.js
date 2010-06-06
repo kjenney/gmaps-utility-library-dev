@@ -33,7 +33,7 @@
   /* Dean Edwards Packer compression tool (with Shrink variables, without Base62 encode). */
 
   /**
-   * Converts 'thin', 'medium', and 'thick' to pixel widths
+   * Converts "thin", "medium", and "thick" to pixel widths
    * in an MSIE environment. Not called for other browsers
    * because getComputedStyle() returns pixel widths automatically.
    * @param {String} widthValue
@@ -41,13 +41,13 @@
   var toPixels = function (widthValue) {
     var px;
     switch (widthValue) {
-    case 'thin':
+    case "thin":
       px = "2px";
       break;
-    case 'medium':
+    case "medium":
       px = "4px";
       break;
-    case 'thick':
+    case "thick":
       px = "6px";
       break;
     default:
@@ -165,10 +165,10 @@
    * @param {Number} op (0-1)
    */
   var setOpacity = function (div, op) {
-    if (typeof op !== 'undefined') {
+    if (typeof op !== "undefined") {
       div.style.opacity = op;
     }
-    if (typeof div.style.opacity !== 'undefined') {
+    if (typeof div.style.opacity !== "undefined") {
       div.style.filter = "alpha(opacity=" + (div.style.opacity * 100) + ")";
     }
   };
@@ -178,12 +178,12 @@
    * @property {String} [key] The hot key to hold down to activate a drag zoom, <code>shift | ctrl | alt</code>.
    *  The default is <code>shift</code>.
    * @property {Object} [boxStyle] The css style of the zoom box.
-   *  The default is <code>{border: '2px solid #FF0000'}</code>.
+   *  The default is <code>{border: "2px solid #FF0000"}</code>.
    * Border widths must be specified in pixel units (or as thin, medium, or thick).
    * @property {Object} [veilStyle] The css style of the veil pane which covers the map when
    *  a drag zoom is activated. The previous name for this property was <code>paneStyle</code>
    *  but the use of this name is now deprecated.
-   *  The default is <code>{backgroundColor: 'white', opacity: 0.0, cursor: 'crosshair'}</code>.
+   *  The default is <code>{backgroundColor: "white", opacity: 0.0, cursor: "crosshair"}</code>.
    * @property {Boolean} [visualEnabled] A flag indicating whether a visual control is to be used.
    *  The default is <code>false</code>.
    * @property {GControlPosition} [visualPosition] The position of the visual control.
@@ -205,39 +205,43 @@
     var i;
     this.map_ = map;
     opt_zoomOpts = opt_zoomOpts || {};
-    this.key_ = opt_zoomOpts.key || 'shift';
+    this.key_ = opt_zoomOpts.key || "shift";
     this.key_ = this.key_.toLowerCase();
     this.borderWidths_ = getBorderWidths(this.map_.getContainer());
 
     this.veilDiv_ = [];
     for (i = 0; i < 4; i++) {
       this.veilDiv_[i] = document.createElement("div");
+      // Prevents selection of other elements on the webpage
+      // when a drag zoom operation is in progress:
       this.veilDiv_[i].onselectstart = function () {
         return false;
       };
-      // default style
+      // Apply default style values for the veil:
       setVals(this.veilDiv_[i].style, {
-        backgroundColor: 'white',
+        backgroundColor: "white",
         opacity: 0.0,
-        cursor: 'crosshair'
+        cursor: "crosshair"
       });
-      // allow overwrite
+      // Apply style values specified in veilStyle parameter:
       setVals(this.veilDiv_[i].style, opt_zoomOpts.paneStyle); // Old option name was "paneStyle"
       setVals(this.veilDiv_[i].style, opt_zoomOpts.veilStyle); // New name is "veilStyle"
-      // stuff that cannot be overwritten
+      // Apply mandatory style values:
       setVals(this.veilDiv_[i].style, {
-        position: 'absolute',
-        overflow: 'hidden',
+        position: "absolute",
+        overflow: "hidden",
         zIndex: 101,
-        display: 'none'
+        display: "none"
       });
-      if (this.key_ === 'shift') { // Workaround for Firefox Shift-Click problem
+      // Workaround for Firefox Shift-Click problem:
+      if (this.key_ === "shift") {
         this.veilDiv_[i].style.MozUserSelect = "none";
       }
       setOpacity(this.veilDiv_[i]);
-      // An IE fix: if the background is transparent, it cannot capture mousedown events
-      if (this.veilDiv_[i].style.backgroundColor === 'transparent') {
-        this.veilDiv_[i].style.backgroundColor = 'white';
+      // An IE fix: If the background is transparent it cannot capture mousedown
+      // events, so if it is, change the background to white with 0 opacity.
+      if (this.veilDiv_[i].style.backgroundColor === "transparent") {
+        this.veilDiv_[i].style.backgroundColor = "white";
         setOpacity(this.veilDiv_[i], 0);
       }
       this.map_.getContainer().appendChild(this.veilDiv_[i]);
@@ -245,37 +249,40 @@
 
     this.visualEnabled_ = opt_zoomOpts.visualEnabled || false;
     this.visualPosition_ = opt_zoomOpts.visualPosition || this.getDefaultPosition();
-    this.imageOn_ = opt_zoomOpts.imageOn;
-    this.imageOff_ = opt_zoomOpts.imageOff;
-    this.imageHot_ = opt_zoomOpts.imageHot;
+    this.imageOn_ = opt_zoomOpts.imageOn || "";
+    this.imageOff_ = opt_zoomOpts.imageOff || "";
+    this.imageHot_ = opt_zoomOpts.imageHot || "";
 
-    this.boxDiv_ = document.createElement('div');
+    this.boxDiv_ = document.createElement("div");
+    // Apply default style values for the zoom box:
     setVals(this.boxDiv_.style, {
-      border: '2px solid #FF0000'
+      border: "2px solid #FF0000"
     });
+    // Apply style values specified in boxStyle parameter:
     setVals(this.boxDiv_.style, opt_zoomOpts.boxStyle);
+    // Apply mandatory style values:
     setVals(this.boxDiv_.style, {
-      position: 'absolute',
-      display: 'none'
+      position: "absolute",
+      display: "none"
     });
     setOpacity(this.boxDiv_);
     this.map_.getContainer().appendChild(this.boxDiv_);
     this.boxBorderWidths_ = getBorderWidths(this.boxDiv_);
 
-    this.keyDownListener_ = GEvent.bindDom(document, 'keydown',  this, this.onKeyDown_);
-    this.keyUpListener_ = GEvent.bindDom(document, 'keyup', this, this.onKeyUp_);
-    this.mouseDownListener_ = GEvent.bindDom(this.veilDiv_[0], 'mousedown', this, this.onMouseDown_);
-    this.mouseDownListenerDocument_ = GEvent.bindDom(document, 'mousedown', this, this.onMouseDownDocument_);
-    this.mouseMoveListener_ = GEvent.bindDom(document, 'mousemove', this, this.onMouseMove_);
-    this.mouseUpListener_ = GEvent.bindDom(document, 'mouseup', this, this.onMouseUp_);
+    this.keyDownListener_ = GEvent.bindDom(document, "keydown",  this, this.onKeyDown_);
+    this.keyUpListener_ = GEvent.bindDom(document, "keyup", this, this.onKeyUp_);
+    this.mouseDownListener_ = GEvent.bindDom(this.veilDiv_[0], "mousedown", this, this.onMouseDown_);
+    this.mouseDownListenerDocument_ = GEvent.bindDom(document, "mousedown", this, this.onMouseDownDocument_);
+    this.mouseMoveListener_ = GEvent.bindDom(document, "mousemove", this, this.onMouseMove_);
+    this.mouseUpListener_ = GEvent.bindDom(document, "mouseup", this, this.onMouseUp_);
 
     this.hotKeyDown_ = false;
     this.mouseDown_ = false;
     this.dragging_ = false;
     this.startPt_ = null;
     this.endPt_ = null;
-    this.boxMaxX_ = null;
-    this.boxMaxY_ = null;
+    this.mapWidth_ = null;
+    this.mapHeight_ = null;
     this.mousePosn_ = null;
     this.mapPosn_ = null;
 
@@ -305,15 +312,15 @@
     var me = this;
     this.buttonImg_ = document.createElement("img");
     this.buttonImg_.src = this.imageOff_;
-    this.buttonImg_.onclick = function () {
-      if (!me.isHotKeyDown_()) {
+    this.buttonImg_.onclick = function (e) {
+      if (!me.isHotKeyDown_(e)) {
         me.hotKeyDown_ = !me.hotKeyDown_;
         if (me.hotKeyDown_) {
           me.buttonImg_.src = me.imageOn_;
-          GEvent.trigger(me, 'activate');
+          GEvent.trigger(me, "activate");
         } else {
           me.buttonImg_.src = me.imageOff_;
-          GEvent.trigger(me, 'deactivate');
+          GEvent.trigger(me, "deactivate");
         }
       }
     };
@@ -332,7 +339,7 @@
     };
     setVals(this.buttonImg_.style, {
       zIndex: 102,
-      cursor: 'pointer'
+      cursor: "pointer"
     });
     map.getContainer().appendChild(this.buttonImg_);
     return this.buttonImg_;
@@ -345,7 +352,7 @@
   DragZoom.prototype.isHotKeyDown_ = function (e) {
     var isHot;
     e = e || window.event;
-    isHot = (e.shiftKey && this.key_ === 'shift') || (e.altKey && this.key_ === 'alt') || (e.ctrlKey && this.key_ === 'ctrl');
+    isHot = (e.shiftKey && this.key_ === "shift") || (e.altKey && this.key_ === "alt") || (e.ctrlKey && this.key_ === "ctrl");
     if (!isHot) {
       // Need to look at keyCode for Opera because it
       // doesn't set the shiftKey, altKey, ctrlKey properties
@@ -355,17 +362,17 @@
       // Also see http://unixpapa.com/js/key.html
       switch (e.keyCode) {
       case 16:
-        if (this.key_ === 'shift') {
+        if (this.key_ === "shift") {
           isHot = true;
         }
         break;
       case 17:
-        if (this.key_ === 'ctrl') {
+        if (this.key_ === "ctrl") {
           isHot = true;
         }
         break;
       case 18:
-        if (this.key_ === 'alt') {
+        if (this.key_ === "alt") {
           isHot = true;
         }
         break;
@@ -379,12 +386,12 @@
    * @return true if mouse is on top of the map div.
    */
   DragZoom.prototype.isMouseOnMap_ = function () {
-    var mousePos = this.mousePosn_;
-    if (mousePos) {
-      var mapPos = this.mapPosn_;
-      var size = this.map_.getSize();
-      return mousePos.left > mapPos.left && mousePos.left < mapPos.left + size.width &&
-      mousePos.top > mapPos.top && mousePos.top < mapPos.top + size.height;
+    var mousePosn = this.mousePosn_;
+    if (mousePosn) {
+      var mapPosn = this.mapPosn_;
+      var mapSize = this.map_.getSize();
+      return mousePosn.left > mapPosn.left && mousePosn.left < (mapPosn.left + mapSize.width) &&
+      mousePosn.top > mapPosn.top && mousePosn.top < (mapPosn.top + mapSize.height);
     } else {
       // if user never moved mouse
       return false;
@@ -397,23 +404,23 @@
   DragZoom.prototype.setVeilVisibility_ = function () {
     var i;
     if (this.map_ && this.hotKeyDown_ && this.isMouseOnMap_()) {
-      var size = this.map_.getSize();
-      this.veilDiv_[0].style.left = 0 + 'px';
-      this.veilDiv_[0].style.top = 0 + 'px';
-      this.veilDiv_[0].style.width = size.width - (this.borderWidths_.left + this.borderWidths_.right) + 'px';
-      this.veilDiv_[0].style.height = size.height - (this.borderWidths_.top + this.borderWidths_.bottom) + 'px';
+      var mapSize = this.map_.getSize();
+      this.mapWidth_ = mapSize.width - (this.borderWidths_.left + this.borderWidths_.right);
+      this.mapHeight_ = mapSize.height - (this.borderWidths_.top + this.borderWidths_.bottom);
+      this.veilDiv_[0].style.left = "0px";
+      this.veilDiv_[0].style.top = "0px";
+      this.veilDiv_[0].style.width = this.mapWidth_ + "px";
+      this.veilDiv_[0].style.height = this.mapHeight_ + "px";
       for (i = 1; i < this.veilDiv_.length; i++) {
-        this.veilDiv_[i].style.width = 0 + 'px';
-        this.veilDiv_[i].style.height = 0 + 'px';
+        this.veilDiv_[i].style.width = "0px";
+        this.veilDiv_[i].style.height = "0px";
       }
       for (i = 0; i < this.veilDiv_.length; i++) {
-        this.veilDiv_[i].style.display = 'block';
+        this.veilDiv_[i].style.display = "block";
       }
-      this.boxMaxX_ = parseInt(this.veilDiv_[0].style.width, 10) - (this.boxBorderWidths_.left + this.boxBorderWidths_.right);
-      this.boxMaxY_ = parseInt(this.veilDiv_[0].style.height, 10) - (this.boxBorderWidths_.top + this.boxBorderWidths_.bottom);
     } else {
       for (i = 0; i < this.veilDiv_.length; i++) {
-        this.veilDiv_[i].style.display = 'none';
+        this.veilDiv_[i].style.display = "none";
       }
     }
   };
@@ -426,17 +433,17 @@
       this.mapPosn_ = getElementPosition(this.map_.getContainer());
       this.hotKeyDown_ = true;
       this.setVeilVisibility_();
+      if (this.visualEnabled_) {
+        if (this.hotKeyDown_ && this.buttonImg_.src !== this.imageOn_) {
+          this.buttonImg_.src = this.imageOn_;
+        }
+      }
      /**
        * This event is fired when the hot key is pressed.
        * @name DragZoom#activate
        * @event
        */
-      GEvent.trigger(this, 'activate');
-    }
-    if (this.visualEnabled_) {
-      if (this.hotKeyDown_ && this.buttonImg_.src !== this.imageOn_) {
-        this.buttonImg_.src = this.imageOn_;
-      }
+      GEvent.trigger(this, "activate");
     }
   };
   /**
@@ -449,8 +456,8 @@
     var p = new GPoint();
     p.x = mousePosn.left - this.mapPosn_.left - this.borderWidths_.left;
     p.y = mousePosn.top - this.mapPosn_.top - this.borderWidths_.top;
-    p.x = Math.min(p.x, this.boxMaxX_);
-    p.y = Math.min(p.y, this.boxMaxY_);
+    p.x = Math.min(p.x, this.mapWidth_);
+    p.y = Math.min(p.y, this.mapHeight_);
     p.x = Math.max(p.x, 0);
     p.y = Math.max(p.y, 0);
     return p;
@@ -464,6 +471,7 @@
       this.mapPosn_ = getElementPosition(this.map_.getContainer());
       this.dragging_ = true;
       this.startPt_ = this.endPt_ = this.getMousePoint_(e);
+      this.boxDiv_.style.width = this.boxDiv_.style.height = "0px";
       var latlng = this.map_.fromContainerPixelToLatLng(this.startPt_);
       /**
        * This event is fired when the drag operation begins.
@@ -472,7 +480,7 @@
        * @param {GLatLng} startLatLng
        * @event
        */
-      GEvent.trigger(this, 'dragstart', latlng);
+      GEvent.trigger(this, "dragstart", latlng);
     }
   };
   /**
@@ -497,24 +505,24 @@
       this.veilDiv_[0].style.top = "0px";
       this.veilDiv_[0].style.left = "0px";
       this.veilDiv_[0].style.width = left + "px";
-      this.veilDiv_[0].style.height = (this.map_.getSize().height - (this.borderWidths_.top + this.borderWidths_.bottom)) + "px";
+      this.veilDiv_[0].style.height = this.mapHeight_ + "px";
       this.veilDiv_[1].style.top = "0px";
-      this.veilDiv_[1].style.left = (left + width + this.boxBorderWidths_.left + this.boxBorderWidths_.right) + "px";
-      this.veilDiv_[1].style.width = (this.map_.getSize().width - (left + width) - (this.borderWidths_.left + this.borderWidths_.right) - (this.boxBorderWidths_.left + this.boxBorderWidths_.right)) + "px";
-      this.veilDiv_[1].style.height = (this.map_.getSize().height - (this.borderWidths_.top + this.borderWidths_.bottom)) + "px";
+      this.veilDiv_[1].style.left = (left + width) + "px";
+      this.veilDiv_[1].style.width = (this.mapWidth_ - (left + width)) + "px";
+      this.veilDiv_[1].style.height = this.mapHeight_ + "px";
       this.veilDiv_[2].style.top = "0px";
       this.veilDiv_[2].style.left = left + "px";
-      this.veilDiv_[2].style.width = (width + this.boxBorderWidths_.left + this.boxBorderWidths_.right) + "px";
+      this.veilDiv_[2].style.width = width + "px";
       this.veilDiv_[2].style.height = top + "px";
-      this.veilDiv_[3].style.top = (top + height + this.boxBorderWidths_.top + this.boxBorderWidths_.bottom) + "px";
+      this.veilDiv_[3].style.top = (top + height) + "px";
       this.veilDiv_[3].style.left = left + "px";
-      this.veilDiv_[3].style.width = (width + this.boxBorderWidths_.left + this.boxBorderWidths_.right) + "px";
-      this.veilDiv_[3].style.height = (this.map_.getSize().height - (this.borderWidths_.top + this.borderWidths_.bottom) - (this.boxBorderWidths_.top + this.boxBorderWidths_.bottom) - (top + height)) + "px";
-      this.boxDiv_.style.left = left + 'px';
-      this.boxDiv_.style.top = top + 'px';
-      this.boxDiv_.style.width = width + 'px';
-      this.boxDiv_.style.height = height + 'px';
-      this.boxDiv_.style.display = 'block';
+      this.veilDiv_[3].style.width = width + "px";
+      this.veilDiv_[3].style.height = (this.mapHeight_ - (top + height)) + "px";
+      this.boxDiv_.style.left = left + "px";
+      this.boxDiv_.style.top = top + "px";
+      this.boxDiv_.style.width = (width - (this.boxBorderWidths_.left + this.boxBorderWidths_.right)) + "px";
+      this.boxDiv_.style.height = (height - (this.boxBorderWidths_.top + this.boxBorderWidths_.bottom)) + "px";
+      this.boxDiv_.style.display = "block";
       /**
        * This event is repeatedly fired while the user drags a box across the area of interest.
        * The southwest and northeast point are passed as parameters of type <code>GPoint</code>
@@ -526,7 +534,7 @@
        * @param {GPoint} northeastPixel
        * @event
        */
-      GEvent.trigger(this, 'drag', new GPoint(left, top + height), new GPoint(left + width, top));
+      GEvent.trigger(this, "drag", new GPoint(left, top + height), new GPoint(left + width, top));
     } else if (!this.mouseDown_) {
       this.mapPosn_ = getElementPosition(this.map_.getContainer());
       this.setVeilVisibility_();
@@ -544,6 +552,13 @@
       var top = Math.min(this.startPt_.y, this.endPt_.y);
       var width = Math.abs(this.startPt_.x - this.endPt_.x);
       var height = Math.abs(this.startPt_.y - this.endPt_.y);
+      // Google Maps API bug: setCenter() doesn't work as expected if the map has a
+      // border on the left or top. The code here includes a workaround for this problem.
+      var kGoogleCenteringBug = true;
+      if (kGoogleCenteringBug) {
+        left += this.borderWidths_.left;
+        top += this.borderWidths_.top;
+      }
       var sw = this.map_.fromContainerPixelToLatLng(new GPoint(left, top + height));
       var ne = this.map_.fromContainerPixelToLatLng(new GPoint(left + width, top));
       var bnds = new GLatLngBounds(sw, ne);
@@ -552,13 +567,19 @@
       // Redraw box after zoom:
       var swPt = this.map_.fromLatLngToContainerPixel(sw);
       var nePt = this.map_.fromLatLngToContainerPixel(ne);
-      this.boxDiv_.style.left = swPt.x + 'px';
-      this.boxDiv_.style.top = nePt.y + 'px';
-      this.boxDiv_.style.width = Math.abs(nePt.x - swPt.x) + 'px';
-      this.boxDiv_.style.height = Math.abs(nePt.y - swPt.y) + 'px';
+      if (kGoogleCenteringBug) {
+        swPt.x -= this.borderWidths_.left;
+        swPt.y -= this.borderWidths_.top;
+        nePt.x -= this.borderWidths_.left;
+        nePt.y -= this.borderWidths_.top;
+      }
+      this.boxDiv_.style.left = swPt.x + "px";
+      this.boxDiv_.style.top = nePt.y + "px";
+      this.boxDiv_.style.width = (Math.abs(nePt.x - swPt.x) - (this.boxBorderWidths_.left + this.boxBorderWidths_.right)) + "px";
+      this.boxDiv_.style.height = (Math.abs(nePt.y - swPt.y) - (this.boxBorderWidths_.top + this.boxBorderWidths_.bottom)) + "px";
       // Hide box asynchronously after 1 second:
       setTimeout(function () {
-        me.boxDiv_.style.display = 'none';
+        me.boxDiv_.style.display = "none";
       }, 1000);
       this.dragging_ = false;
       /**
@@ -569,11 +590,11 @@
        * @param {GLatLngBounds} newBounds
        * @event
        */
-      GEvent.trigger(this, 'dragend', bnds);
-      if (!this.isHotKeyDown_()) {
-        this.hotKeyDown_ = false;
-        this.buttonImg_.src = this.imageOff_;
-        GEvent.trigger(this, 'deactivate');
+      GEvent.trigger(this, "dragend", bnds);
+      // if the hot key isn't down, the drag zoom must have been activated by turning
+      // on the visual control. In this case, finish up by simulating a key up event.
+      if (!this.isHotKeyDown_(e)) {
+        this.onKeyUp_(e);
       }
     }
   };
@@ -586,23 +607,23 @@
     if (this.map_ && this.hotKeyDown_) {
       this.hotKeyDown_ = false;
       if (this.dragging_) {
-        this.boxDiv_.style.display = 'none';
+        this.boxDiv_.style.display = "none";
+        this.dragging_ = false;
       }
       for (i = 0; i < this.veilDiv_.length; i++) {
         this.veilDiv_[i].style.display = "none";
       }
-      this.dragging_ = false;
+      if (this.visualEnabled_) {
+        if (this.buttonImg_.src !== this.imageOff_) {
+          this.buttonImg_.src = this.imageOff_;
+        }
+      }
       /**
        * This event is fired when the hot key is released.
        * @name DragZoom#deactivate
        * @event
        */
-      GEvent.trigger(this, 'deactivate');
-    }
-    if (this.visualEnabled_) {
-      if (this.buttonImg_.src !== this.imageOff_) {
-        this.buttonImg_.src = this.imageOff_;
-      }
+      GEvent.trigger(this, "deactivate");
     }
   };
   /**
@@ -653,7 +674,7 @@
   /**
    * Returns the DragZoom object which is created when <code>GMap2.enableKeyDragZoom</code> is called.
    * With this object you can use <code>GEvent.addListener</code> to attach event listeners
-   * for the 'activate', 'deactivate', 'dragstart', 'drag', and 'dragend' events.
+   * for the "activate", "deactivate", "dragstart", "drag", and "dragend" events.
    * @return {DragZoom}
    */
   GMap2.prototype.getDragZoomObject = function () {
