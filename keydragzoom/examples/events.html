@@ -9,8 +9,8 @@
          document.write('<script type="text/javascript" src="../src/keydragzoom'+(document.location.search.indexOf('packed')>-1?'_packed':'')+'.js"><'+'/script>');
         </script>
         <script type="text/javascript">
-        var map;    
-        function init(){
+        var map;
+        function init() {
           map = new GMap2(document.getElementById("map"));
           map.setCenter(new GLatLng(49.49088, -123.75446), 12);
           map.addControl(new GMapTypeControl());
@@ -20,12 +20,14 @@
           map.enableContinuousZoom();
           map.enableScrollWheelZoom();
  
-          map.enableKeyDragZoom(
-            {
-              visualEnabled: true,
-              visualImages: {off: "dragzoom-off.png", on: "dragzoom-on.png", hot: "dragzoom-hot.png"}
+          map.enableKeyDragZoom({
+            visualEnabled: true,
+            visualImages: {
+              off: "dragzoom-off.png",
+              on: "dragzoom-on.png",
+              hot: "dragzoom-hot.png"
             }
-          );
+          });
 
           var dz = map.getDragZoomObject();
           GEvent.addListener(dz, 'activate', function() {
@@ -43,7 +45,6 @@
           GEvent.addListener(dz, 'deactivate', function() {
             GLog.write('KeyDragZoom Deactivated');
           });
-          
         }
         </script>
 

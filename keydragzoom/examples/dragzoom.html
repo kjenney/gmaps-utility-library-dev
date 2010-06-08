@@ -14,8 +14,8 @@
          document.write('<script type="text/javascript" src="../src/keydragzoom'+(document.location.search.indexOf('packed')>-1?'_packed':'')+'.js"><'+'/script>');
         </script>
         <script type="text/javascript">
-        var map;    
-        function init(){
+        var map;
+        function init() {
           map = new GMap2(document.getElementById("map"));
           map.setCenter(new GLatLng(35.227, -80.84), 12);
           var marker = new GMarker(map.getCenter());
@@ -29,9 +29,8 @@
           map.enableDoubleClickZoom();
           map.enableContinuousZoom();
           map.enableScrollWheelZoom();
-          // simple drag zoom 
+
           map.enableKeyDragZoom();
-         
         }
         </script>
     </head>

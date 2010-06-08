@@ -56,14 +56,14 @@ This library adds a drag zoom capability to a V2 Google map. When drag zoom is 
                     <td><code><span class="type">southwestPixel:GPoint</span>, <span class="type">northeastPixel:GPoint</span></code></td>
                   
                 
-                <td>This event is repeatedly fired while the user drags a box across the area of interest.The southwest and northeast point are passed as parameters of type <code>GPoint</code>(for performance reasons), relative to the map container. Note: the event listener is responsible for converting pixel position to geographic coordinates, if necessary, using<code>GMap2.fromContainerPixelToLatLng</code>.</td>
+                <td>This event is fired repeatedly while the user drags a box across the area of interest.The southwest and northeast point are passed as parameters of type <code>GPoint</code>(for performance reasons), relative to the map container. Note: the event listener is responsible for converting pixel position to geographic coordinates, if necessary, using<code>GMap2.fromContainerPixelToLatLng</code>.</td>
               </tr>
             
               <tr class="even">
                 <td><code>dragend</code></td>
                 
                   
-                    <td><code><span class="type">newBounds:GLatLngBounds</span></code></td>
+                    <td><code><span class="type">bnds:GLatLngBounds</span></code></td>
                   
                 
                 <td>This event is fired when the drag operation ends.The parameter passed is the geographic bounds of the selected area.Note that this event is <i>not</i> fired if the hot key is released before the drag operation ends.</td>
@@ -73,7 +73,7 @@ This library adds a drag zoom capability to a V2 Google map. When drag zoom is 
                 <td><code>dragstart</code></td>
                 
                   
-                    <td><code><span class="type">startLatLng:GLatLng</span></code></td>
+                    <td><code><span class="type">latlng:GLatLng</span></code></td>
                   
                 
                 <td>This event is fired when the drag operation begins.The parameter passed is the geographic position of the starting point.</td>
@@ -168,7 +168,7 @@ This library adds a drag zoom capability to a V2 Google map. When drag zoom is 
                     <td><code>Object</code></td>
                   
                 
-                <td>The css style of the zoom box. The default is <code>{border: "2px solid #FF0000"}</code>.Border widths must be specified in pixel units (or as thin, medium, or thick).</td>
+                <td>An object literal defining the css styles of the zoom box. The default is <code>{border: "2px solid #FF0000"}</code>.Border widths must be specified in pixel units (or as thin, medium, or thick).</td>
               </tr>
             
               <tr class="even">
@@ -188,7 +188,7 @@ This library adds a drag zoom capability to a V2 Google map. When drag zoom is 
                     <td><code>Object</code></td>
                   
                 
-                <td>The css style of the veil pane which covers the map when a drag zoom is activated. The previous name for this property was <code>paneStyle</code> but the use of this name is now deprecated. The default is <code>{backgroundColor: "white", opacity: 0.0, cursor: "crosshair"}</code>.</td>
+                <td>An object literal defining the css styles of the veil pane which covers the map when a drag zoom is activated. The previous name for this property was <code>paneStyle</code> but the use of this name is now deprecated. The default is <code>{backgroundColor: "white", opacity: 0.0, cursor: "crosshair"}</code>.</td>
               </tr>
             
               <tr class="even">
@@ -208,7 +208,7 @@ This library adds a drag zoom capability to a V2 Google map. When drag zoom is 
                     <td><code>Object</code></td>
                   
                 
-                <td>An object literal defining the images to be shown when the visual control is on, off, or hot (i.e., when the mouse is over the control). The three parameters of the object literal are "on", "off", and "hot" and each contains the URL of the image to be shown. If a visual control is being used, only the "off" image is required.</td>
+                <td>An object literal defining the images to be shown when the visual control is on, off, or hot (i.e., when the mouse is over the control). The three properties of the object literal are <code>on</code>, <code>off</code>, and <code>hot</code> and each contains the URL of the image to use. If a visual control is being used, only the <code>off</code> image is required.</td>
               </tr>
             
               <tr class="even">
@@ -228,7 +228,7 @@ This library adds a drag zoom capability to a V2 Google map. When drag zoom is 
                     <td><code>Object</code></td>
                   
                 
-                <td>An object literal defining the help tips that appear when the mouse moves over the visual control. The "off" parameter is the tip to be shown when the control is off and the "on" parameter is the tip to be shown when the control is on. The default values are "Turn on drag zoom mode" and "Turn off drag zoom mode", respectively.</td>
+                <td>An object literal defining the help tips that appear when the mouse moves over the visual control. The <code>off</code> property is the tip to be shown when the control is off and the <code>on</code> property is the tip to be shown when the control is on. The default values are "Turn on drag zoom mode" and "Turn off drag zoom mode", respectively.</td>
               </tr>
             
           </tbody>
