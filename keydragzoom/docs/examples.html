@@ -58,15 +58,17 @@ in your document header after the Google Maps API v2 has been included. You can 
           map.setCenter(new GLatLng(45.5, -122.7), 14);
           //...
           map.enableKeyDragZoom({
-                boxStyle: {
-                  border: "4px dashed black",
-                  backgroundColor: "transparent",
-                  opacity: 1.0
-                },
-                veilStyle: {
-                  backgroundColor: "red",
-                  opacity: 0.25
-                }
+            key: "shift", 
+            boxStyle: {
+              border: "4px dashed black",
+              backgroundColor: "transparent",
+              opacity: 1.0
+            },
+            veilStyle: {
+              backgroundColor: "red",
+              opacity: 0.35,
+              cursor: "crosshair"
+            }
           });
         }
 </pre>
@@ -101,7 +103,7 @@ In the following example, you can start a drag zoom operation by holding down th
 
 <div>
 <h2><span lang="en-us">Visual Drag Zoom Control</span></h2> 
-<p>You can also use a visual control to turn KeyDragZoom on and off. Simply set the <code>visualEnabled</code> parameter to <code>true</code>, indicate the position of the control, and provide the URLs for the pictures to show when the control is in the off, on, and hot states. (The control is hot when the mouse moves over it.) In this example the control is placed below the standard zoom control.</p>
+<p>You can also use a visual control to turn KeyDragZoom on and off. Simply set the <code>visualEnabled</code> parameter to <code>true</code>, indicate the position of the control, and provide the URLs for the pictures to show when the control is in the off, on, and hot states. (The control is hot when the mouse moves over it.) You can also use the <code>visualTips</code> property to set the values of the help tips to be displayed when the control is on and off. In this example the control is placed below the standard zoom control.</p>
 
 <pre class="prettyprint">
         function init(){
@@ -111,8 +113,15 @@ In the following example, you can start a drag zoom operation by holding down th
           map.enableKeyDragZoom({
             visualEnabled: true,
             visualPosition: new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(27, 285)),
-            visualImages: {off: "dragzoom-off.png", on: "dragzoom-on.png", hot: "dragzoom-hot.png"},
-            visualTips: {off: "Turn on", on: "Turn off"}
+            visualImages: {
+              off: "dragzoom-off.png",
+              on: "dragzoom-on.png",
+              hot: "dragzoom-hot.png"
+            },
+            visualTips: {
+              off: "Turn on",
+              on: "Turn off"
+            }
         }
 </pre>
 

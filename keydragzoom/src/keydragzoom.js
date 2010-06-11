@@ -208,12 +208,12 @@
    * @property {String} [key] The hot key to hold down to activate a drag zoom, <code>shift | ctrl | alt</code>.
    *  The default is <code>shift</code>.
    * @property {Object} [boxStyle] An object literal defining the css styles of the zoom box.
-   *  The default is <code>{border: "2px solid #FF0000"}</code>.
+   *  The default is <code>{border: "4px solid #736AFF"}</code>.
    * Border widths must be specified in pixel units (or as thin, medium, or thick).
    * @property {Object} [veilStyle] An object literal defining the css styles of the veil pane
    *  which covers the map when a drag zoom is activated. The previous name for this property was
    *  <code>paneStyle</code> but the use of this name is now deprecated.
-   *  The default is <code>{backgroundColor: "white", opacity: 0.0, cursor: "crosshair"}</code>.
+   *  The default is <code>{backgroundColor: "gray", opacity: 0.25, cursor: "crosshair"}</code>.
    * @property {Boolean} [visualEnabled] A flag indicating whether a visual control is to be used.
    *  The default is <code>false</code>.
    * @property {GControlPosition} [visualPosition] The position of the visual control.
@@ -256,8 +256,8 @@
       };
       // Apply default style values for the veil:
       setVals(this.veilDiv_[i].style, {
-        backgroundColor: "white",
-        opacity: 0.0,
+        backgroundColor: "gray",
+        opacity: 0.25,
         cursor: "crosshair"
       });
       // Apply style values specified in veilStyle parameter:
@@ -297,7 +297,7 @@
     this.boxDiv_ = document.createElement("div");
     // Apply default style values for the zoom box:
     setVals(this.boxDiv_.style, {
-      border: "2px solid #FF0000"
+      border: "4px solid #736AFF"
     });
     // Apply style values specified in boxStyle parameter:
     setVals(this.boxDiv_.style, opt_zoomOpts.boxStyle);
