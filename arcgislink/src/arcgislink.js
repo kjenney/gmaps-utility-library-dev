@@ -2507,8 +2507,10 @@
     */
     ArcGISTileLayer.prototype.getTileUrl = function (tile, zoom) {
       // this.mapService_.hasLoaded() allow direct load of WebMercator
+      var za = this.maxResolution();
+      var zi = this.minResolution();
       var z = zoom - (this.projection_ ? this.projection_.minResolution() : this.minResolution());
-      if (!isNaN(tile.x) && !isNaN(tile.y) && z >= 0) {
+      if (!isNaN(tile.x) && !isNaN(tile.y) && z >= 0 && zoom >= zi && zoom <= za) {
         var u = this.mapService_.url;
         if (this.urlTemplate_) {
           u = this.urlTemplate_.replace('[' + this.numOfHosts_ + ']', '' + ((tile.y + tile.x) % this.numOfHosts_));
@@ -2518,7 +2520,7 @@
       }
       return '';
     };
-    
+     
     /**
      * If the tile layer is loaded. Returns <code>true</code> if it's map service is loaded.
      * @return {Boolean}
@@ -3440,6 +3442,9 @@
     * @return {GLatLngBounds} gLatLngBounds
     */
     ArcGISUtil.fromEnvelopeToLatLngBounds = function (extent) {
+      if (!extent.spatialReference) {
+        return null;
+      }
       var sr = ArcGISSpatialReferences.getSpatialReference(extent.spatialReference.wkid);
       sr = sr || WGS84;
       var sw = sr.reverse([extent.xmin, extent.ymin]);
