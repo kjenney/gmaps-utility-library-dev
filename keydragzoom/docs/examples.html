@@ -21,7 +21,7 @@
 <a name="HowTo"></a>
 <div>
 <h2><span lang="en-us">Including Scripts</span></h2>
-<p>The first step is to include <code>keydragzoom.js</code> or <code>keydragzoom_packed.js</code> in your document header after the Google Maps API v2 has been included. You can use the online version if you do not want to download the script.</p>
+<p>The first step is to include <code>keydragzoom.js</code> or <code>keydragzoom_packed.js</code> in your document header after the Google Maps JavaScript API V2 has been included. You can use the online version if you do not want to download the script.</p>
 
 <pre class="prettyprint">
         &lt;script src=&quot;/path/to/keydragzoom_packed.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
@@ -96,7 +96,7 @@
 
 <div>
 <h2><span lang="en-us">Visual Drag Zoom Control</span></h2>
-<p>You can also use a visual control to turn KeyDragZoom on and off. Simply set the <code>visualEnabled</code> parameter to <code>true</code>, indicate the position of the control, and provide the URLs for the pictures to show when the control is in the off, on, and hot states. (The control is hot when the mouse moves over it.) You can also use the <code>visualTips</code> property to set the values of the help tips to be displayed when the control is on and off. In this example the control is placed below the standard zoom control.</p>
+<p>You can also use a visual control to turn KeyDragZoom on and off. Simply set the <code>visualEnabled</code> parameter to <code>true</code>, indicate the position of the control with <code>visualPosition</code>, and use <code>visualImages</code> to provide the URLs for the pictures to show when the control is in the off, on, and hot states. (The control is hot when the mouse moves over it.) You can also use the <code>visualTips</code> property to set the values of the help tips to be displayed when the control is on and off. In this example the control is placed below the standard zoom control.</p>
 
 <pre class="prettyprint">
         var map = new GMap2(document.getElementById("map"));
