@@ -20,11 +20,8 @@
           map.enableKeyDragZoom({
             visualEnabled: true,
             visualPosition: new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(27, 285)),
-            visualImages: {
-              off: "dragzoom-off.png",
-              on: "dragzoom-on.png",
-              hot: "dragzoom-hot.png"
-            },
+            visualSprite: "http://maps.gstatic.com/mapfiles/ftr/controls/dragzoom_btn.png",
+            visualSize: new google.maps.Size(20, 20),
             visualTips: {
               off: "Turn on",
               on: "Turn off"

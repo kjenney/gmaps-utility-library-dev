@@ -219,11 +219,14 @@
    *  The default is <code>false</code>.
    * @property {GControlPosition} [visualPosition] The position of the visual control.
    *  The default position is (27,285) relative to the top left corner of the map.
-   * @property {Object} [visualImages] An object literal defining the images to be shown when the
-   *  visual control is on, off, or hot (i.e., when the mouse is over the control). The three
-   *  properties of the object literal are <code>on</code>, <code>off</code>, and <code>hot</code>
-   *  and each contains the URL of the image to use.
-   *  If a visual control is being used, only the <code>off</code> image is required.
+   * @property {String} [visualSprite] The URL of the sprite image used for showing the visual control
+   *  in the on, off, and hot (i.e., when the mouse is over the control) states. The three images
+   *  within the sprite must be the same size and arranged in on-hot-off order in a single row
+   *  with no spaces between images.
+   *  The default is <code>http://maps.gstatic.com/mapfiles/ftr/controls/dragzoom_btn.png</code>.
+   * @property {GSize} [visualSize] The width and height values provided by this property are
+   *   the size (in pixels) of each of the images within <code>visualSprite</code>.
+   *   The default is (20,20).
    * @property {Object} [visualTips] An object literal defining the help tips that appear when
    *  the mouse moves over the visual control. The <code>off</code> property is the tip to be shown
    *  when the control is off and the <code>on</code> property is the tip to be shown when the
@@ -288,10 +291,8 @@
 
     this.visualEnabled_ = opt_zoomOpts.visualEnabled || false;
     this.visualPosition_ = opt_zoomOpts.visualPosition || this.getDefaultPosition();
-    this.visualImages_ = opt_zoomOpts.visualImages || {};
-    this.visualImages_.off = this.visualImages_.off || "";
-    this.visualImages_.on = this.visualImages_.on || "";
-    this.visualImages_.hot = this.visualImages_.hot || "";
+    this.visualSprite_ = opt_zoomOpts.visualSprite || "http://maps.gstatic.com/mapfiles/ftr/controls/dragzoom_btn.png";
+    this.visualSize_ = opt_zoomOpts.visualSize || new GSize(20, 20);
     this.visualTips_ = opt_zoomOpts.visualTips || {};
     this.visualTips_.off =  this.visualTips_.off || "Turn on drag zoom mode";
     this.visualTips_.on =  this.visualTips_.on || "Turn off drag zoom mode";
@@ -366,31 +367,33 @@
    */
   DragZoom.prototype.initialize = function (map) {
     var me = this;
-    this.buttonImg_ = document.createElement("img");
-    this.buttonImg_.src = this.visualImages_.off;
+    this.buttonImg_ = document.createElement("div");
+    this.buttonImg_.style.height = this.visualSize_.height + "px";
+    this.buttonImg_.style.width = this.visualSize_.width + "px";
+    this.buttonImg_.style.background = "transparent url(" + this.visualSprite_ + ") no-repeat -40px 0";
     this.buttonImg_.title = this.visualTips_.off;
     this.buttonImg_.onclick = function (e) {
       me.hotKeyDown_ = !me.hotKeyDown_;
       if (me.hotKeyDown_) {
-        me.buttonImg_.src = me.visualImages_.on;
+        me.buttonImg_.style.backgroundPosition = -(me.visualSize_.height * 0) + "px 0";
         me.buttonImg_.title = me.visualTips_.on;
         GEvent.trigger(me, "activate");
       } else {
-        me.buttonImg_.src = me.visualImages_.off;
+        me.buttonImg_.style.backgroundPosition = -(me.visualSize_.height * 2) + "px 0";
         me.buttonImg_.title = me.visualTips_.off;
         GEvent.trigger(me, "deactivate");
       }
       me.onMouseMove_(e); // Updates the veil
     };
     this.buttonImg_.onmouseover = function () {
-      me.buttonImg_.src = me.visualImages_.hot;
+      me.buttonImg_.style.backgroundPosition = -(me.visualSize_.height * 1) + "px 0";
     };
     this.buttonImg_.onmouseout = function () {
       if (me.hotKeyDown_) {
-        me.buttonImg_.src = me.visualImages_.on;
+        me.buttonImg_.style.backgroundPosition = -(me.visualSize_.height * 0) + "px 0";
         me.buttonImg_.title = me.visualTips_.on;
       } else {
-        me.buttonImg_.src = me.visualImages_.off;
+        me.buttonImg_.style.backgroundPosition = -(me.visualSize_.height * 2) + "px 0";
         me.buttonImg_.title = me.visualTips_.off;
       }
     };
@@ -681,7 +684,7 @@
         this.veilDiv_[i].style.display = "none";
       }
       if (this.visualEnabled_) {
-        this.buttonImg_.src = this.visualImages_.off;
+        this.buttonImg_.style.backgroundPosition = -(this.visualSize_.height * 2) + "px 0";
         this.buttonImg_.title = this.visualTips_.off;
         this.buttonImg_.style.display = "";
       }
