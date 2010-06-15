@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>KeyDragZoom v1.1 Reference</title>
+    <title>KeyDragZoom for V2 v1.1 Reference</title>
     <link rel="stylesheet" type="text/css" href="http://code.google.com/css/codesite.css"></link>
     <link rel="stylesheet" type="text/css" href="../../util/docs/template/local_extensions.css"></link>
   </head>
   <body>
-    <h1>KeyDragZoom</h1>
+    <h1>KeyDragZoom for V2</h1>
     <p>
 This library adds a drag zoom capability to a V2 Google map. When drag zoom is enabled, holding down a designated hot key <code>(shift | ctrl | alt)</code> while dragging a box around an area of interest will zoom the map in to that area when the mouse button is released. Optionally, a visual control can also be supplied for turning a drag zoom operation on and off. Only one line of code is needed: <code>GMap2.enableKeyDragZoom();</code> <p> Note that if the map's container has a border around it, the border widths must be specified in pixel units (or as thin, medium, or thick). This is required because of an MSIE limitation.</p>
     <p>For a description and examples of how to use this library, check out the <a href="examples.html">how-to</a>.</p>
@@ -178,7 +178,7 @@ This library adds a drag zoom capability to a V2 Google map. When drag zoom is 
                     <td><code>String</code></td>
                   
                 
-                <td>The hot key to hold down to activate a drag zoom, <code>shift | ctrl | alt</code>. The default is <code>shift</code>.</td>
+                <td>The hot key to hold down to activate a drag zoom, <code>shift | ctrl | alt</code>. Note that the <code>alt</code hot key refers to the Option key on a Macintosh. The default is <code>shift</code>.</td>
               </tr>
             
               <tr class="odd">

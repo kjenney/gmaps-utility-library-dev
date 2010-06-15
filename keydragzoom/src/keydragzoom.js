@@ -1,5 +1,5 @@
 /**
- * @name KeyDragZoom
+ * @name KeyDragZoom for V2
  * @version 1.1
  * @author: Nianwei Liu [nianwei at gmail dot com] & Gary Little [gary at luxcentral dot com]
  * @fileoverview This library adds a drag zoom capability to a V2 Google map.
@@ -206,6 +206,7 @@
    * @name KeyDragZoomOptions
    * @class This class represents the optional parameter passed into <code>GMap2.enableKeyDragZoom</code>.
    * @property {String} [key] The hot key to hold down to activate a drag zoom, <code>shift | ctrl | alt</code>.
+   *  Note that the <code>alt</code hot key refers to the Option key on a Macintosh.
    *  The default is <code>shift</code>.
    * @property {Object} [boxStyle] An object literal defining the css styles of the zoom box.
    *  The default is <code>{border: "4px solid #736AFF"}</code>.
@@ -240,6 +241,7 @@
    */
   function DragZoom(map, opt_zoomOpts) {
     var i;
+    var me = this;
     this.map_ = map;
     opt_zoomOpts = opt_zoomOpts || {};
     this.key_ = opt_zoomOpts.key || "shift";
@@ -267,7 +269,7 @@
       setVals(this.veilDiv_[i].style, {
         position: "absolute",
         overflow: "hidden",
-        zIndex: 101,
+        zIndex: 10001,
         display: "none"
       });
       // Workaround for Firefox Shift-Click problem:
@@ -310,12 +312,24 @@
     this.map_.getContainer().appendChild(this.boxDiv_);
     this.boxBorderWidths_ = getBorderWidths(this.boxDiv_);
 
-    this.keyDownListener_ = GEvent.bindDom(document, "keydown",  this, this.onKeyDown_);
-    this.keyUpListener_ = GEvent.bindDom(document, "keyup", this, this.onKeyUp_);
-    this.mouseDownListener_ = GEvent.bindDom(this.veilDiv_[0], "mousedown", this, this.onMouseDown_);
-    this.mouseDownListenerDocument_ = GEvent.bindDom(document, "mousedown", this, this.onMouseDownDocument_);
-    this.mouseMoveListener_ = GEvent.bindDom(document, "mousemove", this, this.onMouseMove_);
-    this.mouseUpListener_ = GEvent.bindDom(document, "mouseup", this, this.onMouseUp_);
+    this.keyDownListener_ = GEvent.bindDom(document, "keydown", this, function (e) {
+      me.onKeyDown_(e);
+    });
+    this.keyUpListener_ = GEvent.bindDom(document, "keyup", this, function (e) {
+      me.onKeyUp_(e);
+    });
+    this.mouseDownListener_ = GEvent.bindDom(this.veilDiv_[0], "mousedown", this, function (e) {
+      me.onMouseDown_(e);
+    });
+    this.mouseDownListenerDocument_ = GEvent.bindDom(document, "mousedown", this, function (e) {
+      me.onMouseDownDocument_(e);
+    });
+    this.mouseMoveListener_ = GEvent.bindDom(document, "mousemove", this, function (e) {
+      me.onMouseMove_(e);
+    });
+    this.mouseUpListener_ = GEvent.bindDom(document, "mouseup", this, function (e) {
+      me.onMouseUp_(e);
+    });
     this.scrollListener_ = GEvent.bindDom(window, "scroll", this, getScrollValue); 
 
     this.hotKeyDown_ = false;
@@ -384,7 +398,7 @@
       return false;
     };
     setVals(this.buttonImg_.style, {
-      zIndex: 102,
+      zIndex: 10002,
       cursor: "pointer"
     });
     map.getContainer().appendChild(this.buttonImg_);
@@ -427,9 +441,9 @@
     return isHot;
   };
   /**
-   * Checks if the mouse is on top of the map. The position is captured
-   * in onMouseMove_.
-   * @return true if mouse is on top of the map div.
+   * Returns <code>true</code> if the mouse is on top of the map div.
+   * The position is captured in onMouseMove_.
+   * @return {boolean}
    */
   DragZoom.prototype.isMouseOnMap_ = function () {
     var mousePosn = this.mousePosn_;
@@ -634,6 +648,7 @@
         me.boxDiv_.style.display = "none";
       }, 1000);
       this.dragging_ = false;
+      this.onMouseMove_(e); // Updates the veil
       /**
        * This event is fired when the drag operation ends.
        * The parameter passed is the geographic bounds of the selected area.
