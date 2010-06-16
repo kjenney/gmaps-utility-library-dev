@@ -367,45 +367,45 @@
    */
   DragZoom.prototype.initialize = function (map) {
     var me = this;
-    this.buttonImg_ = document.createElement("div");
-    this.buttonImg_.style.height = this.visualSize_.height + "px";
-    this.buttonImg_.style.width = this.visualSize_.width + "px";
-    this.buttonImg_.style.background = "transparent url(" + this.visualSprite_ + ") no-repeat -40px 0";
-    this.buttonImg_.title = this.visualTips_.off;
-    this.buttonImg_.onclick = function (e) {
+    this.buttonDiv_ = document.createElement("div");
+    this.buttonDiv_.style.height = this.visualSize_.height + "px";
+    this.buttonDiv_.style.width = this.visualSize_.width + "px";
+    this.buttonDiv_.style.background = "transparent url(" + this.visualSprite_ + ") no-repeat -40px 0";
+    this.buttonDiv_.title = this.visualTips_.off;
+    this.buttonDiv_.onclick = function (e) {
       me.hotKeyDown_ = !me.hotKeyDown_;
       if (me.hotKeyDown_) {
-        me.buttonImg_.style.backgroundPosition = -(me.visualSize_.height * 0) + "px 0";
-        me.buttonImg_.title = me.visualTips_.on;
+        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.height * 0) + "px 0";
+        me.buttonDiv_.title = me.visualTips_.on;
         GEvent.trigger(me, "activate");
       } else {
-        me.buttonImg_.style.backgroundPosition = -(me.visualSize_.height * 2) + "px 0";
-        me.buttonImg_.title = me.visualTips_.off;
+        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.height * 2) + "px 0";
+        me.buttonDiv_.title = me.visualTips_.off;
         GEvent.trigger(me, "deactivate");
       }
       me.onMouseMove_(e); // Updates the veil
     };
-    this.buttonImg_.onmouseover = function () {
-      me.buttonImg_.style.backgroundPosition = -(me.visualSize_.height * 1) + "px 0";
+    this.buttonDiv_.onmouseover = function () {
+      me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.height * 1) + "px 0";
     };
-    this.buttonImg_.onmouseout = function () {
+    this.buttonDiv_.onmouseout = function () {
       if (me.hotKeyDown_) {
-        me.buttonImg_.style.backgroundPosition = -(me.visualSize_.height * 0) + "px 0";
-        me.buttonImg_.title = me.visualTips_.on;
+        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.height * 0) + "px 0";
+        me.buttonDiv_.title = me.visualTips_.on;
       } else {
-        me.buttonImg_.style.backgroundPosition = -(me.visualSize_.height * 2) + "px 0";
-        me.buttonImg_.title = me.visualTips_.off;
+        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.height * 2) + "px 0";
+        me.buttonDiv_.title = me.visualTips_.off;
       }
     };
-    this.buttonImg_.ondragstart = function () {
+    this.buttonDiv_.ondragstart = function () {
       return false;
     };
-    setVals(this.buttonImg_.style, {
+    setVals(this.buttonDiv_.style, {
       zIndex: 10002,
       cursor: "pointer"
     });
-    map.getContainer().appendChild(this.buttonImg_);
-    return this.buttonImg_;
+    map.getContainer().appendChild(this.buttonDiv_);
+    return this.buttonDiv_;
   };
   /**
    * Returns <code>true</code> if the hot key is being pressed when an event occurs.
@@ -504,7 +504,7 @@
       GEvent.trigger(this, "activate");
     }
     if (this.visualEnabled_ && this.isHotKeyDown_(e)) {
-      this.buttonImg_.style.display = "none";
+      this.buttonDiv_.style.display = "none";
     }
   };
   /**
@@ -535,7 +535,7 @@
       this.boxDiv_.style.width = this.boxDiv_.style.height = "0px";
       var latlng = this.map_.fromContainerPixelToLatLng(this.startPt_);
       if (this.visualEnabled_) {
-        this.buttonImg_.style.display = "none";
+        this.buttonDiv_.style.display = "none";
       }
       /**
        * This event is fired when the drag operation begins.
@@ -684,9 +684,9 @@
         this.veilDiv_[i].style.display = "none";
       }
       if (this.visualEnabled_) {
-        this.buttonImg_.style.backgroundPosition = -(this.visualSize_.height * 2) + "px 0";
-        this.buttonImg_.title = this.visualTips_.off;
-        this.buttonImg_.style.display = "";
+        this.buttonDiv_.style.backgroundPosition = -(this.visualSize_.height * 2) + "px 0";
+        this.buttonDiv_.title = this.visualTips_.off;
+        this.buttonDiv_.style.display = "";
       }
       /**
        * This event is fired when the hot key is released.
