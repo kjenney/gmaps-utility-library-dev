@@ -1,6 +1,6 @@
 /**
  * @name KeyDragZoom for V2
- * @version 1.1
+ * @version 2.0
  * @author: Nianwei Liu [nianwei at gmail dot com] & Gary Little [gary at luxcentral dot com]
  * @fileoverview This library adds a drag zoom capability to a V2 Google map.
  *  When drag zoom is enabled, holding down a designated hot key <code>(shift | ctrl | alt)</code>
@@ -210,7 +210,7 @@
    *  The default is <code>shift</code>.
    * @property {Object} [boxStyle] An object literal defining the css styles of the zoom box.
    *  The default is <code>{border: "4px solid #736AFF"}</code>.
-   * Border widths must be specified in pixel units (or as thin, medium, or thick).
+   *  Border widths must be specified in pixel units (or as thin, medium, or thick).
    * @property {Object} [veilStyle] An object literal defining the css styles of the veil pane
    *  which covers the map when a drag zoom is activated. The previous name for this property was
    *  <code>paneStyle</code> but the use of this name is now deprecated.
@@ -225,8 +225,8 @@
    *  with no spaces between images.
    *  The default is <code>http://maps.gstatic.com/mapfiles/ftr/controls/dragzoom_btn.png</code>.
    * @property {GSize} [visualSize] The width and height values provided by this property are
-   *   the size (in pixels) of each of the images within <code>visualSprite</code>.
-   *   The default is (20,20).
+   *  the size (in pixels) of each of the images within <code>visualSprite</code>.
+   *  The default is (20,20).
    * @property {Object} [visualTips] An object literal defining the help tips that appear when
    *  the mouse moves over the visual control. The <code>off</code> property is the tip to be shown
    *  when the control is off and the <code>on</code> property is the tip to be shown when the
@@ -313,25 +313,27 @@
     this.map_.getContainer().appendChild(this.boxDiv_);
     this.boxBorderWidths_ = getBorderWidths(this.boxDiv_);
 
-    this.keyDownListener_ = GEvent.bindDom(document, "keydown", this, function (e) {
-      me.onKeyDown_(e);
-    });
-    this.keyUpListener_ = GEvent.bindDom(document, "keyup", this, function (e) {
-      me.onKeyUp_(e);
-    });
-    this.mouseDownListener_ = GEvent.bindDom(this.veilDiv_[0], "mousedown", this, function (e) {
-      me.onMouseDown_(e);
-    });
-    this.mouseDownListenerDocument_ = GEvent.bindDom(document, "mousedown", this, function (e) {
-      me.onMouseDownDocument_(e);
-    });
-    this.mouseMoveListener_ = GEvent.bindDom(document, "mousemove", this, function (e) {
-      me.onMouseMove_(e);
-    });
-    this.mouseUpListener_ = GEvent.bindDom(document, "mouseup", this, function (e) {
-      me.onMouseUp_(e);
-    });
-    this.scrollListener_ = GEvent.bindDom(window, "scroll", this, getScrollValue); 
+    this.listeners_ = [
+      GEvent.bindDom(document, "keydown", this, function (e) {
+        me.onKeyDown_(e);
+      }),
+      GEvent.bindDom(document, "keyup", this, function (e) {
+        me.onKeyUp_(e);
+      }),
+      GEvent.bindDom(this.veilDiv_[0], "mousedown", this, function (e) {
+        me.onMouseDown_(e);
+      }),
+      GEvent.bindDom(document, "mousedown", this, function (e) {
+        me.onMouseDownDocument_(e);
+      }),
+      GEvent.bindDom(document, "mousemove", this, function (e) {
+        me.onMouseMove_(e);
+      }),
+      GEvent.bindDom(document, "mouseup", this, function (e) {
+        me.onMouseUp_(e);
+      }),
+      GEvent.bindDom(window, "scroll", this, getScrollValue)
+    ];
 
     this.hotKeyDown_ = false;
     this.mouseDown_ = false;
@@ -718,13 +720,9 @@
     var i;
     var d = this.dragZoom_;
     if (d) {
-      GEvent.removeListener(d.mouseDownListener_);
-      GEvent.removeListener(d.mouseDownListenerDocument_);
-      GEvent.removeListener(d.mouseMoveListener_);
-      GEvent.removeListener(d.mouseUpListener_);
-      GEvent.removeListener(d.keyUpListener_);
-      GEvent.removeListener(d.keyDownListener_);
-      GEvent.removeListener(d.scrollListener_);
+      for (i = 0; i < this.listeners_.length; ++i) {
+        GEvent.removeListener(d.listeners_[i]);
+      }
       this.getContainer().removeChild(d.boxDiv_);
       for (i = 0; i < d.veilDiv_.length; i++) {
         this.getContainer().removeChild(d.veilDiv_[i]);
