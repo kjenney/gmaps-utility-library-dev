@@ -1,6 +1,6 @@
 /**
  * @name KeyDragZoom for V2
- * @version 2.0
+ * @version 2.0.1 [October 13, 2010]
  * @author: Nianwei Liu [nianwei at gmail dot com] & Gary Little [gary at luxcentral dot com]
  * @fileoverview This library adds a drag zoom capability to a V2 Google map.
  *  When drag zoom is enabled, holding down a designated hot key <code>(shift | ctrl | alt)</code>
@@ -372,30 +372,30 @@
     this.buttonDiv_ = document.createElement("div");
     this.buttonDiv_.style.height = this.visualSize_.height + "px";
     this.buttonDiv_.style.width = this.visualSize_.width + "px";
-    this.buttonDiv_.style.background = "transparent url(" + this.visualSprite_ + ") no-repeat -40px 0";
+    this.buttonDiv_.style.background = "transparent url(" + this.visualSprite_ + ") no-repeat -" + (this.visualSize_.width * 2) + "px 0";
     this.buttonDiv_.title = this.visualTips_.off;
     this.buttonDiv_.onclick = function (e) {
       me.hotKeyDown_ = !me.hotKeyDown_;
       if (me.hotKeyDown_) {
-        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.height * 0) + "px 0";
+        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.width * 0) + "px 0";
         me.buttonDiv_.title = me.visualTips_.on;
         GEvent.trigger(me, "activate");
       } else {
-        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.height * 2) + "px 0";
+        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.width * 2) + "px 0";
         me.buttonDiv_.title = me.visualTips_.off;
         GEvent.trigger(me, "deactivate");
       }
       me.onMouseMove_(e); // Updates the veil
     };
     this.buttonDiv_.onmouseover = function () {
-      me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.height * 1) + "px 0";
+      me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.width * 1) + "px 0";
     };
     this.buttonDiv_.onmouseout = function () {
       if (me.hotKeyDown_) {
-        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.height * 0) + "px 0";
+        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.width * 0) + "px 0";
         me.buttonDiv_.title = me.visualTips_.on;
       } else {
-        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.height * 2) + "px 0";
+        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.width * 2) + "px 0";
         me.buttonDiv_.title = me.visualTips_.off;
       }
     };
