@@ -1,6 +1,6 @@
 /**
  * @name KeyDragZoom for V2
- * @version 2.0.3 [November 26, 2010]
+ * @version 2.0.3 [November 27, 2010]
  * @author: Nianwei Liu [nianwei at gmail dot com] & Gary Little [gary at luxcentral dot com]
  * @fileoverview This library adds a drag zoom capability to a V2 Google map.
  *  When drag zoom is enabled, holding down a designated hot key <code>(shift | ctrl | alt)</code>
@@ -217,6 +217,8 @@
    *  The default is <code>{backgroundColor: "gray", opacity: 0.25, cursor: "crosshair"}</code>.
    * @property {Boolean} [visualEnabled] A flag indicating whether a visual control is to be used.
    *  The default is <code>false</code>.
+   * @property {string} [visualClass] The name of the CSS class defining the styles for the visual
+   *  control.
    * @property {GControlPosition} [visualPosition] The position of the visual control.
    *  The default position is (27,285) relative to the top left corner of the map.
    * @property {String} [visualSprite] The URL of the sprite image used for showing the visual control
@@ -290,6 +292,7 @@
     }
 
     this.visualEnabled_ = opt_zoomOpts.visualEnabled || false;
+    this.visualClass_ = opt_zoomOpts.visualClass || "";
     this.visualPosition_ = opt_zoomOpts.visualPosition || this.getDefaultPosition();
     this.visualSprite_ = opt_zoomOpts.visualSprite || "http://maps.gstatic.com/mapfiles/ftr/controls/dragzoom_btn.png";
     this.visualSize_ = opt_zoomOpts.visualSize || new GSize(20, 20);
@@ -370,6 +373,7 @@
   DragZoom.prototype.initialize = function (map) {
     var me = this;
     this.buttonDiv_ = document.createElement("div");
+    this.buttonDiv_.className = this.visualClass_;
     this.buttonDiv_.style.height = this.visualSize_.height + "px";
     this.buttonDiv_.style.width = this.visualSize_.width + "px";
     this.buttonDiv_.style.background = "transparent url(" + this.visualSprite_ + ") no-repeat -" + (this.visualSize_.width * 2) + "px 0";
