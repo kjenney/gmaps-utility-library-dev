@@ -1,6 +1,6 @@
 /**
  * @name KeyDragZoom for V2
- * @version 2.0.3 [November 27, 2010]
+ * @version 2.0.3 [December 1, 2010]
  * @author: Nianwei Liu [nianwei at gmail dot com] & Gary Little [gary at luxcentral dot com]
  * @fileoverview This library adds a drag zoom capability to a V2 Google map.
  *  When drag zoom is enabled, holding down a designated hot key <code>(shift | ctrl | alt)</code>
@@ -220,7 +220,7 @@
    * @property {string} [visualClass] The name of the CSS class defining the styles for the visual
    *  control.
    * @property {GControlPosition} [visualPosition] The position of the visual control.
-   *  The default position is (27,285) relative to the top left corner of the map.
+   *  The default position is (27,295) relative to the top left corner of the map.
    * @property {String} [visualSprite] The URL of the sprite image used for showing the visual control
    *  in the on, off, and hot (i.e., when the mouse is over the control) states. The three images
    *  within the sprite must be the same size and arranged in on-hot-off order in a single row
@@ -362,7 +362,7 @@
    * @private
    */
   DragZoom.prototype.getDefaultPosition = function () {
-    return new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(27, 285));
+    return new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(27, 295));
   };
   /**
    * Initializes the visual control and returns its DOM element.
@@ -371,35 +371,43 @@
    * @private
    */
   DragZoom.prototype.initialize = function (map) {
+    var image;
     var me = this;
     this.buttonDiv_ = document.createElement("div");
     this.buttonDiv_.className = this.visualClass_;
+    this.buttonDiv_.style.position = "relative";
+    this.buttonDiv_.style.overflow = "hidden";
     this.buttonDiv_.style.height = this.visualSize_.height + "px";
     this.buttonDiv_.style.width = this.visualSize_.width + "px";
-    this.buttonDiv_.style.background = "transparent url(" + this.visualSprite_ + ") no-repeat -" + (this.visualSize_.width * 2) + "px 0";
     this.buttonDiv_.title = this.visualTips_.off;
+    image = document.createElement("img");
+    image.src = this.visualSprite_;
+    image.style.position = "absolute";
+    image.style.left = -(this.visualSize_.width * 2) + "px";
+    image.style.top = 0 + "px";
+    this.buttonDiv_.appendChild(image);
     this.buttonDiv_.onclick = function (e) {
       me.hotKeyDown_ = !me.hotKeyDown_;
       if (me.hotKeyDown_) {
-        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.width * 0) + "px 0";
+        me.buttonDiv_.firstChild.style.left = -(me.visualSize_.width * 0) + "px";
         me.buttonDiv_.title = me.visualTips_.on;
         GEvent.trigger(me, "activate");
       } else {
-        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.width * 2) + "px 0";
+        me.buttonDiv_.firstChild.style.left = -(me.visualSize_.width * 2) + "px";
         me.buttonDiv_.title = me.visualTips_.off;
         GEvent.trigger(me, "deactivate");
       }
       me.onMouseMove_(e); // Updates the veil
     };
     this.buttonDiv_.onmouseover = function () {
-      me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.width * 1) + "px 0";
+      me.buttonDiv_.firstChild.style.left = -(me.visualSize_.width * 1) + "px";
     };
     this.buttonDiv_.onmouseout = function () {
       if (me.hotKeyDown_) {
-        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.width * 0) + "px 0";
+        me.buttonDiv_.firstChild.style.left = -(me.visualSize_.width * 0) + "px";
         me.buttonDiv_.title = me.visualTips_.on;
       } else {
-        me.buttonDiv_.style.backgroundPosition = -(me.visualSize_.width * 2) + "px 0";
+        me.buttonDiv_.firstChild.style.left = -(me.visualSize_.width * 2) + "px";
         me.buttonDiv_.title = me.visualTips_.off;
       }
     };
@@ -697,7 +705,7 @@
         this.veilDiv_[i].style.display = "none";
       }
       if (this.visualEnabled_) {
-        this.buttonDiv_.style.backgroundPosition = -(this.visualSize_.height * 2) + "px 0";
+        this.buttonDiv_.firstChild.style.left = -(this.visualSize_.width * 2) + "px";
         this.buttonDiv_.title = this.visualTips_.off;
         this.buttonDiv_.style.display = "";
       }
