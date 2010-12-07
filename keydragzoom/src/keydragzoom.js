@@ -1,6 +1,6 @@
 /**
  * @name KeyDragZoom for V2
- * @version 2.0.3 [December 1, 2010]
+ * @version 2.0.4 [December 7, 2010]
  * @author: Nianwei Liu [nianwei at gmail dot com] & Gary Little [gary at luxcentral dot com]
  * @fileoverview This library adds a drag zoom capability to a V2 Google map.
  *  When drag zoom is enabled, holding down a designated hot key <code>(shift | ctrl | alt)</code>
@@ -739,7 +739,7 @@
     var i;
     var d = this.dragZoom_;
     if (d) {
-      for (i = 0; i < this.listeners_.length; ++i) {
+      for (i = 0; i < d.listeners_.length; ++i) {
         GEvent.removeListener(d.listeners_[i]);
       }
       this.getContainer().removeChild(d.boxDiv_);
